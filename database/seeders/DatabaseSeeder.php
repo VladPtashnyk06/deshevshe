@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\DeliveryMethod;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +22,13 @@ class DatabaseSeeder extends Seeder
              'email' => 'Admin@gmail.com',
              'role' => 'Admin',
              'password' => \Hash::make('admin'),
+         ]);
+        \App\Models\User::factory()->create([
+             'name' => 'User',
+             'last_name' => 'User',
+             'phone' => '0000000000',
+             'email' => 'User@gmail.com',
+             'password' => \Hash::make('user'),
          ]);
     }
 }
