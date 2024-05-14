@@ -68,6 +68,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{characteristic}', 'destroy')->name('characteristic.destroy');
                 });
             });
+            Route::group(['prefix' => 'size'], function () {
+                Route::controller(\App\Http\Controllers\SizeController::class)->group(function () {
+                    Route::get('/', 'index')->name('size.index');
+                    Route::get('/create', 'create')->name('size.create');
+                    Route::post('/store', 'store')->name('size.store');
+                    Route::get('/edit/{size}', 'edit')->name('size.edit');
+                    Route::post('/update/{size}', 'update')->name('size.update');
+                    Route::delete('/delete/{size}', 'destroy')->name('size.destroy');
+                });
+            });
         });
     });
 });

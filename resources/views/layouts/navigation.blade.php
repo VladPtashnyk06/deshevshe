@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('characteristic.index')" :active="request()->routeIs('characteristic.index')">
                         {{ __('Characteristic') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('size.index')" :active="request()->routeIs('size.index')">
+                        {{ __('Size') }}
+                    </x-nav-link>
                 </div>
             </div>
 

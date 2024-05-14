@@ -9,30 +9,36 @@ class SizeController extends Controller
 {
     public function index()
     {
-        return Size::all();
+        $sizes = Size::all();
+        return view('admin.sizes.index', compact('sizes'));
+    }
+
+    public function create() {
+        return view('admin.sizes.create');
     }
 
     public function store(SizeRequest $request)
     {
-        return Size::create($request->validated());
+        Size::create($request->validated());
+        return redirect()->route('size.index');
     }
 
-    public function show(Size $size)
+    public function edit(Size $size)
     {
-        return $size;
+        return view('admin.sizes.edit', compact('size'));
     }
 
     public function update(SizeRequest $request, Size $size)
     {
         $size->update($request->validated());
 
-        return $size;
+        return redirect()->route('size.index');
     }
 
     public function destroy(Size $size)
     {
         $size->delete();
 
-        return response()->json();
+        return redirect()->route('size.index');
     }
 }
