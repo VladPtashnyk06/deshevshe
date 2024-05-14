@@ -28,6 +28,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::group(['prefix' => 'admin'], function () {
         Route::middleware('auth.admin')->group(function () {
+            Route::group(['prefix' => 'color'], function () {
+                Route::controller(\App\Http\Controllers\ColorController::class)->group(function () {
+                    Route::get('/', 'index')->name('color.index');
+                    Route::get('/create', 'create')->name('color.create');
+                    Route::post('/store', 'store')->name('color.store');
+                    Route::get('/edit/{color}', 'edit')->name('color.edit');
+                    Route::post('/update/{color}', 'update')->name('color.update');
+                    Route::delete('/delete/{color}', 'destroy')->name('color.destroy');
+                });
+            });
         });
     });
 });

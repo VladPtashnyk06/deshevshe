@@ -9,30 +9,36 @@ class ColorController extends Controller
 {
     public function index()
     {
-        return Color::all();
+        $colors = Color::all();
+        return view('admin.colors.index', compact('colors'));
+    }
+
+    public function create() {
+        return view('admin.colors.create');
     }
 
     public function store(ColorRequest $request)
     {
-        return Color::create($request->validated());
+        Color::create($request->validated());
+        return redirect()->route('color.index');
     }
 
-    public function show(Color $colors)
+    public function edit(Color $color)
     {
-        return $colors;
+        return view('admin.colors.edit', compact('color'));
     }
 
-    public function update(ColorRequest $request, Color $colors)
+    public function update(ColorRequest $request, Color $color)
     {
-        $colors->update($request->validated());
+        $color->update($request->validated());
 
-        return $colors;
+        return redirect()->route('color.index');
     }
 
-    public function destroy(Color $colors)
+    public function destroy(Color $color)
     {
-        $colors->delete();
+        $color->delete();
 
-        return response()->json();
+        return redirect()->route('color.index');
     }
 }
