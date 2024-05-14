@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable()->unique();
             $table->timestamps();
         });
     }

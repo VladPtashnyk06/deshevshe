@@ -9,7 +9,7 @@ class PackageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'integer'],
+            'title' => ['required', 'unique:packages,title', 'integer'],
         ];
     }
 

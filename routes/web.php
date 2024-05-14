@@ -48,6 +48,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{package}', 'destroy')->name('package.destroy');
                 });
             });
+            Route::group(['prefix' => 'material'], function () {
+                Route::controller(\App\Http\Controllers\MaterialController::class)->group(function () {
+                    Route::get('/', 'index')->name('material.index');
+                    Route::get('/create', 'create')->name('material.create');
+                    Route::post('/store', 'store')->name('material.store');
+                    Route::get('/edit/{material}', 'edit')->name('material.edit');
+                    Route::post('/update/{material}', 'update')->name('material.update');
+                    Route::delete('/delete/{material}', 'destroy')->name('material.destroy');
+                });
+            });
         });
     });
 });
