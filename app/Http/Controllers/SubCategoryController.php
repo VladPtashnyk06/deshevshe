@@ -2,37 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ColorRequest;
 use App\Http\Requests\SubCategoryRequest;
+use App\Models\Category;
+use App\Models\Color;
 use App\Models\SubCategory;
 
 class SubCategoryController extends Controller
 {
     public function index()
     {
-        return SubCategory::all();
+        $sub_categories = SubCategory::all();
+        return view('admin.sub_categories.index', compact('sub_categories'));
+    }
+
+    public function create() {
+        $categories = Category::all();
+        return view('admin.sub_categories.create', compact('categories'));
     }
 
     public function store(SubCategoryRequest $request)
     {
-        return SubCategory::create($request->validated());
+        SubCategory::create($request->validated());
+        return redirect()->route('sub_category.index');
     }
 
-    public function show(SubCategory $subCategory)
+    public function edit(SubCategory $sub_category)
     {
-        return $subCategory;
+        $categories = Category::all();
+        return view('admin.sub_categories.edit', compact('sub_category', 'categories'));
     }
 
-    public function update(SubCategoryRequest $request, SubCategory $subCategory)
+    public function update(SubCategoryRequest $request, SubCategory $sub_category)
     {
-        $subCategory->update($request->validated());
+        $sub_category->update($request->validated());
 
-        return $subCategory;
+        return redirect()->route('sub_category.index');
     }
 
-    public function destroy(SubCategory $subCategory)
+    public function destroy(SubCategory $sub_category)
     {
-        $subCategory->delete();
+        $sub_category->delete();
 
-        return response()->json();
+        return redirect()->route('sub_category.index');
     }
 }

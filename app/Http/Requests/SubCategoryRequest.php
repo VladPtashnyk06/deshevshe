@@ -9,7 +9,7 @@ class SubCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required', 'exists:categories'],
+            'category_id' => ['required'],
             'title' => ['required'],
         ];
     }
