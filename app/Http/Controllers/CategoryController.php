@@ -3,36 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
-use App\Models\Categorie;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        return Categorie::all();
+        $categories = Category::all();
+        return view('admin.categories.index', compact('categories'));
+    }
+
+    public function create() {
+        return view('admin.categories.create');
     }
 
     public function store(CategoryRequest $request)
     {
-        return Categorie::create($request->validated());
+        Category::create($request->validated());
+        return redirect()->route('category.index');
     }
 
-    public function show(Categorie $category)
+    public function edit(Category $category)
     {
-        return $category;
+        return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(CategoryRequest $request, Categorie $category)
+    public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
 
-        return $category;
+        return redirect()->route('category.index');
     }
 
-    public function destroy(Categorie $category)
+    public function destroy(Category $category)
     {
         $category->delete();
 
-        return response()->json();
+        return redirect()->route('category.index');
     }
 }
