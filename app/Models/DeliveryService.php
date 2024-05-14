@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DeliveryMethod extends Model
+class DeliveryService extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'delivery_methods';
+    protected $table = 'delivery_services';
 
     /**
      * The primary key associated with the table.
@@ -23,10 +23,9 @@ class DeliveryMethod extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string, int>
+     * @var array<string>
      */
     protected $fillable = [
-        'delivery_service_id',
-        'method_title',
+        'delivery_title',
     ];
 }

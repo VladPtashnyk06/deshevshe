@@ -7,16 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('delivery_methods', function (Blueprint $table) {
+        Schema::create('delivery_services', function (Blueprint $table) {
             $table->id();
             $table->string('delivery_title');
-            $table->string('method_title');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('delivery_methods');
+        Schema::dropIfExists('delivery_services');
     }
 };
