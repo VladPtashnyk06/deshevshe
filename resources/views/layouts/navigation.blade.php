@@ -33,6 +33,9 @@
                     <x-nav-link :href="route('status.index')" :active="request()->routeIs('status.index')">
                         {{ __('Status') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('producer.index')" :active="request()->routeIs('producer.index')">
+                        {{ __('Producer') }}
+                    </x-nav-link>
                 </div>
             </div>
 

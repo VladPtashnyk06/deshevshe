@@ -88,6 +88,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{status}', 'destroy')->name('status.destroy');
                 });
             });
+            Route::group(['prefix' => 'producer'], function () {
+                Route::controller(\App\Http\Controllers\ProducerController::class)->group(function () {
+                    Route::get('/', 'index')->name('producer.index');
+                    Route::get('/create', 'create')->name('producer.create');
+                    Route::post('/store', 'store')->name('producer.store');
+                    Route::get('/edit/{producer}', 'edit')->name('producer.edit');
+                    Route::post('/update/{producer}', 'update')->name('producer.update');
+                    Route::delete('/delete/{producer}', 'destroy')->name('producer.destroy');
+                });
+            });
         });
     });
 });
