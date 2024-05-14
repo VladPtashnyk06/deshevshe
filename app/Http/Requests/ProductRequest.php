@@ -17,7 +17,6 @@ class ProductRequest extends FormRequest
             'package_id' => ['required', 'exists:packages'],
             'material_id' => ['required', 'exists:materials'],
             'characteristic_id' => ['required', 'exists:characteristics'],
-            'review_id' => ['required', 'exists:reviews'],
             'title' => ['required'],
             'description' => ['required'],
             'quantity' => ['required', 'integer'],

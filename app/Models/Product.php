@@ -35,7 +35,6 @@ class Product extends Model
         'package_id',
         'material_id',
         'characteristic_id',
-        'review_id',
         'title',
         'description',
         'quantity',
@@ -84,10 +83,5 @@ class Product extends Model
     public function characteristic(): BelongsTo
     {
         return $this->belongsTo(Characteristic::class);
-    }
-
-    public function review(): BelongsTo
-    {
-        return $this->belongsTo(Review::class);
     }
 }
