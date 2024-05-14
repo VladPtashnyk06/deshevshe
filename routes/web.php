@@ -78,6 +78,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{size}', 'destroy')->name('size.destroy');
                 });
             });
+            Route::group(['prefix' => 'product_status'], function () {
+                Route::controller(\App\Http\Controllers\StatusController::class)->group(function () {
+                    Route::get('/', 'index')->name('status.index');
+                    Route::get('/create', 'create')->name('status.create');
+                    Route::post('/store', 'store')->name('status.store');
+                    Route::get('/edit/{status}', 'edit')->name('status.edit');
+                    Route::post('/update/{status}', 'update')->name('status.update');
+                    Route::delete('/delete/{status}', 'destroy')->name('status.destroy');
+                });
+            });
         });
     });
 });

@@ -30,6 +30,9 @@
                     <x-nav-link :href="route('size.index')" :active="request()->routeIs('size.index')">
                         {{ __('Size') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('status.index')" :active="request()->routeIs('status.index')">
+                        {{ __('Status') }}
+                    </x-nav-link>
                 </div>
             </div>
 
