@@ -3,16 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DeliveryAddress extends Model
+class PaymentMethod extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'delivery_addresses';
+    protected $table = 'payment_methods';
 
     /**
      * The primary key associated with the table.
@@ -24,16 +23,9 @@ class DeliveryAddress extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string, int>
+     * @var array<string>
      */
     protected $fillable = [
-        'region_id',
-        'city',
-        'address',
+        'title',
     ];
-
-    public function region(): BelongsTo
-    {
-        return $this->belongsTo(Region::class);
-    }
 }
