@@ -38,6 +38,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{color}', 'destroy')->name('color.destroy');
                 });
             });
+            Route::group(['prefix' => 'package'], function () {
+                Route::controller(\App\Http\Controllers\PackageController::class)->group(function () {
+                    Route::get('/', 'index')->name('package.index');
+                    Route::get('/create', 'create')->name('package.create');
+                    Route::post('/store', 'store')->name('package.store');
+                    Route::get('/edit/{package}', 'edit')->name('package.edit');
+                    Route::post('/update/{package}', 'update')->name('package.update');
+                    Route::delete('/delete/{package}', 'destroy')->name('package.destroy');
+                });
+            });
         });
     });
 });

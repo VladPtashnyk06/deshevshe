@@ -9,30 +9,36 @@ class PackageController extends Controller
 {
     public function index()
     {
-        return Package::all();
+        $packages = Package::all();
+        return view('admin.packages.index', compact('packages'));
+    }
+
+    public function create() {
+        return view('admin.packages.create');
     }
 
     public function store(PackageRequest $request)
     {
-        return Package::create($request->validated());
+        Package::create($request->validated());
+        return redirect()->route('package.index');
     }
 
-    public function show(Package $package)
+    public function edit(Package $package)
     {
-        return $package;
+        return view('admin.packages.edit', compact('package'));
     }
 
     public function update(PackageRequest $request, Package $package)
     {
         $package->update($request->validated());
 
-        return $package;
+        return redirect()->route('package.index');
     }
 
     public function destroy(Package $package)
     {
         $package->delete();
 
-        return response()->json();
+        return redirect()->route('package.index');
     }
 }
