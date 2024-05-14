@@ -58,6 +58,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{material}', 'destroy')->name('material.destroy');
                 });
             });
+            Route::group(['prefix' => 'characteristic'], function () {
+                Route::controller(\App\Http\Controllers\CharacteristicController::class)->group(function () {
+                    Route::get('/', 'index')->name('characteristic.index');
+                    Route::get('/create', 'create')->name('characteristic.create');
+                    Route::post('/store', 'store')->name('characteristic.store');
+                    Route::get('/edit/{characteristic}', 'edit')->name('characteristic.edit');
+                    Route::post('/update/{characteristic}', 'update')->name('characteristic.update');
+                    Route::delete('/delete/{characteristic}', 'destroy')->name('characteristic.destroy');
+                });
+            });
         });
     });
 });

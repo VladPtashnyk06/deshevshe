@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ColorRequest;
 use App\Http\Requests\MaterialRequest;
-use App\Models\Color;
 use App\Models\Material;
 
 class MaterialController extends Controller
