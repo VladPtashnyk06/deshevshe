@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     public function rules(): array
     {
@@ -25,10 +25,13 @@ class ProductRequest extends FormRequest
             'product_promotion' => ['nullable', 'boolean'],
             'top_product' => ['nullable', 'boolean'],
             'rec_product' => ['nullable', 'boolean'],
-            'main_image' => ['required', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
+            'main_media_id' => ['nullable', 'integer', 'exists:media,id'],
+            'deleted_main_image' => ['nullable', 'integer', 'min:0'],
+            'main_image' => ['nullable' ,'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
             'alt_for_main_image' => ['nullable', 'string', 'max:255'],
             'additional.*.image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
             'additional.*.alt' => ['nullable', 'string', 'max:255'],
+            'additional_image.*.alt' => ['nullable', 'string', 'max:255'],
         ];
     }
 

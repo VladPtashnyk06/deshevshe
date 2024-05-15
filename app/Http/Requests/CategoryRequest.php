@@ -10,6 +10,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'title' => ['required', 'unique:categories,title'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 

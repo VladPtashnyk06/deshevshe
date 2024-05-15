@@ -10,6 +10,8 @@ return new class extends Migration {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('title')->unique();
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
+            $table->integer('level')->default(1);
             $table->timestamps();
         });
     }

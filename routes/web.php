@@ -102,20 +102,22 @@ Route::middleware('auth')->group(function () {
                 Route::controller(\App\Http\Controllers\CategoryController::class)->group(function () {
                     Route::get('/', 'index')->name('category.index');
                     Route::get('/create', 'create')->name('category.create');
+                    Route::get('/createSubCategory/{category}', 'createSubCategory')->name('category.createSubCategory');
                     Route::post('/store', 'store')->name('category.store');
                     Route::get('/edit/{category}', 'edit')->name('category.edit');
                     Route::post('/update/{category}', 'update')->name('category.update');
                     Route::delete('/delete/{category}', 'destroy')->name('category.destroy');
                 });
             });
-            Route::group(['prefix' => 'sub_category'], function () {
-                Route::controller(\App\Http\Controllers\SubCategoryController::class)->group(function () {
-                    Route::get('/', 'index')->name('sub_category.index');
-                    Route::get('/create', 'create')->name('sub_category.create');
-                    Route::post('/store', 'store')->name('sub_category.store');
-                    Route::get('/edit/{sub_category}', 'edit')->name('sub_category.edit');
-                    Route::post('/update/{sub_category}', 'update')->name('sub_category.update');
-                    Route::delete('/delete/{sub_category}', 'destroy')->name('sub_category.destroy');
+            Route::group(['prefix' => 'product'], function () {
+                Route::controller(\App\Http\Controllers\ProductController::class)->group(function () {
+                    Route::get('/', 'index')->name('product.index');
+                    Route::get('/create', 'create')->name('product.create');
+                    Route::post('/store', 'store')->name('product.store');
+                    Route::get('/edit/{product}', 'edit')->name('product.edit');
+                    Route::post('/update/{product}', 'update')->name('product.update');
+                    Route::delete('/deleteMedia/{media}', 'destroyMedia')->name('product.destroyMedia');
+                    Route::delete('/delete/{product}', 'destroy')->name('product.destroy');
                 });
             });
         });

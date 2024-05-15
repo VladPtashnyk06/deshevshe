@@ -3,23 +3,17 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white">
                 <h2 class="text-2xl font-semibold mb-4 text-center">Create SubCategory</h2>
-                <form action="{{ route('sub_category.store') }}" method="post" class="max-w-4xl mx-auto" enctype="multipart/form-data">
+                <form action="{{ route('category.store') }}" method="post" class="max-w-4xl mx-auto" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-4">
-                        <label for="category_id" class="block mb-2 font-bold">Category</label>
-                        <select name="category_id" id="category_id" class="w-full border rounded px-3 py-2">
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
                         @error('title')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required and unique") }}</span>
+                        <span class="text-red-500">{{ $message }}</span>
                         @enderror
-                        <label for="title" class="block mb-2 font-bold">SubCategory</label>
+                        <label for="title_parent" class="block mb-2 font-bold">Parent Category</label>
+                        <input type="text" name="title_parent" id="title_parent" class="w-full border rounded px-3 py-2" value="{{ $category->title}}" disabled>
+                        <input type="hidden" name="parent_id" id="parent_id" value="{{ $category->id }}">
+                        <label for="title" class="block mb-2 font-bold mt-3">SubCategory</label>
                         <input type="text" name="title" id="title" class="w-full border rounded px-3 py-2" value="{{ old('title') }}">
                     </div>
 

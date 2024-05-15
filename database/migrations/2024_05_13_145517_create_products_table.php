@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->foreignId('size_id')->constrained('sizes');
             $table->foreignId('color_id')->constrained('colors');
             $table->foreignId('package_id')->constrained('packages');
-            $table->foreignId('material_id')->constrained('materials');
-            $table->foreignId('characteristic_id')->constrained('characteristics');
+            $table->foreignId('material_id')->nullable()->constrained('materials');
+            $table->foreignId('characteristic_id')->nullable()->constrained('characteristics');
             $table->string('title');
             $table->text('description');
             $table->integer('quantity');
