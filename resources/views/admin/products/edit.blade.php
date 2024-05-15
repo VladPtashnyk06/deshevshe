@@ -2,7 +2,7 @@
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white">
-                <h2 class="text-2xl font-semibold mb-4 text-center">Edit Product</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-center">Редагувати товар</h2>
                 <form action="{{ route('product.update', $product->id) }}" method="post" class="max-w-4xl mx-auto" enctype="multipart/form-data">
                     @csrf
 
@@ -12,7 +12,7 @@
                                 <div class="main_image_with_alt">
                                     <div class="mb-4">
                                         <input type="hidden" name="main_media_id" value="{{ $media->id }}">
-                                        <label for="image_main" class="block mb-2 font-bold">Main Image</label>
+                                        <label for="image_main" class="block mb-2 font-bold">Головна фотографія</label>
                                         <div class="mb-4">
                                             <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="w-1/4">
                                         </div>
@@ -23,13 +23,13 @@
                                             @error('alt_for_main_image')
                                             <span class="text-red-500">{{ htmlspecialchars("Потрібно ввести текст, не більше 255 символів") }}</span>
                                             @enderror
-                                            <label for="alt_for_main_image" class="block mb-2 font-bold">Alt For Main Image</label>
+                                            <label for="alt_for_main_image" class="block mb-2 font-bold">Alt для головної фотографії</label>
                                             <input type="text" name="alt_for_main_image" id="alt_for_main_image" class="w-full border rounded px-3 py-2" value="{{ $media->getCustomProperty('alt') }}">
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <button type="button" title="Delete Poster With Alt" onclick="deleteMainImageWithAlts(this, {{ $media->id }})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 transition duration-300 rounded">
-                                            Delete Poster With Alt
+                                            Видалити головну фотографію з Alt
                                         </button>
                                     </div>
                                 </div>
@@ -38,20 +38,20 @@
                     </div>
 
                     <div id="additional_images_container" class="border border-gray-500 rounded p-4 mb-4">
-                        <h2 class="mb-3"><b>Additional Images</b></h2>
+                        <h2 class="mb-3"><b>Додаткові фотографії</b></h2>
                         @foreach ($product->getMedia($product->id) as $media)
                             @if ($media->getCustomProperty('main_image') === 0)
                                 <div class="border border-gray-500 rounded p-4 mb-4">
                                     <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="rounded-md w-1/4">
                                     <div class="w-full grid grid-cols-2 gap-4">
                                         <div class="mb-4">
-                                            <label for="additional_image[{{$media->id}}]" class="block mb-2 font-bold">Alt For Additional Photo</label>
+                                            <label for="additional_image[{{$media->id}}]" class="block mb-2 font-bold">Alt для додаткової фотографії</label>
                                             <input type="text" name="additional_image[{{$media->id}}][alt]" id="additional_image[{{$media->id}}]" class="w-full border rounded px-3 py-2" value="{{ $media->getCustomProperty('alt') }}">
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out" onclick="deleteAdditionalImageWithAlts(this, {{ $media->id }})">
-                                            Delete Additional Photo with Alt
+                                            Видалити додаткову фотографію з Alt
                                         </button>
                                     </div>
                                 </div>
@@ -62,14 +62,14 @@
                     <div id="image_container" class="mb-4"></div>
 
                     <div class="text-center mb-4">
-                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" onclick="addNewImagesWithAlt(this)">Add Additional Image and Their Alts</button>
+                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" onclick="addNewImagesWithAlt(this)">Додати додаткову фотографію та Alts</button>
                     </div>
 
                     <div class="mb-4">
                         @error('category_id')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="category_id" class="block mb-2 font-bold">Category</label>
+                        <label for="category_id" class="block mb-2 font-bold">Категорія</label>
                         <select name="category_id" id="category_id" class="w-full border rounded px-3 py-2">
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}" @if($category->id == $product->category_id ) selected @endif>{{ $category->title }}</option>
@@ -79,46 +79,46 @@
 
                     <div class="mb-4">
                         @error('code')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="code" class="block mb-2 font-bold">Code</label>
+                        <label for="code" class="block mb-2 font-bold">Код товару</label>
                         <input type="text" name="code" id="code" class="w-full border rounded px-3 py-2" value="{{ $product->code }}">
                     </div>
 
                     <div class="mb-4">
                         @error('title')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="title" class="block mb-2 font-bold">Title</label>
+                        <label for="title" class="block mb-2 font-bold">Назва товару</label>
                         <input type="text" name="title" id="title" class="w-full border rounded px-3 py-2" value="{{ $product->title }}">
                     </div>
 
                     <div class="mb-4">
                         @error('quantity')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="quantity" class="block mb-2 font-bold">Quantity</label>
+                        <label for="quantity" class="block mb-2 font-bold">Кількість товару</label>
                         <input type="number" name="quantity" id="quantity" class="w-full border rounded px-3 py-2" value="{{ $product->quantity }}">
                     </div>
 
                     <div class="mb-4">
-                        <label for="model" class="block mb-2 font-bold">Model</label>
+                        <label for="model" class="block mb-2 font-bold">Модель</label>
                         <input type="text" name="model" id="model" class="w-full border rounded px-3 py-2" value="{{ $product->model }}">
                     </div>
 
                     <div class="mb-4">
                         @error('description')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required and unique") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="description" class="block mb-2 font-bold">Description in Ukrainian</label>
+                        <label for="description" class="block mb-2 font-bold">Опис товару</label>
                         <textarea name="description" id="description" class="w-full border rounded px-3 py-2 h-32">{{ $product->description }}</textarea>
                     </div>
 
                     <div class="mb-4">
                         @error('color_id')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="color_id" class="block mb-2 font-bold">Color</label>
+                        <label for="color_id" class="block mb-2 font-bold">Колір</label>
                         <select name="color_id" id="color_id" class="w-full border rounded px-3 py-2">
                             @foreach($colors as $color)
                                 <option value="{{ $color->id }}" @if($color->id == $product->color_id ) selected @endif>{{ $color->title }}</option>
@@ -128,9 +128,9 @@
 
                     <div class="mb-4">
                         @error('size_id')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="size_id" class="block mb-2 font-bold">Size</label>
+                        <label for="size_id" class="block mb-2 font-bold">Розмір</label>
                         <select name="size_id" id="size_id" class="w-full border rounded px-3 py-2">
                             @foreach($sizes as $size)
                                 <option value="{{ $size->id }}" @if($size->id == $product->size_id ) selected @endif>{{ $size->title }}</option>
@@ -140,9 +140,9 @@
 
                     <div class="mb-4">
                         @error('package_id')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="package_id" class="block mb-2 font-bold">Package</label>
+                        <label for="package_id" class="block mb-2 font-bold">К-сть. у пакуванні</label>
                         <select name="package_id" id="package_id" class="w-full border rounded px-3 py-2">
                             @foreach($packages as $package)
                                 <option value="{{ $package->id }}" @if($package->id == $product->package_id ) selected @endif>{{ $package->title }}</option>
@@ -152,9 +152,9 @@
 
                     <div class="mb-4">
                         @error('producer_id')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="producer_id" class="block mb-2 font-bold">Producer</label>
+                        <label for="producer_id" class="block mb-2 font-bold">Виробник</label>
                         <select name="producer_id" id="producer_id" class="w-full border rounded px-3 py-2">
                             @foreach($producers as $producer)
                                 <option value="{{ $producer->id }}" @if($producer->id == $product->producer_id ) selected @endif>{{ $producer->title }}</option>
@@ -163,9 +163,9 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="material_id" class="block mb-2 font-bold">Material</label>
+                        <label for="material_id" class="block mb-2 font-bold">Матеріал</label>
                         <select name="material_id" id="material_id" class="w-full border rounded px-3 py-2">
-                            <option value="">All Materials</option>
+                            <option value="">Всі матеріали</option>
                             @foreach($materials as $material)
                                 <option value="{{ $material->id }}" @if($material->id == $product->material_id ) selected @endif>{{ $material->title }}</option>
                             @endforeach
@@ -173,9 +173,9 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="characteristic_id" class="block mb-2 font-bold">Characteristic</label>
+                        <label for="characteristic_id" class="block mb-2 font-bold">Характеристики</label>
                         <select name="characteristic_id" id="characteristic_id" class="w-full border rounded px-3 py-2">
-                            <option value="">All Characteristics</option>
+                            <option value="">Всі характеристики</option>
                             @foreach($characteristics as $characteristic)
                                 <option value="{{ $characteristic->id }}" @if($characteristic->id == $product->characteristic_id ) selected @endif>Height: {{ $characteristic->height }}cm Width: {{ $characteristic->width }}cm</option>
                             @endforeach
@@ -184,42 +184,42 @@
 
                     <div class="mb-4">
                         @error('product_promotion')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="product_promotion" class="block mb-2 font-bold">Product Promotion</label>
+                        <label for="product_promotion" class="block mb-2 font-bold">Промоакція</label>
                         <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
-                            <option value="0" @if($product->product_promotion == 0 ) selected @endif> No </option>
-                            <option value="1" @if($product->product_promotion == 1 ) selected @endif> Yes </option>
+                            <option value="0" @if($product->product_promotion == 0 ) selected @endif> Ні </option>
+                            <option value="1" @if($product->product_promotion == 1 ) selected @endif> Так </option>
                         </select>
                     </div>
 
                     <div class="mb-4">
                         @error('top_product')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="top_product" class="block mb-2 font-bold">Top Product </label>
+                        <label for="top_product" class="block mb-2 font-bold">Топ продукт</label>
                         <select name="top_product" id="top_product" class="w-full border rounded px-3 py-2">
-                            <option value="0" @if($product->top_product == 0 ) selected @endif> No </option>
-                            <option value="1" @if($product->top_product == 1 ) selected @endif> Yes </option>
+                            <option value="0" @if($product->top_product == 0 ) selected @endif> Ні </option>
+                            <option value="1" @if($product->top_product == 1 ) selected @endif> Так </option>
                         </select>
                     </div>
 
                     <div class="mb-4">
                         @error('rec_product')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="rec_product" class="block mb-2 font-bold">Rec Product</label>
+                        <label for="rec_product" class="block mb-2 font-bold">Рекомендований товар</label>
                         <select name="rec_product" id="rec_product" class="w-full border rounded px-3 py-2">
-                            <option value="0" @if($product->rec_product == 0 ) selected @endif> No </option>
-                            <option value="1" @if($product->rec_product == 1 ) selected @endif> Yes </option>
+                            <option value="0" @if($product->rec_product == 0 ) selected @endif> Ні </option>
+                            <option value="1" @if($product->rec_product == 1 ) selected @endif> Так </option>
                         </select>
                     </div>
 
                     <div class="mb-4">
                         @error('status_id')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="status_id" class="block mb-2 font-bold">Status</label>
+                        <label for="status_id" class="block mb-2 font-bold">Статус</label>
                         <select name="status_id" id="status_id" class="w-full border rounded px-3 py-2">
                             @foreach($statuses as $status)
                                 <option value="{{ $status->id }}" @if($status->id == $product->status_id ) selected @endif>{{ $status->title }}</option>
@@ -229,46 +229,46 @@
 
                     <div class="mb-4">
                         @error('pair')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="pair" class="block mb-2 font-bold">Price Pair</label>
+                        <label for="pair" class="block mb-2 font-bold">Ціна за одну пару</label>
                         <input type="text" name="pair" id="pair" class="w-full border rounded px-3 py-2" value="{{ $price->pair }}">
                     </div>
 
                     <div class="mb-4">
                         @error('rec_pair')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="rec_pair" class="block mb-2 font-bold">Price Rec Pair</label>
+                        <label for="rec_pair" class="block mb-2 font-bold">Рекомендована ціна за одну пару</label>
                         <input type="text" name="rec_pair" id="rec_pair" class="w-full border rounded px-3 py-2" value="{{ $price->rec_pair }}">
                     </div>
 
                     <div class="mb-4">
                         @error('package')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="package" class="block mb-2 font-bold">Price Package</label>
+                        <label for="package" class="block mb-2 font-bold">Ціна за опт</label>
                         <input type="text" name="package" id="package" class="w-full border rounded px-3 py-2" value="{{ $price->package }}">
                     </div>
 
                     <div class="mb-4">
                         @error('rec_package')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="rec_package" class="block mb-2 font-bold">Price Rec Package</label>
+                        <label for="rec_package" class="block mb-2 font-bold">Рекомендована ціна за опт</label>
                         <input type="text" name="rec_package" id="rec_package" class="w-full border rounded px-3 py-2" value="{{ $price->rec_package }}">
                     </div>
 
                     <div class="mb-4">
                         @error('retail')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
-                        <label for="retail" class="block mb-2 font-bold">Price Retail</label>
+                        <label for="retail" class="block mb-2 font-bold">Роздрібна ціна</label>
                         <input type="text" name="retail" id="retail" class="w-full border rounded px-3 py-2" value="{{ $price->retail }}">
                     </div>
 
                     <div class="text-center mb-4">
-                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Update Product</button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Оновити продукт</button>
                     </div>
                 </form>
                 @if ($product->getMedia($product->id)->slice(1))
@@ -294,23 +294,23 @@
         imageWithAltDiv.innerHTML = `
             <div class="mb-4">
                 @error("additional")
-                    <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                    <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                 @enderror
-                <label for="additional[${countImageDiv}][image]" class="block mb-2 font-bold">Additional Image ${countImageDiv}</label>
+                <label for="additional[${countImageDiv}][image]" class="block mb-2 font-bold">Додаткова фотографія ${countImageDiv}</label>
                 <input type="file" name="additional[${countImageDiv}][image]" id="additional[${countImageDiv}][image]" class="w-full border rounded px-3 py-2">
             </div>
 
             <div class="w-full grid grid-cols-2 gap-4">
                 <div class="mb-4">
                     @error('additional')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                     @enderror
-                    <label for="additional[${countImageDiv}][alt]" class="block mb-2 font-bold">Alt For Additional Image</label>
+                    <label for="additional[${countImageDiv}][alt]" class="block mb-2 font-bold">Alt для додаткової фотографії</label>
                     <input type="text" name="additional[${countImageDiv}][alt]" id="additional[${countImageDiv}][alt_uk]" class="w-full border rounded px-3 py-2">
                 </div>
             </div>
             <div class="text-right">
-                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out" onclick="deleteAdditionalImageWithAlts(this)">Delete Image and Alts</button>
+                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out" onclick="deleteAdditionalImageWithAlts(this)">Видалити додаткову фотографію з Alts</button>
             </div>
         `;
         imageContainer.appendChild(imageWithAltDiv);
@@ -346,7 +346,7 @@
                 @error('main_image')
                         <span class="text-red-500">Треба обов'язково вибрати картинку</span>
                 @enderror
-                        <label for="main_image" class="block mb-2 font-bold">Main Image</label>
+                        <label for="main_image" class="block mb-2 font-bold">Головна фотографія</label>
                         <input type="file" name="main_image" id="main_image" class="w-full border rounded px-3 py-2">
                     </div>
 
@@ -355,7 +355,7 @@
                 @error('alt_for_main_image')
                         <span class="text-red-500">Потрібно ввести текст, не більше 255 символів</span>
                 @enderror
-                        <label for="alt_for_main_image" class="block mb-2 font-bold">Alt For Main Image</label>
+                        <label for="alt_for_main_image" class="block mb-2 font-bold">Alt для головної фотографії</label>
                         <input type="text" name="alt_for_main_image" id="alt_for_main_image" class="w-full border rounded px-3 py-2" value="">
                     </div>
                 </div>

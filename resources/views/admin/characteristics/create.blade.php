@@ -2,28 +2,28 @@
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white">
-                <h2 class="text-2xl font-semibold mb-4 text-center">Create Characteristic</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-center">Створити характеристики</h2>
                 <form action="{{ route('characteristic.store') }}" method="post" class="max-w-4xl mx-auto" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-4">
                         @error('height')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required and unique") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
                         @enderror
-                        <label for="height" class="block mb-2 font-bold">Height</label>
+                        <label for="height" class="block mb-2 font-bold">Висота</label>
                         <input type="text" name="height" id="height" class="w-full border rounded px-3 py-2" value="{{ old('height') }}">
                     </div>
 
                     <div class="mb-4">
                         @error('width')
-                        <span class="text-red-500">{{ htmlspecialchars("This field is required and unique") }}</span>
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
                         @enderror
-                        <label for="width" class="block mb-2 font-bold">Width</label>
+                        <label for="width" class="block mb-2 font-bold">Ширина</label>
                         <input type="text" name="width" id="width" class="w-full border rounded px-3 py-2" value="{{ old('width') }}">
                     </div>
 
                     <div class="text-center mb-4">
-                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Create Characteristic</button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Створити характеристики</button>
                     </div>
                 </form>
             </div>

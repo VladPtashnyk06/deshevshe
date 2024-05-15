@@ -3,89 +3,89 @@
         <div class="mx-auto sm:px-6 lg:px-8" style="max-width: 114rem">
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg bg-white">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-2xl font-semibold mb-2 text-center">Products</h1>
+                    <h1 class="text-2xl font-semibold mb-2 text-center">Продукти</h1>
                     <div class="text-center mb-4">
-                        <a href="{{ route('product.create') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Create Product</a>
+                        <a href="{{ route('product.create') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Створити продукт</a>
                     </div>
                     <div class="text-center mb-4">
                         <form action="{{ route('product.index') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
                             <div class="mb-4" style="flex: 1;">
-                                <label for="code" class="block mb-2 font-bold">Codes:</label>
+                                <label for="code" class="block mb-2 font-bold">Коди:</label>
                                 <select name="code" id="code" class="w-full border rounded px-3">
-                                    <option value="">All Codes</option>
+                                    <option value="">Усі коди</option>
                                     @foreach ($codes as $code)
                                         <option value="{{ $code }}" @if(request()->input('code') == $code) selected @endif>{{ $code }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
-                                <label for="producer_id" class="block mb-2 font-bold">Producers:</label>
+                                <label for="producer_id" class="block mb-2 font-bold">Виробники:</label>
                                 <select name="producer_id" id="producer_id" class="w-full border rounded px-3 py-2">
-                                    <option value="">All Producer</option>
+                                    <option value="">Усі виробники</option>
                                     @foreach ($producers as $producer)
                                         <option value="{{ $producer->id }}" @if(request()->input('producer_id') == $producer->id) selected @endif>{{ $producer->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
-                                <label for="category_id" class="block mb-2 font-bold">Categories:</label>
+                                <label for="category_id" class="block mb-2 font-bold">Категорії:</label>
                                 <select name="category_id" id="category_id" class="w-full border rounded px-3 py-2">
-                                    <option value="">All Categories</option>
+                                    <option value="">Усі категорії</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}" @if(request()->input('category_id') == $category->id) selected @endif>{{ $category->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
-                                <label for="product_promotion" class="block mb-2 font-bold">Product Promotion:</label>
+                                <label for="product_promotion" class="block mb-2 font-bold">Промоційні продукти:</label>
                                 <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
-                                    <option value=""> All </option>
-                                    <option value="1" @if(request()->input('product_promotion') == '1') selected @endif> Yes </option>
-                                    <option value="No" @if(request()->input('product_promotion') == 'No') selected @endif> No </option>
+                                    <option value=""> Всі </option>
+                                    <option value="1" @if(request()->input('product_promotion') == '1') selected @endif> Так </option>
+                                    <option value="No" @if(request()->input('product_promotion') == 'No') selected @endif> Ні </option>
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
-                                <label for="top_product" class="block mb-2 font-bold">Top Product:</label>
+                                <label for="top_product" class="block mb-2 font-bold">Топ продукти:</label>
                                 <select name="top_product" id="top_product" class="w-full border rounded px-3 py-2">
-                                    <option value=""> All </option>
-                                    <option value="1" @if(request()->input('top_product') == '1') selected @endif> Yes </option>
-                                    <option value="No" @if(request()->input('top_product') == 'No') selected @endif> No </option>
+                                    <option value=""> Всі </option>
+                                    <option value="1" @if(request()->input('top_product') == '1') selected @endif> Так </option>
+                                    <option value="No" @if(request()->input('top_product') == 'No') selected @endif> Ні </option>
                                 </select>
                             </div>
                             <div class="mb-4 ml-4 mr-2" style="flex: 1;">
-                                <label for="rec_product" class="block mb-2 font-bold">Rec Product:</label>
+                                <label for="rec_product" class="block mb-2 font-bold">Рекомендовані продукти:</label>
                                 <select name="rec_product" id="rec_product" class="w-full border rounded px-3 py-2">
-                                    <option value=""> All </option>
-                                    <option value="1" @if(request()->input('rec_product') == '1') selected @endif> Yes </option>
-                                    <option value="No" @if(request()->input('rec_product') == 'No') selected @endif> No </option>
+                                    <option value=""> Всі </option>
+                                    <option value="1" @if(request()->input('rec_product') == '1') selected @endif> Так </option>
+                                    <option value="No" @if(request()->input('rec_product') == 'No') selected @endif> Ні </option>
                                 </select>
                             </div>
-                            <div class="mb-4">
-                            <div class="mt-4">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border">Apply Filters</button>
-                                <button type="button" onclick="window.location='{{ route('product.index') }}'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border ml-2">Clear Filters</button>
-                            </div>
+                            <div class="ml-2 mb-4">
+                                <div class="mt-4">
+                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border">Застосувати фільтри</button>
+                                    <button type="button" onclick="window.location='{{ route('product.index') }}'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border ml-2">Очистити фільтри</button>
+                                </div>
                         </form>
                     </div>
                     <table class="w-full mb-5">
                         <thead>
-                            <tr class="text-center border-b-2 border-gray-700">
-                                <th class="p-2 text-lg">Image</th>
-                                <th class="p-2 text-lg">Code</th>
-                                <th class="p-2 text-lg">Title</th>
-                                <th class="p-2 text-lg">Quantity</th>
-                                <th class="p-2 text-lg">Category</th>
-                                <th class="p-2 text-lg">Color</th>
-                                <th class="p-2 text-lg">Size</th>
-                                <th class="p-2 text-lg">Package</th>
-                                <th class="p-2 text-lg">Producers</th>
-                                <th class="p-2 text-lg">Pr. Promotion</th>
-                                <th class="p-2 text-lg">Top Product</th>
-                                <th class="p-2 text-lg">Rec Product</th>
-                                <th class="p-2 text-lg">Price Pair</th>
-                                <th class="p-2 text-lg">Price Retail</th>
-                                <th class="p-2 text-lg">Actions</th>
-                            </tr>
+                        <tr class="text-center border-b-2 border-gray-700">
+                            <th class="p-2 text-lg">Зображення</th>
+                            <th class="p-2 text-lg">Код товару</th>
+                            <th class="p-2 text-lg">Назва товару</th>
+                            <th class="p-2 text-lg">Кількість товару</th>
+                            <th class="p-2 text-lg">Категорія</th>
+                            <th class="p-2 text-lg">Колір</th>
+                            <th class="p-2 text-lg">Розмір</th>
+                            <th class="p-2 text-lg">К-сть. в упакуванні</th>
+                            <th class="p-2 text-lg">Виробник</th>
+                            <th class="p-2 text-lg">Промоція</th>
+                            <th class="p-2 text-lg">Топ продукт</th>
+                            <th class="p-2 text-lg">Рекомендований продукт</th>
+                            <th class="p-2 text-lg">Ціна за пару</th>
+                            <th class="p-2 text-lg">Роздрібна ціна</th>
+                            <th class="p-2 text-lg">Дії</th>
+                        </tr>
                         </thead>
                         <tbody>
                         @foreach ($products as $product)
@@ -105,9 +105,9 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->size->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->package->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'No' : 'Yes' }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'No' : 'Yes' }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->rec_product == 0 ? 'No' : 'Yes' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->rec_product == 0 ? 'Ні' : 'Так' }}</td>
                                 @foreach($prices as $price)
                                     @if($price->product_id == $product->id)
                                         <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->pair }}</td>
@@ -119,11 +119,11 @@
                                     @endif
                                 @endforeach
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
-                                    <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Edit</a>
+                                    <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Редагувати</a>
                                     <form action="{{ route('product.destroy', $product->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 mt-3 w-full border" style="max-width: 120px">Delete</button>
+                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 mt-3 w-full border" style="max-width: 120px">Видалити</button>
                                     </form>
                                 </td>
                             </tr>
