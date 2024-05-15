@@ -28,5 +28,6 @@ class Characteristic extends Model
     protected $fillable = [
         'height',
         'width',
+        'length'
     ];
 }

@@ -11,6 +11,7 @@ class CharacteristicRequest extends FormRequest
         return [
             'height' => ['required', 'integer'],
             'width' => ['required', 'integer'],
+            'length' => ['required', 'integer'],
         ];
     }
 

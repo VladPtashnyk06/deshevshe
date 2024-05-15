@@ -15,7 +15,7 @@
                                     <option value="">Всі категорії</option>
                                     @foreach ($uniqueParentIds as $parentId)
                                         @if($parentId == null)
-                                            <option value="{{ 'null' }}" @if(request()->input('parent_category') == 'null') selected @endif>Null</option>
+                                            <option value="{{ 'null' }}" @if(request()->input('parent_category') == 'null') selected @endif>Немає</option>
                                         @else
                                             <option value="{{ $parentId }}" @if(request()->input('parent_category') == $parentId) selected @endif>{{ $parentId }}</option>
                                         @endif
@@ -50,7 +50,7 @@
                         @foreach ($categories as $category)
                             <tr class="text-center odd:bg-gray-200">
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $category->parent ? $category->parent->title : 'Null' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $category->parent ? $category->parent->title : 'Немає' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $category->level }}</td>
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
                                     <a href="{{ route('category.edit', $category->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Редагувати</a>

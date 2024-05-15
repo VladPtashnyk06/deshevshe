@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->integer('height');
             $table->integer('width');
+            $table->integer('length');
             $table->timestamps();
         });
     }

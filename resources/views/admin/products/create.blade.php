@@ -149,7 +149,7 @@
                         <select name="characteristic_id" id="characteristic_id" class="w-full border rounded px-3 py-2">
                             <option value="">Всі характеристики</option>
                             @foreach($characteristics as $characteristic)
-                                <option value="{{ $characteristic->id }}">Height: {{ $characteristic->height }}cm Width: {{ $characteristic->width }}cm</option>
+                                <option value="{{ $characteristic->id }}">Висота: {{ $characteristic->height }}cm Ширина: {{ $characteristic->width }}cm Довжина: {{ $characteristic->length }}cm</option>
                             @endforeach
                         </select>
                     </div>

@@ -22,6 +22,14 @@
                         <input type="text" name="width" id="width" class="w-full border rounded px-3 py-2" value="{{ $characteristic->width }}">
                     </div>
 
+                    <div class="mb-4">
+                        @error('length')
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
+                        @enderror
+                        <label for="length" class="block mb-2 font-bold">Довжина</label>
+                        <input type="text" name="length" id="length" class="w-full border rounded px-3 py-2" value="{{ $characteristic->length }}">
+                    </div>
+
                     <div class="text-center mb-4">
                         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Оновити характеристики</button>
                     </div>

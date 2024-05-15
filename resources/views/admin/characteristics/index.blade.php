@@ -12,6 +12,7 @@
                             <tr class="text-center border-b-2 border-gray-700">
                                 <th class="p-2 text-lg">Висота</th>
                                 <th class="p-2 text-lg">Ширина</th>
+                                <th class="p-2 text-lg">Довжина</th>
                                 <th class="p-2 text-lg">Дії</th>
                             </tr>
                         </thead>
@@ -20,6 +21,7 @@
                             <tr class="text-center odd:bg-gray-200">
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $characteristic->height }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $characteristic->width }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $characteristic->length }}</td>
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
                                     <a href="{{ route('characteristic.edit', $characteristic->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Редагувати</a>
                                     <form action="{{ route('characteristic.destroy', $characteristic->id) }}" method="POST">
