@@ -227,6 +227,46 @@
                         </select>
                     </div>
 
+                    <div class="mb-4">
+                        @error('pair')
+                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        @enderror
+                        <label for="pair" class="block mb-2 font-bold">Price Pair</label>
+                        <input type="text" name="pair" id="pair" class="w-full border rounded px-3 py-2" value="{{ $price->pair }}">
+                    </div>
+
+                    <div class="mb-4">
+                        @error('rec_pair')
+                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        @enderror
+                        <label for="rec_pair" class="block mb-2 font-bold">Price Rec Pair</label>
+                        <input type="text" name="rec_pair" id="rec_pair" class="w-full border rounded px-3 py-2" value="{{ $price->rec_pair }}">
+                    </div>
+
+                    <div class="mb-4">
+                        @error('package')
+                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        @enderror
+                        <label for="package" class="block mb-2 font-bold">Price Package</label>
+                        <input type="text" name="package" id="package" class="w-full border rounded px-3 py-2" value="{{ $price->package }}">
+                    </div>
+
+                    <div class="mb-4">
+                        @error('rec_package')
+                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        @enderror
+                        <label for="rec_package" class="block mb-2 font-bold">Price Rec Package</label>
+                        <input type="text" name="rec_package" id="rec_package" class="w-full border rounded px-3 py-2" value="{{ $price->rec_package }}">
+                    </div>
+
+                    <div class="mb-4">
+                        @error('retail')
+                        <span class="text-red-500">{{ htmlspecialchars("This field is required") }}</span>
+                        @enderror
+                        <label for="retail" class="block mb-2 font-bold">Price Retail</label>
+                        <input type="text" name="retail" id="retail" class="w-full border rounded px-3 py-2" value="{{ $price->retail }}">
+                    </div>
+
                     <div class="text-center mb-4">
                         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Update Product</button>
                     </div>

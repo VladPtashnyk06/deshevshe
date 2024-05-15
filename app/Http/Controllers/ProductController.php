@@ -9,6 +9,7 @@ use App\Models\Characteristic;
 use App\Models\Color;
 use App\Models\Material;
 use App\Models\Package;
+use App\Models\Price;
 use App\Models\Producer;
 use App\Models\Product;
 use App\Models\Size;
@@ -22,9 +23,11 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::all();
+        $prices = Price::all();
         $codes = Product::select('code')->distinct()->pluck('code');
+        $categories = Category::all();
         $producers = Producer::all();
-        $queryParams = $request->only(['code', 'producer_id', 'top_product', 'product_promotion', 'rec_product']);
+        $queryParams = $request->only(['code', 'category_id', 'producer_id', 'top_product', 'product_promotion', 'rec_product']);
         $filteredParams = array_filter($queryParams);
         $query = Product::query();
 
@@ -34,6 +37,10 @@ class ProductController extends Controller
 
         if (isset($filteredParams['producer_id'])) {
             $query->where('producer_id', $filteredParams['producer_id']);
+        }
+
+        if (isset($filteredParams['category_id'])) {
+            $query->where('category_id', $filteredParams['category_id']);
         }
 
         if (isset($filteredParams['top_product'])) {
@@ -61,10 +68,10 @@ class ProductController extends Controller
         }
 
         $products = $query->get();
-        return view('admin.products.index', compact('products', 'codes', 'producers'));
+        return view('admin.products.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
 
-    public function allNeeds($view, $idProduct = '')
+    public function allNeeds($view, $idProduct = '', $idPrices = '')
     {
         $categories = Category::all();
         $colors = Color::all();
@@ -79,8 +86,13 @@ class ProductController extends Controller
         } else {
             $product = Product::all();
         }
+        if ($idPrices != '') {
+            $price = Price::find($idPrices);
+        } else {
+            $price = Price::all();
+        }
 
-        return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'packages', 'product', 'statuses', 'materials', 'characteristics'));
+        return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'packages', 'product', 'statuses', 'materials', 'characteristics', 'price'));
     }
 
     public function create() {
@@ -105,13 +117,27 @@ class ProductController extends Controller
                 }
             }
         }
+
+        $prices = [
+            'product_id' => $newProduct->id,
+            'pair' => $request->validated('pair'),
+            'rec_pair' => $request->validated('rec_pair'),
+            'package' => $request->validated('package'),
+            'rec_package' => $request->validated('rec_package'),
+            'retail' => $request->validated('retail'),
+        ];
+        Price::create($prices);
         return redirect()->route('product.index');
     }
 
     public function edit(Product $product)
     {
         $id = $product->id;
-        return $this->allNeeds('edit', $id);
+        $prices = Price::where('product_id', $id)->get();
+        foreach ($prices as $price) {
+            $idPrice = $price->id;
+        }
+        return $this->allNeeds('edit', $id, $idPrice);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
@@ -171,6 +197,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        Price::where('product_id', $product->id)->delete();
         $product->delete();
 
         return redirect()->route('product.index');

@@ -28,6 +28,15 @@
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
+                                <label for="category_id" class="block mb-2 font-bold">Categories:</label>
+                                <select name="category_id" id="category_id" class="w-full border rounded px-3 py-2">
+                                    <option value="">All Categories</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}" @if(request()->input('category_id') == $category->id) selected @endif>{{ $category->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4 ml-4" style="flex: 1;">
                                 <label for="product_promotion" class="block mb-2 font-bold">Product Promotion:</label>
                                 <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
                                     <option value=""> All </option>
@@ -73,6 +82,8 @@
                                 <th class="p-2 text-lg">Pr. Promotion</th>
                                 <th class="p-2 text-lg">Top Product</th>
                                 <th class="p-2 text-lg">Rec Product</th>
+                                <th class="p-2 text-lg">Price Pair</th>
+                                <th class="p-2 text-lg">Price Retail</th>
                                 <th class="p-2 text-lg">Actions</th>
                             </tr>
                         </thead>
@@ -97,6 +108,16 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'No' : 'Yes' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'No' : 'Yes' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->rec_product == 0 ? 'No' : 'Yes' }}</td>
+                                @foreach($prices as $price)
+                                    @if($price->product_id == $product->id)
+                                        <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->pair }}</td>
+                                    @endif
+                                @endforeach
+                                @foreach($prices as $price)
+                                    @if($price->product_id == $product->id)
+                                        <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->retail }}</td>
+                                    @endif
+                                @endforeach
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
                                     <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Edit</a>
                                     <form action="{{ route('product.destroy', $product->id) }}" method="POST">
