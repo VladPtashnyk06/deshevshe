@@ -5,7 +5,7 @@
                 <div class="p-6 text-gray-900">
                     <h1 class="text-2xl font-semibold mb-2 text-center">Матеріали</h1>
                     <div class="text-center mb-4">
-                        <a href="{{ route('material.create') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Create Material</a>
+                        <a href="{{ route('material.create') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Створити матеріал</a>
                     </div>
                     <table class="w-full mb-5">
                         <thead>
