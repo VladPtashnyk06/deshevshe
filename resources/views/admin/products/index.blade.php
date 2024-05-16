@@ -10,13 +10,8 @@
                     <div class="text-center mb-4">
                         <form action="{{ route('product.index') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
                             <div class="mb-4" style="flex: 1;">
-                                <label for="code" class="block mb-2 font-bold">Коди:</label>
-                                <select name="code" id="code" class="w-full border rounded px-3">
-                                    <option value="">Усі коди</option>
-                                    @foreach ($codes as $code)
-                                        <option value="{{ $code }}" @if(request()->input('code') == $code) selected @endif>{{ $code }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="code" class="block mb-2 font-bold">Код товару:</label>
+                                <input type="text" name="code" id="code" value="{{ !empty(request()->input('code')) ? request()->input('code') : '' }}">
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
                                 <label for="producer_id" class="block mb-2 font-bold">Виробники:</label>
@@ -80,7 +75,7 @@
                             <th class="p-2 text-lg">Розмір</th>
                             <th class="p-2 text-lg">К-сть. в упакуванні</th>
                             <th class="p-2 text-lg">Виробник</th>
-                            <th class="p-2 text-lg">Промоція</th>
+                            <th class="p-2 text-lg">Промоакція</th>
                             <th class="p-2 text-lg">Топ продукт</th>
                             <th class="p-2 text-lg">Рекомендований продукт</th>
                             <th class="p-2 text-lg">Ціна за пару</th>
@@ -103,8 +98,8 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->quantity }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->color->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->size->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->package->title }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->size->title) ? $product->size->title : 'Не вказано' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->package->title) ? $product->package->title : 'Не вказано' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>

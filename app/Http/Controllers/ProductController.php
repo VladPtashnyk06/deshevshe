@@ -32,7 +32,7 @@ class ProductController extends Controller
         $query = Product::query();
 
         if (isset($filteredParams['code'])) {
-            $query->where('code', $filteredParams['code']);
+            $query->where('code', 'LIKE', '%' . $filteredParams['code'] . '%');
         }
 
         if (isset($filteredParams['producer_id'])) {
