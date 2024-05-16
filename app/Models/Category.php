@@ -36,4 +36,9 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
 }

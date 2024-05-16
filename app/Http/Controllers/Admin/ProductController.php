@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
@@ -15,7 +16,6 @@ use App\Models\Product;
 use App\Models\Size;
 use App\Models\Status;
 use Illuminate\Http\Request;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller

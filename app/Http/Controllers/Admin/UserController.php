@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
-use App\Models\Category;
-use App\Models\Price;
-use App\Models\Producer;
-use App\Models\Product;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
