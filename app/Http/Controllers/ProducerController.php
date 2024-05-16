@@ -9,30 +9,36 @@ class ProducerController extends Controller
 {
     public function index()
     {
-        return Producer::all();
+        $producers = Producer::all();
+        return view('admin.producers.index', compact('producers'));
+    }
+
+    public function create() {
+        return view('admin.producers.create');
     }
 
     public function store(ProducerRequest $request)
     {
-        return Producer::create($request->validated());
+        Producer::create($request->validated());
+        return redirect()->route('producer.index');
     }
 
-    public function show(Producer $producer)
+    public function edit(Producer $producer)
     {
-        return $producer;
+        return view('admin.producers.edit', compact('producer'));
     }
 
     public function update(ProducerRequest $request, Producer $producer)
     {
         $producer->update($request->validated());
 
-        return $producer;
+        return redirect()->route('producer.index');
     }
 
     public function destroy(Producer $producer)
     {
         $producer->delete();
 
-        return response()->json();
+        return redirect()->route('producer.index');
     }
 }

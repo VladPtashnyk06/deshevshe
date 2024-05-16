@@ -10,6 +10,7 @@ class ReviewRequest extends FormRequest
     {
         return [
             'user_id' => ['required', 'exists:users'],
+            'product_id' => ['required', 'exists:products'],
             'title' => ['required'],
         ];
     }

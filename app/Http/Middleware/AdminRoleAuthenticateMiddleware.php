@@ -12,6 +12,6 @@ class AdminRoleAuthenticateMiddleware
         if (\Auth::user()->role == 'admin') {
             return $next($request);
         }
-        return view('welcome');
+        return redirect()->route('dashboard');
     }
 }

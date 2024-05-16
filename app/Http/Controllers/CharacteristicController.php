@@ -9,30 +9,36 @@ class CharacteristicController extends Controller
 {
     public function index()
     {
-        return Characteristic::all();
+        $characteristics = Characteristic::all();
+        return view('admin.characteristics.index', compact('characteristics'));
+    }
+
+    public function create() {
+        return view('admin.characteristics.create');
     }
 
     public function store(CharacteristicRequest $request)
     {
-        return Characteristic::create($request->validated());
+        Characteristic::create($request->validated());
+        return redirect()->route('characteristic.index');
     }
 
-    public function show(Characteristic $characteristic)
+    public function edit(Characteristic $characteristic)
     {
-        return $characteristic;
+        return view('admin.characteristics.edit', compact('characteristic'));
     }
 
     public function update(CharacteristicRequest $request, Characteristic $characteristic)
     {
         $characteristic->update($request->validated());
 
-        return $characteristic;
+        return redirect()->route('characteristic.index');
     }
 
     public function destroy(Characteristic $characteristic)
     {
         $characteristic->delete();
 
-        return response()->json();
+        return redirect()->route('characteristic.index');
     }
 }

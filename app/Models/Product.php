@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
+    use HasFactory, InteractsWithMedia;
     /**
      * The table associated with the model.
      *
@@ -35,7 +39,6 @@ class Product extends Model
         'package_id',
         'material_id',
         'characteristic_id',
-        'review_id',
         'title',
         'description',
         'quantity',
@@ -84,10 +87,5 @@ class Product extends Model
     public function characteristic(): BelongsTo
     {
         return $this->belongsTo(Characteristic::class);
-    }
-
-    public function review(): BelongsTo
-    {
-        return $this->belongsTo(Review::class);
     }
 }

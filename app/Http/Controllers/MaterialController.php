@@ -9,30 +9,36 @@ class MaterialController extends Controller
 {
     public function index()
     {
-        return Material::all();
+        $materials = Material::all();
+        return view('admin.materials.index', compact('materials'));
+    }
+
+    public function create() {
+        return view('admin.materials.create');
     }
 
     public function store(MaterialRequest $request)
     {
-        return Material::create($request->validated());
+        Material::create($request->validated());
+        return redirect()->route('material.index');
     }
 
-    public function show(Material $material)
+    public function edit(Material $material)
     {
-        return $material;
+        return view('admin.materials.edit', compact('material'));
     }
 
     public function update(MaterialRequest $request, Material $material)
     {
         $material->update($request->validated());
 
-        return $material;
+        return redirect()->route('material.index');
     }
 
     public function destroy(Material $material)
     {
         $material->delete();
 
-        return response()->json();
+        return redirect()->route('material.index');
     }
 }

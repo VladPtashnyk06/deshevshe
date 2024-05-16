@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->integer('title');
+            $table->integer('title')->unique();
             $table->timestamps();
         });
     }

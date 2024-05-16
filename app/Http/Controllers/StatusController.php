@@ -9,30 +9,36 @@ class StatusController extends Controller
 {
     public function index()
     {
-        return Status::all();
+        $statuses = Status::all();
+        return view('admin.statuses.index', compact('statuses'));
+    }
+
+    public function create() {
+        return view('admin.statuses.create');
     }
 
     public function store(StatusRequest $request)
     {
-        return Status::create($request->validated());
+        Status::create($request->validated());
+        return redirect()->route('status.index');
     }
 
-    public function show(Status $status)
+    public function edit(Status $status)
     {
-        return $status;
+        return view('admin.statuses.edit', compact('status'));
     }
 
     public function update(StatusRequest $request, Status $status)
     {
         $status->update($request->validated());
 
-        return $status;
+        return redirect()->route('status.index');
     }
 
     public function destroy(Status $status)
     {
         $status->delete();
 
-        return response()->json();
+        return redirect()->route('status.index');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Category extends Model
 {
@@ -23,9 +24,16 @@ class Category extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<string, int>
      */
     protected $fillable = [
         'title',
+        'parent_id',
+        'level'
     ];
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

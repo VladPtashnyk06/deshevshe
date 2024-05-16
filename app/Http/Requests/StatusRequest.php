@@ -9,7 +9,7 @@ class StatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required'],
+            'title' => ['required', 'unique:statuses,title'],
         ];
     }
 
