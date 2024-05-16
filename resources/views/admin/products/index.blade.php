@@ -65,6 +65,7 @@
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border">Застосувати фільтри</button>
                                     <button type="button" onclick="window.location='{{ route('product.index') }}'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border ml-2">Очистити фільтри</button>
                                 </div>
+                            </div>
                         </form>
                     </div>
                     <table class="w-full mb-5">

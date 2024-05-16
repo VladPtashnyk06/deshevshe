@@ -12,9 +12,9 @@ return new class extends Migration {
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('producer_id')->constrained('producers');
             $table->foreignId('status_id')->constrained('statuses');
-            $table->foreignId('size_id')->constrained('sizes');
+            $table->foreignId('size_id')->nullable()->constrained('sizes');
             $table->foreignId('color_id')->constrained('colors');
-            $table->foreignId('package_id')->constrained('packages');
+            $table->foreignId('package_id')->nullable()->constrained('packages');
             $table->foreignId('material_id')->nullable()->constrained('materials');
             $table->foreignId('characteristic_id')->nullable()->constrained('characteristics');
             $table->string('title');
