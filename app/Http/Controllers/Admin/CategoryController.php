@@ -5,10 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $categories = Category::all();
@@ -38,16 +46,27 @@ class CategoryController extends Controller
         return view('admin.categories.index', compact('categories', 'uniqueLevels', 'parentCategories'));
     }
 
+    /**
+     * @param Category $category
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function createSubCategory(Category $category)
     {
         return view('admin.categories.createSubCategory', compact('category'));
     }
 
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function create() {
         $categories = Category::all();
         return view('admin.categories.create', compact('categories'));
     }
 
+    /**
+     * @param CategoryRequest $request
+     * @return RedirectResponse
+     */
     public function store(CategoryRequest $request)
     {
         if (!$request->validated('parent_id') == null) {
@@ -63,11 +82,20 @@ class CategoryController extends Controller
         return redirect()->route('category.index');
     }
 
+    /**
+     * @param Category $category
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function edit(Category $category)
     {
         return view('admin.categories.edit', compact('category'));
     }
 
+    /**
+     * @param CategoryRequest $request
+     * @param Category $category
+     * @return RedirectResponse
+     */
     public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
@@ -75,6 +103,10 @@ class CategoryController extends Controller
         return redirect()->route('category.index');
     }
 
+    /**
+     * @param Category $category
+     * @return RedirectResponse
+     */
     public function destroy(Category $category)
     {
         $category->delete();

@@ -5,11 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogRequest;
 use App\Models\Blog;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class BlogController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $blogs = Blog::all();
@@ -24,10 +34,19 @@ class BlogController extends Controller
         return view('admin.blogs.index', compact('blogs'));
     }
 
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function create() {
         return view('admin.blogs.create');
     }
 
+    /**
+     * @param BlogRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function store(BlogRequest $request)
     {
         $newBlog = Blog::create($request->validated());
@@ -40,17 +59,32 @@ class BlogController extends Controller
         return redirect()->route('blog.index');
     }
 
+    /**
+     * @param Blog $blog
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function showComments(Blog $blog)
     {
         $comments = $blog->comments()->get();
         return view('admin.blogs.blogComments', compact('blog', 'comments'));
     }
 
+    /**
+     * @param Blog $blog
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function edit(Blog $blog)
     {
         return view('admin.blogs.edit', compact('blog'));
     }
 
+    /**
+     * @param BlogRequest $request
+     * @param Blog $blog
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(BlogRequest $request, Blog $blog)
     {
         $blog->update($request->validated());
@@ -77,6 +111,10 @@ class BlogController extends Controller
         return redirect()->route('blog.index');
     }
 
+    /**
+     * @param Blog $blog
+     * @return RedirectResponse
+     */
     public function destroy(Blog $blog)
     {
         $blog->delete();

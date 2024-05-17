@@ -16,11 +16,21 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Size;
 use App\Models\Status;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $products = Product::all();
@@ -72,6 +82,11 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
 
+    /**
+     * @param $view
+     * @param $product
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function allNeeds($view, $product = '')
     {
         $categories = Category::all();
@@ -87,10 +102,19 @@ class ProductController extends Controller
         return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'packages', 'product', 'statuses', 'materials', 'characteristics', 'productVariants'));
     }
 
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function create() {
         return $this->allNeeds('create');
     }
 
+    /**
+     * @param ProductRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function store(ProductRequest $request)
     {
         $newProduct = Product::create($request->validated());
@@ -135,11 +159,22 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
+    /**
+     * @param Product $product
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function edit(Product $product)
     {
         return $this->allNeeds('edit', $product);
     }
 
+    /**
+     * @param UpdateProductRequest $request
+     * @param Product $product
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update($request->validated());
@@ -219,6 +254,10 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
+    /**
+     * @param Product $product
+     * @return RedirectResponse
+     */
     public function destroy(Product $product)
     {
         Price::where('product_id', $product->id)->delete();
@@ -227,12 +266,20 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
     public function destroyMedia($id)
     {
         Media::find($id)->delete();
         return back();
     }
 
+    /**
+     * @param ProductVariant $productVariant
+     * @return RedirectResponse
+     */
     public function destroyProductVariant(ProductVariant $productVariant)
     {
         $productVariant->delete();
