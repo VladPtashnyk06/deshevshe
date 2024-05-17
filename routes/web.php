@@ -26,6 +26,7 @@ Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
         Route::get('/', 'index')->name('site.product.index');
         Route::get('/edit/{user}', 'edit')->name('user.edit');
+        Route::get('/show/{category}', 'show')->name('site.product.show');
         Route::post('/update/{user}', 'update')->name('user.update');
         Route::delete('/delete/{user}', 'destroy')->name('user.destroy');
     });
@@ -68,6 +69,7 @@ Route::middleware('auth')->group(function () {
                     Route::post('/update/{product}', 'update')->name('product.update');
                     Route::delete('/deleteMedia/{media}', 'destroyMedia')->name('product.destroyMedia');
                     Route::delete('/delete/{product}', 'destroy')->name('product.destroy');
+                    Route::delete('/deleteProductVariant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
                 });
                 Route::group(['prefix' => 'color'], function () {
                     Route::controller(\App\Http\Controllers\Admin\ColorController::class)->group(function () {
