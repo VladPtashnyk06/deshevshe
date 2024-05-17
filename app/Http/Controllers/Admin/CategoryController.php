@@ -12,7 +12,8 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $uniqueParentIds = Category::select('parent_id')->distinct()->pluck('parent_id');
+        $uniqueParentIds = $categories->pluck('parent_id')->unique()->filter();
+        $parentCategories = Category::whereIn('id', $uniqueParentIds)->get();
         $uniqueLevels = $categories->pluck('level')->unique();
 
         $queryParams = $request->only(['parent_category', 'level']);
@@ -34,7 +35,7 @@ class CategoryController extends Controller
 
         $categories = $query->get();
 
-        return view('admin.categories.index', compact('categories', 'uniqueLevels', 'uniqueParentIds'));
+        return view('admin.categories.index', compact('categories', 'uniqueLevels', 'parentCategories'));
     }
 
     public function createSubCategory(Category $category)
