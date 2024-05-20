@@ -47,13 +47,13 @@ class CartController extends Controller
         $productVariant = ProductVariant::where('product_id', $request->post('product_id'))->where('color_id', $request->post('color_id'))->where('size_id', $request->post('size_id'))->first();
 
         \Cart::add([
-            'id' => $product->id.'_p',
+            'id' => $productVariant->id.'_p',
             'name' => $product->title,
             'price' => $product->price->pair,
             'quantity' => 1,
             'attributes' => [
                 'product_id' => $product->id,
-                'article' => $product->code,
+                'code' => $product->code,
                 'color' => $productVariant->color->title ,
                 'size' => $productVariant->size->title ,
                 'product_quantity' => $productVariant->quantity,

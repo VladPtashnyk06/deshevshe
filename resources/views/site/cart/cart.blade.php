@@ -39,7 +39,14 @@
                                         <h2 class="text-lg font-semibold">
                                             <a href="{{ route('site.product.showOneProduct', $item->attributes->product_id) }}">{{ $item->name }}</a>
                                         </h2>
-                                        <p class="text-gray-500">Код: {{ $item->attributes->article }}</p>
+                                        <p class="text-gray-500">Код: {{ $item->attributes->code }}</p>
+                                        <p class="text-gray-500">Колір:
+                                            @if($item->attributes->color)
+                                                <span>{{ $item->attributes->color }}</span>
+                                            @else
+                                                <span class="text-red-500">Не вибраний</span>
+                                            @endif
+                                        </p>
                                         <p class="text-gray-500">Розмір:
                                             @if($item->attributes->size)
                                                 <span>{{ $item->attributes->size }}</span>
@@ -54,9 +61,15 @@
                                             @method('patch')
                                             <input type="hidden" name="id" value="{{ $item->id }}">
                                             <input type="hidden" name="quantity" value="{{ $item->quantity }}">
-                                            <button type="submit" name="quantityDed" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                                            <p class="px-2">{{ $item->quantity }}</p>
-                                            <button type="submit" name="quantityAdd" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                                            @if($item->quantity < $item->attributes->product_quantity)
+                                                <button type="submit" name="quantityDed" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                                                <p class="px-2">{{ $item->quantity }}</p>
+                                                <button type="submit" name="quantityAdd" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                                            @else
+                                                <button type="submit" name="quantityDed" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                                                <p class="px-2">{{ $item->quantity }}</p>
+                                                <p>Максимальна доступна кількість</p>
+                                            @endif
                                         </form>
                                     </div>
                                     <div class="ml-4 text-right">
