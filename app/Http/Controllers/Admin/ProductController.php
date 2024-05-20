@@ -177,26 +177,31 @@ class ProductController extends Controller
         $product->update($request->validated());
 
         foreach ($request->validated('productVariant') as $productVariantId => $productVariant) {
-            ProductVariant::updateOrCreate(
-                [
-                    'id' => $productVariantId,
-                ],
-                [
-                    'color_id' => $productVariant['color'],
-                    'size_id' => $productVariant['size'],
-                    'quantity' => $productVariant['quantity'],
-                ]
-            );
+            if (!ProductVariant::where('product_id', $product->id)->where('color_id', $productVariant['color'])->where('size_id', $productVariant['size'])) {
+                ProductVariant::updateOrCreate(
+                    [
+                        'id' => $productVariantId,
+                    ],
+                    [
+                        'product_id' => $product->id,
+                        'color_id' => $productVariant['color'],
+                        'size_id' => $productVariant['size'],
+                        'quantity' => $productVariant['quantity'],
+                    ]
+                );
+            }
         }
 
         if (!empty($request->validated('newProductVariant'))) {
             foreach ($request->validated('newProductVariant') as $key => $newProductVariant) {
-                ProductVariant::create([
-                    'product_id' => $product->id,
-                    'color_id' => $newProductVariant['color'],
-                    'size_id' => $newProductVariant['size'],
-                    'quantity' => $newProductVariant['quantity'],
-                ]);
+                if (!ProductVariant::where('product_id', $product->id)->where('color_id', $newProductVariant['color'])->where('size_id', $newProductVariant['size'])) {
+                    ProductVariant::create([
+                        'product_id' => $product->id,
+                        'color_id' => $newProductVariant['color'],
+                        'size_id' => $newProductVariant['size'],
+                        'quantity' => $newProductVariant['quantity'],
+                    ]);
+                }
             }
         }
 

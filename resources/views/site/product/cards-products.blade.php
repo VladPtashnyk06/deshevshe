@@ -48,10 +48,14 @@
                                         @else
                                             <p class="text-lg mb-2">Ціна не вказана</p>
                                         @endif
-                                        <button onclick="openPopup({{ $product->id }})"
-                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border">
-                                            В кошик
-                                        </button>
+                                        @if($product->status_id == 1)
+                                            <button onclick="openPopup({{ $product->id }})"
+                                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border">
+                                                В кошик
+                                            </button>
+                                        @else
+                                            {{ $product->status->title }}
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
@@ -71,11 +75,17 @@
                     <form id="cart_form_popup" action="{{ route('cart.store') }}" method="post">
                         @csrf
                         <input type="hidden" id="popup_product_id" name="product_id" value="">
+                        @error('color_id')
+                            <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково колір товару, щоб добавити його в кошик") }}</span>
+                        @enderror
                         <label for="color_id" class="block mb-2 font-bold">Виберіть колір:</label>
                         <select name="color_id" id="color_id" class="w-full border rounded px-3 py-2">
                             <option value="" selected>Виберіть колір</option>
                         </select>
                         <div id="size-container" class="mt-4 hidden">
+                            @error('size_id')
+                            <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково розмір товару, щоб добавити його в кошик") }}</span>
+                            @enderror
                             <label for="size_id" class="block mb-2 font-bold">Виберіть розмір:</label>
                             <select name="size_id" id="size_id" class="w-full border rounded px-3 py-2">
                                 <option value="" selected>Виберіть Розмір</option>

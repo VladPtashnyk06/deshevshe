@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CartRequest;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Contracts\View\View;
@@ -36,12 +37,10 @@ class CartController extends Controller
     }
 
     /**
-     * Add new item to Cart.
-     *
-     * @param Request $request
+     * @param CartRequest $request
      * @return RedirectResponse
      */
-    public function addToCart(Request $request): RedirectResponse
+    public function addToCart(CartRequest $request): RedirectResponse
     {
         $product = Product::find($request->post('product_id'));
         $productVariant = ProductVariant::where('product_id', $request->post('product_id'))->where('color_id', $request->post('color_id'))->where('size_id', $request->post('size_id'))->first();

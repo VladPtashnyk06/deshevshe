@@ -19,7 +19,7 @@ class UpdateProductRequest extends FormRequest
             'characteristic_id' => ['nullable'],
             'title' => ['required'],
             'description' => ['required'],
-            'code' => ['required', 'integer', 'min:1', 'unique:products,code'],
+            'code' => ['required'],
             'model' => ['nullable'],
             'product_promotion' => ['nullable', 'boolean'],
             'pair' => ['required', 'integer', 'min:1'],

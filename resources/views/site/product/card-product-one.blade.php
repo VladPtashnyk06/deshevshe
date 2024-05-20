@@ -18,15 +18,21 @@
                                     <p class="text-lg mb-2">В упаковці: {{ $product->package->title }}</p>
                                 @endif
 
+                                @error('color_id')
+                                <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково колір товару, щоб добавити його в кошик") }}</span>
+                                @enderror
                                 <label for="color_id" class="block mb-2 font-bold">Виберіть колір:</label>
                                 <select name="color_id" id="color_id" class="w-full border rounded px-3 py-2">
                                     <option value="" disabled selected>Виберіть колір</option>
-                                    @foreach($product->productVariants()->get() as $productVariant)
+                                    @foreach($product->productVariants()->get()->unique('color_id') as $productVariant)
                                         <option value="{{ $productVariant->color->id }}">{{ $productVariant->color->title }}</option>
                                     @endforeach
                                 </select>
 
                                 <div id="size-container" class="mt-4 hidden">
+                                    @error('size_id')
+                                        <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково розмір товару, щоб добавити його в кошик") }}</span>
+                                    @enderror
                                     <label for="size_id" class="block mb-2 font-bold">Виберіть розмір:</label>
                                     <select name="size_id" id="size_id" class="w-full border rounded px-3 py-2">
                                         <!-- Опції для розмірів додати тут -->
@@ -42,9 +48,14 @@
                                 @else
                                     <p class="text-lg mb-2">Ціна не вказана</p>
                                 @endif
-                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" type="submit" name="product_id" value="{{ $product->id }}">
-                                    В кошик
-                                </button>
+                                @if($product->status_id == 1)
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" type="submit" name="product_id" value="{{ $product->id }}">
+                                        В кошик
+                                    </button>
+                                @else
+                                    {{ $product->status->title }}
+                                @endif
+                                <a href="{{ route('site.product.show', $product->category_id) }}" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md text-center transition duration-300 ease-in-out">Назад</a>
                             </div>
                         </div>
                     </form>
@@ -65,11 +76,17 @@
                 .then(data => {
                     if (data.length > 0) {
                         sizeContainer.classList.remove('hidden');
+
+                        const seenSizes = new Set();
+
                         data.forEach(size => {
-                            const option = document.createElement('option');
-                            option.value = size.size_id;
-                            option.textContent = `${size.size_title}`;
-                            sizeSelect.appendChild(option);
+                            if (!seenSizes.has(size.size_id)) {
+                                const option = document.createElement('option');
+                                option.value = size.size_id;
+                                option.textContent = `${size.size_title}`;
+                                sizeSelect.appendChild(option);
+                                seenSizes.add(size.size_id);
+                            }
                         });
                     } else {
                         sizeContainer.classList.add('hidden');
