@@ -40,9 +40,11 @@
             <form action="{{ route('blog.commentAnswerStore') }}" method="post" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 @csrf
 
-                <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
-                <input type="hidden" name="blog_id" value="{{ $comment->blog_id }}">
-                <input type="hidden" name="level" value="{{ $comment->level + 1}}">
+                @if(isset($comment))
+                    <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                    <input type="hidden" name="blog_id" value="{{ $comment->blog_id }}">
+                    <input type="hidden" name="level" value="{{ $comment->level + 1}}">
+                @endif
 
                 <div class="w-full grid grid-cols-2 gap-4">
                     <div class="mb-4">

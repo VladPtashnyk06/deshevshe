@@ -36,6 +36,9 @@ Route::group(['prefix' => 'product'], function () {
         Route::get('/get-sizes/{color_id}', 'getSizes')->name('site.product.getSizes');
         Route::get('/get-product/{product_id}', 'getProduct')->name('site.product.getProduct');
     });
+    Route::controller(\App\Http\Controllers\Site\ProductCommentController::class)->group(function () {
+        Route::post('/comment/store', 'store')->name('site.product.comment.store');
+    });
 });
 Route::group(['prefix' => 'blog'], function () {
     Route::controller(\App\Http\Controllers\Site\BlogController::class)->group(function () {

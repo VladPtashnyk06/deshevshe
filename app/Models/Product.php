@@ -85,4 +85,9 @@ class Product extends Model implements HasMedia
     {
         return $this->hasOne(Price::class, 'product_id');
     }
+
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductComment::class, 'product_id');
+    }
 }
