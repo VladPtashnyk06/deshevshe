@@ -47,14 +47,6 @@
                                     <option value="No" @if(request()->input('top_product') == 'No') selected @endif> Ні </option>
                                 </select>
                             </div>
-                            <div class="mb-4 ml-4 mr-2" style="flex: 1;">
-                                <label for="rec_product" class="block mb-2 font-bold">Рекомендовані продукти:</label>
-                                <select name="rec_product" id="rec_product" class="w-full border rounded px-3 py-2">
-                                    <option value=""> Всі </option>
-                                    <option value="1" @if(request()->input('rec_product') == '1') selected @endif> Так </option>
-                                    <option value="No" @if(request()->input('rec_product') == 'No') selected @endif> Ні </option>
-                                </select>
-                            </div>
                             <div class="ml-2 mb-4">
                                 <div class="mt-4">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border">Застосувати фільтри</button>
@@ -77,7 +69,6 @@
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Промоакція</th>
                             <th class="p-2 text-lg">Топ продукт</th>
-                            <th class="p-2 text-lg">Рекомендований продукт</th>
                             <th class="p-2 text-lg">Ціна за пару</th>
                             <th class="p-2 text-lg">Роздрібна ціна</th>
                             <th class="p-2 text-lg">Дії</th>
@@ -115,7 +106,6 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->rec_product == 0 ? 'Ні' : 'Так' }}</td>
                                 @foreach($prices as $price)
                                     @if($price->product_id == $product->id)
                                         <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->pair }}</td>

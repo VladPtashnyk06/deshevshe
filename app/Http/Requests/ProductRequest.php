@@ -27,7 +27,6 @@ class ProductRequest extends FormRequest
             'rec_package' => ['nullable', 'integer', 'min:1'],
             'retail' => ['required', 'integer', 'min:1'],
             'top_product' => ['nullable', 'boolean'],
-            'rec_product' => ['nullable', 'boolean'],
             'main_image' => ['required', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
             'alt_for_main_image' => ['nullable', 'string', 'max:255'],
             'additional.*.image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],

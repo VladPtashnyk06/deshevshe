@@ -39,7 +39,7 @@ class ProductController extends Controller
         $codes = Product::select('code')->distinct()->pluck('code');
         $categories = Category::all();
         $producers = Producer::all();
-        $queryParams = $request->only(['code', 'category_id', 'producer_id', 'top_product', 'product_promotion', 'rec_product']);
+        $queryParams = $request->only(['code', 'category_id', 'producer_id', 'top_product', 'product_promotion']);
         $filteredParams = array_filter($queryParams);
         $query = Product::query();
 
@@ -68,14 +68,6 @@ class ProductController extends Controller
                 $query->where('product_promotion', $filteredParams['product_promotion']);
             } else {
                 $query->where('product_promotion', 0);
-            }
-        }
-
-        if (isset($filteredParams['rec_product'])) {
-            if ($filteredParams['rec_product'] == 1) {
-                $query->where('rec_product', $filteredParams['rec_product']);
-            } else {
-                $query->where('rec_product', 0);
             }
         }
 

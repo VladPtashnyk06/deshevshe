@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->string('model')->nullable();
             $table->boolean('product_promotion')->default(false);
             $table->boolean('top_product')->default(false);
-            $table->boolean('rec_product')->default(false);
             $table->timestamps();
         });
     }
