@@ -1,17 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $categories = Category::all();
-        $uniqueParentIds = Category::select('parent_id')->distinct()->pluck('parent_id');
+        $uniqueParentIds = $categories->pluck('parent_id')->unique()->filter();
+        $parentCategories = Category::whereIn('id', $uniqueParentIds)->get();
         $uniqueLevels = $categories->pluck('level')->unique();
 
         $queryParams = $request->only(['parent_category', 'level']);
@@ -33,19 +43,30 @@ class CategoryController extends Controller
 
         $categories = $query->get();
 
-        return view('admin.categories.index', compact('categories', 'uniqueLevels', 'uniqueParentIds'));
+        return view('admin.categories.index', compact('categories', 'uniqueLevels', 'parentCategories'));
     }
 
+    /**
+     * @param Category $category
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function createSubCategory(Category $category)
     {
         return view('admin.categories.createSubCategory', compact('category'));
     }
 
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function create() {
         $categories = Category::all();
         return view('admin.categories.create', compact('categories'));
     }
 
+    /**
+     * @param CategoryRequest $request
+     * @return RedirectResponse
+     */
     public function store(CategoryRequest $request)
     {
         if (!$request->validated('parent_id') == null) {
@@ -61,11 +82,20 @@ class CategoryController extends Controller
         return redirect()->route('category.index');
     }
 
+    /**
+     * @param Category $category
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function edit(Category $category)
     {
         return view('admin.categories.edit', compact('category'));
     }
 
+    /**
+     * @param CategoryRequest $request
+     * @param Category $category
+     * @return RedirectResponse
+     */
     public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
@@ -73,6 +103,10 @@ class CategoryController extends Controller
         return redirect()->route('category.index');
     }
 
+    /**
+     * @param Category $category
+     * @return RedirectResponse
+     */
     public function destroy(Category $category)
     {
         $category->delete();

@@ -94,14 +94,6 @@
                     </div>
 
                     <div class="mb-4">
-                        @error('quantity')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="quantity" class="block mb-2 font-bold">Кількість товару</label>
-                        <input type="number" name="quantity" id="quantity" class="w-full border rounded px-3 py-2" value="{{ $product->quantity }}">
-                    </div>
-
-                    <div class="mb-4">
                         <label for="model" class="block mb-2 font-bold">Модель</label>
                         <input type="text" name="model" id="model" class="w-full border rounded px-3 py-2" value="{{ $product->model }}">
                     </div>
@@ -114,28 +106,51 @@
                         <textarea name="description" id="description" class="w-full border rounded px-3 py-2 h-32">{{ $product->description }}</textarea>
                     </div>
 
-                    <div class="mb-4">
-                        @error('color_id')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="color_id" class="block mb-2 font-bold">Колір</label>
-                        <select name="color_id" id="color_id" class="w-full border rounded px-3 py-2">
-                            @foreach($colors as $color)
-                                <option value="{{ $color->id }}" @if($color->id == $product->color_id ) selected @endif>{{ $color->title }}</option>
-                            @endforeach
-                        </select>
+                    <div id="productVariantsContainer">
+                        @foreach($productVariants as $productVariant)
+                            <div class="productVariant mb-4 variant_div">
+                                <div class="mb-4">
+                                    @error('color_{{$productVariant->id}}')
+                                    <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                                    @enderror
+                                    <label for="color_{{$productVariant->id}}" class="block mb-2 font-bold">Колір</label>
+                                    <select name="productVariant[{{ $productVariant->id }}][color]" id="color_{{$productVariant->id}}" class="w-full border rounded px-3 py-2">
+                                        @foreach($colors as $color)
+                                            <option value="{{ $color->id }}" @if($productVariant->color_id == $color->id) selected @endif>{{ $color->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    @error('size_{{$productVariant->id}}')
+                                    <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                                    @enderror
+                                    <label for="size_{{$productVariant->id}}" class="block mb-2 font-bold">Розмір</label>
+                                    <select name="productVariant[{{ $productVariant->id }}][size]" id="size_{{$productVariant->id}}" class="w-full border rounded px-3 py-2">
+                                        <option value="">Всі розміри</option>
+                                        @foreach($sizes as $size)
+                                            <option value="{{ $size->id }}" @if($productVariant->size_id == $size->id) selected @endif>{{ $size->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    @error('quantity_{{$productVariant->id}}')
+                                    <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                                    @enderror
+                                    <label for="quantity_{{$productVariant->id}}" class="block mb-2 font-bold">Кількість</label>
+                                    <input type="number" name="productVariant[{{ $productVariant->id }}][quantity]" id="quantity_{{$productVariant->id}}" class="w-full border rounded px-3 py-2" value="{{ $productVariant->quantity }}">
+                                </div>
+
+                                <div class="text-center mb-4">
+                                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" onclick="removeProductVariant(this, {{ $productVariant->id }})">Видалити варіант</button>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
-                    <div class="mb-4">
-                        @error('size_id')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="size_id" class="block mb-2 font-bold">Розмір</label>
-                        <select name="size_id" id="size_id" class="w-full border rounded px-3 py-2">
-                            @foreach($sizes as $size)
-                                <option value="{{ $size->id }}" @if($size->id == $product->size_id ) selected @endif>{{ $size->title }}</option>
-                            @endforeach
-                        </select>
+                    <div class="text-center mb-4">
+                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" onclick="addNewProductVariant()">Додати додатковий колір, розмір та кількість</button>
                     </div>
 
                     <div class="mb-4">
@@ -226,46 +241,47 @@
                             @endforeach
                         </select>
                     </div>
+                    @foreach($product->price()->get() as $price)
+                        <div class="mb-4">
+                            @error('pair')
+                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                            @enderror
+                            <label for="pair" class="block mb-2 font-bold">Ціна за одну пару</label>
+                            <input type="text" name="pair" id="pair" class="w-full border rounded px-3 py-2" value="{{ $price->pair }}">
+                        </div>
 
-                    <div class="mb-4">
-                        @error('pair')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="pair" class="block mb-2 font-bold">Ціна за одну пару</label>
-                        <input type="text" name="pair" id="pair" class="w-full border rounded px-3 py-2" value="{{ $price->pair }}">
-                    </div>
+                        <div class="mb-4">
+                            @error('rec_pair')
+                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                            @enderror
+                            <label for="rec_pair" class="block mb-2 font-bold">Рекомендована ціна за одну пару</label>
+                            <input type="text" name="rec_pair" id="rec_pair" class="w-full border rounded px-3 py-2" value="{{ $price->rec_pair }}">
+                        </div>
 
-                    <div class="mb-4">
-                        @error('rec_pair')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="rec_pair" class="block mb-2 font-bold">Рекомендована ціна за одну пару</label>
-                        <input type="text" name="rec_pair" id="rec_pair" class="w-full border rounded px-3 py-2" value="{{ $price->rec_pair }}">
-                    </div>
+                        <div class="mb-4">
+                            @error('package')
+                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                            @enderror
+                            <label for="package" class="block mb-2 font-bold">Ціна за опт</label>
+                            <input type="text" name="package" id="package" class="w-full border rounded px-3 py-2" value="{{ $price->package }}">
+                        </div>
 
-                    <div class="mb-4">
-                        @error('package')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="package" class="block mb-2 font-bold">Ціна за опт</label>
-                        <input type="text" name="package" id="package" class="w-full border rounded px-3 py-2" value="{{ $price->package }}">
-                    </div>
+                        <div class="mb-4">
+                            @error('rec_package')
+                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                            @enderror
+                            <label for="rec_package" class="block mb-2 font-bold">Рекомендована ціна за опт</label>
+                            <input type="text" name="rec_package" id="rec_package" class="w-full border rounded px-3 py-2" value="{{ $price->rec_package }}">
+                        </div>
 
-                    <div class="mb-4">
-                        @error('rec_package')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="rec_package" class="block mb-2 font-bold">Рекомендована ціна за опт</label>
-                        <input type="text" name="rec_package" id="rec_package" class="w-full border rounded px-3 py-2" value="{{ $price->rec_package }}">
-                    </div>
-
-                    <div class="mb-4">
-                        @error('retail')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="retail" class="block mb-2 font-bold">Роздрібна ціна</label>
-                        <input type="text" name="retail" id="retail" class="w-full border rounded px-3 py-2" value="{{ $price->retail }}">
-                    </div>
+                        <div class="mb-4">
+                            @error('retail')
+                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
+                            @enderror
+                            <label for="retail" class="block mb-2 font-bold">Роздрібна ціна</label>
+                            <input type="text" name="retail" id="retail" class="w-full border rounded px-3 py-2" value="{{ $price->retail }}">
+                        </div>
+                    @endforeach
 
                     <div class="text-center mb-4">
                         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Оновити продукт</button>
@@ -279,6 +295,12 @@
                         </form>
                     @endforeach
                 @endif
+                @foreach ($productVariants as $productVariant)
+                    <form action="{{ route('product.destroyProductVariant', $productVariant->id) }}" method="POST" id="variant_{{ $productVariant->id }}">
+                        @csrf
+                        @method("DELETE")
+                    </form>
+                @endforeach
             </div>
         </div>
     </div>
@@ -361,5 +383,55 @@
                 </div>
             `;
         mainImageWithAltsContainer.appendChild(mainImage);
+    }
+
+    function addNewProductVariant(button) {
+        const variantContainer = document.getElementById('productVariantsContainer');
+        const variantDiv = document.createElement('div');
+        variantDiv.classList.add('variant_div');
+        const variantDivCount = document.querySelectorAll('.variant_div').length;
+        const countVariantDiv = variantDivCount + 1;
+        variantDiv.innerHTML = `
+            <div class="productVariant mb-4">
+                <div class="mb-4">
+                    <label for="new_color_${countVariantDiv}" class="block mb-2 font-bold">Колір</label>
+                    <select name="newProductVariant[${countVariantDiv}][color]" id="new_color_${countVariantDiv}" class="w-full border rounded px-3 py-2">
+                        @foreach($colors as $color)
+                            <option value="{{ $color->id }}">{{ $color->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="new_size_${countVariantDiv}" class="block mb-2 font-bold">Розмір</label>
+                    <select name="newProductVariant[${countVariantDiv}][size]" id="new_size_${countVariantDiv}" class="w-full border rounded px-3 py-2">
+                        @foreach($sizes as $size)
+                            <option value="{{ $size->id }}">{{ $size->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="new_quantity_${countVariantDiv}" class="block mb-2 font-bold">Кількість</label>
+                    <input type="number" name="newProductVariant[${countVariantDiv}][quantity]" id="new_quantity_${countVariantDiv}" class="w-full border rounded px-3 py-2">
+                </div>
+
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border" onclick="removeProductVariant(this)">Видалити варіант</button>
+                </div>
+            </div>
+        `;
+        variantContainer.appendChild(variantDiv);
+    }
+
+    function removeProductVariant(button, variantId) {
+        const variantContainer = button.closest('.variant_div');
+        if (variantId) {
+            let form_id = '#variant_' + variantId;
+            let form = document.querySelector(form_id);
+
+            form.submit();
+        }
+        variantContainer.remove();
     }
 </script>

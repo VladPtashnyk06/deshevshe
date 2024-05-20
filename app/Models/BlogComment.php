@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Category extends Model
+class BlogComment extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'categories';
+    protected $table = 'blog_comments';
 
     /**
      * The primary key associated with the table.
@@ -27,18 +27,21 @@ class Category extends Model
      * @var array<string, int>
      */
     protected $fillable = [
-        'title',
-        'parent_id',
-        'level'
+        'blog_id',
+        'parent_comment_id',
+        'level',
+        'comment',
+        'name',
+        'email',
     ];
 
-    public function parent(): BelongsTo
+    public function parent_comment(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(BlogComment::class);
     }
 
-    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function blog(): BelongsTo
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id');
+        return $this->belongsTo(Blog::class);
     }
 }

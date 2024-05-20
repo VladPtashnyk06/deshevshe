@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
@@ -12,14 +13,25 @@ use App\Models\Package;
 use App\Models\Price;
 use App\Models\Producer;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\RecProduct;
 use App\Models\Size;
 use App\Models\Status;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $products = Product::all();
@@ -71,7 +83,12 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
 
-    public function allNeeds($view, $idProduct = '', $idPrices = '')
+    /**
+     * @param $view
+     * @param $product
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function allNeeds($view, $product = '')
     {
         $categories = Category::all();
         $colors = Color::all();
@@ -81,27 +98,44 @@ class ProductController extends Controller
         $statuses = Status::all();
         $materials = Material::all();
         $characteristics = Characteristic::all();
-        if ($idProduct != '') {
-            $product = Product::find($idProduct);
-        } else {
-            $product = Product::all();
-        }
-        if ($idPrices != '') {
-            $price = Price::find($idPrices);
-        } else {
-            $price = Price::all();
-        }
+        ($product == '') ? $productVariants = null : $productVariants = ProductVariant::where('product_id', $product->id)->get();;
 
-        return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'packages', 'product', 'statuses', 'materials', 'characteristics', 'price'));
+        return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'packages', 'product', 'statuses', 'materials', 'characteristics', 'productVariants'));
     }
 
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function create() {
         return $this->allNeeds('create');
     }
 
+    /**
+     * @param ProductRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function store(ProductRequest $request)
     {
         $newProduct = Product::create($request->validated());
+
+        RecProduct::create([
+            'product_id' => $newProduct->id,
+        ]);
+
+        $productVariantData = $request->validated('productVariant');
+        $count = count($productVariantData['color']);
+
+        for ($i = 0; $i < $count; $i++) {
+            ProductVariant::create([
+                'product_id' => $newProduct->id,
+                'color_id' => $productVariantData['color'][$i],
+                'size_id' => $productVariantData['size'][$i],
+                'quantity' => $productVariantData['quantity'][$i],
+            ]);
+        }
+
         $newProduct->addMedia($request->validated('main_image'))->withCustomProperties([
             'alt' => $request->validated('alt_for_main_image'),
             'main_image' => 1
@@ -118,31 +152,61 @@ class ProductController extends Controller
             }
         }
 
-        $prices = [
+        Price::create([
             'product_id' => $newProduct->id,
             'pair' => $request->validated('pair'),
             'rec_pair' => $request->validated('rec_pair'),
             'package' => $request->validated('package'),
             'rec_package' => $request->validated('rec_package'),
             'retail' => $request->validated('retail'),
-        ];
-        Price::create($prices);
+        ]);
+
         return redirect()->route('product.index');
     }
 
+    /**
+     * @param Product $product
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function edit(Product $product)
     {
-        $id = $product->id;
-        $prices = Price::where('product_id', $id)->get();
-        foreach ($prices as $price) {
-            $idPrice = $price->id;
-        }
-        return $this->allNeeds('edit', $id, $idPrice);
+        return $this->allNeeds('edit', $product);
     }
 
+    /**
+     * @param UpdateProductRequest $request
+     * @param Product $product
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update($request->validated());
+
+        foreach ($request->validated('productVariant') as $productVariantId => $productVariant) {
+            ProductVariant::updateOrCreate(
+                [
+                    'id' => $productVariantId,
+                ],
+                [
+                    'color_id' => $productVariant['color'],
+                    'size_id' => $productVariant['size'],
+                    'quantity' => $productVariant['quantity'],
+                ]
+            );
+        }
+
+        if (!empty($request->validated('newProductVariant'))) {
+            foreach ($request->validated('newProductVariant') as $key => $newProductVariant) {
+                ProductVariant::create([
+                    'product_id' => $product->id,
+                    'color_id' => $newProductVariant['color'],
+                    'size_id' => $newProductVariant['size'],
+                    'quantity' => $newProductVariant['quantity'],
+                ]);
+            }
+        }
 
         if ($request->validated('main_media_id')) {
             $media = Media::find($request->validated('main_media_id'));
@@ -195,6 +259,10 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
+    /**
+     * @param Product $product
+     * @return RedirectResponse
+     */
     public function destroy(Product $product)
     {
         Price::where('product_id', $product->id)->delete();
@@ -203,9 +271,23 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
     public function destroyMedia($id)
     {
         Media::find($id)->delete();
+        return back();
+    }
+
+    /**
+     * @param ProductVariant $productVariant
+     * @return RedirectResponse
+     */
+    public function destroyProductVariant(ProductVariant $productVariant)
+    {
+        $productVariant->delete();
         return back();
     }
 }

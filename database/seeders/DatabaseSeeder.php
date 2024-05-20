@@ -3,10 +3,17 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Characteristic;
+use App\Models\Color;
 use App\Models\DeliveryMethod;
 use App\Models\DeliveryService;
+use App\Models\Material;
+use App\Models\Package;
 use App\Models\PaymentMethod;
+use App\Models\Producer;
 use App\Models\Region;
+use App\Models\Size;
+use App\Models\Status;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -84,6 +91,85 @@ class DatabaseSeeder extends Seeder
         ]);
         PaymentMethod::create([
             'title' => 'Банківський переказ'
+        ]);
+
+        Status::create([
+            'title' => 'Є у наявності'
+        ]);
+        Status::create([
+            'title' => 'Немає у наявності'
+        ]);
+        Status::create([
+            'title' => 'Скоро буде у наявності'
+        ]);
+
+         Producer::create([
+             'title' => 'Китай'
+         ]);
+        Producer::create([
+            'title' => 'Україна'
+        ]);
+        Producer::create([
+            'title' => 'Польща'
+        ]);
+
+        Package::create([
+            'title' => 12
+        ]);
+        Package::create([
+            'title' => 10
+        ]);
+        Package::create([
+            'title' => 8
+        ]);
+
+        Material::create([
+            'title' => 'Тканина'
+        ]);
+        Material::create([
+            'title' => 'Пластик'
+        ]);
+        Material::create([
+            'title' => 'Двухнитка'
+        ]);
+
+        Characteristic::create([
+            'height' => 12,
+            'width' => 12,
+            'length' => 12,
+        ]);
+        Characteristic::create([
+            'height' => 10,
+            'width' => 10,
+            'length' => 10,
+        ]);
+        Characteristic::create([
+            'height' => 12,
+            'width' => 10,
+            'length' => 8,
+        ]);
+
+        Color::create([
+            'title' => 'Червоний'
+        ]);
+        Color::create([
+            'title' => 'Чорний'
+        ]);
+        Color::create([
+            'title' => 'Білий'
+        ]);
+        Color::create([
+            'title' => 'Сірий'
+        ]);
+
+        Size::create([
+            'title' => 'M'
+        ]);
+        Size::create([
+            'title' => 'XL'
+        ]);
+        Size::create([
+            'title' => '14'
         ]);
     }
 }

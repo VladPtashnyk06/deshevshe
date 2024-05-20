@@ -3,16 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Category extends Model
+class Blog extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'categories';
+    protected $table = 'blogs';
 
     /**
      * The primary key associated with the table.
@@ -28,17 +31,12 @@ class Category extends Model
      */
     protected $fillable = [
         'title',
-        'parent_id',
-        'level'
+        'description',
+        'count_views',
     ];
 
-    public function parent(): BelongsTo
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Category::class, 'parent_id', 'id');
+        return $this->hasMany(BlogComment::class);
     }
 }

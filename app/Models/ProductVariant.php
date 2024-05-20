@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Category extends Model
+class ProductVariant extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'categories';
+    protected $table = 'product_variants';
 
     /**
      * The primary key associated with the table.
@@ -24,21 +24,27 @@ class Category extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string, int>
+     * @var array<int>
      */
     protected $fillable = [
-        'title',
-        'parent_id',
-        'level'
+        'product_id',
+        'color_id',
+        'size_id',
+        'quantity',
     ];
 
-    public function parent(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function color(): BelongsTo
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id');
+        return $this->belongsTo(Color::class);
+    }
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class);
     }
 }

@@ -13,12 +13,8 @@
                                 <label for="parent_category" class="block mb-2 font-bold">Категорія:</label>
                                 <select name="parent_category" id="parent_category" class="w-full border rounded px-3">
                                     <option value="">Всі категорії</option>
-                                    @foreach ($uniqueParentIds as $parentId)
-                                        @if($parentId == null)
-                                            <option value="{{ 'null' }}" @if(request()->input('parent_category') == 'null') selected @endif>Немає</option>
-                                        @else
-                                            <option value="{{ $parentId }}" @if(request()->input('parent_category') == $parentId) selected @endif>{{ $parentId }}</option>
-                                        @endif
+                                    @foreach ($parentCategories as $parentCategory)
+                                        <option value="{{ $parentCategory->id }}" @if(request()->input('parent_category') == $parentCategory->id) selected @endif>{{ $parentCategory->title }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -22,6 +22,30 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::group(['prefix' => 'product'], function () {
+    Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
+        Route::get('/', 'index')->name('site.product.index');
+        Route::get('/show/{category}', 'show')->name('site.product.show');
+        Route::get('/showOneProduct/{product}', 'showOneProduct')->name('site.product.showOneProduct');
+        Route::get('/viewedProducts', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
+        Route::get('/recProducts', 'recProducts')->name('site.product.recProducts');
+    });
+});
+Route::group(['prefix' => 'blog'], function () {
+    Route::controller(\App\Http\Controllers\Site\BlogController::class)->group(function () {
+       Route::get('/', 'index')->name('site.blog.index');
+       Route::get('/show/{blog}', 'show')->name('site.blog.show');
+    });
+    Route::controller(\App\Http\Controllers\Site\BlogCommentController::class)->group(function () {
+       Route::post('/comment/create', 'commentStore')->name('site.blog.commentStore');
+    });
+});
+
+//
+//
+//          ADMIN
+//
+//
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -29,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::middleware('auth.admin')->group(function () {
             Route::group(['prefix' => 'users'], function () {
-                Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
+                Route::controller(\App\Http\Controllers\Admin\UserController::class)->group(function () {
                     Route::get('/', 'index')->name('user.index');
                     Route::get('/edit/{user}', 'edit')->name('user.edit');
                     Route::post('/update/{user}', 'update')->name('user.update');
@@ -37,7 +61,7 @@ Route::middleware('auth')->group(function () {
                 });
             });
             Route::group(['prefix' => 'product'], function () {
-                Route::controller(\App\Http\Controllers\ProductController::class)->group(function () {
+                Route::controller(\App\Http\Controllers\Admin\ProductController::class)->group(function () {
                     Route::get('/', 'index')->name('product.index');
                     Route::get('/create', 'create')->name('product.create');
                     Route::post('/store', 'store')->name('product.store');
@@ -45,9 +69,10 @@ Route::middleware('auth')->group(function () {
                     Route::post('/update/{product}', 'update')->name('product.update');
                     Route::delete('/deleteMedia/{media}', 'destroyMedia')->name('product.destroyMedia');
                     Route::delete('/delete/{product}', 'destroy')->name('product.destroy');
+                    Route::delete('/deleteProductVariant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
                 });
                 Route::group(['prefix' => 'color'], function () {
-                    Route::controller(\App\Http\Controllers\ColorController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\ColorController::class)->group(function () {
                         Route::get('/', 'index')->name('color.index');
                         Route::get('/create', 'create')->name('color.create');
                         Route::post('/store', 'store')->name('color.store');
@@ -57,7 +82,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'package'], function () {
-                    Route::controller(\App\Http\Controllers\PackageController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\PackageController::class)->group(function () {
                         Route::get('/', 'index')->name('package.index');
                         Route::get('/create', 'create')->name('package.create');
                         Route::post('/store', 'store')->name('package.store');
@@ -67,7 +92,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'material'], function () {
-                    Route::controller(\App\Http\Controllers\MaterialController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\MaterialController::class)->group(function () {
                         Route::get('/', 'index')->name('material.index');
                         Route::get('/create', 'create')->name('material.create');
                         Route::post('/store', 'store')->name('material.store');
@@ -77,7 +102,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'characteristic'], function () {
-                    Route::controller(\App\Http\Controllers\CharacteristicController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\CharacteristicController::class)->group(function () {
                         Route::get('/', 'index')->name('characteristic.index');
                         Route::get('/create', 'create')->name('characteristic.create');
                         Route::post('/store', 'store')->name('characteristic.store');
@@ -87,7 +112,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'size'], function () {
-                    Route::controller(\App\Http\Controllers\SizeController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\SizeController::class)->group(function () {
                         Route::get('/', 'index')->name('size.index');
                         Route::get('/create', 'create')->name('size.create');
                         Route::post('/store', 'store')->name('size.store');
@@ -97,7 +122,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'product_status'], function () {
-                    Route::controller(\App\Http\Controllers\StatusController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\StatusController::class)->group(function () {
                         Route::get('/', 'index')->name('status.index');
                         Route::get('/create', 'create')->name('status.create');
                         Route::post('/store', 'store')->name('status.store');
@@ -107,7 +132,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'producer'], function () {
-                    Route::controller(\App\Http\Controllers\ProducerController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\ProducerController::class)->group(function () {
                         Route::get('/', 'index')->name('producer.index');
                         Route::get('/create', 'create')->name('producer.create');
                         Route::post('/store', 'store')->name('producer.store');
@@ -117,7 +142,7 @@ Route::middleware('auth')->group(function () {
                     });
                 });
                 Route::group(['prefix' => 'category'], function () {
-                    Route::controller(\App\Http\Controllers\CategoryController::class)->group(function () {
+                    Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(function () {
                         Route::get('/', 'index')->name('category.index');
                         Route::get('/create', 'create')->name('category.create');
                         Route::get('/createSubCategory/{category}', 'createSubCategory')->name('category.createSubCategory');
@@ -125,6 +150,22 @@ Route::middleware('auth')->group(function () {
                         Route::get('/edit/{category}', 'edit')->name('category.edit');
                         Route::post('/update/{category}', 'update')->name('category.update');
                         Route::delete('/delete/{category}', 'destroy')->name('category.destroy');
+                    });
+                });
+                Route::group(['prefix' => 'blog'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\BlogController::class)->group(function () {
+                        Route::get('/', 'index')->name('blog.index');
+                        Route::get('/create', 'create')->name('blog.create');
+                        Route::post('/store', 'store')->name('blog.store');
+                        Route::get('/edit/{blog}', 'edit')->name('blog.edit');
+                        Route::get('/showComments/{blog}', 'showComments')->name('blog.showComments');
+                        Route::post('/update/{blog}', 'update')->name('blog.update');
+                        Route::delete('/delete/{blog}', 'destroy')->name('blog.destroy');
+                    });
+                    Route::controller(\App\Http\Controllers\Admin\BlogCommentController::class)->group(function () {
+                        Route::get('/createAnswer/{blog_comment}', 'commentAnswerCreate')->name('blog.commentAnswerCreate');
+                        Route::post('/storeAnswer', 'commentAnswerStore')->name('blog.commentAnswerStore');
+                        Route::delete('/deleteComment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
                     });
                 });
             });

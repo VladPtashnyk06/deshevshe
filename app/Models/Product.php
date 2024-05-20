@@ -34,14 +34,11 @@ class Product extends Model implements HasMedia
         'category_id',
         'producer_id',
         'status_id',
-        'size_id',
-        'color_id',
         'package_id',
         'material_id',
         'characteristic_id',
         'title',
         'description',
-        'quantity',
         'code',
         'model',
         'product_promotion',
@@ -64,16 +61,6 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Status::class);
     }
 
-    public function size(): BelongsTo
-    {
-        return $this->belongsTo(Size::class);
-    }
-
-    public function color(): BelongsTo
-    {
-        return $this->belongsTo(Color::class);
-    }
-
     public function package(): BelongsTo
     {
         return $this->belongsTo(Package::class);
@@ -87,5 +74,15 @@ class Product extends Model implements HasMedia
     public function characteristic(): BelongsTo
     {
         return $this->belongsTo(Characteristic::class);
+    }
+
+    public function productVariants(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id');
+    }
+
+    public function price(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Price::class, 'product_id');
     }
 }

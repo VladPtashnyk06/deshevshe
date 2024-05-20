@@ -69,10 +69,10 @@
                             <th class="p-2 text-lg">Зображення</th>
                             <th class="p-2 text-lg">Код товару</th>
                             <th class="p-2 text-lg">Назва товару</th>
-                            <th class="p-2 text-lg">Кількість товару</th>
                             <th class="p-2 text-lg">Категорія</th>
                             <th class="p-2 text-lg">Колір</th>
                             <th class="p-2 text-lg">Розмір</th>
+                            <th class="p-2 text-lg">Кількість товару</th>
                             <th class="p-2 text-lg">К-сть. в упакуванні</th>
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Промоакція</th>
@@ -95,10 +95,22 @@
                                 </td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->quantity }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->color->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->size->title) ? $product->size->title : 'Не вказано' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
+                                    @foreach($product->productVariants()->get() as $productVariant)
+                                        {{ $productVariant->color->title }}<br>
+                                    @endforeach
+                                </td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
+                                    @foreach($product->productVariants()->get() as $productVariant)
+                                        {{ $productVariant->size->title }}<br>
+                                    @endforeach
+                                </td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
+                                    @foreach($product->productVariants()->get() as $productVariant)
+                                        {{ $productVariant->quantity }}<br>
+                                    @endforeach
+                                </td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->package->title) ? $product->package->title : 'Не вказано' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>

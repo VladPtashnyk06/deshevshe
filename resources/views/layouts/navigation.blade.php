@@ -12,12 +12,17 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
-                        {{ __('Користувачі') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
-                        {{ __('Продукт') }}
-                    </x-nav-link>
+                    @if(Auth::user()->role == 'admin')
+                        <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+                            {{ __('Користувачі') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
+                            {{ __('Продукт') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
+                            {{ __('Блог') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
