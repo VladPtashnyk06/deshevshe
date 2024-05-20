@@ -22,13 +22,19 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+/* =================================== */
+/*                 Site                */
+/* =================================== */
+
 Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
         Route::get('/', 'index')->name('site.product.index');
-        Route::get('/show/{category}', 'show')->name('site.product.show');
-        Route::get('/showOneProduct/{product}', 'showOneProduct')->name('site.product.showOneProduct');
-        Route::get('/viewedProducts', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
-        Route::get('/recProducts', 'recProducts')->name('site.product.recProducts');
+        Route::get('/catalog/show/{category}', 'show')->name('site.product.show');
+        Route::get('/show-one-product/{product}', 'showOneProduct')->name('site.product.showOneProduct');
+        Route::get('/viewed-products', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
+        Route::get('/rec-products', 'recProducts')->name('site.product.recProducts');
+        Route::get('/get-sizes/{color_id}', 'getSizes')->name('site.product.getSizes');
+        Route::get('/get-product/{product_id}', 'getProduct')->name('site.product.getProduct');
     });
 });
 Route::group(['prefix' => 'blog'], function () {
@@ -40,12 +46,16 @@ Route::group(['prefix' => 'blog'], function () {
        Route::post('/comment/create', 'commentStore')->name('site.blog.commentStore');
     });
 });
+Route::controller(\App\Http\Controllers\Site\CartController::class)->group(function () {
+    Route::get('cart', 'cartList')->name('cart');
+    Route::post('cart-add', 'addToCart')->name('cart.store');
+    Route::patch('cart-update', 'updateCart')->name('cart.update');
+    Route::delete('cart-remove', 'removeCart')->name('cart.remove');
+});
 
-//
-//
-//          ADMIN
-//
-//
+///* =================================== */
+///*                 Admin                */
+///* =================================== */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -67,9 +77,9 @@ Route::middleware('auth')->group(function () {
                     Route::post('/store', 'store')->name('product.store');
                     Route::get('/edit/{product}', 'edit')->name('product.edit');
                     Route::post('/update/{product}', 'update')->name('product.update');
-                    Route::delete('/deleteMedia/{media}', 'destroyMedia')->name('product.destroyMedia');
+                    Route::delete('/delete-media/{media}', 'destroyMedia')->name('product.destroyMedia');
                     Route::delete('/delete/{product}', 'destroy')->name('product.destroy');
-                    Route::delete('/deleteProductVariant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
+                    Route::delete('/delete-product-variant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
                 });
                 Route::group(['prefix' => 'color'], function () {
                     Route::controller(\App\Http\Controllers\Admin\ColorController::class)->group(function () {
@@ -145,7 +155,7 @@ Route::middleware('auth')->group(function () {
                     Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(function () {
                         Route::get('/', 'index')->name('category.index');
                         Route::get('/create', 'create')->name('category.create');
-                        Route::get('/createSubCategory/{category}', 'createSubCategory')->name('category.createSubCategory');
+                        Route::get('/create-sub-category/{category}', 'createSubCategory')->name('category.createSubCategory');
                         Route::post('/store', 'store')->name('category.store');
                         Route::get('/edit/{category}', 'edit')->name('category.edit');
                         Route::post('/update/{category}', 'update')->name('category.update');
@@ -158,14 +168,14 @@ Route::middleware('auth')->group(function () {
                         Route::get('/create', 'create')->name('blog.create');
                         Route::post('/store', 'store')->name('blog.store');
                         Route::get('/edit/{blog}', 'edit')->name('blog.edit');
-                        Route::get('/showComments/{blog}', 'showComments')->name('blog.showComments');
+                        Route::get('/show-comments/{blog}', 'showComments')->name('blog.showComments');
                         Route::post('/update/{blog}', 'update')->name('blog.update');
                         Route::delete('/delete/{blog}', 'destroy')->name('blog.destroy');
                     });
                     Route::controller(\App\Http\Controllers\Admin\BlogCommentController::class)->group(function () {
-                        Route::get('/createAnswer/{blog_comment}', 'commentAnswerCreate')->name('blog.commentAnswerCreate');
-                        Route::post('/storeAnswer', 'commentAnswerStore')->name('blog.commentAnswerStore');
-                        Route::delete('/deleteComment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
+                        Route::get('/create-answer/{blog_comment}', 'commentAnswerCreate')->name('blog.commentAnswerCreate');
+                        Route::post('/store-answer', 'commentAnswerStore')->name('blog.commentAnswerStore');
+                        Route::delete('/delete-comment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
                     });
                 });
             });

@@ -11,6 +11,7 @@ use App\Models\Package;
 use App\Models\Price;
 use App\Models\Producer;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\RecProduct;
 use App\Models\Size;
 use App\Models\Status;
@@ -38,7 +39,7 @@ class ProductController extends Controller
         }
 
         $products = $query->get();
-        return view('site.filter.index', compact('products', 'categories'));
+        return view('site.catalog.first-part-catalog', compact('products', 'categories'));
     }
 
     /**
@@ -48,7 +49,14 @@ class ProductController extends Controller
     public function show(Category $category)
     {
         $products = Product::where('category_id', $category->id)->get();
-        return view('site.product.show', compact('products'));
+
+        if (!$products->count() > 0) {
+            $categories = Category::where('parent_id', $category->id)->get();
+        } else {
+            $categories = [];
+        }
+
+        return view('site.product.cards-products', compact('products', 'categories'));
     }
 
     public function showOneProduct(Product $product)
@@ -61,7 +69,7 @@ class ProductController extends Controller
             foreach (session()->get('recentlyViewedProducts') as $key => $recentlyViewedProduct) {
                 foreach ($recentlyViewedProduct as $item) {
                     if ($item == $product->id) {
-                        return view('site.product.oneProduct', compact('product'));
+                        return view('site.product.card-product-one', compact('product'));
                     } else {
                         $recentlyViewedProducts = session()->get('recentlyViewedProducts');
                         $recentlyViewedProducts['product_id'][] = $product->id;
@@ -74,7 +82,7 @@ class ProductController extends Controller
             session()->put('recentlyViewedProducts', $recentlyViewedProducts);
         }
 
-        return view('site.product.oneProduct', compact('product'));
+        return view('site.product.card-product-one', compact('product'));
     }
 
     public function recentlyViewedProducts()
@@ -90,7 +98,7 @@ class ProductController extends Controller
             $viewedProducts = [];
         }
 
-        return view('site.product.viewedProduct', compact('viewedProducts'));
+        return view('site.product.viewed-products', compact('viewedProducts'));
     }
 
     public function recProducts()
@@ -99,6 +107,25 @@ class ProductController extends Controller
         foreach ($recommendProducts as $recommendProduct) {
             $recProducts[] = $recommendProduct;
         }
-        return view('site.product.recProduct', compact('recProducts'));
+        return view('site.product.rec-products', compact('recProducts'));
+    }
+
+    public function getSizes($color_id)
+    {
+        $productVariants = ProductVariant::where('color_id', $color_id)->with('size')->get();
+        $sizes = $productVariants->map(function($variant) {
+            return [
+                'size_id' => $variant->size->id,
+                'size_title' => $variant->size->title,
+            ];
+        });
+        return response()->json($sizes);
+    }
+
+    public function getProduct($productId)
+    {
+        $product = Product::with('productVariants.color')->findOrFail($productId);
+
+        return response()->json(['productVariants' => $product->productVariants]);
     }
 }

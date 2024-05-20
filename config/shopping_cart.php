@@ -23,8 +23,8 @@ return [
      *
      * the configuration for persisting cart
      */
-    'storage' => null,
-
+//    'storage' => null,
+    'storage' => \App\Models\CacheStorage::class,
     /*
      * ---------------------------------------------------------------
      * events

@@ -6,7 +6,7 @@
                     <h1 class="text-3xl font-semibold mb-6 text-center">Продукти</h1>
                     <ul class="bg-yellow-200 p-4 rounded-lg">
                         @foreach($categories as $category)
-                            @include('site.filter.filter', ['category' => $category])
+                            @include('site.catalog.second-part-catalog', ['category' => $category])
                         @endforeach
                     </ul>
                 </div>
