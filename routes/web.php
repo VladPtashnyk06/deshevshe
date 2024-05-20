@@ -181,6 +181,12 @@ Route::middleware('auth')->group(function () {
                         Route::delete('/delete-comment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
                     });
                 });
+                Route::controller(\App\Http\Controllers\Admin\ProductCommentController::class)->group(function () {
+                    Route::get('/comments/{product}', 'index')->name('product.comments');
+                    Route::get('/comments/create/{product_comment}', 'create')->name('product.comments.create');
+                    Route::post('/comments/store', 'store')->name('product.comment.store');
+                    Route::delete('/comment/delete/{product_comment}', 'destroy')->name('product.comment.delete');
+                });
             });
         });
     });
