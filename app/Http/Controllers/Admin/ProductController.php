@@ -14,6 +14,7 @@ use App\Models\Price;
 use App\Models\Producer;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\RecProduct;
 use App\Models\Size;
 use App\Models\Status;
 use Illuminate\Contracts\Foundation\Application;
@@ -118,6 +119,10 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $newProduct = Product::create($request->validated());
+
+        RecProduct::create([
+            'product_id' => $newProduct->id,
+        ]);
 
         $productVariantData = $request->validated('productVariant');
         $count = count($productVariantData['color']);

@@ -25,10 +25,10 @@ Route::get('/dashboard', function () {
 Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
         Route::get('/', 'index')->name('site.product.index');
-        Route::get('/edit/{user}', 'edit')->name('user.edit');
         Route::get('/show/{category}', 'show')->name('site.product.show');
-        Route::post('/update/{user}', 'update')->name('user.update');
-        Route::delete('/delete/{user}', 'destroy')->name('user.destroy');
+        Route::get('/showOneProduct/{product}', 'showOneProduct')->name('site.product.showOneProduct');
+        Route::get('/viewedProducts', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
+        Route::get('/recProducts', 'recProducts')->name('site.product.recProducts');
     });
 });
 Route::group(['prefix' => 'blog'], function () {

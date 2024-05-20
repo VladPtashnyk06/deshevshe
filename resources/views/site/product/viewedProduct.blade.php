@@ -3,16 +3,10 @@
         <div class="mx-auto sm:px-6 lg:px-8 max-w-7xl">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-3xl font-semibold mb-6 text-center">Продукти</h1>
-                    @if(isset($categories))
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            @foreach($categories as $category)
-                                @include('site.filter.filter')
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            @foreach($products as $product)
+                    <h1 class="text-3xl font-semibold mb-6 text-center">Переглянуті продукти</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        @if(!empty($viewedProducts))
+                            @foreach($viewedProducts as $product)
                                 <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center">
                                     @foreach($product->getMedia($product->id) as $media)
                                         @if($media->getCustomProperty('main_image') === 1)
@@ -40,12 +34,14 @@
                                         @else
                                             <p class="text-lg mb-2">Ціна не вказана</p>
                                         @endif
-{{--                                        <a href="{{ route('product.', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Купити</a>--}}
+                                        {{--                                        <a href="{{ route('product.', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Купити</a>--}}
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
-                    @endif
+                        @else
+                            Немає переглянутих товарів
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
