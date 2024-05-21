@@ -27,31 +27,49 @@ class CartController extends Controller
         $cartItems->totalPrice = $cartItems->totalDiscountPrice = 0;
         $cartItems->map(function ($item) use($cartItems) {
             $cartItems->totalPrice += $item->quantity * $item->price;
-            $cartItems->totalDiscountPrice +=
-                $item->attributes->pair
-                    ? $item->quantity * $item->attributes->pair
-                    : $item->quantity * $item->price;
+            $cartItems->totalDiscountPrice += $item->quantity * $item->price;
         });
         $cartItems->totalDiscount = $cartItems->totalPrice - $cartItems->totalDiscountPrice;
 
         // Check if total price exceeds 2500 and apply discount
         $discount = 0;
-        if ($cartItems->totalPrice > 2500 && $cartItems->totalPrice <= 5000) {
-            // Assuming a 10% discount for this example
-            $discount = $cartItems->totalPrice * 0.10;
-            $cartItems->totalDiscountPrice -= $discount;
-            $cartItems->totalDiscount += $discount;
-        }
+        if(session()->get('currency') == 'USD' || session()->get('currency') == 'EUR') {
+            $currency_rate = session()->get('currency_rate');
 
-        // Check if total price exceeds 1000 and apply free shipping
-        $freeShipping = false;
-        if ($cartItems->totalPrice > 1000 && $cartItems->totalPrice < 2500) {
-            $freeShipping = true;
-        }
+            if ($cartItems->totalPrice > ( 2500 / $currency_rate ) && $cartItems->totalPrice <= ( 5000 / $currency_rate )) {
+                // Assuming a 10% discount for this example
+                $discount = $cartItems->totalPrice * 0.10;
+                $cartItems->totalDiscountPrice -= $discount;
+                $cartItems->totalDiscount += $discount;
+            }
 
-        // Check if total price is below minimum threshold
-        $minimumAmount = 500;
-        $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+            // Check if total price exceeds 1000 and apply free shipping
+            $freeShipping = false;
+            if ($cartItems->totalPrice > ( 1000 / $currency_rate ) && $cartItems->totalPrice < ( 2500 / $currency_rate )) {
+                $freeShipping = true;
+            }
+
+            // Check if total price is below minimum threshold
+            $minimumAmount = ( 500 / $currency_rate );
+            $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+        } else {
+            if ($cartItems->totalPrice > 2500 && $cartItems->totalPrice <= 5000) {
+                // Assuming a 10% discount for this example
+                $discount = $cartItems->totalPrice * 0.10;
+                $cartItems->totalDiscountPrice -= $discount;
+                $cartItems->totalDiscount += $discount;
+            }
+
+            // Check if total price exceeds 1000 and apply free shipping
+            $freeShipping = false;
+            if ($cartItems->totalPrice > 1000 && $cartItems->totalPrice < 2500) {
+                $freeShipping = true;
+            }
+
+            // Check if total price is below minimum threshold
+            $minimumAmount = 500;
+            $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+        }
 
         return view('site.cart.cart', compact('cartItems', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount'));
     }
@@ -63,37 +81,109 @@ class CartController extends Controller
         $giftItemFirst = \Cart::get('gift_1');
         $giftItemSecond = \Cart::get('gift_2');
 
-        if ($totalPrice > 7000) {
-            if (!$giftItemSecond) {
-                \Cart::remove('gift_1');
+        if (session()->get('currency') == 'USD') {
+            $currency_rate_usd = session()->get('currency_rate_usd');
+            if ($totalPrice > ( 7000 / $currency_rate_usd )) {
+                if (!$giftItemSecond) {
+                    \Cart::remove('gift_1');
 
-                \Cart::add([
-                    'id' => 'gift_2',
-                    'name' => 'Подарунковий товар 2',
-                    'price' => 0,
-                    'quantity' => 1,
-                    'attributes' => [
-                        'is_gift' => true,
-                    ],
-                ]);
-            } elseif ($totalPrice <= 7000) {
-                \Cart::remove('gift_2');
+                    \Cart::add([
+                        'id' => 'gift_2',
+                        'name' => 'Подарунковий товар 2',
+                        'price' => 0,
+                        'quantity' => 1,
+                        'attributes' => [
+                            'is_gift' => true,
+                        ],
+                    ]);
+                } elseif ($totalPrice <= ( 7000 / $currency_rate_usd )) {
+                    \Cart::remove('gift_2');
+                }
+            } else {
+                if ($totalPrice > ( 5000 / $currency_rate_usd ) && !$giftItemFirst) {
+                    \Cart::remove('gift_2');
+
+                    \Cart::add([
+                        'id' => 'gift_1',
+                        'name' => 'Подарунковий товар 1',
+                        'price' => 0,
+                        'quantity' => 1,
+                        'attributes' => [
+                            'is_gift' => true,
+                        ],
+                    ]);
+                } elseif ($totalPrice <= ( 5000 / $currency_rate_usd )) {
+                    \Cart::remove('gift_1');
+                }
             }
-        } else {
-            if ($totalPrice > 5000 && !$giftItemFirst) {
-                \Cart::remove('gift_2');
+        } elseif (session()->get('currency') == 'EUR') {
+            $currency_rate_eur = session()->get('currency_rate_eur');
+            if ($totalPrice > ( 7000 / $currency_rate_eur )) {
+                if (!$giftItemSecond) {
+                    \Cart::remove('gift_1');
 
-                \Cart::add([
-                    'id' => 'gift_1',
-                    'name' => 'Подарунковий товар 1',
-                    'price' => 0,
-                    'quantity' => 1,
-                    'attributes' => [
-                        'is_gift' => true,
-                    ],
-                ]);
-            } elseif ($totalPrice <= 5000) {
-                \Cart::remove('gift_1');
+                    \Cart::add([
+                        'id' => 'gift_2',
+                        'name' => 'Подарунковий товар 2',
+                        'price' => 0,
+                        'quantity' => 1,
+                        'attributes' => [
+                            'is_gift' => true,
+                        ],
+                    ]);
+                } elseif ($totalPrice <= ( 7000 / $currency_rate_eur )) {
+                    \Cart::remove('gift_2');
+                }
+            } else {
+                if ($totalPrice > ( 5000 / $currency_rate_eur ) && !$giftItemFirst) {
+                    \Cart::remove('gift_2');
+
+                    \Cart::add([
+                        'id' => 'gift_1',
+                        'name' => 'Подарунковий товар 1',
+                        'price' => 0,
+                        'quantity' => 1,
+                        'attributes' => [
+                            'is_gift' => true,
+                        ],
+                    ]);
+                } elseif ($totalPrice <= ( 5000 / $currency_rate_eur )) {
+                    \Cart::remove('gift_1');
+                }
+            }
+        } elseif (session()->get('currency') == 'UAH') {
+            if ($totalPrice > 7000) {
+                if (!$giftItemSecond) {
+                    \Cart::remove('gift_1');
+
+                    \Cart::add([
+                        'id' => 'gift_2',
+                        'name' => 'Подарунковий товар 2',
+                        'price' => 0,
+                        'quantity' => 1,
+                        'attributes' => [
+                            'is_gift' => true,
+                        ],
+                    ]);
+                } elseif ($totalPrice <= 7000) {
+                    \Cart::remove('gift_2');
+                }
+            } else {
+                if ($totalPrice > 5000 && !$giftItemFirst) {
+                    \Cart::remove('gift_2');
+
+                    \Cart::add([
+                        'id' => 'gift_1',
+                        'name' => 'Подарунковий товар 1',
+                        'price' => 0,
+                        'quantity' => 1,
+                        'attributes' => [
+                            'is_gift' => true,
+                        ],
+                    ]);
+                } elseif ($totalPrice <= 5000) {
+                    \Cart::remove('gift_1');
+                }
             }
         }
     }
@@ -107,21 +197,63 @@ class CartController extends Controller
         $product = Product::find($request->post('product_id'));
         $productVariant = ProductVariant::where('product_id', $request->post('product_id'))->where('color_id', $request->post('color_id'))->where('size_id', $request->post('size_id'))->first();
 
-        \Cart::add([
-            'id' => $productVariant->id.'_p',
-            'name' => $product->title,
-            'price' => $product->price->pair,
-            'quantity' => 1,
-            'attributes' => [
-                'product_id' => $product->id,
-                'code' => $product->code,
-                'color' => $productVariant->color->title ,
-                'size' => $productVariant->size->title ,
-                'product_quantity' => $productVariant->quantity,
-                'pair' => $product->price->pair,
-                'imageUrl' => $product->getFirstMediaUrl($product->id),
-            ],
-        ]);
+        if(session()->get('currency') == 'USD') {
+            $currency_rate_usd = session()->get('currency_rate_usd');
+            $currency = session()->get('currency');
+            \Cart::add([
+                'id' => $productVariant->id.'_p',
+                'name' => $product->title,
+                'price' => ($product->price->pair / $currency_rate_usd),
+                'quantity' => 1,
+                'attributes' => [
+                    'product_id' => $product->id,
+                    'code' => $product->code,
+                    'color' => $productVariant->color->title ,
+                    'size' => $productVariant->size->title ,
+                    'product_quantity' => $productVariant->quantity,
+                    'pair' => $product->price->pair / $currency_rate_usd,
+                    'currency' => $currency,
+                    'imageUrl' => $product->getFirstMediaUrl($product->id),
+                ],
+            ]);
+        } elseif (session()->get('currency') == 'EUR') {
+            $currency_rate_eur = session()->get('currency_rate_eur');
+            $currency = session()->get('currency');
+            \Cart::add([
+                'id' => $productVariant->id.'_p',
+                'name' => $product->title,
+                'price' => ($product->price->pair / $currency_rate_eur),
+                'quantity' => 1,
+                'attributes' => [
+                    'product_id' => $product->id,
+                    'code' => $product->code,
+                    'color' => $productVariant->color->title ,
+                    'size' => $productVariant->size->title ,
+                    'product_quantity' => $productVariant->quantity,
+                    'pair' => $product->price->pair / $currency_rate_eur,
+                    'currency' => $currency,
+                    'imageUrl' => $product->getFirstMediaUrl($product->id),
+                ],
+            ]);
+        } elseif (session()->get('currency') == 'UAH') {
+            $currency = session()->get('currency');
+            \Cart::add([
+                'id' => $productVariant->id.'_p',
+                'name' => $product->title,
+                'price' => $product->price->pair,
+                'quantity' => 1,
+                'attributes' => [
+                    'product_id' => $product->id,
+                    'code' => $product->code,
+                    'color' => $productVariant->color->title ,
+                    'size' => $productVariant->size->title ,
+                    'product_quantity' => $productVariant->quantity,
+                    'pair' => $product->price->pair,
+                    'currency' => $currency,
+                    'imageUrl' => $product->getFirstMediaUrl($product->id),
+                ],
+            ]);
+        }
 
         return to_route('cart');
     }
@@ -138,10 +270,8 @@ class CartController extends Controller
             'id' => 'required|string|max:12',
             'quantity' => 'required|integer|max:1024',
         ]);
-
         // Deduct quantity
         if ($request->has('quantityDed') && ($validated['quantity'] > 1)) {
-
             \Cart::update(
                 $validated['id'],
                 [
@@ -152,7 +282,6 @@ class CartController extends Controller
                 ]
             );
         }
-
         // Add quantity
         if ($request->has('quantityAdd')) {
             \Cart::update(

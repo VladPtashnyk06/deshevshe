@@ -60,6 +60,20 @@
                 </x-dropdown>
             </div>
 
+            <!-- Currency Selector -->
+            <div class="flex items-center">
+                <form action="{{ route('change-currency') }}" method="post" id="currency-form" class="flex items-center">
+                    @csrf
+                    <select name="currency" id="currency-select" class="rounded-l-md border border-gray-300 focus:border-blue-500 focus:outline-none py-2 px-4 bg-white dark:bg-gray-800 text-sm w-20">
+                        <option value="UAH" @if(session('currency') == 'UAH') selected @endif>UAH</option>
+                        <option value="USD" @if(session('currency') == 'USD') selected @endif>USD</option>
+                        <option value="EUR" @if(session('currency') == 'EUR') selected @endif>EUR</option>
+                    </select>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm">Змінити</button>
+                </form>
+            </div>
+
+
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">

@@ -41,9 +41,7 @@
 
                                 @if($product->price()->get())
                                     @foreach($product->price()->get() as $price)
-                                        <p class="text-lg mb-2">Ціна за шт - {{ $price->pair }} грн.</p>
-                                        <p class="text-lg mb-2">Ціна за пакування - {{ $price->package }} грн.</p>
-                                        <p class="text-lg mb-2">Рекомендована ціна для продажу у роздріб - {{ $price->rec_pair }} грн.</p>
+                                        @include('site.product.price.index')
                                     @endforeach
                                 @else
                                     <p class="text-lg mb-2">Ціна не вказана</p>

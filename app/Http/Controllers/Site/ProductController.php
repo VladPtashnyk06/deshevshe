@@ -4,21 +4,16 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Characteristic;
-use App\Models\Color;
-use App\Models\Material;
-use App\Models\Package;
-use App\Models\Price;
-use App\Models\Producer;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\RecProduct;
-use App\Models\Size;
-use App\Models\Status;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ProductController extends Controller
 {
@@ -59,19 +54,26 @@ class ProductController extends Controller
         return view('site.product.cards-products', compact('products', 'categories'));
     }
 
+    /**
+     * @param Product $product
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function showOneProduct(Product $product)
     {
         $recProduct = RecProduct::where('product_id', $product->id)->first();
-        $recProduct->update([
-            'count_views' => $recProduct->count_views + 1,
-        ]);
+        if ($recProduct) {
+            $recProduct->update(['count_views' => $recProduct->count_views + 1]);
+        }
+
         if (!empty(session()->get('recentlyViewedProducts'))) {
-            foreach (session()->get('recentlyViewedProducts') as $key => $recentlyViewedProduct) {
+            $recentlyViewedProducts = session()->get('recentlyViewedProducts', []);
+            foreach ($recentlyViewedProducts as $recentlyViewedProduct) {
                 foreach ($recentlyViewedProduct as $item) {
                     if ($item == $product->id) {
-                        return view('site.product.card-product-one', compact('product'));
+                        break;
                     } else {
-                        $recentlyViewedProducts = session()->get('recentlyViewedProducts');
                         $recentlyViewedProducts['product_id'][] = $product->id;
                         session()->put('recentlyViewedProducts', $recentlyViewedProducts);
                     }
@@ -85,6 +87,12 @@ class ProductController extends Controller
         return view('site.product.card-product-one', compact('product'));
     }
 
+
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function recentlyViewedProducts()
     {
         $recentlyViewedProducts = session()->get('recentlyViewedProducts');
@@ -98,18 +106,28 @@ class ProductController extends Controller
             $viewedProducts = [];
         }
 
-        return view('site.product.viewed-products', compact('viewedProducts'));
+        return view('site.product.viewed-products', compact('viewedProducts', ));
     }
 
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function recProducts()
     {
         $recommendProducts = RecProduct::all();
         foreach ($recommendProducts as $recommendProduct) {
             $recProducts[] = $recommendProduct;
         }
+
         return view('site.product.rec-products', compact('recProducts'));
     }
 
+    /**
+     * @param $color_id
+     * @return JsonResponse
+     */
     public function getSizes($color_id)
     {
         $productVariants = ProductVariant::where('color_id', $color_id)->with('size')->get();
@@ -122,6 +140,10 @@ class ProductController extends Controller
         return response()->json($sizes);
     }
 
+    /**
+     * @param $productId
+     * @return JsonResponse
+     */
     public function getProduct($productId)
     {
         $product = Product::with('productVariants.color')->findOrFail($productId);

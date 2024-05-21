@@ -25,7 +25,10 @@ Route::get('/dashboard', function () {
 /* =================================== */
 /*                 Site                */
 /* =================================== */
-
+Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
+    Route::get('/exchange-rates', 'getExchangeRates')->name('exchange-rates');
+    Route::post('/change-currency', 'changeCurrency')->name('change-currency');
+});
 Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
         Route::get('/', 'index')->name('site.product.index');

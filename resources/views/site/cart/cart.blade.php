@@ -90,7 +90,7 @@
                                                     <p class="text-gray-500 line-through">{{ number_format($item->attributes->discount_price, 0, '.', ' ') . ' грн' }}</p>
                                                     <p class="text-lg font-semibold">{{ number_format($item->price, 0, '.', ' ') . ' грн' }}</p>
                                                 @else
-                                                    <p class="text-lg font-semibold">{{ number_format($item->price, 0, '.', ' ') . ' грн' }}</p>
+                                                    <p class="text-lg font-semibold">{{ number_format($item->price, 0, '.', '  ') .' '. $item->attributes->currency }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                             <h2 class="text-xl font-semibold mb-4">Інформація про замовлення</h2>
                             <p class="flex justify-between">
                                 <span>Загальна вартість:</span>
-                                <span>{{ number_format($cartItems->totalPrice, 0, '.', ' ') . ' грн' }}</span>
+                                <span>{{ number_format($cartItems->totalPrice, 0, '.', ' ') .' '. $item->attributes->currency  }}</span>
                             </p>
                             <p class="flex justify-between">
                                 <span>Знижка:</span>
@@ -120,7 +120,7 @@
                             <hr class="my-4">
                             <p class="flex justify-between text-lg font-semibold">
                                 <span>До сплати:</span>
-                                <span>{{ number_format($cartItems->totalDiscountPrice, 0, '.', ' ') . ' грн' }}</span>
+                                <span>{{ number_format($cartItems->totalDiscountPrice, 0, '.', ' ') .' '. $item->attributes->currency  }}</span>
                             </p>
                             @if($belowMinimumAmount)
                                 <p class="text-red-500 mt-4 text-center">
@@ -159,10 +159,23 @@
                             </h3>
                             <h2 class="text-lg leading-6 font-medium text-gray-900">Знижки :</h2>
                             <ul class="text-left">
+                                <h2 class="text-center text-lg leading-6 font-medium text-gray-900">ГРН</h2>
                                 <li>1). Якщо Ваше замовлення більше 1000грн, але менше ніж 2500грн - безкоштовна доставка</li>
                                 <li>2). Якщо Ваше замовлення більше 2500грн, але менше ніж 5000грн - знижка 10%</li>
                                 <li>3). Якщо Ваше замовлення більше 5000грн, але менше ніж 7000грн - подарунковий товар №1</li>
                                 <li>4). Якщо Ваше замовлення більше 7000грн - подарунковий товар №2</li>
+                                <br>
+                                <h2 class="text-center text-lg leading-6 font-medium text-gray-900">USD</h2>
+                                <li>1). Якщо Ваше замовлення більше {{ round(1000 / session()->get('currency_rate_usd'), 1) }} USD, але менше ніж {{ round(2500 / session()->get('currency_rate_usd'), 1) }} USD - безкоштовна доставка</li>
+                                <li>2). Якщо Ваше замовлення більше {{ round(2500 / session()->get('currency_rate_usd'), 1) }} USD, але менше ніж {{ round(5000 / session()->get('currency_rate_usd'), 1) }} USD - знижка 10%</li>
+                                <li>3). Якщо Ваше замовлення більше {{ round(5000 / session()->get('currency_rate_usd'), 1) }} USD, але менше ніж {{ round(7000 / session()->get('currency_rate_usd'), 1) }} USD - подарунковий товар №1</li>
+                                <li>4). Якщо Ваше замовлення більше {{ round(7000 / session()->get('currency_rate_usd'), 1) }} USD - подарунковий товар №2</li>
+                                <br>
+                                <h2 class="text-center text-lg leading-6 font-medium text-gray-900">EUR</h2>
+                                <li>1). Якщо Ваше замовлення більше {{ round(1000 / session()->get('currency_rate_eur'), 1) }} EUR, але менше ніж 2500грн - безкоштовна доставка</li>
+                                <li>2). Якщо Ваше замовлення більше {{ round(2500 / session()->get('currency_rate_eur'), 1) }} EUR, але менше ніж {{ round(5000 / session()->get('currency_rate_eur'), 1) }} EUR - знижка 10%</li>
+                                <li>3). Якщо Ваше замовлення більше {{ round(5000 / session()->get('currency_rate_eur'), 1) }} EUR, але менше ніж {{ round(7000 / session()->get('currency_rate_eur'), 1) }} EUR - подарунковий товар №1</li>
+                                <li>4). Якщо Ваше замовлення більше {{ round(7000 / session()->get('currency_rate_eur'), 1) }} EUR - подарунковий товар №2</li>
                             </ul>
                         </div>
                     </div>

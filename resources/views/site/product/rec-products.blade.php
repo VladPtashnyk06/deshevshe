@@ -14,7 +14,9 @@
                                         @endif
                                     @endforeach
                                     <div class="text-center">
-                                        <a href="{{ route('site.product.showOneProduct', $recProduct->product_id) }}"><p class="text-xl font-semibold mb-2">{{ $recProduct->product->name }}</p></a>
+                                        <a href="{{ route('site.product.showOneProduct', $recProduct->product_id) }}">
+                                            <p class="text-xl font-semibold mb-2">{{ $recProduct->product->title }}</p>
+                                        </a>
                                         @if($recProduct->product->package)
                                             <p class="text-lg mb-2">В упаковці: {{ $recProduct->product->package->title }}</p>
                                         @endif
@@ -27,14 +29,11 @@
 
                                         @if($recProduct->product->price()->get())
                                             @foreach($recProduct->product->price()->get() as $price)
-                                                <p class="text-lg mb-2">Ціна за шт - {{ $price->pair }} грн.</p>
-                                                <p class="text-lg mb-2">Ціна за пакування - {{ $price->package }} грн.</p>
-                                                <p class="text-lg mb-2">Рекомендована ціна для продажу у роздріб - {{ $price->rec_pair }} грн.</p>
+                                                @include('site.product.price.index')
                                             @endforeach
                                         @else
                                             <p class="text-lg mb-2">Ціна не вказана</p>
                                         @endif
-                                        {{--                                        <a href="{{ route('product.', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border" style="max-width: 120px">Купити</a>--}}
                                     </div>
                                 </div>
                             @endforeach
