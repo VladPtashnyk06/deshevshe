@@ -20,6 +20,7 @@ class CartController extends Controller
      */
     public function cartList(): View
     {
+        $this->addGiftsToCartIfNeeded();
         $cartItems = \Cart::getContent()->sortBy('id');
 
         // Counting Cart's additional parameters
@@ -33,7 +34,68 @@ class CartController extends Controller
         });
         $cartItems->totalDiscount = $cartItems->totalPrice - $cartItems->totalDiscountPrice;
 
-        return view('site.cart.cart', compact('cartItems'));
+        // Check if total price exceeds 2500 and apply discount
+        $discount = 0;
+        if ($cartItems->totalPrice > 2500 && $cartItems->totalPrice <= 5000) {
+            // Assuming a 10% discount for this example
+            $discount = $cartItems->totalPrice * 0.10;
+            $cartItems->totalDiscountPrice -= $discount;
+            $cartItems->totalDiscount += $discount;
+        }
+
+        // Check if total price exceeds 1000 and apply free shipping
+        $freeShipping = false;
+        if ($cartItems->totalPrice > 1000 && $cartItems->totalPrice < 2500) {
+            $freeShipping = true;
+        }
+
+        // Check if total price is below minimum threshold
+        $minimumAmount = 500;
+        $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+
+        return view('site.cart.cart', compact('cartItems', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount'));
+    }
+
+    public function addGiftsToCartIfNeeded()
+    {
+        $totalPrice = \Cart::getTotal();
+
+        $giftItemFirst = \Cart::get('gift_1');
+        $giftItemSecond = \Cart::get('gift_2');
+
+        if ($totalPrice > 7000) {
+            if (!$giftItemSecond) {
+                \Cart::remove('gift_1');
+
+                \Cart::add([
+                    'id' => 'gift_2',
+                    'name' => 'Подарунковий товар 2',
+                    'price' => 0,
+                    'quantity' => 1,
+                    'attributes' => [
+                        'is_gift' => true,
+                    ],
+                ]);
+            } elseif ($totalPrice <= 7000) {
+                \Cart::remove('gift_2');
+            }
+        } else {
+            if ($totalPrice > 5000 && !$giftItemFirst) {
+                \Cart::remove('gift_2');
+
+                \Cart::add([
+                    'id' => 'gift_1',
+                    'name' => 'Подарунковий товар 1',
+                    'price' => 0,
+                    'quantity' => 1,
+                    'attributes' => [
+                        'is_gift' => true,
+                    ],
+                ]);
+            } elseif ($totalPrice <= 5000) {
+                \Cart::remove('gift_1');
+            }
+        }
     }
 
     /**
@@ -79,6 +141,7 @@ class CartController extends Controller
 
         // Deduct quantity
         if ($request->has('quantityDed') && ($validated['quantity'] > 1)) {
+
             \Cart::update(
                 $validated['id'],
                 [

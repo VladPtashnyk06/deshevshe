@@ -176,6 +176,14 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
 
+        $product->price()->update([
+            'pair' => $request->validated('pair'),
+            'rec_pair' => $request->validated('rec_pair'),
+            'package' => $request->validated('package'),
+            'rec_package' => $request->validated('rec_package'),
+            'retail' => $request->validated('retail'),
+        ]);
+
         foreach ($request->validated('productVariant') as $productVariantId => $productVariant) {
             if (!ProductVariant::where('product_id', $product->id)->where('color_id', $productVariant['color'])->where('size_id', $productVariant['size'])) {
                 ProductVariant::updateOrCreate(
