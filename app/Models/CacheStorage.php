@@ -36,11 +36,11 @@ class CacheStorage
     public function put($key, $value)
     {
         $this->data[$key] = $value;
-        \Cache::put('cart_' . $this->cart_id, $this->data, Carbon::now()->addDays(30));
+        \Cache::put('cart_' . $this->cart_id, $this->data, Carbon::now()->addDays(7));
 
         if (!Cookie::hasQueued('cart')) {
             Cookie::queue(
-                Cookie::make('cart', $this->cart_id, 60 * 24 * 30)
+                Cookie::make('cart', $this->cart_id, 60 * 24 * 7)
             );
         }
     }
