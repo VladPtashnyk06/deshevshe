@@ -136,7 +136,8 @@ class ProductController extends Controller
                 'size_id' => $variant->size->id,
                 'size_title' => $variant->size->title,
             ];
-        });
+        })->unique('size_id')->values();
+
         return response()->json($sizes);
     }
 
