@@ -18,7 +18,7 @@
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 
-            @if(Auth::user()->role == 'admin' && \Illuminate\Support\Facades\Route::is('product.*') || \Illuminate\Support\Facades\Route::is('category.*') || \Illuminate\Support\Facades\Route::is('color.*') || \Illuminate\Support\Facades\Route::is('package.*') || \Illuminate\Support\Facades\Route::is('material.*') || \Illuminate\Support\Facades\Route::is('characteristic.*') || \Illuminate\Support\Facades\Route::is('size.*') || \Illuminate\Support\Facades\Route::is('status.*') || \Illuminate\Support\Facades\Route::is('producer.*'))
+            @if(Auth::user() && Auth::user()->role == 'admin' && \Illuminate\Support\Facades\Route::is('product.*') || \Illuminate\Support\Facades\Route::is('category.*') || \Illuminate\Support\Facades\Route::is('color.*') || \Illuminate\Support\Facades\Route::is('package.*') || \Illuminate\Support\Facades\Route::is('material.*') || \Illuminate\Support\Facades\Route::is('characteristic.*') || \Illuminate\Support\Facades\Route::is('size.*') || \Illuminate\Support\Facades\Route::is('status.*') || \Illuminate\Support\Facades\Route::is('producer.*'))
                 @include('layouts.custom-header')
             @endif
 

@@ -14,24 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
+    Route::get('/', 'index')->name('site.product.index');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 /* =================================== */
 /*                 Site                */
 /* =================================== */
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
-    Route::get('/exchange-rates', 'getExchangeRates')->name('exchange-rates');
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
 });
 Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
-        Route::get('/', 'index')->name('site.product.index');
+        Route::get('/catalog', 'catalog')->name('site.product.catalog.index');
         Route::get('/catalog/show/{category}', 'show')->name('site.product.show');
         Route::get('/show-one-product/{product}', 'showOneProduct')->name('site.product.showOneProduct');
         Route::get('/viewed-products', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
@@ -52,11 +48,16 @@ Route::group(['prefix' => 'blog'], function () {
        Route::post('/comment/create', 'commentStore')->name('site.blog.commentStore');
     });
 });
+Route::group(['prefix' => 'order'], function () {
+    Route::controller(\App\Http\Controllers\Site\OrderController::class)->group(function () {
+        Route::get('/create', 'create')->name('site.order.create');
+    });
+});
 Route::controller(\App\Http\Controllers\Site\CartController::class)->group(function () {
-    Route::get('cart', 'cartList')->name('cart');
-    Route::post('cart-add', 'addToCart')->name('cart.store');
-    Route::patch('cart-update', 'updateCart')->name('cart.update');
-    Route::delete('cart-remove', 'removeCart')->name('cart.remove');
+    Route::get('/cart', 'cartList')->name('cart');
+    Route::post('/cart-add', 'addToCart')->name('cart.store');
+    Route::patch('/cart-update', 'updateCart')->name('cart.update');
+    Route::delete('/cart-remove', 'removeCart')->name('cart.remove');
 });
 
 ///* =================================== */

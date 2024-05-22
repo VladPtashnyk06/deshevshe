@@ -116,7 +116,7 @@
                 @if(isset($comment))
                     <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
                     <input type="hidden" name="product_id" value="{{ $comment->product_id }}">
-                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                    <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : null }}">
                     <input type="hidden" name="level" value="{{ $comment->level + 1}}">
                 @endif
 
@@ -126,7 +126,7 @@
                             <span class="text-red-500">{{ htmlspecialchars("Будь ласка, не більше 255 символів") }}</span>
                         @enderror
                         <label for="name" class="block mb-2 font-bold">Ім'я</label>
-                        <input type="text" name="name" id="name" class="w-full border rounded px-3 py-2" value="{{ Auth::user()->name }}">
+                        <input type="text" name="name" id="name" class="w-full border rounded px-3 py-2" value="{{ Auth::user() ? Auth::user()->name : old('name') }}">
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@
                             <span class="text-red-500">{{ htmlspecialchars("Будь ласка, не більше 255 символів") }}</span>
                         @enderror
                     <label for="email" class="block mb-2 font-bold">Електрона адреса</label>
-                    <input type="text" name="email" id="email" class="w-full border rounded px-3 py-2" value="{{ Auth::user()->email ? Auth::user()->email : old('email') }}">
+                    <input type="text" name="email" id="email" class="w-full border rounded px-3 py-2" value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : old('email') }}">
                     </div>
                 </div>
 
@@ -164,7 +164,7 @@
 
                 <input type="hidden" name="parent_comment_id" value="">
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : null}}">
                 <input type="hidden" name="level" value="1">
 
                 <div class="w-full grid grid-cols-2 gap-4">
@@ -173,7 +173,7 @@
                         <span class="text-red-500">{{ htmlspecialchars("Будь ласка, не більше 255 символів") }}</span>
                         @enderror
                         <label for="name" class="block mb-2 font-bold">Ім'я</label>
-                        <input type="text" name="name" id="name" class="w-full border rounded px-3 py-2" value="{{ Auth::user()->name }}">
+                        <input type="text" name="name" id="name" class="w-full border rounded px-3 py-2" value="{{ Auth::user() ? Auth::user()->name : old('name') }}">
                     </div>
                 </div>
 
@@ -183,7 +183,7 @@
                             <span class="text-red-500">{{ htmlspecialchars("Будь ласка, не більше 255 символів") }}</span>
                         @enderror
                         <label for="email" class="block mb-2 font-bold">Електрона адреса</label>
-                        <input type="text" name="email" id="email" class="w-full border rounded px-3 py-2" value="{{ Auth::user()->email ? Auth::user()->email : old('email') }}">
+                        <input type="text" name="email" id="email" class="w-full border rounded px-3 py-2" value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : old('email') }}">
                     </div>
                 </div>
 

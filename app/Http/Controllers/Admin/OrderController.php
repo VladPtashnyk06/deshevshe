@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 
@@ -10,6 +11,11 @@ class OrderController extends Controller
     public function index()
     {
         return Order::all();
+    }
+
+    public function create()
+    {
+        return view('site.orders.create');
     }
 
     public function store(OrderRequest $request)

@@ -33,10 +33,10 @@ class CartController extends Controller
 
         // Check if total price exceeds 2500 and apply discount
         $discount = 0;
-        if(session()->get('currency') == 'USD' || session()->get('currency') == 'EUR') {
-            $currency_rate = session()->get('currency_rate');
+        if(session()->get('currency') == 'USD') {
+            $currencyRateUsd = session()->get('currency_rate_usd');
 
-            if ($cartItems->totalPrice > ( 2500 / $currency_rate ) && $cartItems->totalPrice <= ( 5000 / $currency_rate )) {
+            if ($cartItems->totalPrice > ( 2500 / $currencyRateUsd ) && $cartItems->totalPrice <= ( 5000 / $currencyRateUsd )) {
                 // Assuming a 10% discount for this example
                 $discount = $cartItems->totalPrice * 0.10;
                 $cartItems->totalDiscountPrice -= $discount;
@@ -45,12 +45,31 @@ class CartController extends Controller
 
             // Check if total price exceeds 1000 and apply free shipping
             $freeShipping = false;
-            if ($cartItems->totalPrice > ( 1000 / $currency_rate ) && $cartItems->totalPrice < ( 2500 / $currency_rate )) {
+            if ($cartItems->totalPrice > ( 1000 / $currencyRateUsd ) && $cartItems->totalPrice < ( 2500 / $currencyRateUsd )) {
                 $freeShipping = true;
             }
 
             // Check if total price is below minimum threshold
-            $minimumAmount = ( 500 / $currency_rate );
+            $minimumAmount = ( 500 / $currencyRateUsd );
+            $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+        } elseif(session()->get('currency') == 'EUR') {
+            $currencyRateEUR = session()->get('currency_rate_eur');
+
+            if ($cartItems->totalPrice > ( 2500 / $currencyRateEUR ) && $cartItems->totalPrice <= ( 5000 / $currencyRateEUR )) {
+                // Assuming a 10% discount for this example
+                $discount = $cartItems->totalPrice * 0.10;
+                $cartItems->totalDiscountPrice -= $discount;
+                $cartItems->totalDiscount += $discount;
+            }
+
+            // Check if total price exceeds 1000 and apply free shipping
+            $freeShipping = false;
+            if ($cartItems->totalPrice > ( 1000 / $currencyRateEUR ) && $cartItems->totalPrice < ( 2500 / $currencyRateEUR )) {
+                $freeShipping = true;
+            }
+
+            // Check if total price is below minimum threshold
+            $minimumAmount = ( 500 / $currencyRateEUR );
             $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
         } else {
             if ($cartItems->totalPrice > 2500 && $cartItems->totalPrice <= 5000) {

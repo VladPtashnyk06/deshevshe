@@ -1,7 +1,6 @@
 <x-app-layout>
     <main itemscope itemtype="http://schema.org/ItemList">
         <section class="max-w-7xl mx-auto py-12">
-            {{-- Actions messages --}}
             @if(!empty(session('cart')))
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
                    class="bg-green-100 text-green-800 p-4 rounded mb-4 text-center">
@@ -21,13 +20,13 @@
                     <div class="flex flex-col md:flex-row md:justify-between">
                         <div class="md:w-2/3">
                             @foreach($cartItems as $item)
-                                <div class="flex items-center mb-4 border-b pb-4">
-                                    <form action="{{ route('cart.remove') }}" method="post" class="mr-4">
+                                <div class="flex items-center mb-4 border-b p-6" style="padding-left: 0">
+                                    <form action="{{ route('cart.remove') }}" method="post" style="margin-right: 16px">
                                         @csrf
                                         @method('delete')
                                         <input type="hidden" name="id" value="{{ $item->id }}">
                                         <button type="submit" name="cartRemove" value="1" class="text-red-500 hover:text-red-700">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 17" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                                       d="M14.1763 1.28027C14.5651 0.88794 15.1953 0.88794 15.584 1.28027C15.9727 1.6726 15.9727 2.3087 15.584 2.70103L9.90321 8.43474L15.7133 14.299C16.102 14.6913 16.102 15.3274 15.7133 15.7197C15.3246 16.1121 14.6944 16.1121 14.3057 15.7197L8.49558 9.8555L2.6855 15.7197C2.29679 16.1121 1.66657 16.1121 1.27786 15.7197C0.889151 15.3274 0.88915 14.6913 1.27786 14.299L7.08794 8.43474L1.40717 2.70103C1.01846 2.3087 1.01846 1.6726 1.40717 1.28027C1.79588 0.88794 2.4261 0.88794 2.81481 1.28027L8.49558 7.01398L14.1763 1.28027Z"
                                                       fill="#D9D9D9"/>
@@ -38,7 +37,7 @@
                                         @if(!$item->attributes->is_gift)
                                             <a href="{{ route('site.product.showOneProduct', $item->attributes->product_id) }}">
                                                 <img src="{{ $item->attributes->imageUrl ?: asset('/img/_no_image.png') }}"
-                                                     alt="Купити {{ $item->name }}" class="w-full h-full object-cover rounded">
+                                                     alt="Купити {{ $item->name }}" class="w-full h-full object-cover rounded h-48">
                                             </a>
                                         @endif
                                     </div>
@@ -87,10 +86,10 @@
                                             </div>
                                             <div class="ml-4 text-right">
                                                 @if($item->attributes->discount_price)
-                                                    <p class="text-gray-500 line-through">{{ number_format($item->attributes->discount_price, 0, '.', ' ') . ' грн' }}</p>
-                                                    <p class="text-lg font-semibold">{{ number_format($item->price, 0, '.', ' ') . ' грн' }}</p>
+                                                    <p class="text-gray-500 line-through">{{ number_format($item->attributes->discount_price, 2, '.', ' ') . ' грн' }}</p>
+                                                    <p class="text-lg font-semibold">{{ number_format($item->price, 2, '.', ' ') . ' грн' }}</p>
                                                 @else
-                                                    <p class="text-lg font-semibold">{{ number_format($item->price, 0, '.', '  ') .' '. $item->attributes->currency }}</p>
+                                                    <p class="text-lg font-semibold">{{ number_format($item->price, 2, '.', '  ') .' '. $item->attributes->currency }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -100,11 +99,11 @@
                             <h2 class="text-xl font-semibold mb-4">Інформація про замовлення</h2>
                             <p class="flex justify-between">
                                 <span>Загальна вартість:</span>
-                                <span>{{ number_format($cartItems->totalPrice, 0, '.', ' ') .' '. $item->attributes->currency  }}</span>
+                                <span>{{ number_format($cartItems->totalPrice, 2, '.', ' ') .' '. $item->attributes->currency }}</span>
                             </p>
                             <p class="flex justify-between">
                                 <span>Знижка:</span>
-                                <span>-{{ number_format($discount, 0, '.', ' ') . ' грн' }}</span>
+                                <span>-{{ number_format($discount, 2, '.', ' ') .' '. $item->attributes->currency }}</span>
                             </p>
                             @if($freeShipping)
                                 <p class="flex justify-between">
@@ -120,11 +119,11 @@
                             <hr class="my-4">
                             <p class="flex justify-between text-lg font-semibold">
                                 <span>До сплати:</span>
-                                <span>{{ number_format($cartItems->totalDiscountPrice, 0, '.', ' ') .' '. $item->attributes->currency  }}</span>
+                                <span>{{ number_format($cartItems->totalDiscountPrice, 2, '.', ' ') .' '. $item->attributes->currency }}</span>
                             </p>
                             @if($belowMinimumAmount)
                                 <p class="text-red-500 mt-4 text-center">
-                                    Мінімальна сума для замовлення {{ number_format($minimumAmount, 0, '.', ' ') }} грн.
+                                    Мінімальна сума для замовлення {{ number_format($minimumAmount, 2, '.', ' ') .' '. $item->attributes->currency }}.
                                 </p>
                             @endif
                             <div class="flex flex-col space-y-2">
@@ -132,9 +131,9 @@
                                     Продовжити покупки
                                 </a>
                                 @if(!$belowMinimumAmount)
-                                    {{-- <a class="text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-700 transition duration-300" href="{{ route('order') }}">--}}
+                                     <a class="text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-700 transition duration-300" href="{{ route('site.order.create') }}">
                                     Підтвердити
-                                    {{-- </a>--}}
+                                     </a>
                                 @endif
                             </div>
                         </div>
@@ -150,7 +149,7 @@
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
+            <div class="inline-block sm:align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
                 <div class="bg-white p-6">
                     <div class="sm:flex sm:items-start">
                         <div class="sm:mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
@@ -165,17 +164,19 @@
                                 <li>3). Якщо Ваше замовлення більше 5000грн, але менше ніж 7000грн - подарунковий товар №1</li>
                                 <li>4). Якщо Ваше замовлення більше 7000грн - подарунковий товар №2</li>
                                 <br>
-                                <h2 class="text-center text-lg leading-6 font-medium text-gray-900">USD</h2>
-                                <li>1). Якщо Ваше замовлення більше {{ round(1000 / session()->get('currency_rate_usd'), 1) }} USD, але менше ніж {{ round(2500 / session()->get('currency_rate_usd'), 1) }} USD - безкоштовна доставка</li>
-                                <li>2). Якщо Ваше замовлення більше {{ round(2500 / session()->get('currency_rate_usd'), 1) }} USD, але менше ніж {{ round(5000 / session()->get('currency_rate_usd'), 1) }} USD - знижка 10%</li>
-                                <li>3). Якщо Ваше замовлення більше {{ round(5000 / session()->get('currency_rate_usd'), 1) }} USD, але менше ніж {{ round(7000 / session()->get('currency_rate_usd'), 1) }} USD - подарунковий товар №1</li>
-                                <li>4). Якщо Ваше замовлення більше {{ round(7000 / session()->get('currency_rate_usd'), 1) }} USD - подарунковий товар №2</li>
-                                <br>
-                                <h2 class="text-center text-lg leading-6 font-medium text-gray-900">EUR</h2>
-                                <li>1). Якщо Ваше замовлення більше {{ round(1000 / session()->get('currency_rate_eur'), 1) }} EUR, але менше ніж 2500грн - безкоштовна доставка</li>
-                                <li>2). Якщо Ваше замовлення більше {{ round(2500 / session()->get('currency_rate_eur'), 1) }} EUR, але менше ніж {{ round(5000 / session()->get('currency_rate_eur'), 1) }} EUR - знижка 10%</li>
-                                <li>3). Якщо Ваше замовлення більше {{ round(5000 / session()->get('currency_rate_eur'), 1) }} EUR, але менше ніж {{ round(7000 / session()->get('currency_rate_eur'), 1) }} EUR - подарунковий товар №1</li>
-                                <li>4). Якщо Ваше замовлення більше {{ round(7000 / session()->get('currency_rate_eur'), 1) }} EUR - подарунковий товар №2</li>
+                                @if(!empty(session()->get('currency_rate_usd')) || !empty(session()->get('currency_rate_eur')))
+                                    <h2 class="text-center text-lg leading-6 font-medium text-gray-900">USD</h2>
+                                    <li>1). Якщо Ваше замовлення більше {{ round(1000 / session()->get('currency_rate_usd'), 2) }} USD, але менше ніж {{ round(2500 / session()->get('currency_rate_usd'), 2) }} USD - безкоштовна доставка</li>
+                                    <li>2). Якщо Ваше замовлення більше {{ round(2500 / session()->get('currency_rate_usd'), 2) }} USD, але менше ніж {{ round(5000 / session()->get('currency_rate_usd'), 2) }} USD - знижка 10%</li>
+                                    <li>3). Якщо Ваше замовлення більше {{ round(5000 / session()->get('currency_rate_usd'), 2) }} USD, але менше ніж {{ round(7000 / session()->get('currency_rate_usd'), 2) }} USD - подарунковий товар №1</li>
+                                    <li>4). Якщо Ваше замовлення більше {{ round(7000 / session()->get('currency_rate_usd'), 2) }} USD - подарунковий товар №2</li>
+                                    <br>
+                                    <h2 class="text-center text-lg leading-6 font-medium text-gray-900">EUR</h2>
+                                    <li>1). Якщо Ваше замовлення більше {{ round(1000 / session()->get('currency_rate_eur'), 2) }} EUR, але менше ніж {{ round(2500 / session()->get('currency_rate_eur'), 2) }} EUR - безкоштовна доставка</li>
+                                    <li>2). Якщо Ваше замовлення більше {{ round(2500 / session()->get('currency_rate_eur'), 2) }} EUR, але менше ніж {{ round(5000 / session()->get('currency_rate_eur'), 2) }} EUR - знижка 10%</li>
+                                    <li>3). Якщо Ваше замовлення більше {{ round(5000 / session()->get('currency_rate_eur'), 2) }} EUR, але менше ніж {{ round(7000 / session()->get('currency_rate_eur'), 2) }} EUR - подарунковий товар №1</li>
+                                    <li>4). Якщо Ваше замовлення більше {{ round(7000 / session()->get('currency_rate_eur'), 2) }} EUR - подарунковий товар №2</li>
+                                @endif
                             </ul>
                         </div>
                     </div>

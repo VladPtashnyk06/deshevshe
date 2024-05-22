@@ -21,7 +21,32 @@ class ProductController extends Controller
      * @param Request $request
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
+    {
+        $recommendProducts = RecProduct::all();
+        foreach ($recommendProducts as $recommendProduct) {
+            if ($recommendProduct->count_views > 0) {
+                $recProducts[] = $recommendProduct;
+            }
+        }
+        if (empty($recProducts)) {
+            $recProducts = [];
+        }
+
+        $recentlyViewedProducts = session()->get('recentlyViewedProducts');
+        if (!empty($recentlyViewedProducts)) {
+            foreach ($recentlyViewedProducts as $product) {
+                foreach ($product as $idProduct) {
+                    $viewedProducts[] = Product::find($idProduct);
+                }
+            }
+        } else {
+            $viewedProducts = [];
+        }
+
+        return view('site.index', compact('recProducts', 'viewedProducts'));
+    }
+    public function catalog(Request $request)
     {
         $products = Product::all();
         $categories = Category::where('level', '1')->get();
@@ -118,7 +143,9 @@ class ProductController extends Controller
     {
         $recommendProducts = RecProduct::all();
         foreach ($recommendProducts as $recommendProduct) {
-            $recProducts[] = $recommendProduct;
+            if ($recommendProduct->count_views > 0) {
+                $recProducts[] = $recommendProduct;
+            }
         }
 
         return view('site.product.rec-products', compact('recProducts'));
@@ -149,6 +176,9 @@ class ProductController extends Controller
     {
         $product = Product::with('productVariants.color')->findOrFail($productId);
 
-        return response()->json(['productVariants' => $product->productVariants]);
+        $uniqueVariants = $product->productVariants->unique('title');
+
+        return response()->json(['productVariants' => $uniqueVariants]);
     }
+
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use App\Models\Characteristic;
 use App\Models\Color;
 use App\Models\DeliveryMethod;
@@ -86,6 +87,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        //PaymentMethods
         PaymentMethod::create([
             'title' => 'Оплата при доставці'
         ]);
@@ -93,6 +95,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'Банківський переказ'
         ]);
 
+        //Statuses
         Status::create([
             'title' => 'Є у наявності'
         ]);
@@ -103,9 +106,10 @@ class DatabaseSeeder extends Seeder
             'title' => 'Скоро буде у наявності'
         ]);
 
-         Producer::create([
-             'title' => 'Китай'
-         ]);
+        //Producers
+        Producer::create([
+            'title' => 'Китай'
+        ]);
         Producer::create([
             'title' => 'Україна'
         ]);
@@ -113,6 +117,10 @@ class DatabaseSeeder extends Seeder
             'title' => 'Польща'
         ]);
 
+        //Packages
+        Package::create([
+            'title' => 4
+        ]);
         Package::create([
             'title' => 12
         ]);
@@ -123,6 +131,7 @@ class DatabaseSeeder extends Seeder
             'title' => 8
         ]);
 
+        //Materials
         Material::create([
             'title' => 'Тканина'
         ]);
@@ -133,6 +142,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'Двухнитка'
         ]);
 
+        //Characteristics
         Characteristic::create([
             'height' => 12,
             'width' => 12,
@@ -149,6 +159,7 @@ class DatabaseSeeder extends Seeder
             'length' => 8,
         ]);
 
+        //Colors
         Color::create([
             'title' => 'Червоний'
         ]);
@@ -161,7 +172,11 @@ class DatabaseSeeder extends Seeder
         Color::create([
             'title' => 'Сірий'
         ]);
+        Color::create([
+            'title' => 'Синій'
+        ]);
 
+        //Sizes
         Size::create([
             'title' => 'M'
         ]);
@@ -169,7 +184,58 @@ class DatabaseSeeder extends Seeder
             'title' => 'XL'
         ]);
         Size::create([
+            'title' => '2XL'
+        ]);
+        Size::create([
+            'title' => '3XL'
+        ]);
+        Size::create([
+            'title' => '4XL'
+        ]);
+        Size::create([
             'title' => '14'
+        ]);
+        Size::create([
+            'title' => '28'
+        ]);
+        Size::create([
+            'title' => '33'
+        ]);
+        Size::create([
+            'title' => '46'
+        ]);
+        Size::create([
+            'title' => '48'
+        ]);
+        Size::create([
+            'title' => '50'
+        ]);
+
+        //Categories
+        Category::create([
+            'title' => 'Чоловічий одяг',
+            'parent_id' => null,
+            'level' => 1,
+        ]);
+        Category::create([
+            'title' => 'Жіночий одяг',
+            'parent_id' => null,
+            'level' => 1,
+        ]);
+        Category::create([
+            'title' => 'Спортивні штани',
+            'parent_id' => 1,
+            'level' => 2,
+        ]);
+        Category::create([
+            'title' => 'Футболки "Імпорт"	',
+            'parent_id' => 1,
+            'level' => 2,
+        ]);
+        Category::create([
+            'title' => 'Джинси"	',
+            'parent_id' => 2,
+            'level' => 2,
         ]);
     }
 }
