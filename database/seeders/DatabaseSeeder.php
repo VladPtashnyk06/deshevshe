@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Characteristic;
 use App\Models\Color;
@@ -236,6 +237,12 @@ class DatabaseSeeder extends Seeder
             'title' => 'Джинси"	',
             'parent_id' => 2,
             'level' => 2,
+        ]);
+
+        //Blogs
+        Blog::create([
+            'title' => 'Про нас',
+            'description' => 'SUPERPRICE.UA – ЦЕ ОПТОВИЙ ІНТЕРНЕТ-МАГАЗИН. МИ ПРОПОНУЄМО НАШИМ КЛІЄНТАМ УНІКАЛЬНУ ЛІНІЙКУ ТОВАРІВ – ОДЯГ, ВЗУТТЯ, БІЛИЗНА, АКСЕСУАРИ, СУМКИ, РЮКЗАКИ, ТОВАРИ ДЛЯ ДОМУ ТА КУХНІ, ТЕКСТИЛЬ ВІД УКРАЇНСЬКИХ ТА ЗАКОРДОННИХ ВИРОБНИКІВ. МЕНЕДЖЕРИ SUPERPRICE.UA (SUPERЦІНА) НА УКРАЇНСЬКИХ ТА ТУРЕЦЬКИХ СКЛАДАХ КОНТРОЛЮЮТЬ ПРОЦЕС УПАКОВКИ І ЯКОСТІ ТОВАРУ ПЕРЕД ВІДПРАВКОЮ, СПІЛКУЮТЬСЯ ІЗ ПОСТАЧАЛЬНИКАМИ НАПРЯМУ ТА ДОМОВЛЯЮТЬСЯ ПРО НАЙВИГІДНІШУ ЦІНУ. НАША ГОЛОВНА МЕТА – НИЗЬКІ ЦІНИ НА ЯКІСНІ ТОВАРИ.'
         ]);
     }
 }

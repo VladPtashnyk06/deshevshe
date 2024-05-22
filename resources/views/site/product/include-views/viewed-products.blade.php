@@ -1,5 +1,5 @@
 <div class="p-6 text-gray-900">
-    <a href="{{ route('site.product.recentlyViewedProducts') }}"><h1 class="text-3xl font-semibold mb-6 text-center">Переглянуті продукти</h1></a>
+    <h1 class="text-3xl font-semibold mb-6 text-center"><a href="{{ route('site.product.recentlyViewedProducts') }}">Переглянуті продукти</a></h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @if(!empty($viewedProducts))
             @foreach($viewedProducts as $product)

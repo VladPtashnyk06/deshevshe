@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -44,7 +45,9 @@ class ProductController extends Controller
             $viewedProducts = [];
         }
 
-        return view('site.index', compact('recProducts', 'viewedProducts'));
+        $blogs = Blog::all()->sortByDesc('created_at');
+
+        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs'));
     }
     public function catalog(Request $request)
     {

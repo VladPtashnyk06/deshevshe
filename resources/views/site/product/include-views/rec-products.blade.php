@@ -1,5 +1,5 @@
 <div class="p-6 text-gray-900">
-    <a href="{{ route('site.product.recProducts') }}"><h1 class="text-3xl font-semibold mb-6 text-center">Рекомендовані продукти</h1></a>
+    <h1 class="text-3xl font-semibold mb-6 text-center"><a href="{{ route('site.product.recProducts') }}">Рекомендовані продукти</a></h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @if(!empty($recProducts))
             @foreach($recProducts as $recProduct)

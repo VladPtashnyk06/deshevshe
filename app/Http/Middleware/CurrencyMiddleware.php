@@ -42,6 +42,7 @@ class CurrencyMiddleware
             }
         } else {
             Session::put('currency', 'UAH');
+            $this->updateCartPricesUAH();
         }
 
         return $next($request);
