@@ -32,7 +32,7 @@ Route::group(['prefix' => 'product'], function () {
         Route::get('/show-one-product/{product}', 'showOneProduct')->name('site.product.showOneProduct');
         Route::get('/viewed-products', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
         Route::get('/rec-products', 'recProducts')->name('site.product.recProducts');
-        Route::get('/get-sizes/{color_id}', 'getSizes')->name('site.product.getSizes');
+        Route::get('/get-sizes/{product_id}', 'getSizes')->name('site.product.getSizes');
         Route::get('/get-product/{product_id}', 'getProduct')->name('site.product.getProduct');
     });
     Route::controller(\App\Http\Controllers\Site\ProductCommentController::class)->group(function () {
@@ -51,6 +51,7 @@ Route::group(['prefix' => 'blog'], function () {
 Route::group(['prefix' => 'order'], function () {
     Route::controller(\App\Http\Controllers\Site\OrderController::class)->group(function () {
         Route::get('/create', 'create')->name('site.order.create');
+        Route::post('/store', 'store')->name('site.order.store');
     });
 });
 Route::controller(\App\Http\Controllers\Site\CartController::class)->group(function () {

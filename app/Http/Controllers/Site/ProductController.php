@@ -155,20 +155,16 @@ class ProductController extends Controller
     }
 
     /**
-     * @param $color_id
+     * @param $productId
      * @return JsonResponse
      */
-    public function getSizes($color_id)
+    public function getSizes($productId)
     {
-        $productVariants = ProductVariant::where('color_id', $color_id)->with('size')->get();
-        $sizes = $productVariants->map(function($variant) {
-            return [
-                'size_id' => $variant->size->id,
-                'size_title' => $variant->size->title,
-            ];
-        })->unique('size_id')->values();
+        $product = Product::with('productVariants.size')->find($productId);
 
-        return response()->json($sizes);
+        $sizeUniqueVariants = $product->productVariants->unique('size_id');
+
+        return response()->json(['sizeVariants' => $sizeUniqueVariants]);
     }
 
     /**
@@ -179,7 +175,7 @@ class ProductController extends Controller
     {
         $product = Product::with('productVariants.color')->findOrFail($productId);
 
-        $uniqueVariants = $product->productVariants->unique('title');
+        $uniqueVariants = $product->productVariants->unique('color_id');
 
         return response()->json(['productVariants' => $uniqueVariants]);
     }

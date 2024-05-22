@@ -134,20 +134,18 @@
 
                     sizeSelect.innerHTML = '';
 
-                    fetch(`/product/get-sizes/${colorId}`)
+                    fetch(`/product/get-sizes/${productId}`)
                         .then(response => response.json())
                         .then(data => {
-                            if (data.length > 0) {
-                                sizeContainer.classList.remove('hidden');
-                                data.forEach(size => {
-                                    const option = document.createElement('option');
-                                    option.value = size.size_id;
-                                    option.textContent = `${size.size_title}`;
+                            sizeContainer.classList.remove('hidden');
+                            data.sizeVariants.forEach(size => {
+                                const option = document.createElement('option');
+                                if (size.color_id == colorId) {
+                                    option.value = size.size.id;
+                                    option.textContent = size.size.title;
                                     sizeSelect.appendChild(option);
-                                });
-                            } else {
-                                sizeContainer.classList.add('hidden');
-                            }
+                                }
+                            });
                         })
                         .catch(error => {
                             console.error('Error fetching sizes:', error);

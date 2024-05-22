@@ -202,7 +202,7 @@ class ProductController extends Controller
 
         if (!empty($request->validated('newProductVariant'))) {
             foreach ($request->validated('newProductVariant') as $key => $newProductVariant) {
-                if (!ProductVariant::where('product_id', $product->id)->where('color_id', $newProductVariant['color'])->where('size_id', $newProductVariant['size'])) {
+                if (empty(ProductVariant::where('product_id', $product->id)->where('color_id', $newProductVariant['color'])->where('size_id', $newProductVariant['size'])->first())) {
                     ProductVariant::create([
                         'product_id' => $product->id,
                         'color_id' => $newProductVariant['color'],
