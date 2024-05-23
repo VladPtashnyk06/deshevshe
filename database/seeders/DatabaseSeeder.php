@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
              'name' => 'Admin',
              'last_name' => 'Admin',
-             'phone' => '0971037978',
+             'phone' => '+380971037978',
              'email' => 'Admin@gmail.com',
              'role' => 'Admin',
              'password' => \Hash::make('admin'),
@@ -42,10 +42,26 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
              'name' => 'User',
              'last_name' => 'User',
-             'phone' => '0000000000',
+             'phone' => '+380686464949',
              'email' => 'User@gmail.com',
              'password' => \Hash::make('user'),
          ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Operator 1',
+            'last_name' => 'Operator 1',
+            'phone' => '+380686463838',
+            'email' => 'operator@gmail.com',
+            'role' => 'Operator',
+            'password' => \Hash::make('operator'),
+        ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Operator 2',
+            'last_name' => 'Operator 2',
+            'phone' => '+380631198197',
+            'email' => 'operator2@gmail.com',
+            'role' => 'Operator',
+            'password' => \Hash::make('operator'),
+        ]);
 
         $deliveryServices = ['Нова Пошта', 'Укрпошта', 'Міст'];
         foreach ($deliveryServices as $service) {
@@ -267,13 +283,34 @@ class DatabaseSeeder extends Seeder
 
         //OrderStatuses
         OrderStatus::create([
-            'title' => 'Обробляється'
+            'title' => 'Нове'
         ]);
         OrderStatus::create([
-            'title' => 'Очікує на відправку'
+            'title' => 'В обробці'
         ]);
         OrderStatus::create([
-            'title' => 'Виконане'
+            'title' => 'Пакують'
+        ]);
+        OrderStatus::create([
+            'title' => 'Відравлено'
+        ]);
+        OrderStatus::create([
+            'title' => 'Отримано'
+        ]);
+        OrderStatus::create([
+            'title' => 'Має дозамовити товар'
+        ]);
+        OrderStatus::create([
+            'title' => 'Не відповідає'
+        ]);
+        OrderStatus::create([
+            'title' => 'Неправильні дані'
+        ]);
+        OrderStatus::create([
+            'title' => 'Повернення'
+        ]);
+        OrderStatus::create([
+            'title' => 'Скасоване клієнтом'
         ]);
 
         //Products
