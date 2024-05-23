@@ -67,8 +67,8 @@ class Order extends Model
         return $this->belongsTo(DeliveryAddress::class);
     }
 
-    public function orderStatuses(): HasMany
+    public function orderDetails(): HasMany
     {
-        return $this->hasMany(OrderStatus::class, 'order_id');
+        return $this->hasMany(OrderDetail::class, 'order_id');
     }
 }

@@ -50,8 +50,10 @@ Route::group(['prefix' => 'blog'], function () {
 });
 Route::group(['prefix' => 'order'], function () {
     Route::controller(\App\Http\Controllers\Site\OrderController::class)->group(function () {
+        Route::get('/all-my-orders', 'index')->name('site.order.index');
         Route::get('/create', 'create')->name('site.order.create');
         Route::post('/store', 'store')->name('site.order.store');
+        Route::get('/oneOrder/{order}', 'oneOrder')->name('site.order.oneOrder');
     });
 });
 Route::controller(\App\Http\Controllers\Site\CartController::class)->group(function () {

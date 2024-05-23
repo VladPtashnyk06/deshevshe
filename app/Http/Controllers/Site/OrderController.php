@@ -13,7 +13,11 @@ class OrderController extends Controller
 {
     public function index()
     {
-        return Order::all();
+        $orders = Order::where('user_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('site.orders.all-my-orders', compact('orders'));
     }
 
     public function create()
@@ -126,8 +130,8 @@ class OrderController extends Controller
         return redirect()->route('site.product.index');
     }
 
-    public function show(Order $order)
+    public function oneOrder(Order $order)
     {
-        return $order;
+        return view('site.orders.one-order', compact('order'));
     }
 }
