@@ -30,7 +30,7 @@ class UpdateProductRequest extends FormRequest
             'top_product' => ['nullable', 'boolean'],
             'main_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
             'alt_for_main_image' => ['nullable', 'string', 'max:255'],
-            'additional.*.image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
+            'additional.*.images' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
             'additional.*.alt' => ['nullable', 'string', 'max:255'],
         ];
     }

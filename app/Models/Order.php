@@ -38,6 +38,7 @@ class Order extends Model
         'user_phone',
         'user_email',
         'total_price',
+        'currency',
         'comment',
     ];
 

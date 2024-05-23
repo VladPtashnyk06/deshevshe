@@ -124,14 +124,13 @@ class ProductController extends Controller
     public function recentlyViewedProducts()
     {
         $recentlyViewedProducts = session()->get('recentlyViewedProducts');
+        $viewedProducts = [];
         if (!empty($recentlyViewedProducts)) {
             foreach ($recentlyViewedProducts as $product) {
                 foreach ($product as $idProduct) {
                     $viewedProducts[] = Product::find($idProduct);
                 }
             }
-        } else {
-            $viewedProducts = [];
         }
 
         return view('site.product.viewed-products', compact('viewedProducts', ));
@@ -145,6 +144,7 @@ class ProductController extends Controller
     public function recProducts()
     {
         $recommendProducts = RecProduct::all();
+        $recProducts = [];
         foreach ($recommendProducts as $recommendProduct) {
             if ($recommendProduct->count_views > 0) {
                 $recProducts[] = $recommendProduct;

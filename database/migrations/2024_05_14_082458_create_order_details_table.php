@@ -9,8 +9,10 @@ return new class extends Migration {
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products');
+            $table->string('color');
+            $table->string('size');
             $table->integer('quantity_product');
             $table->timestamps();
         });

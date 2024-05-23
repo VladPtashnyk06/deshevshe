@@ -135,8 +135,8 @@ class ProductController extends Controller
 
         if ($request->post('additional')) {
             foreach ($request->validated('additional') as $imageData) {
-                if (isset($imageData['image'])) {
-                    $newProduct->addMedia($imageData['image'])->withCustomProperties([
+                if (isset($imageData['images'])) {
+                    $newProduct->addMedia($imageData['images'])->withCustomProperties([
                         'alt' => $imageData['alt'],
                         'main_image' => 0
                     ])->toMediaCollection($newProduct->id);
@@ -240,8 +240,8 @@ class ProductController extends Controller
 
         if ($request->validated('additional')) {
             foreach ($request->validated('additional') as $imageData) {
-                if (isset($imageData['image'])) {
-                    $product->addMedia($imageData['image'])->withCustomProperties([
+                if (isset($imageData['images'])) {
+                    $product->addMedia($imageData['images'])->withCustomProperties([
                         'alt' => $imageData['alt'],
                         'main_image' => 0
                     ])->toMediaCollection($product->id);
@@ -249,8 +249,8 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->validated('deleted_main_image')) {
-            $idDeletedPoster = $request->validated('deleted_main_image');
+        if ($request->post('deleted_main_image')) {
+            $idDeletedPoster = $request->post('deleted_main_image');
             Media::find($idDeletedPoster)->delete();
         }
 

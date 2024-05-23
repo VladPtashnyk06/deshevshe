@@ -10,9 +10,13 @@ use App\Models\Color;
 use App\Models\DeliveryMethod;
 use App\Models\DeliveryService;
 use App\Models\Material;
+use App\Models\OrderStatus;
 use App\Models\Package;
 use App\Models\PaymentMethod;
+use App\Models\Price;
 use App\Models\Producer;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Region;
 use App\Models\Size;
 use App\Models\Status;
@@ -240,9 +244,226 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Blogs
-        Blog::create([
+        $newBlog = Blog::create([
             'title' => 'Про нас',
             'description' => 'SUPERPRICE.UA – ЦЕ ОПТОВИЙ ІНТЕРНЕТ-МАГАЗИН. МИ ПРОПОНУЄМО НАШИМ КЛІЄНТАМ УНІКАЛЬНУ ЛІНІЙКУ ТОВАРІВ – ОДЯГ, ВЗУТТЯ, БІЛИЗНА, АКСЕСУАРИ, СУМКИ, РЮКЗАКИ, ТОВАРИ ДЛЯ ДОМУ ТА КУХНІ, ТЕКСТИЛЬ ВІД УКРАЇНСЬКИХ ТА ЗАКОРДОННИХ ВИРОБНИКІВ. МЕНЕДЖЕРИ SUPERPRICE.UA (SUPERЦІНА) НА УКРАЇНСЬКИХ ТА ТУРЕЦЬКИХ СКЛАДАХ КОНТРОЛЮЮТЬ ПРОЦЕС УПАКОВКИ І ЯКОСТІ ТОВАРУ ПЕРЕД ВІДПРАВКОЮ, СПІЛКУЮТЬСЯ ІЗ ПОСТАЧАЛЬНИКАМИ НАПРЯМУ ТА ДОМОВЛЯЮТЬСЯ ПРО НАЙВИГІДНІШУ ЦІНУ. НАША ГОЛОВНА МЕТА – НИЗЬКІ ЦІНИ НА ЯКІСНІ ТОВАРИ.'
+        ]);
+        $sourcePath = database_path('seeders/images/super price.png');
+        $temporaryPath = storage_path('app/temp/super price.png');
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0777, true);
+        }
+        copy($sourcePath, $temporaryPath);
+        if (file_exists($temporaryPath)) {
+            $newBlog->addMedia($temporaryPath)
+                ->withCustomProperties([
+                    'alt' => $newBlog->title,
+                    'main_image' => 1,
+                ])
+                ->toMediaCollection('blog'.$newBlog->id);
+        } else {
+            echo "Файл не знайдено: " . $temporaryPath;
+        }
+
+        //OrderStatuses
+        OrderStatus::create([
+            'title' => 'Обробляється'
+        ]);
+        OrderStatus::create([
+            'title' => 'Очікує на відправку'
+        ]);
+        OrderStatus::create([
+            'title' => 'Виконане'
+        ]);
+
+        //Products
+        $newProduct = Product::create([
+            'category_id' => 3,
+            'producer_id' => 1,
+            'status_id' => 1,
+            'package_id' => 2,
+            'material_id' => 1,
+            'title' => 'Чоловічі спортивні штани',
+            'description' => 'Чоловічі спортивні штани м.1 1уп. 5шт. р.46-48-50-52-54',
+            'code' => 226298,
+        ]);
+        $sourcePath = database_path('seeders/images/Спортивні штани.jpg');
+        $temporaryPath = storage_path('app/temp/Спортивні штани.jpg');
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0777, true);
+        }
+        copy($sourcePath, $temporaryPath);
+        if (file_exists($temporaryPath)) {
+            $newProduct->addMedia($temporaryPath)
+                ->withCustomProperties([
+                    'alt' => $newProduct->title,
+                    'main_image' => 1,
+                ])
+                ->toMediaCollection($newProduct->id);
+        } else {
+            echo "Файл не знайдено: " . $temporaryPath;
+        }
+        $newProduct = Product::create([
+            'category_id' => 3,
+            'producer_id' => 1,
+            'status_id' => 1,
+            'package_id' => 2,
+            'material_id' => 1,
+            'title' => 'Чоловічі спортивні штани',
+            'description' => 'Чоловічі спортивні штани м.2 1уп. 5шт. р.46-48-50-52-54',
+            'code' => 226297,
+        ]);
+        $sourcePath = database_path('seeders/images/Спортивні штани 2.jpg');
+        $temporaryPath = storage_path('app/temp/Спортивні штани 2.jpg');
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0777, true);
+        }
+        copy($sourcePath, $temporaryPath);
+        if (file_exists($temporaryPath)) {
+            $newProduct->addMedia($temporaryPath)
+                ->withCustomProperties([
+                    'alt' => $newProduct->title,
+                    'main_image' => 1,
+                ])
+                ->toMediaCollection($newProduct->id);
+        } else {
+            echo "Файл не знайдено: " . $temporaryPath;
+        }
+        $newProduct = Product::create([
+            'category_id' => 4,
+            'producer_id' => 2,
+            'status_id' => 1,
+            'package_id' => 3,
+            'material_id' => 1,
+            'title' => 'Чоловiча футболка',
+            'description' => 'Чоловiча футболка (однотон\батал\кулірка) 1уп. 4шт. р.3XL-4XL-5XL-6XL',
+            'code' => 219804,
+        ]);
+        $sourcePath = database_path('seeders/images/Футболка.jpg');
+        $temporaryPath = storage_path('app/temp/Футболка.jpg');
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0777, true);
+        }
+        copy($sourcePath, $temporaryPath);
+        if (file_exists($temporaryPath)) {
+            $newProduct->addMedia($temporaryPath)
+                ->withCustomProperties([
+                    'alt' => $newProduct->title,
+                    'main_image' => 1,
+                ])
+                ->toMediaCollection($newProduct->id);
+        } else {
+            echo "Файл не знайдено: " . $temporaryPath;
+        }
+        $newProduct = Product::create([
+            'category_id' => 5,
+            'producer_id' => 1,
+            'status_id' => 1,
+            'package_id' => 4,
+            'material_id' => 1,
+            'title' => 'Жіночі джинси',
+            'description' => 'Жіночі джинси м.1300 1уп. (6шт) р.28-33',
+            'code' => 214110,
+        ]);
+        $sourcePath = database_path('seeders/images/Джинси.jpg');
+        $temporaryPath = storage_path('app/temp/Джинси.jpg');
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0777, true);
+        }
+        copy($sourcePath, $temporaryPath);
+        if (file_exists($temporaryPath)) {
+            $newProduct->addMedia($temporaryPath)
+                ->withCustomProperties([
+                    'alt' => $newProduct->title,
+                    'main_image' => 1,
+                ])
+                ->toMediaCollection($newProduct->id);
+        } else {
+            echo "Файл не знайдено: " . $temporaryPath;
+        }
+
+        //ProductVariants
+        ProductVariant::create([
+            'product_id' => 1,
+            'color_id' => 4,
+            'size_id' => 9,
+            'quantity' => 12,
+        ]);
+        ProductVariant::create([
+            'product_id' => 1,
+            'color_id' => 4,
+            'size_id' => 10,
+            'quantity' => 10,
+        ]);
+        ProductVariant::create([
+            'product_id' => 2,
+            'color_id' => 4,
+            'size_id' => 11,
+            'quantity' => 12,
+        ]);
+        ProductVariant::create([
+            'product_id' => 3,
+            'color_id' => 3,
+            'size_id' => 4,
+            'quantity' => 8,
+        ]);
+        ProductVariant::create([
+            'product_id' => 3,
+            'color_id' => 3,
+            'size_id' => 5,
+            'quantity' => 6,
+        ]);
+        ProductVariant::create([
+            'product_id' => 4,
+            'color_id' => 5,
+            'size_id' => 7,
+            'quantity' => 13,
+        ]);
+        ProductVariant::create([
+            'product_id' => 4,
+            'color_id' => 5,
+            'size_id' => 8,
+            'quantity' => 12,
+        ]);
+        ProductVariant::create([
+            'product_id' => 2,
+            'color_id' => 2,
+            'size_id' => 10,
+            'quantity' => 12,
+        ]);
+
+        //Price
+        Price::create([
+            'product_id' => 1,
+            'pair' => 210,
+            'rec_pair' => 225,
+            'package' => 1050,
+            'rec_package' => 1250,
+            'retail' => 359
+        ]);
+        Price::create([
+            'product_id' => 2,
+            'pair' => 210,
+            'rec_pair' => 225,
+            'package' => 1050,
+            'rec_package' => 1250,
+            'retail' => 359
+        ]);
+        Price::create([
+            'product_id' => 3,
+            'pair' => 130,
+            'rec_pair' => 145,
+            'package' => 520,
+            'rec_package' => 555,
+            'retail' => 349
+        ]);
+        Price::create([
+            'product_id' => 4,
+            'pair' => 249,
+            'rec_pair' => 256,
+            'package' => 1494,
+            'rec_package' => 1494,
+            'retail' => 1700
         ]);
     }
 }

@@ -56,25 +56,48 @@
                                 Мінімальна сума для замовлення {{ number_format($minimumAmount, 2, '.', ' ') }} {{ session('currency') }}.
                             </p>
                         @endif
-{{--                        <form action="{{ route('site.orders.store') }}" method="POST" class="mt-6">--}}
+                        <form action="{{ route('site.order.store') }}" method="POST" class="mt-6">
                             @csrf
-                            <!-- Введення даних замовлення -->
+                            <input type="hidden" name="total_price" value="{{ round($totalDiscountPrice, 2) }}">
+                            <input type="hidden" name="currency" value="{{ session('currency') }}">
+                            <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                             <div class="mb-4">
-                                <label for="name" class="block text-gray-700">Ім'я</label>
-                                <input type="text" id="name" name="name" class="mt-1 block w-full" required value="{{ Auth::user() ? Auth::user()->name : old('name') }}">
+                                <label for="user_name" class="block text-gray-700">Ім'я</label>
+                                <input type="text" id="user_name" name="user_name" class="mt-1 block w-full" required value="{{ Auth::user() ? Auth::user()->name : old('name') }}">
                             </div>
                             <div class="mb-4">
-                                <label for="last_name" class="block text-gray-700">Прізвище</label>
-                                <input type="text" id="last_name" name="last_name" class="mt-1 block w-full" required value="{{ Auth::user() ? Auth::user()->last_name : old('last_name') }}">
+                                <label for="user_last_name" class="block text-gray-700">Прізвище</label>
+                                <input type="text" id="user_last_name" name="user_last_name" class="mt-1 block w-full" required value="{{ Auth::user() ? Auth::user()->last_name : old('last_name') }}">
                             </div>
                             <div class="mb-4">
-                                <label for="phone" class="block text-gray-700">Номер телефону</label>
-                                <input type="tel" id="phone" name="phone" class="mt-1 block w-full" required value="{{ Auth::user() ? Auth::user()->phone : old('phone') }}">
+                                <label for="user_phone" class="block text-gray-700">Номер телефону</label>
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-900 text-sm">
+                                        +380
+                                    </span>
+                                    <input type="text" id="user_phone" name="user_phone" class="mt-1 block w-full pl-2 border-l-0 rounded-r-md" required value="{{ Auth::user() ? str_replace('+380', '', Auth::user()->phone) : old('phone') }}">
+                                </div>
                             </div>
                             <div class="mb-4">
-                                <label for="email" class="block text-gray-700">Електронна пошта</label>
-                                <input type="email" id="email" name="email" class="mt-1 block w-full" required value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : old('email') }}">
+                                <label for="user_email" class="block text-gray-700">Електронна пошта</label>
+                                <input type="email" id="user_email" name="user_email" class="mt-1 block w-full" required value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : old('email') }}">
                             </div>
+                            @if(!Auth::user())
+                                <div class="mb-4">
+                                    <label for="registration" class="block text-gray-700 font-semibold mb-2">Реєстрація (Створити особистий кабінет)</label>
+                                    <input type="checkbox" name="registration" id="registration" class="mr-2">
+                                </div>
+                                <div id="passwordFields" class="hidden">
+                                    <div class="mb-4">
+                                        <label for="password" class="block text-gray-700">Пароль</label>
+                                        <input type="password" id="password" name="password" class="mt-1 block w-full">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="password_confirmation" class="block text-gray-700">Підтвердження пароля</label>
+                                        <input type="password" id="password_confirmation" name="password_confirmation" class="mt-1 block w-full">
+                                    </div>
+                                </div>
+                            @endif
                             <div class="mb-4">
                                 <label for="comment" class="block text-gray-700">Коментар</label>
                                 <textarea name="comment" id="comment" class="w-full border rounded px-3 py-2 h-32">{{ old('comment') }}</textarea>
@@ -93,10 +116,34 @@
                                     Оформити замовлення
                                 </button>
                             </div>
-{{--                        </form>--}}
+                        </form>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 </x-app-layout>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const registrationCheckbox = document.getElementById('registration');
+        const passwordFields = document.getElementById('passwordFields');
+
+        registrationCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                passwordFields.classList.remove('hidden');
+            } else {
+                passwordFields.classList.add('hidden');
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const phoneInput = document.getElementById('user_phone');
+
+        phoneInput.addEventListener('input', function (e) {
+            if (!/^\d*$/.test(phoneInput.value)) {
+                phoneInput.value = phoneInput.value.replace(/[^\d]/g, '');
+            }
+        });
+    });
+</script>

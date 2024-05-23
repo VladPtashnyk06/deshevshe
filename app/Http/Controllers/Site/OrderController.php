@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PaymentMethod;
+use App\Models\User;
 
 class OrderController extends Controller
 {
@@ -65,25 +67,68 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-        return Order::create($request->validated());
+//        dd($request->validated());
+        if ($request->validated('user_phone')) {
+            $falsePhone = $request->validated('user_phone');
+            $normalizedPhone = preg_replace('/\D/', '', $falsePhone);
+            if (substr($normalizedPhone, 0, 1) === '0') {
+                $phone = '+38' . $normalizedPhone;
+            } else {
+                $phone = '+380' . $normalizedPhone;
+            }
+        }
+        if ($request->post('registration') == 'on') {
+            if ($request->validated('password') == $request->validated('password_confirmation')) {
+                $newUser = User::create([
+                    'phone' => $phone,
+                    'email' => $request->validated('user_email') ? $request->validated('user_email') : null,
+                    'name' => $request->validated('user_name'),
+                    'last_name' => $request->validated('user_last_name'),
+                    'password' => \Hash::make($request->validated('password')),
+                ]);
+            }
+        }
+        if (isset($newUser)) {
+            $newOrder = Order::create([
+                'user_id' => $newUser->id,
+                'order_status_id' => 1,
+                'payment_method_id' => $request->validated('payment_method_id'),
+                'total_price' => $request->validated('total_price'),
+                'currency' => $request->validated('currency'),
+                'comment' => $request->validated('comment')
+            ]);
+        } else {
+            $newOrder = Order::create([
+                'user_id' => !empty($request->validated('user_id')) ? $request->validated('user_id') : null,
+                'order_status_id' => 1,
+                'user_name' => !empty($request->validated('user_id')) ? null : $request->validated('user_name'),
+                'user_last_name' => !empty($request->validated('user_id')) ? null : $request->validated('user_last_name'),
+                'user_phone' => !empty($request->validated('user_id')) ? null : $phone,
+                'user_email' => !empty($request->validated('user_id')) ? null : ($request->validated('user_email') ? $request->validated('user_email') : null),
+                'payment_method_id' => $request->validated('payment_method_id'),
+                'total_price' => $request->validated('total_price'),
+                'currency' => $request->validated('currency'),
+                'comment' => $request->validated('comment')
+            ]);
+        }
+        if (isset($newOrder)) {
+            $cartItems = \Cart::getContent()->sortBy('id');
+            foreach ($cartItems as $item) {
+                OrderDetail::create([
+                    'order_id' => $newOrder->id,
+                    'product_id' => $item->attributes->product_id,
+                    'color' => $item->attributes->color,
+                    'size' => $item->attributes->size,
+                    'quantity_product' => $item->quantity
+                ]);
+            }
+        }
+
+        return redirect()->route('site.product.index');
     }
 
     public function show(Order $order)
     {
         return $order;
-    }
-
-    public function update(OrderRequest $request, Order $order)
-    {
-        $order->update($request->validated());
-
-        return $order;
-    }
-
-    public function destroy(Order $order)
-    {
-        $order->delete();
-
-        return response()->json();
     }
 }

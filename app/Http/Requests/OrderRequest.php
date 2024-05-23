@@ -9,18 +9,19 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:users'],
-            'order_status_id' => ['required', 'exists:order_statuses'],
-            'delivery_method_id' => ['required', 'exists:delivery_methods'],
-            'payment_method_id' => ['required', 'exists:payment_methods'],
-            'delivery_address_id' => ['required', 'exists:delivery_addresses'],
+            'user_id' => ['nullable'],
+            'delivery_method_id' => ['nullable',],
+            'payment_method_id' => ['required'],
+            'delivery_address_id' => ['nullable'],
+            'user_name' => ['required', 'string'],
+            'user_last_name' => ['required', 'string'],
+            'user_phone' => ['required', 'string'],
+            'user_email' => ['nullable', 'string'],
+            'password' => ['nullable'],
+            'password_confirmation' => ['nullable'],
+            'comment' => ['nullable'],
             'total_price' => ['required'],
-            'comment' => ['required'],
+            'currency' => ['required', 'string']
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }
