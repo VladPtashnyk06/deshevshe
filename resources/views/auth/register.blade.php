@@ -1,59 +1,73 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<x-app-layout>
+    <main itemscope itemtype="http://schema.org/ItemList">
+        <section class="max-w-7xl mx-auto py-12">
+            <div class="bg-white shadow sm:rounded-lg p-6">
+                <h1 class="text-3xl font-semibold mb-6 text-center" itemprop="name">Реєстрація</h1>
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+                    <!-- Name -->
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 font-medium mb-2">Ім'я</label>
+                        <input type="text" id="name" name="name" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autofocus autocomplete="name" value="{{ old('name') }}">
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    </div>
 
-        <!-- Last Name -->
-        <div class="mt-4">
-            <x-input-label for="last_name" :value="__('Last Name')" />
-            <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
-        </div>
+                    <!-- Last Name -->
+                    <div class="mb-4">
+                        <label for="last_name" class="block text-gray-700 font-medium mb-2">Прізвище</label>
+                        <input type="text" id="last_name" name="last_name" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="last_name" value="{{ old('last_name') }}">
+                        <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
+                    </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="phone" :value="__('Phone')" />
-            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-        </div>
+                    <!-- Phone -->
+                    <div class="mb-4">
+                        <label for="phone" class="block text-gray-700 font-medium mb-2">Номер телефону</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-900 text-sm">
+                                +380
+                            </span>
+                            <input type="text" id="phone" name="phone" class="block w-full pl-2 border border-gray-300 rounded-r-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="username" value="{{ old('phone') }}">
+                        </div>
+                        <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+                    <!-- Password -->
+                    <div class="mb-4">
+                        <label for="password" class="block text-gray-700 font-medium mb-2">Пароль</label>
+                        <input type="password" id="password" name="password" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="new-password">
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <label for="password_confirmation" class="block text-gray-700 font-medium mb-2">Підтвердження пароля</label>
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="new-password">
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+                            {{ __('Вже зареєстровані?') }}
+                        </a>
+                        <x-primary-button class="ml-4">
+                            {{ __('Зареєструватися') }}
+                        </x-primary-button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+</x-app-layout>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const phoneInput = document.getElementById('phone');
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        phoneInput.addEventListener('input', function (e) {
+            if (!/^\d*$/.test(phoneInput.value)) {
+                phoneInput.value = phoneInput.value.replace(/[^\d]/g, '');
+            }
+        });
+    });
+</script>

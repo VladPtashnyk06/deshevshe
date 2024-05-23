@@ -35,10 +35,20 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        if ($request->phone) {
+            $falsePhone = $request->phone;
+            $normalizedPhone = preg_replace('/\D/', '', $falsePhone);
+            if (substr($normalizedPhone, 0, 1) === '0') {
+                $phone = '+38' . $normalizedPhone;
+            } else {
+                $phone = '+380' . $normalizedPhone;
+            }
+        }
+
         $user = User::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
-            'phone' => $request->phone,
+            'phone' => $phone,
             'password' => Hash::make($request->password),
         ]);
 
@@ -46,6 +56,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('product.index');
     }
 }

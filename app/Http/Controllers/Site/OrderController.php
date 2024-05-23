@@ -67,7 +67,6 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-//        dd($request->validated());
         if ($request->validated('user_phone')) {
             $falsePhone = $request->validated('user_phone');
             $normalizedPhone = preg_replace('/\D/', '', $falsePhone);

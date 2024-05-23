@@ -20,6 +20,37 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'phone' => $this->normalizePhoneNumber($this->phone),
+        ]);
+    }
+
+    /**
+     * Normalize the phone number by adding country code if missing.
+     *
+     * @param  string  $phoneNumber
+     * @return string
+     */
+    protected function normalizePhoneNumber(string $phoneNumber): string
+    {
+        // Remove all non-numeric characters
+        $normalizedPhone = preg_replace('/\D/', '', $phoneNumber);
+
+        // Check if the phone number starts with '0', if it does, add the country code '+38'
+        if (substr($normalizedPhone, 0, 1) === '0') {
+            return '+38' . $normalizedPhone;
+        } else {
+            return '+380' . $normalizedPhone;
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
