@@ -30,7 +30,7 @@
                                 <div class="w-1/4 ml-6 text-right flex items-center">
                                     <div>
                                         <p><span class="font-semibold">Статус:</span> {{ $order->orderStatus->title }}</p>
-                                        <p><span class="font-semibold">Загальна вартість замовлення:</span> {{ number_format($order->total_price, 2, '.', ' ') . ' ' . $order->currency }}</p>
+                                        <p><span class="font-semibold">Вартість замовлення:</span> {{ number_format($order->total_price, 2, '.', ' ') . ' ' . $order->currency }}</p>
                                          <form action="{{ route('site.order.oneOrder', $order->id) }}" method="GET">
                                              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 mt-4">Деталі замовлення</button>
                                          </form>
@@ -40,7 +40,6 @@
                         </li>
                     @endforeach
                 </ul>
-
             </div>
         </section>
     </main>

@@ -37,6 +37,7 @@ class Order extends Model
         'user_last_name',
         'user_phone',
         'user_email',
+        'cost_delivery',
         'total_price',
         'currency',
         'comment',

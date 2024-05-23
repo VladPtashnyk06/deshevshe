@@ -21,7 +21,8 @@ class OrderRequest extends FormRequest
             'password_confirmation' => ['nullable'],
             'comment' => ['nullable'],
             'total_price' => ['required'],
-            'currency' => ['required', 'string']
+            'currency' => ['required', 'string'],
+            'cost_delivery' => ['required', 'string']
         ];
     }
 }

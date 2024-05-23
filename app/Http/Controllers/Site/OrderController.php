@@ -96,6 +96,7 @@ class OrderController extends Controller
                 'user_id' => $newUser->id,
                 'order_status_id' => 1,
                 'payment_method_id' => $request->validated('payment_method_id'),
+                'cost_delivery' => $request->validated('cost_delivery'),
                 'total_price' => $request->validated('total_price'),
                 'currency' => $request->validated('currency'),
                 'comment' => $request->validated('comment')
@@ -109,6 +110,7 @@ class OrderController extends Controller
                 'user_phone' => !empty($request->validated('user_id')) ? null : $phone,
                 'user_email' => !empty($request->validated('user_id')) ? null : ($request->validated('user_email') ? $request->validated('user_email') : null),
                 'payment_method_id' => $request->validated('payment_method_id'),
+                'cost_delivery' => $request->validated('cost_delivery'),
                 'total_price' => $request->validated('total_price'),
                 'currency' => $request->validated('currency'),
                 'comment' => $request->validated('comment')

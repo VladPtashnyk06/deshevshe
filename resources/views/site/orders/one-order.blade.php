@@ -36,7 +36,19 @@
                         </p>
                         <p class="flex justify-between">
                             <span>Доставка:</span>
-{{--                            <span>{{ $order->pay_delivery }}</span>--}}
+                            <span>{{ $order->cost_delivery }}</span>
+                        </p>
+                        <p class="flex justify-between">
+                            <span>Метод оплати:</span>
+                            <span>{{ $order->paymentMethod->title }}</span>
+                        </p>
+                        <div class="mb-4">
+                            <label for="comment" class="block text-gray-900">Коментар</label>
+                            <textarea name="comment" id="comment" class="w-full border rounded px-3 py-2 h-20 flex justify-between">{{ $order->comment }}</textarea>
+                        </div>
+                        <p class="flex justify-between">
+                            <span>Спосіб доставки:</span>
+{{--                            <span>{{ $order->deliveryMethod->deliveryService->delivery_title }} - {{ $order->deliveryMethod->method_title }}<br> {{ $order->deliveryAddress->region->title }} <br> {{ $order->deliveryAddress->city }} <br> {{ $order->deliveryAddress->address }}</span>--}}
                         </p>
                         <hr class="my-4">
                         <div class="flex flex-col space-y-2">

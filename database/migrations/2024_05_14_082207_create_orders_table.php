@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('user_last_name')->nullable();
             $table->string('user_phone', 15)->nullable();
             $table->string('user_email')->nullable();
+            $table->string('cost_delivery');
             $table->integer('total_price');
             $table->string('currency');
             $table->text('comment')->nullable();

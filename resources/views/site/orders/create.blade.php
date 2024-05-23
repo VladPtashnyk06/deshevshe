@@ -59,6 +59,7 @@
                         <form action="{{ route('site.order.store') }}" method="POST" class="mt-6">
                             @csrf
                             <input type="hidden" name="total_price" value="{{ round($totalDiscountPrice, 2) }}">
+                            <input type="hidden" name="cost_delivery" value="{{ $freeShipping ? 'Безкоштовно' : 'За Ваш рахунок' }}">
                             <input type="hidden" name="currency" value="{{ session('currency') }}">
                             <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                             <div class="mb-4">
