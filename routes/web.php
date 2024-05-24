@@ -64,6 +64,23 @@ Route::controller(\App\Http\Controllers\Site\CartController::class)->group(funct
 });
 
 ///* =================================== */
+///*             Operator                */
+///* =================================== */\
+Route::middleware('auth.operator')->group(function () {
+    Route::group(['prefix' => 'operator'], function () {
+        Route::group(['prefix' => 'orders'], function () {
+            Route::controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
+                Route::get('/', 'index')->name('operator.order.index');
+                Route::post('/update-order-status/{id}', 'updateStatusAndOperator')->name('operator.order.updateOrderStatus');
+                Route::get('/user-orders/{user}', 'showUserOrders')->name('operator.order.showUserOrders');
+                Route::get('/edit/{order}', 'edit')->name('operator.order.edit');
+                Route::post('/update/{order}', 'update')->name('operator.order.update');
+            });
+        });
+    });
+});
+
+///* =================================== */
 ///*                 Admin                */
 ///* =================================== */
 Route::middleware('auth')->group(function () {
@@ -78,6 +95,14 @@ Route::middleware('auth')->group(function () {
                     Route::get('/edit/{user}', 'edit')->name('user.edit');
                     Route::post('/update/{user}', 'update')->name('user.update');
                     Route::delete('/delete/{user}', 'destroy')->name('user.destroy');
+                });
+            });
+            Route::group(['prefix' => 'orders'], function () {
+                Route::controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
+                    Route::get('/', 'index')->name('order.index');
+                    Route::get('/edit/{order}', 'edit')->name('order.edit');
+                    Route::post('/update/{order}', 'update')->name('order.update');
+                    Route::delete('/delete/{order}', 'destroy')->name('order.destroy');
                 });
             });
             Route::group(['prefix' => 'product'], function () {

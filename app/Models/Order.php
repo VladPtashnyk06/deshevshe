@@ -33,6 +33,7 @@ class Order extends Model
         'delivery_method_id',
         'payment_method_id',
         'delivery_address_id',
+        'operator_id',
         'user_name',
         'user_last_name',
         'user_phone',

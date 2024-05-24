@@ -22,11 +22,18 @@
                         <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
                             {{ __('Блог') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
+                            {{ __('Замовлення') }}
+                        </x-nav-link>
                     @else
                         <x-nav-link :href="route('site.product.catalog.index')" :active="request()->routeIs('site.product.catalog.index')">
                             {{ __('Продукти') }}
                         </x-nav-link>
-                        @if(Auth::user())
+                        @if(Auth::user() && Auth::user()->role == 'operator')
+                            <x-nav-link :href="route('operator.order.index')" :active="request()->routeIs('operator.order.index')">
+                                {{ __('Замовлення') }}
+                            </x-nav-link>
+                        @else
                             <x-nav-link :href="route('site.order.index')" :active="request()->routeIs('site.order.index')">
                                 {{ __('Всі мої замовлення') }}
                             </x-nav-link>
