@@ -34,9 +34,11 @@
                                 {{ __('Замовлення') }}
                             </x-nav-link>
                         @else
-                            <x-nav-link :href="route('site.order.index')" :active="request()->routeIs('site.order.index')">
-                                {{ __('Всі мої замовлення') }}
-                            </x-nav-link>
+                            @if(Auth::user() && Auth::user()->role == 'user')
+                                <x-nav-link :href="route('site.order.index')" :active="request()->routeIs('site.order.index')">
+                                    {{ __('Всі мої замовлення') }}
+                                </x-nav-link>
+                            @endif
                         @endif
                     @endif
                 </div>
