@@ -22,6 +22,9 @@
 
                     <!-- Phone -->
                     <div class="mb-4">
+                        @error('phone')
+                        <span class="text-red-500">{{ htmlspecialchars("Ви ввели не правильний номер, він не відповідає вимогам українського номеру") }}</span>
+                        @enderror
                         <label for="phone" class="block text-gray-700 font-medium mb-2">Номер телефону</label>
                         <div class="flex">
                             <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-900 text-sm">
@@ -29,7 +32,6 @@
                             </span>
                             <input type="text" id="phone" name="phone" class="block w-full pl-2 border border-gray-300 rounded-r-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="username" value="{{ old('phone') }}">
                         </div>
-                        <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                     </div>
 
                     <!-- Password -->
