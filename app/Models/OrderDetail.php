@@ -31,6 +31,7 @@ class OrderDetail extends Model
         'product_id',
         'color',
         'size',
+        'product_total_price',
         'quantity_product',
     ];
 

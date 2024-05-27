@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->foreignId('product_id')->constrained('products');
             $table->string('color');
             $table->string('size');
+            $table->integer('product_total_price');
             $table->integer('quantity_product');
             $table->timestamps();
         });

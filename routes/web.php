@@ -73,8 +73,17 @@ Route::middleware('auth.operator')->group(function () {
                 Route::get('/', 'index')->name('operator.order.index');
                 Route::post('/update-order-status/{id}', 'updateStatusAndOperator')->name('operator.order.updateOrderStatus');
                 Route::get('/user-orders/{user}', 'showUserOrders')->name('operator.order.showUserOrders');
-                Route::get('/edit/{order}', 'edit')->name('operator.order.edit');
+                Route::get('/edit-first/{order}', 'editFirst')->name('operator.order.editFirst');
+                Route::post('/edit-first/update/{order}', 'updateFirst')->name('operator.order.updateFirst');
+                Route::get('/edit-second/{order}', 'editSecond')->name('operator.order.editSecond');
+                Route::post('/edit-second/update/{order}', 'updateSecond')->name('operator.order.updateSecond');
+                Route::get('/edit-third/{order}', 'editThird')->name('operator.order.editThird');
+                Route::get('/edit-fourth/{order}', 'editFourth')->name('operator.order.editFourth');
                 Route::post('/update/{order}', 'update')->name('operator.order.update');
+                Route::get('/small-edit/{order}', 'smallEdit')->name('operator.order.small-edit');
+                Route::post('/small-edit/update/{order}', 'smallUpdate')->name('operator.order.smallUpdate');
+                Route::get('/add-additional-product/update', 'getProductsByCode')->name('operator.order.addAdditionalProduct');
+                Route::delete('/order-detail/delete/{order_detail}', 'orderDetailDestroy')->name('operator.order_detail.destroy');
             });
         });
     });

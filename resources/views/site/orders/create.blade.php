@@ -104,9 +104,9 @@
                                 <textarea name="comment" id="comment" class="w-full border rounded px-3 py-2 h-32">{{ old('comment') }}</textarea>
                             </div>
                             <div class="mb-4">
-                                <label for="payment_method_id" class="block text-gray-700">Метод оплати</label>
+                                <label for="payment_method_id" class="block text-gray-700">Спосіб оплати</label>
                                 <select name="payment_method_id" id="payment_method_id" class="w-full border rounded px-3 py-2">
-                                    <option value="">Всі методи оплати</option>
+                                    <option value="">Всі способи оплати</option>
                                     @foreach($paymentMethods as $paymentMethod)
                                         <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->title }}</option>
                                     @endforeach

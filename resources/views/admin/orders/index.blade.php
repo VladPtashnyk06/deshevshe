@@ -74,7 +74,7 @@
                                 <td class="px-4 py-2 break-words max-w-xs text-xs">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span>{{ $order->id }}</span>
-                                        <a href="">
+                                        <a href="{{ route('operator.order.small-edit', $order->id) }}">
                                             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                                  width="20px" height="20px" viewBox="0 0 497.25 497.25" style="fill: green;">
                                                 <path d="M248.625,172.125c-42.075,0-76.5,34.425-76.5,76.5s34.425,76.5,76.5,76.5s76.5-34.425,76.5-76.5
@@ -95,7 +95,7 @@
                                                 <path d=" M 80 82 L 80 66 C 80 63.6 78.8 61.2 76.8 59.6 C 72.4 56 66.8 53.6 61.2 52 C 57.2 50.8 52.8 50 48 50 C 43.6 50 39.2 50.8 34.8 52 C 29.2 53.6 23.6 56.4 19.2 59.6 C 17.2 61.2 16 63.6 16 66 L 16 82 L 80 82 Z"/>
                                             </g>
                                         </svg>
-                                        <a href="{{ route('operator.order.showUserOrders', $order->user_id ? $order->user_id : $order->user->id) }}">{{ $order->user_id ? $order->user->name . ' ' . $order->user->last_name : $order->user_name . ' ' . $order->user_last_name }}</a>
+                                        <a href="{{ route('operator.order.showUserOrders', $order->user_id ? $order->user_id : $order->user->id) }}">{{ $order->user_name . ' ' . $order->user_last_name }}</a>
                                     </p>
                                     <p>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" viewBox="0 0 16 16" class="inline-block" style="fill: black">
@@ -120,7 +120,7 @@
 		c76.031,76.031,179.454,118.219,286.891,117.313c0.562,0,18.312-3.813,24.375-9.845l33.938-33.938
 		C474.946,420.878,480.571,397.035,475.009,380.316z"/>
                                         </svg>
-                                        {{ $order->user_id ? $order->user->phone : $order->user_phone }}
+                                        {{ $order->user_phone }}
                                     </p>
                                     <p>
                                         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -133,13 +133,13 @@
 		c11.784,0,22.687-3.495,31.983-9.329L301.393,241.631z M9.448,89.085C3.554,98.44,0,109.429,0,121.305v242.602
 		c0,10.637,2.978,20.498,7.789,29.174l153.183-171.44L9.448,89.085z"/>
                                         </svg>
-                                        {{ $order->user_id ? ($order->user->email ?: ($order->user_email ?: 'Немає')) : 'Немає' }}
+                                        {{ $order->user_email ? $order->user_email : 'Немає' }}
                                     </p>
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" class="inline-block">
                                             <path fill-rule="evenodd" d="M12 9H2V8h10v1zm4-6v9c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h14c.55 0 1 .45 1 1zm-1 3H1v6h14V6zm0-3H1v1h14V3zm-9 7H2v1h4v-1z"/>
                                         </svg>
-                                        {{ $order->cost_delivery }}
+                                        Доставка - {{ $order->cost_delivery }} <br>Оплата за товар - {{ $order->paymentMethod->title }}
                                     </p>
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-truck" width="12" height="12" viewBox="0 0 24 24" class="inline-block">
@@ -175,7 +175,7 @@
                                 </td>
                                 <td>
                                     <select name="operator_id" id="operator_id" class="border rounded px-3 py-2 text-sm w-full" disabled>
-                                        <option>Всі оператори</option>
+                                        <option value="null">Всі оператори</option>
                                         @foreach($operators as $operator)
                                             <option value="{{ $operator->id }}" {{ $operator->id == $order->operator_id ? 'selected'  : '' }}>{{ $operator->name }}</option>
                                         @endforeach
@@ -193,7 +193,7 @@
                                 <td class="break-words max-w-60 text-xs">{{ $order->created_at }}</td>
                                 <td class="break-words max-w-60 text-xs">{{ $order->updated_at }}</td>
                                 <td class="break-words max-w-xs text-center">
-                                    <a href="{{ route('operator.order.edit', $order->id) }}" class="inline-block text-blue-500 hover:text-blue-700">
+                                    <a href="{{ route('operator.order.editFirst', $order->id) }}" class="inline-block text-blue-500 hover:text-blue-700" onclick="return isOperator()">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 128 128">
                                             <g>
                                                 <path d="M36.108,110.473l70.436-70.436L87.963,21.457L17.526,91.893c-0.378,0.302-0.671,0.716-0.803,1.22   l-5.476,20.803c-0.01,0.04-0.01,0.082-0.019,0.121c-0.018,0.082-0.029,0.162-0.039,0.247c-0.007,0.075-0.009,0.147-0.009,0.222   c-0.001,0.077,0.001,0.147,0.009,0.225c0.01,0.084,0.021,0.166,0.039,0.246c0.008,0.04,0.008,0.082,0.019,0.121   c0.007,0.029,0.021,0.055,0.031,0.083c0.023,0.078,0.053,0.154,0.086,0.23c0.029,0.067,0.057,0.134,0.09,0.196   c0.037,0.066,0.077,0.127,0.121,0.189c0.041,0.063,0.083,0.126,0.13,0.184c0.047,0.059,0.1,0.109,0.152,0.162   c0.053,0.054,0.105,0.105,0.163,0.152c0.056,0.048,0.119,0.09,0.182,0.131c0.063,0.043,0.124,0.084,0.192,0.12   c0.062,0.033,0.128,0.062,0.195,0.09c0.076,0.033,0.151,0.063,0.23,0.087c0.028,0.009,0.054,0.023,0.083,0.031   c0.04,0.01,0.081,0.01,0.121,0.02c0.081,0.017,0.162,0.028,0.246,0.037c0.077,0.009,0.148,0.011,0.224,0.01   c0.075,0,0.147-0.001,0.223-0.008c0.084-0.011,0.166-0.022,0.247-0.039c0.04-0.01,0.082-0.01,0.121-0.02l20.804-5.475   C35.393,111.146,35.808,110.853,36.108,110.473z M19.651,108.349c-0.535-0.535-1.267-0.746-1.964-0.649l3.183-12.094l11.526,11.525   L20.3,110.313C20.398,109.616,20.188,108.884,19.651,108.349z" style="fill: orangered;"/>
@@ -254,4 +254,13 @@
     // setInterval(function() {
     //     window.location.reload();
     // }, 3 * 60 * 1000);
+
+    function isOperator() {
+        var operator = document.getElementById('operator_id');
+        if (operator.value == 'null') {
+            alert('Помилка: поміняйте статус, не вказаний оператор.');
+            return false;
+        }
+        return true;
+    }
 </script>

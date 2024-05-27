@@ -39,10 +39,8 @@ class LoginRequest extends FormRequest
      */
     protected function normalizePhoneNumber(string $phoneNumber): string
     {
-        // Remove all non-numeric characters
         $normalizedPhone = preg_replace('/\D/', '', $phoneNumber);
 
-        // Check if the phone number starts with '0', if it does, add the country code '+38'
         if (substr($normalizedPhone, 0, 1) === '0') {
             return '+38' . $normalizedPhone;
         } else {

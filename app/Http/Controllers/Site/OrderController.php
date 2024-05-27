@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\Product;
 use App\Models\User;
 
 class OrderController extends Controller
@@ -94,45 +95,73 @@ class OrderController extends Controller
         }
         $orderStatus = OrderStatus::where('title', 'Нове')->first();
         if (isset($newUser)) {
+//            $newOrder = Order::create([
+//                'user_id' => $newUser->id,
+//                'order_status_id' => $orderStatus->id,
+//                'payment_method_id' => $request->validated('payment_method_id'),
+//                'cost_delivery' => $request->validated('cost_delivery'),
+//                'user_name' => $newUser->name,
+//                'user_last_name' => $newUser->last_name,
+//                'user_phone' => $newUser->phone,
+//                'user_email' => $newUser->email,
+//                'total_price' => $request->validated('total_price'),
+//                'currency' => $request->validated('currency'),
+//                'comment' => $request->validated('comment')
+//            ]);
             $newOrder = Order::create([
                 'user_id' => $newUser->id,
                 'order_status_id' => $orderStatus->id,
                 'payment_method_id' => $request->validated('payment_method_id'),
                 'cost_delivery' => $request->validated('cost_delivery'),
-                'user_name' => $newUser->name,
-                'user_last_name' => $newUser->last_name,
-                'user_phone' => $newUser->phone,
-                'user_email' => $newUser->email,
+                'user_name' => $request->validated('user_name'),
+                'user_last_name' => $request->validated('user_last_name'),
+                'user_phone' => $phone,
+                'user_email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                 'total_price' => $request->validated('total_price'),
                 'currency' => $request->validated('currency'),
                 'comment' => $request->validated('comment')
             ]);
         } else {
-            if (!empty($request->validated('user_id'))) {
-                $user = User::find($request->validated('user_id'));
-            }
+//            if (!empty($request->validated('user_id'))) {
+//                $user = User::find($request->validated('user_id'));
+//            }
             $newOrder = Order::create([
                 'user_id' => !empty($request->validated('user_id')) ? $request->validated('user_id') : null,
                 'order_status_id' => 1,
-                'user_name' => !empty($request->validated('user_id')) ? $user->name : $request->validated('user_name'),
-                'user_last_name' => !empty($request->validated('user_id')) ? $user->last_name : $request->validated('user_last_name'),
-                'user_phone' => !empty($request->validated('user_id')) ? $user->phone : $phone,
-                'user_email' => !empty($request->validated('user_id')) ? ($user->email ? $user->email : null) : ($request->validated('user_email') ? $request->validated('user_email') : null),
+                'user_name' => $request->validated('user_name'),
+                'user_last_name' => $request->validated('user_last_name'),
+                'user_phone' => $phone,
+                'user_email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                 'payment_method_id' => $request->validated('payment_method_id'),
                 'cost_delivery' => $request->validated('cost_delivery'),
                 'total_price' => $request->validated('total_price'),
                 'currency' => $request->validated('currency'),
                 'comment' => $request->validated('comment')
             ]);
+//            $newOrder = Order::create([
+//                'user_id' => !empty($request->validated('user_id')) ? $request->validated('user_id') : null,
+//                'order_status_id' => 1,
+//                'user_name' => !empty($request->validated('user_id')) ? $user->name : $request->validated('user_name'),
+//                'user_last_name' => !empty($request->validated('user_id')) ? $user->last_name : $request->validated('user_last_name'),
+//                'user_phone' => !empty($request->validated('user_id')) ? $user->phone : $phone,
+//                'user_email' => !empty($request->validated('user_id')) ? ($user->email ? $user->email : null) : ($request->validated('user_email') ? $request->validated('user_email') : null),
+//                'payment_method_id' => $request->validated('payment_method_id'),
+//                'cost_delivery' => $request->validated('cost_delivery'),
+//                'total_price' => $request->validated('total_price'),
+//                'currency' => $request->validated('currency'),
+//                'comment' => $request->validated('comment')
+//            ]);
         }
         if (isset($newOrder)) {
             $cartItems = \Cart::getContent()->sortBy('id');
             foreach ($cartItems as $item) {
+                $product = Product::find($item->attributes->product_id);
                 OrderDetail::create([
                     'order_id' => $newOrder->id,
                     'product_id' => $item->attributes->product_id,
                     'color' => $item->attributes->color,
                     'size' => $item->attributes->size,
+                    'product_total_price' => $product->price->pair * $item->quantity,
                     'quantity_product' => $item->quantity
                 ]);
             }
