@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\GeneralController;
 use App\Http\Requests\OrderEditFirstRequest;
 use App\Http\Requests\OrderEditSecondRequest;
 use App\Http\Requests\OrderRequest;
@@ -100,20 +101,10 @@ class OrderController extends Controller
      */
     public function updateFirst(OrderEditFirstRequest $request, Order $order)
     {
-        if ($request->validated('user_phone')) {
-            $falsePhone = $request->validated('user_phone');
-            $normalizedPhone = preg_replace('/\D/', '', $falsePhone);
-            if (substr($normalizedPhone, 0, 1) === '0') {
-                $phone = '+38' . $normalizedPhone;
-            } else {
-                $phone = '+380' . $normalizedPhone;
-            }
-        }
-
         $order->update([
             'user_name' => $request->validated('user_name'),
             'user_last_name' => $request->validated('user_last_name'),
-            'user_phone' => $phone,
+            'user_phone' => $request->validated('user_phone'),
             'user_email' => $request->validated('user_email'),
             'currency' => $request->validated('currency')
         ]);
@@ -181,7 +172,6 @@ class OrderController extends Controller
         return redirect()->route('operator.order.editThird', $order->id);
     }
 
-
     public function editThird(Order $order)
     {
         return view('admin.orders.edit_third', compact('order'));
@@ -191,14 +181,6 @@ class OrderController extends Controller
         $paymentMethods = PaymentMethod::all();
         $statuses = OrderStatus::all();
         return view('admin.orders.edit_fourth', compact('order', 'paymentMethods', 'statuses'));
-    }
-
-
-    public function update(OrderRequest $request, Order $order)
-    {
-        $order->update($request->validated());
-
-        return $order;
     }
 
     public function showUserOrders(User $user)
@@ -219,23 +201,7 @@ class OrderController extends Controller
 
     public function smallUpdate(OrderSmallRequest $request ,Order $order)
     {
-        if ($request->validated('user_phone')) {
-            $falsePhone = $request->validated('user_phone');
-            $normalizedPhone = preg_replace('/\D/', '', $falsePhone);
-            if (substr($normalizedPhone, 0, 1) === '0') {
-                $phone = '+38' . $normalizedPhone;
-            } else {
-                $phone = '+380' . $normalizedPhone;
-            }
-        }
-        $order->update([
-            'delivery_method_id' => $request->validated('delivery_method_id'),
-            'payment_method_id' => $request->validated('payment_method_id'),
-            'user_name' => $request->validated('user_name'),
-            'user_last_name' => $request->validated('user_last_name'),
-            'user_phone' => $phone,
-            'user_email' => $request->validated('user_email'),
-        ]);
+        $order->update($request->validated());
 
         return redirect()->route('operator.order.index');
     }

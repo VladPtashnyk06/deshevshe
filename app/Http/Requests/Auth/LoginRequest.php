@@ -43,9 +43,11 @@ class LoginRequest extends FormRequest
 
         if (substr($normalizedPhone, 0, 1) === '0') {
             return '+38' . $normalizedPhone;
-        } else {
+        } elseif (!str_starts_with($normalizedPhone, '380')) {
             return '+380' . $normalizedPhone;
         }
+
+        return '+' . $normalizedPhone;
     }
 
     /**
