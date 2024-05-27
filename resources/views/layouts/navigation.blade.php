@@ -88,31 +88,33 @@
             @endif
 
             <!-- Currency Selector and Cart -->
-            <div class="flex items-center ml-4">
-                <form action="{{ route('change-currency') }}" method="post" id="currency-form" class="flex items-center mr-4">
-                    @csrf
-                    <select name="currency" id="currency-select" class="rounded-l-md border border-gray-300 focus:border-blue-500 focus:outline-none py-2 px-4 bg-white dark:bg-gray-800 text-sm w-20" style="color: white">
-                        <option value="UAH" @if(session('currency') == 'UAH') selected @endif>UAH</option>
-                        <option value="USD" @if(session('currency') == 'USD') selected @endif>USD</option>
-                        <option value="EUR" @if(session('currency') == 'EUR') selected @endif>EUR</option>
-                    </select>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm">Змінити</button>
-                </form>
+            @if(Auth::user()->role == 'user')
+                <div class="flex items-center ml-4">
+                    <form action="{{ route('change-currency') }}" method="post" id="currency-form" class="flex items-center mr-4">
+                        @csrf
+                        <select name="currency" id="currency-select" class="rounded-l-md border border-gray-300 focus:border-blue-500 focus:outline-none py-2 px-4 bg-white dark:bg-gray-800 text-sm w-20" style="color: white">
+                            <option value="UAH" @if(session('currency') == 'UAH') selected @endif>UAH</option>
+                            <option value="USD" @if(session('currency') == 'USD') selected @endif>USD</option>
+                            <option value="EUR" @if(session('currency') == 'EUR') selected @endif>EUR</option>
+                        </select>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm">Змінити</button>
+                    </form>
 
-                <!-- Cart Icon -->
-                <div class="relative ml-4">
-                    <a href="{{ route('cart') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none transition duration-150 ease-in-out">
-                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                             width="30px" height="30px" viewBox="0 0 512 512" xml:space="preserve" style="fill: #FFFFFF;">
+                    <!-- Cart Icon -->
+                    <div class="relative ml-4">
+                        <a href="{{ route('cart') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none transition duration-150 ease-in-out">
+                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 width="30px" height="30px" viewBox="0 0 512 512" xml:space="preserve" style="fill: #FFFFFF;">
                                 <path d="M420.25,64l54.844,384H36.875L91.75,64H420.25 M448,32H64L0,480h512L448,32L448,32z"/>
                                 <path d="M384,128c0-17.688-14.312-32-32-32s-32,14.313-32,32c0,10.938,5.844,20.125,14.25,25.906
                                         C326.5,211.375,293.844,256,256,256c-37.813,0-70.5-44.625-78.25-102.094C186.156,148.125,192,138.938,192,128
                                         c0-17.688-14.313-32-32-32s-32,14.313-32,32c0,12.563,7.438,23.188,17.938,28.406C155.125,232.063,200.031,288,256,288
                                         s100.875-55.938,110.062-131.594C376.594,151.188,384,140.563,384,128z"/>
                         </svg>
-                    </a>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
