@@ -10,9 +10,7 @@ class OrderRequest extends FormRequest
     {
         return [
             'user_id' => ['nullable'],
-            'delivery_method_id' => ['nullable',],
             'payment_method_id' => ['required'],
-            'delivery_address_id' => ['nullable'],
             'user_name' => ['required', 'string'],
             'user_last_name' => ['required', 'string'],
             'user_phone' => ['required', 'string'],

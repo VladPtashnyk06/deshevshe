@@ -77,19 +77,10 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-        if ($request->validated('user_phone')) {
-            $falsePhone = $request->validated('user_phone');
-            $normalizedPhone = preg_replace('/\D/', '', $falsePhone);
-            if (substr($normalizedPhone, 0, 1) === '0') {
-                $phone = '+38' . $normalizedPhone;
-            } else {
-                $phone = '+380' . $normalizedPhone;
-            }
-        }
         if ($request->post('registration') == 'on') {
             if ($request->validated('password') == $request->validated('password_confirmation')) {
                 $newUser = User::create([
-                    'phone' => $phone,
+                    'phone' => $request->validated('user_phone'),
                     'email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                     'name' => $request->validated('user_name'),
                     'last_name' => $request->validated('user_last_name'),
@@ -106,7 +97,7 @@ class OrderController extends Controller
                 'cost_delivery' => $request->validated('cost_delivery'),
                 'user_name' => $request->validated('user_name'),
                 'user_last_name' => $request->validated('user_last_name'),
-                'user_phone' => $phone,
+                'user_phone' => $request->validated('user_phone'),
                 'user_email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                 'total_price' => $request->validated('total_price'),
                 'currency' => $request->validated('currency'),
@@ -118,7 +109,7 @@ class OrderController extends Controller
                 'order_status_id' => 1,
                 'user_name' => $request->validated('user_name'),
                 'user_last_name' => $request->validated('user_last_name'),
-                'user_phone' => $phone,
+                'user_phone' => $request->validated('user_phone'),
                 'user_email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                 'payment_method_id' => $request->validated('payment_method_id'),
                 'cost_delivery' => $request->validated('cost_delivery'),

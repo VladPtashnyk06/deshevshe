@@ -26,6 +26,8 @@ Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(fu
 Route::get('/regions', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('regions');
 Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCities'])->name('cities');
 Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
+Route::get('/city/{ref}', [\App\Http\Controllers\DeliveryController::class, 'getCityByRef'])->name('getCityByRef');
+Route::get('/branch/{ref}', [\App\Http\Controllers\DeliveryController::class, 'getBranchByRef'])->name('getBranchByRef');
 
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
@@ -83,7 +85,9 @@ Route::middleware('auth.operator')->group(function () {
                 Route::get('/edit-second/{order}', 'editSecond')->name('operator.order.editSecond');
                 Route::post('/edit-second/update/{order}', 'updateSecond')->name('operator.order.updateSecond');
                 Route::get('/edit-third/{order}', 'editThird')->name('operator.order.editThird');
+                Route::post('/edit-third/update/{order}', 'updateThird')->name('operator.order.updateThird');
                 Route::get('/edit-fourth/{order}', 'editFourth')->name('operator.order.editFourth');
+                Route::post('/edit-fourth/update/{order}', 'updateFourth')->name('operator.order.updateFourth');
                 Route::post('/update/{order}', 'update')->name('operator.order.update');
                 Route::get('/small-edit/{order}', 'smallEdit')->name('operator.order.small-edit');
                 Route::post('/small-edit/update/{order}', 'smallUpdate')->name('operator.order.smallUpdate');

@@ -5,7 +5,7 @@
 
                 @include('admin.orders.header')
 
-                <form action="" method="post">
+                <form action="{{ route('operator.order.updateFourth', $order->id) }}" method="post">
                     @csrf
 
                     <table class="w-full mt-16 mb-5 border-collapse">
@@ -72,10 +72,15 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="currency" class="block text-gray-700">Спосіб доставки</label>
-                        <select name="currency" id="currency" class="w-full border rounded px-3 py-2">
-
-                        </select>
+                        <div class="space-y-1 relative mb-4" id="branchesContainer">
+                            <input type="hidden" id="branchRefHidden" name="branchRefHidden" value="{{ $order->delivery->branch }}">
+                            <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->city }}">
+                            <label for="branchesInput" class="block font-semibold">Відділення Нової пошти</label>
+                            <input id="branchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
+                            <ul id="branchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+                                <!-- Відділення будуть відображені тут -->
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="mb-4">
@@ -113,7 +118,7 @@
                     </div>
 
                     <div class="mt-4 flex justify-between">
-                        <a class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border" style="padding: 10px 41px" href="{{ route('operator.order.editSecond', $order->id) }}">
+                        <a class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border" style="padding: 10px 41px" href="{{ route('operator.order.editThird', $order->id) }}">
                             Назад
                         </a>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border">
@@ -125,5 +130,83 @@
         </section>
     </main>
 </x-app-layout>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const branchesInput = document.getElementById('branchesInput');
+        const branchesList = document.getElementById('branchesList');
+        const cityRefHidden = document.getElementById('cityRefHidden');
+        const branchRefHidden = document.getElementById('branchRefHidden');
 
+        loadInitialData();
+
+        branchesInput.addEventListener('input', function() {
+            const cityRef = cityRefHidden.value;
+            const searchText = this.value.trim().toLowerCase();
+            if (cityRef && searchText.length > 1) {
+                fetchBranches(cityRef, searchText);
+            } else {
+                branchesList.innerHTML = '';
+                branchesList.classList.add('hidden');
+            }
+        });
+
+        branchesInput.addEventListener('focus', function() {
+            const cityRef = cityRefHidden.value;
+            if (branchesInput.value.trim().length === 0) {
+                fetchBranches(cityRef, '');
+            } else if (branchesList.children.length > 0) {
+                branchesList.classList.remove('hidden');
+            }
+        });
+
+        function loadInitialData() {
+            const branchRef = branchRefHidden.value;
+            if (branchRef) {
+                fetchBranchByRef(branchRef);
+            }
+        }
+
+        function fetchBranchByRef(ref) {
+            fetch(`/branch/${ref}`)
+                .then(response => response.json())
+                .then(data => {
+                    branchesInput.value = data.Description;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function fetchBranches(cityRef, searchText) {
+            fetch('/branches', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ city: cityRef, search: searchText })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    branchesList.innerHTML = '';
+                    data.forEach(branch => {
+                        if (branch.Description.toLowerCase().includes(searchText)) {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = branch.Description;
+                            listItem.setAttribute('data-value', branch.Ref);
+                            listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                            listItem.addEventListener('click', function() {
+                                branchesInput.value = this.textContent;
+                                branchRefHidden.value = branch.Ref;
+                                branchesList.classList.add('hidden');
+                            });
+                            branchesList.appendChild(listItem);
+                        }
+                    });
+                    if (branchesList.children.length > 0) {
+                        branchesList.classList.remove('hidden');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
 

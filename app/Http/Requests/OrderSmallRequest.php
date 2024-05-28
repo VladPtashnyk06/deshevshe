@@ -6,9 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class OrderSmallRequest extends FormRequest
 {
-    /**
-     * @return void
-     */
     protected function prepareForValidation()
     {
         if (isset($this->user_phone)) {
@@ -25,17 +22,23 @@ class OrderSmallRequest extends FormRequest
             }
         }
     }
+    /**
+     * @return array{user_id: array{0: string}, delivery_method_id: array{0: string}, payment_method_id: array{0: string}, delivery_address_id: array{0: string}, user_name: array{0: string, 1: string}, user_last_name: array{0: string, 1: string}, user_phone: array{0: string, 1: string}, user_email: array{0: string, 1: string}}
+     */
     public function rules(): array
     {
         return [
             'user_id' => ['nullable'],
-            'delivery_method_id' => ['nullable',],
             'payment_method_id' => ['required'],
-            'delivery_address_id' => ['nullable'],
             'user_name' => ['required', 'string'],
             'user_last_name' => ['required', 'string'],
             'user_phone' => ['required', 'regex:/^\+380(39|67|68|96|97|98|50|66|95|99|63|73|93)\d{7}$/'],
             'user_email' => ['nullable', 'string'],
+            'region' => ['required', 'string'],
+            'cityRefHidden' => ['required', 'string'],
+            'branchRefHidden' => ['nullable', 'string'],
+            'address' => ['nullable', 'string'],
+            'delivery_type' => ['nullable', 'string']
         ];
     }
 

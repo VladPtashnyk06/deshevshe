@@ -95,7 +95,7 @@
                                                 <path d=" M 80 82 L 80 66 C 80 63.6 78.8 61.2 76.8 59.6 C 72.4 56 66.8 53.6 61.2 52 C 57.2 50.8 52.8 50 48 50 C 43.6 50 39.2 50.8 34.8 52 C 29.2 53.6 23.6 56.4 19.2 59.6 C 17.2 61.2 16 63.6 16 66 L 16 82 L 80 82 Z"/>
                                             </g>
                                         </svg>
-                                        <a href="{{ route('operator.order.showUserOrders', $order->user_id ? $order->user_id : $order->user->id) }}">{{ $order->user_name . ' ' . $order->user_last_name }}</a>
+                                        <a href="{{ route('operator.order.showUserOrders', $order->user_id ? $order->user_id : '') }}">{{ $order->user_name . ' ' . $order->user_last_name }}</a>
                                     </p>
                                     <p>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" viewBox="0 0 16 16" class="inline-block" style="fill: black">

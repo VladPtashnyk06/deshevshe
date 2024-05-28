@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
 use App\Http\Requests\OrderEditFirstRequest;
+use App\Http\Requests\OrderEditFourthRequest;
 use App\Http\Requests\OrderEditSecondRequest;
+use App\Http\Requests\OrderEditThirdRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderSmallRequest;
 use App\Models\Delivery;
@@ -16,6 +18,7 @@ use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
+use App\Services\NovaPoshtaService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -174,13 +177,40 @@ class OrderController extends Controller
 
     public function editThird(Order $order)
     {
-        return view('admin.orders.edit_third', compact('order'));
+        $novaPoshtaService = new NovaPoshtaService();
+        $regions = $novaPoshtaService->getRegions();
+        return view('admin.orders.edit_third', compact('order', 'regions'));
     }
+
+    public function updateThird(OrderEditThirdRequest $request, Order $order)
+    {
+        $order->update($request->validated());
+
+        $delivery = Delivery::where('order_id', $order->id)->first();
+        $delivery->update([
+            'region' => $request->validated('region'),
+            'city' => $request->validated('cityRefHidden'),
+            'address' => $request->validated('address'),
+        ]);
+        return redirect()->route('operator.order.editFourth', $order->id);
+    }
+
     public function editFourth(Order $order)
     {
         $paymentMethods = PaymentMethod::all();
         $statuses = OrderStatus::all();
         return view('admin.orders.edit_fourth', compact('order', 'paymentMethods', 'statuses'));
+    }
+
+    public function updateFourth(OrderEditFourthRequest $request, Order $order)
+    {
+        $order->update($request->validated());
+
+        $delivery = Delivery::where('order_id', $order->id)->first();
+        $delivery->update([
+            'branch' => $request->validated('branchRefHidden'),
+        ]);
+        return redirect()->route('operator.order.index');
     }
 
     public function showUserOrders(User $user)
@@ -196,12 +226,22 @@ class OrderController extends Controller
     public function smallEdit(Order $order)
     {
         $paymentMethods = PaymentMethod::all();
-        return view('admin.orders.small-edit', compact('order', 'paymentMethods'));
+        $novaPoshtaService = new NovaPoshtaService();
+        $regions = $novaPoshtaService->getRegions();
+        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'regions'));
     }
 
     public function smallUpdate(OrderSmallRequest $request ,Order $order)
     {
         $order->update($request->validated());
+
+        $delivery = Delivery::where('order_id', $order->id)->first();
+        $delivery->update([
+            'region' => $request->validated('region'),
+            'city' => $request->validated('cityRefHidden'),
+            'branch' => $request->validated('branchRefHidden'),
+            'address' => $request->validated('address'),
+        ]);
 
         return redirect()->route('operator.order.index');
     }

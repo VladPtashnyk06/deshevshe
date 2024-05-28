@@ -5,17 +5,9 @@
 
                 @include('admin.orders.header')
 
-                <form action="" method="post">
+                <form action="{{ route('operator.order.updateThird', $order->id) }}" method="post">
                     @csrf
 
-{{--                    <div class="mb-4">--}}
-{{--                        <label for="currency" class="block text-gray-700">Вибрати адресу</label>--}}
-{{--                        <select name="currency" id="currency" class="w-full border rounded px-3 py-2">--}}
-{{--                            <option value="UAH" @if($order->currency == 'UAH') selected @endif>UAH</option>--}}
-{{--                            <option value="USD" @if($order->currency == 'USD') selected @endif>USD</option>--}}
-{{--                            <option value="EUR" @if($order->currency == 'EUR') selected @endif>EUR</option>--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
                     <div class="mb-4">
                         <label for="user_name" class="block mb-2 font-bold w-full">Ім'я</label>
                         <input type="text" name="user_name" id="user_name" class="w-full border rounded px-3 py-2" value="{{ $order->user_name }}">
@@ -28,30 +20,25 @@
 
                     <div class="mb-4">
                         <label for="address" class="block mb-2 font-bold">Адреса</label>
-                        <input type="text" name="address" id="address" class="w-full border rounded px-3 py-2" value="">
+                        <input type="text" name="address" id="address" class="w-full border rounded px-3 py-2" value="{{ $order->delivery->address ? $order->delivery->address : 'Немає' }}">
+                    </div>
+
+                    <div class="space-y-1 relative mb-4" id="cityContainer">
+                        <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->city }}">
+                        <label for="cityInput" class="block font-semibold">Місто</label>
+                        <input id="cityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
+                        <ul id="cityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+                            <!-- Міста будуть відображені тут -->
+                        </ul>
                     </div>
 
                     <div class="mb-4">
-                        <label for="city" class="block mb-2 font-bold">Місто</label>
-                        <input type="text" name="city" id="city" class="w-full border rounded px-3 py-2" value="">
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="country_id" class="block mb-2 font-bold">Країна</label>
-{{--                        <select name="country_id" id="country_id" class="w-full border rounded px-3 py-2">--}}
-{{--                            @foreach()--}}
-
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="region_id" class="block mb-2 font-bold">Облать</label>
-{{--                        <select name="region_id" id="region_id" class="w-full border rounded px-3 py-2">--}}
-{{--                            @foreach()--}}
-{{--                                --}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
+                        <label for="region" class="block mb-2 font-bold">Область</label>
+                        <select name="region" id="region" class="w-full border rounded-md py-2 px-3">
+                            @foreach($regions as $region)
+                                <option value="{{ $region['Ref'] }}" {{ $region['Ref'] == $order->delivery->region ? 'selected': '' }}>{{ $region['Description'] }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="mt-4 flex justify-between">
@@ -67,5 +54,89 @@
         </section>
     </main>
 </x-app-layout>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const regionSelect = document.getElementById('region');
+        const cityInput = document.getElementById('cityInput');
+        const cityList = document.getElementById('cityList');
+        const cityRefHidden = document.getElementById('cityRefHidden');
 
+        loadInitialData();
+
+        regionSelect.addEventListener('change', function() {
+            cityInput.value = '';
+            cityList.innerHTML = '';
+            cityRefHidden.value = '';
+        });
+
+        cityInput.addEventListener('input', function() {
+            const regionRef = regionSelect.value;
+            const searchText = this.value.trim().toLowerCase();
+            if (regionRef && searchText.length >= 0) {
+                fetchCities(regionRef, searchText);
+            } else {
+                cityList.innerHTML = '';
+                cityList.classList.add('hidden');
+            }
+        });
+
+        cityInput.addEventListener('focus', function() {
+            const regionRef = regionSelect.value;
+            if (regionRef && cityInput.value.trim().length === 0) {
+                fetchCities(regionRef, '');
+            } else if (cityList.children.length > 0) {
+                cityList.classList.remove('hidden');
+            }
+        });
+
+        function loadInitialData() {
+            const cityRef = cityRefHidden.value;
+            if (cityRef) {
+                fetchCityByRef(cityRef);
+            }
+        }
+
+        function fetchCityByRef(ref) {
+            fetch(`/city/${ref}`)
+                .then(response => response.json())
+                .then(data => {
+                    cityInput.value = data.Description;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function fetchCities(regionRef, searchText) {
+            fetch('/cities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ region: regionRef, search: searchText })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    cityList.innerHTML = '';
+                    data.forEach(city => {
+                        if (city.Description.toLowerCase().startsWith(searchText)) {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = city.Description;
+                            listItem.setAttribute('data-value', city.Ref);
+                            listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                            listItem.addEventListener('click', function() {
+                                cityInput.value = city.Description;
+                                cityRefHidden.value = city.Ref;
+                                cityList.classList.add('hidden');
+                            });
+                            cityList.appendChild(listItem);
+                        }
+                    });
+                    if (cityList.children.length > 0) {
+                        cityList.classList.remove('hidden');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
 

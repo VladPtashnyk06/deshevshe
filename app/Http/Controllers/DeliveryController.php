@@ -32,4 +32,22 @@ class DeliveryController extends Controller
 
         return response()->json($branches);
     }
+
+    public function getCityByRef(Request $request, $ref)
+    {
+        $regionRef = $request->input('region');
+        $cities = $this->novaPoshtaService->getCities($regionRef);
+        $city = collect($cities)->firstWhere('Ref', $ref);
+
+        return response()->json($city);
+    }
+
+    public function getBranchByRef(Request $request, $ref)
+    {
+        $cityRef = $request->input('city');
+        $branches = $this->novaPoshtaService->getBranches($cityRef, '');
+        $branch = collect($branches)->firstWhere('Ref', $ref);
+
+        return response()->json($branch);
+    }
 }
