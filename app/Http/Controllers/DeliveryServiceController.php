@@ -2,37 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DeliveryServiceRequest;
-use App\Models\DeliveryService;
+use App\Services\NovaPoshtaService;
+use Illuminate\Http\Request;
 
 class DeliveryServiceController extends Controller
 {
+    protected $novaPoshtaService;
+
+    public function __construct(NovaPoshtaService $novaPoshtaService)
+    {
+        $this->novaPoshtaService = $novaPoshtaService;
+    }
+
     public function index()
     {
-        return DeliveryService::all();
+        $regions = $this->novaPoshtaService->getRegions();
+
+        return view('site.example.index', compact('regions'));
     }
 
-    public function store(DeliveryServiceRequest $request)
+    public function getCities(Request $request)
     {
-        return DeliveryService::create($request->validated());
+        $regionRef = $request->input('region');
+
+        $cities = $this->novaPoshtaService->getCities($regionRef);
+
+        return response()->json($cities);
     }
 
-    public function show(DeliveryService $deliveryService)
+    public function getBranches(Request $request)
     {
-        return $deliveryService;
-    }
+        $cityRef = $request->input('city');
+        $categoryOfWarehouse = $request->input('categoryOfWarehouse');
 
-    public function update(DeliveryServiceRequest $request, DeliveryService $deliveryService)
-    {
-        $deliveryService->update($request->validated());
+        $branches = $this->novaPoshtaService->getBranches($cityRef, $categoryOfWarehouse);
 
-        return $deliveryService;
-    }
-
-    public function destroy(DeliveryService $deliveryService)
-    {
-        $deliveryService->delete();
-
-        return response()->json();
+        return response()->json($branches);
     }
 }

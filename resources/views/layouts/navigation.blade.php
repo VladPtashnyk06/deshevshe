@@ -88,7 +88,7 @@
             @endif
 
             <!-- Currency Selector and Cart -->
-            @if(Auth::user()->role == 'user')
+            @if(!Auth::user() || Auth::user()->role == 'user')
                 <div class="flex items-center ml-4">
                     <form action="{{ route('change-currency') }}" method="post" id="currency-form" class="flex items-center mr-4">
                         @csrf

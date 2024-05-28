@@ -22,6 +22,12 @@ Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(fu
 /* =================================== */
 /*                 Site                */
 /* =================================== */
+
+Route::get('/regions', [\App\Http\Controllers\DeliveryServiceController::class, 'index'])->name('regions');
+Route::post('/cities', [\App\Http\Controllers\DeliveryServiceController::class, 'getCities'])->name('cities');
+Route::post('/branches', [\App\Http\Controllers\DeliveryServiceController::class, 'getBranches'])->name('branches');
+Route::post('/delivery/submit', [\App\Http\Controllers\DeliveryServiceController::class, 'submit'])->name('delivery.submit');
+
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
 });
