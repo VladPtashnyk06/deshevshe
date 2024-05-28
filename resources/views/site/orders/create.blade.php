@@ -125,17 +125,17 @@
                                         </div>
                                         <div>
                                             <label>
-                                                <input type="radio" name="delivery_type" value="branch" checked> Доставка у відділення - Нова Пошта
+                                                <input type="radio" name="delivery_type" value="NovaPoshta_branch" checked> Доставка у відділення - Нова Пошта
                                             </label>
                                         </div>
                                         <div>
                                             <label>
-                                                <input type="radio" name="delivery_type" value="courier"> Доставка кур'єром - Нова Пошта
+                                                <input type="radio" name="delivery_type" value="NovaPoshta_courier"> Доставка кур'єром - Нова Пошта
                                             </label>
                                         </div>
                                         <div>
                                             <label>
-                                                <input type="radio" name="delivery_type" value="postomat"> Доставка в поштомат - Нова Пошта
+                                                <input type="radio" name="delivery_type" value="NovaPoshta_postomat"> Доставка в поштомат - Нова Пошта
                                             </label>
                                         </div>
                                     </div>
@@ -151,6 +151,7 @@
                                     </div>
 
                                     <div class="space-y-1 relative mb-4" id="cityContainer">
+                                        <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="">
                                         <label for="cityInput" class="block font-semibold">Місто</label>
                                         <input id="cityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
                                         <ul id="cityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
@@ -161,6 +162,7 @@
                                     <input type="hidden" name="categoryOfWarehouse" id="categoryOfWarehouse" value="Branch">
 
                                     <div class="space-y-1 relative mb-4" id="branchesContainer">
+                                        <input type="hidden" id="branchRefHidden" name="branchRefHidden" value="">
                                         <label for="branchesInput" class="block font-semibold">Відділення Нової пошти</label>
                                         <input id="branchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
                                         <ul id="branchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
@@ -219,6 +221,8 @@
         const addressContainer = document.getElementById('addressContainer');
         const branchesContainer = document.getElementById('branchesContainer');
         const deliveryTypeInputs = document.querySelectorAll('input[name="delivery_type"]');
+        const cityRefHidden = document.getElementById('cityRefHidden');
+        const branchRefHidden = document.getElementById('branchRefHidden');
 
         regionSelect.addEventListener('change', function() {
             cityInput.value = '';
@@ -287,7 +291,8 @@
                             listItem.setAttribute('data-value', city.Ref);
                             listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                             listItem.addEventListener('click', function() {
-                                cityInput.value = this.textContent;
+                                cityInput.value = city.Description;
+                                cityRefHidden.value = city.Ref;
                                 cityList.classList.add('hidden');
                                 branchesInput.value = '';
                                 branchesList.innerHTML = '';
@@ -326,6 +331,7 @@
                                     listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                     listItem.addEventListener('click', function() {
                                         branchesInput.value = this.textContent;
+                                        branchRefHidden.value = branch.Ref;
                                         branchesList.classList.add('hidden');
                                     });
                                     branchesList.appendChild(listItem);
@@ -339,6 +345,7 @@
                                 listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                 listItem.addEventListener('click', function() {
                                     branchesInput.value = this.textContent;
+                                    branchRefHidden.value = branch.Ref;
                                     branchesList.classList.add('hidden');
                                 });
                                 branchesList.appendChild(listItem);
@@ -355,19 +362,19 @@
         function updateFormVisibility() {
             const selectedDeliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
             const inputCategoryOfWarehouse = document.getElementById('categoryOfWarehouse');
-            if (selectedDeliveryType === 'branch') {
+            if (selectedDeliveryType === 'NovaPoshta_branch') {
                 branchesContainer.style.display = 'block';
                 addressContainer.style.display = 'none';
                 document.querySelector('#branchesContainer label').textContent = 'Відділення Нової пошти';
                 branchesInput.placeholder = 'Введіть назву відділення';
                 inputCategoryOfWarehouse.value = '';
-            } else if (selectedDeliveryType === 'postomat') {
+            } else if (selectedDeliveryType === 'NovaPoshta_postomat') {
                 branchesContainer.style.display = 'block';
                 addressContainer.style.display = 'none';
                 document.querySelector('#branchesContainer label').textContent = 'Поштомат Нової пошти';
                 branchesInput.placeholder = 'Введіть назву поштомата';
                 inputCategoryOfWarehouse.value = 'Postomat';
-            } else if (selectedDeliveryType === 'courier') {
+            } else if (selectedDeliveryType === 'NovaPoshta_courier') {
                 branchesContainer.style.display = 'none';
                 addressContainer.style.display = 'block';
                 inputCategoryOfWarehouse.value = '';

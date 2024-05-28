@@ -32,6 +32,7 @@ class Delivery extends Model
         'delivery_method',
         'region',
         'city',
+        'branch',
         'address',
     ];
 

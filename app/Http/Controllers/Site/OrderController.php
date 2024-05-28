@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
+use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
@@ -98,19 +99,6 @@ class OrderController extends Controller
         }
         $orderStatus = OrderStatus::where('title', 'Нове')->first();
         if (isset($newUser)) {
-//            $newOrder = Order::create([
-//                'user_id' => $newUser->id,
-//                'order_status_id' => $orderStatus->id,
-//                'payment_method_id' => $request->validated('payment_method_id'),
-//                'cost_delivery' => $request->validated('cost_delivery'),
-//                'user_name' => $newUser->name,
-//                'user_last_name' => $newUser->last_name,
-//                'user_phone' => $newUser->phone,
-//                'user_email' => $newUser->email,
-//                'total_price' => $request->validated('total_price'),
-//                'currency' => $request->validated('currency'),
-//                'comment' => $request->validated('comment')
-//            ]);
             $newOrder = Order::create([
                 'user_id' => $newUser->id,
                 'order_status_id' => $orderStatus->id,
@@ -125,9 +113,6 @@ class OrderController extends Controller
                 'comment' => $request->validated('comment')
             ]);
         } else {
-//            if (!empty($request->validated('user_id'))) {
-//                $user = User::find($request->validated('user_id'));
-//            }
             $newOrder = Order::create([
                 'user_id' => !empty($request->validated('user_id')) ? $request->validated('user_id') : null,
                 'order_status_id' => 1,
@@ -141,19 +126,6 @@ class OrderController extends Controller
                 'currency' => $request->validated('currency'),
                 'comment' => $request->validated('comment')
             ]);
-//            $newOrder = Order::create([
-//                'user_id' => !empty($request->validated('user_id')) ? $request->validated('user_id') : null,
-//                'order_status_id' => 1,
-//                'user_name' => !empty($request->validated('user_id')) ? $user->name : $request->validated('user_name'),
-//                'user_last_name' => !empty($request->validated('user_id')) ? $user->last_name : $request->validated('user_last_name'),
-//                'user_phone' => !empty($request->validated('user_id')) ? $user->phone : $phone,
-//                'user_email' => !empty($request->validated('user_id')) ? ($user->email ? $user->email : null) : ($request->validated('user_email') ? $request->validated('user_email') : null),
-//                'payment_method_id' => $request->validated('payment_method_id'),
-//                'cost_delivery' => $request->validated('cost_delivery'),
-//                'total_price' => $request->validated('total_price'),
-//                'currency' => $request->validated('currency'),
-//                'comment' => $request->validated('comment')
-//            ]);
         }
         if (isset($newOrder)) {
             $cartItems = \Cart::getContent()->sortBy('id');
@@ -168,6 +140,17 @@ class OrderController extends Controller
                     'quantity_product' => $item->quantity
                 ]);
             }
+            $deliveryNameAndType = $request->validated('delivery_type');
+            list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+            Delivery::create([
+                'order_id' => $newOrder->id,
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('region'),
+                'city' => $request->validated('cityRefHidden'),
+                'branch' => $request->validated('branchRefHidden'),
+                'address' => $request->validated('address'),
+            ]);
         }
 
         return redirect()->route('site.product.index');

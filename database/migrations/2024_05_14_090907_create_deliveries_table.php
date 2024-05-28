@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->string('delivery_method');
             $table->string('region');
             $table->string('city');
-            $table->string('address');
+            $table->string('branch')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,12 @@ class OrderRequest extends FormRequest
             'comment' => ['nullable'],
             'total_price' => ['required'],
             'currency' => ['required', 'string'],
-            'cost_delivery' => ['required', 'string']
+            'cost_delivery' => ['required', 'string'],
+            'region' => ['required', 'string'],
+            'cityRefHidden' => ['required', 'string'],
+            'branchRefHidden' => ['nullable', 'string'],
+            'address' => ['nullable', 'string'],
+            'delivery_type' => ['required', 'string']
         ];
     }
 }
