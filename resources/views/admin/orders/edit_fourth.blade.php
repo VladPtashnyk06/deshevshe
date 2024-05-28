@@ -74,9 +74,9 @@
                     <div class="mb-4">
                         <div class="space-y-1 relative mb-4" id="branchesContainer">
                             <input type="hidden" id="branchRefHidden" name="branchRefHidden" value="{{ $order->delivery->branch }}">
-                            <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->city }}">
+                            <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->cityRef }}">
                             <label for="branchesInput" class="block font-semibold">Відділення Нової пошти</label>
-                            <input id="branchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
+                            <input id="branchesInput" name="branch" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення" value="{{ $order->delivery->branch }}">
                             <ul id="branchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                                 <!-- Відділення будуть відображені тут -->
                             </ul>
@@ -137,43 +137,17 @@
         const cityRefHidden = document.getElementById('cityRefHidden');
         const branchRefHidden = document.getElementById('branchRefHidden');
 
-        loadInitialData();
-
         branchesInput.addEventListener('input', function() {
             const cityRef = cityRefHidden.value;
+            console.log(cityRef);
             const searchText = this.value.trim().toLowerCase();
-            if (cityRef && searchText.length > 1) {
+            if (cityRef && searchText.length >= 0) {
                 fetchBranches(cityRef, searchText);
             } else {
                 branchesList.innerHTML = '';
                 branchesList.classList.add('hidden');
             }
         });
-
-        branchesInput.addEventListener('focus', function() {
-            const cityRef = cityRefHidden.value;
-            if (branchesInput.value.trim().length === 0) {
-                fetchBranches(cityRef, '');
-            } else if (branchesList.children.length > 0) {
-                branchesList.classList.remove('hidden');
-            }
-        });
-
-        function loadInitialData() {
-            const branchRef = branchRefHidden.value;
-            if (branchRef) {
-                fetchBranchByRef(branchRef);
-            }
-        }
-
-        function fetchBranchByRef(ref) {
-            fetch(`/branch/${ref}`)
-                .then(response => response.json())
-                .then(data => {
-                    branchesInput.value = data.Description;
-                })
-                .catch(error => console.error('Error:', error));
-        }
 
         function fetchBranches(cityRef, searchText) {
             fetch('/branches', {

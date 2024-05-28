@@ -189,7 +189,8 @@ class OrderController extends Controller
         $delivery = Delivery::where('order_id', $order->id)->first();
         $delivery->update([
             'region' => $request->validated('region'),
-            'city' => $request->validated('cityRefHidden'),
+            'city' => $request->validated('city'),
+            'cityRef' => $request->validated('cityRefHidden'),
             'address' => $request->validated('address'),
         ]);
         return redirect()->route('operator.order.editFourth', $order->id);
@@ -208,7 +209,8 @@ class OrderController extends Controller
 
         $delivery = Delivery::where('order_id', $order->id)->first();
         $delivery->update([
-            'branch' => $request->validated('branchRefHidden'),
+            'branch' => $request->validated('branch'),
+            'branchRef' => $request->validated('branchRefHidden'),
         ]);
         return redirect()->route('operator.order.index');
     }
@@ -238,8 +240,10 @@ class OrderController extends Controller
         $delivery = Delivery::where('order_id', $order->id)->first();
         $delivery->update([
             'region' => $request->validated('region'),
-            'city' => $request->validated('cityRefHidden'),
-            'branch' => $request->validated('branchRefHidden'),
+            'city' => $request->validated('city'),
+            'cityRef' => $request->validated('cityRefHidden'),
+            'branch' => $request->validated('branch'),
+            'branchRef' => $request->validated('branchRefHidden'),
             'address' => $request->validated('address'),
         ]);
 

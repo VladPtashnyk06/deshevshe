@@ -24,9 +24,9 @@
                     </div>
 
                     <div class="space-y-1 relative mb-4" id="cityContainer">
-                        <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->city }}">
+                        <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->cityRef }}">
                         <label for="cityInput" class="block font-semibold">Місто</label>
-                        <input id="cityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
+                        <input id="cityInput" name="city" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city }}">
                         <ul id="cityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                             <!-- Міста будуть відображені тут -->
                         </ul>
@@ -61,8 +61,6 @@
         const cityList = document.getElementById('cityList');
         const cityRefHidden = document.getElementById('cityRefHidden');
 
-        loadInitialData();
-
         regionSelect.addEventListener('change', function() {
             cityInput.value = '';
             cityList.innerHTML = '';
@@ -89,22 +87,6 @@
             }
         });
 
-        function loadInitialData() {
-            const cityRef = cityRefHidden.value;
-            if (cityRef) {
-                fetchCityByRef(cityRef);
-            }
-        }
-
-        function fetchCityByRef(ref) {
-            fetch(`/city/${ref}`)
-                .then(response => response.json())
-                .then(data => {
-                    cityInput.value = data.Description;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
         function fetchCities(regionRef, searchText) {
             fetch('/cities', {
                 method: 'POST',
@@ -118,6 +100,7 @@
                 .then(data => {
                     cityList.innerHTML = '';
                     data.forEach(city => {
+                        // console.log(city)
                         if (city.Description.toLowerCase().startsWith(searchText)) {
                             const listItem = document.createElement('li');
                             listItem.textContent = city.Description;
@@ -125,7 +108,9 @@
                             listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                             listItem.addEventListener('click', function() {
                                 cityInput.value = city.Description;
+                                console.log(city.Ref)
                                 cityRefHidden.value = city.Ref;
+                                console.log(cityRefHidden.value)
                                 cityList.classList.add('hidden');
                             });
                             cityList.appendChild(listItem);

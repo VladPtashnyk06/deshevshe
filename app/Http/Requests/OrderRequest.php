@@ -22,7 +22,9 @@ class OrderRequest extends FormRequest
             'currency' => ['required', 'string'],
             'cost_delivery' => ['required', 'string'],
             'region' => ['required', 'string'],
+            'city' => ['required', 'string'],
             'cityRefHidden' => ['required', 'string'],
+            'branch' => ['nullable', 'string'],
             'branchRefHidden' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
             'delivery_type' => ['required', 'string']

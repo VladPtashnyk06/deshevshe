@@ -55,18 +55,18 @@
                         </div>
 
                         <div class="space-y-1 relative mb-4" id="cityContainer">
-                            <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->city }}">
+                            <input type="hidden" id="cityRefHidden" name="cityRefHidden" value="{{ $order->delivery->cityRef }}">
                             <label for="cityInput" class="block font-semibold">Місто</label>
-                            <input id="cityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
+                            <input id="cityInput" name="city" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city }}">
                             <ul id="cityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                                 <!-- Міста будуть відображені тут -->
                             </ul>
                         </div>
 
                         <div class="space-y-1 relative mb-4" id="branchesContainer">
-                            <input type="hidden" id="branchRefHidden" name="branchRefHidden" value="{{ $order->delivery->branch }}">
+                            <input type="hidden" id="branchRefHidden" name="branchRefHidden" value="{{ $order->delivery->branchRef }}">
                             <label for="branchesInput" class="block font-semibold">Відділення Нової пошти</label>
-                            <input id="branchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
+                            <input id="branchesInput" name="branch" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення" value="{{ $order->delivery->branch }}">
                             <ul id="branchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                                 <!-- Відділення будуть відображені тут -->
                             </ul>
@@ -98,8 +98,6 @@
         const branchesList = document.getElementById('branchesList');
         const cityRefHidden = document.getElementById('cityRefHidden');
         const branchRefHidden = document.getElementById('branchRefHidden');
-
-        loadInitialData();
 
         regionSelect.addEventListener('change', function() {
             cityInput.value = '';
@@ -149,35 +147,6 @@
                 branchesList.classList.remove('hidden');
             }
         });
-
-        function loadInitialData() {
-            const cityRef = cityRefHidden.value;
-            const branchRef = branchRefHidden.value;
-            if (cityRef) {
-                fetchCityByRef(cityRef);
-            }
-            if (branchRef) {
-                fetchBranchByRef(branchRef);
-            }
-        }
-
-        function fetchCityByRef(ref) {
-            fetch(`/city/${ref}`)
-                .then(response => response.json())
-                .then(data => {
-                    cityInput.value = data.Description;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function fetchBranchByRef(ref) {
-            fetch(`/branch/${ref}`)
-                .then(response => response.json())
-                .then(data => {
-                    branchesInput.value = data.Description;
-                })
-                .catch(error => console.error('Error:', error));
-        }
 
         function fetchCities(regionRef, searchText) {
             fetch('/cities', {

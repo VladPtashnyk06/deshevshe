@@ -35,7 +35,9 @@ class OrderSmallRequest extends FormRequest
             'user_phone' => ['required', 'regex:/^\+380(39|67|68|96|97|98|50|66|95|99|63|73|93)\d{7}$/'],
             'user_email' => ['nullable', 'string'],
             'region' => ['required', 'string'],
+            'city' => ['required', 'string'],
             'cityRefHidden' => ['required', 'string'],
+            'branch' => ['nullable', 'string'],
             'branchRefHidden' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
             'delivery_type' => ['nullable', 'string']

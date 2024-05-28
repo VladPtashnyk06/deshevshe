@@ -14,7 +14,9 @@ return new class extends Migration {
             $table->string('delivery_method');
             $table->string('region');
             $table->string('city');
+            $table->string('cityRef');
             $table->string('branch')->nullable();
+            $table->string('branchRef')->nullable();
             $table->string('address')->nullable();
             $table->timestamps();
         });

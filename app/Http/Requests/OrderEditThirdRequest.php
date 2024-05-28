@@ -12,7 +12,8 @@ class OrderEditThirdRequest extends FormRequest
             'user_name' => ['required', 'string'],
             'user_last_name' => ['required', 'string'],
             'region' => ['required', 'string'],
-            'cityRefHidden' => ['required', 'string'],
+            'city' => ['required', 'string'],
+            'cityRefHidden' => ['nullable', 'string'],
             'branchRefHidden' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
             'delivery_type' => ['nullable', 'string']

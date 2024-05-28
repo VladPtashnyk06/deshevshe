@@ -138,8 +138,10 @@ class OrderController extends Controller
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
-                'city' => $request->validated('cityRefHidden'),
-                'branch' => $request->validated('branchRefHidden'),
+                'city' => $request->validated('city'),
+                'cityRef' => $request->validated('cityRefHidden'),
+                'branch' => $request->validated('branch'),
+                'branchRef' => $request->validated('branchRefHidden'),
                 'address' => $request->validated('address'),
             ]);
         }
