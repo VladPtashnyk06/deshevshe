@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('delivery_addresses', function (Blueprint $table) {
+        Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('region_id')->constrained('regions');
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+            $table->string('delivery_name');
+            $table->string('delivery_method');
+            $table->string('region');
             $table->string('city');
             $table->string('address');
             $table->timestamps();

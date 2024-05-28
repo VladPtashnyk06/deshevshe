@@ -11,9 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->foreignId('order_status_id')->constrained('order_statuses');
-            $table->foreignId('delivery_method_id')->nullable()->constrained('delivery_methods');
             $table->foreignId('payment_method_id')->constrained('payment_methods');
-            $table->foreignId('delivery_address_id')->nullable()->constrained('delivery_addresses');
             $table->foreignId('operator_id')->nullable()->constrained('users');
             $table->string('user_name')->nullable();
             $table->string('user_last_name')->nullable();

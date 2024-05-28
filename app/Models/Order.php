@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -30,9 +31,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_status_id',
-        'delivery_method_id',
         'payment_method_id',
-        'delivery_address_id',
         'operator_id',
         'user_name',
         'user_last_name',
@@ -54,23 +53,18 @@ class Order extends Model
         return $this->belongsTo(OrderStatus::class);
     }
 
-    public function deliveryMethod(): BelongsTo
-    {
-        return $this->belongsTo(DeliveryMethod::class);
-    }
-
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function deliveryAddress(): BelongsTo
-    {
-        return $this->belongsTo(DeliveryAddress::class);
-    }
-
     public function orderDetails(): HasMany
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+
+    public function delivery(): HasOne
+    {
+        return $this->hasOne(Delivery::class, 'order_id');
     }
 }

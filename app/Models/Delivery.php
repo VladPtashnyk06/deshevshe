@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DeliveryService extends Model
+class Delivery extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'delivery_services';
+    protected $table = 'deliveries';
 
     /**
      * The primary key associated with the table.
@@ -23,9 +24,19 @@ class DeliveryService extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<string, int>
      */
     protected $fillable = [
-        'delivery_title',
+        'order_id',
+        'delivery_name',
+        'delivery_method',
+        'region',
+        'city',
+        'address',
     ];
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

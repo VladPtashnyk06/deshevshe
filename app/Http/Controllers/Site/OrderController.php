@@ -10,6 +10,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\NovaPoshtaService;
 
 class OrderController extends Controller
 {
@@ -67,8 +68,10 @@ class OrderController extends Controller
         }
 
         $paymentMethods = PaymentMethod::all();
+        $novaPoshtaService = new NovaPoshtaService();
+        $regions = $novaPoshtaService->getRegions();
 
-        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods'));
+        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'regions'));
     }
 
     public function store(OrderRequest $request)

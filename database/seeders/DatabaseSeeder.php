@@ -21,6 +21,7 @@ use App\Models\Region;
 use App\Models\Size;
 use App\Models\Status;
 use Illuminate\Database\Seeder;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DatabaseSeeder extends Seeder
 {
@@ -62,51 +63,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'Operator',
             'password' => \Hash::make('operator'),
         ]);
-
-        $deliveryServices = ['Нова Пошта', 'Укрпошта', 'Міст'];
-        foreach ($deliveryServices as $service) {
-            DeliveryService::create([
-                'delivery_title' => $service,
-            ]);
-        }
-
-        $deliveryMethods = [
-            'Укрпошта' => [
-                'Експрес відділення',
-                'Експрес кур\'єр',
-                'Стандарт відділення',
-                'Стандарт кур\'єр',
-            ],
-            'Нова пошта' => [
-                'Доставка у відділення',
-                'Доставка кур\'єром',
-                'Доставка в поштомат',
-            ],
-            'Міст' => [
-                'Meest: відділення',
-                'Meest: поштомат',
-                'Meest: кур\'єр',
-            ],
-        ];
-        foreach ($deliveryMethods as $serviceName => $methods) {
-            $service = DeliveryService::where('delivery_title', $serviceName)->first();
-
-            foreach ($methods as $method) {
-                DeliveryMethod::create([
-                    'delivery_service_id' => $service->id,
-                    'method_title' => $method,
-                ]);
-            }
-        }
-
-        $regions = [
-            'Вінницька область', 'Волинська область', 'Дніпропетровська область', 'Донецька область', 'Житомирська область', 'Закарпатська область', 'Запорізька область', 'Івано-Франківська область', 'Київська область', 'Кіровоградська область', 'Луганська область', 'Львівська область', 'Миколаївська область', 'Одеська область', 'Полтавська область', 'Рівненська область', 'Сумська область', 'Тернопільська область', 'Харківська область', 'Херсонська область', 'Хмельницька область', 'Черкаська область', 'Чернівецька область', 'Чернігівська область', 'місто Київ', 'місто Севастополь',
-        ];
-        foreach ($regions as $region) {
-            Region::create([
-                'title' => $region,
-            ]);
-        }
 
         //PaymentMethods
         PaymentMethod::create([

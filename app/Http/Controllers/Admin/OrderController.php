@@ -8,7 +8,7 @@ use App\Http\Requests\OrderEditFirstRequest;
 use App\Http\Requests\OrderEditSecondRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderSmallRequest;
-use App\Models\DeliveryAddress;
+use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
