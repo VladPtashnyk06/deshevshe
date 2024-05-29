@@ -361,6 +361,11 @@
         function updateFormVisibility() {
             const selectedDeliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
             const inputCategoryOfWarehouse = document.getElementById('categoryOfWarehouse');
+
+            branchesInput.value = '';
+            branchesList.innerHTML = '';
+            branchRefHidden.value = '';
+
             if (selectedDeliveryType === 'NovaPoshta_branch') {
                 branchesContainer.style.display = 'block';
                 addressContainer.style.display = 'none';

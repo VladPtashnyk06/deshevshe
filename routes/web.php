@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MeestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,12 @@ Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCit
 Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
 Route::get('/city/{ref}', [\App\Http\Controllers\DeliveryController::class, 'getCityByRef'])->name('getCityByRef');
 Route::get('/branch/{ref}', [\App\Http\Controllers\DeliveryController::class, 'getBranchByRef'])->name('getBranchByRef');
+
+Route::post('/meest/branches', [MeestController::class, 'getBranches']);
+Route::post('/meest/cities', [MeestController::class, 'getCities']);
+Route::get('/meest/city/{ref}', [MeestController::class, 'getCityByRef']);
+Route::get('/meest/branch/{ref}', [MeestController::class, 'getBranchByRef']);
+Route::get('/meest', [MeestController::class, 'index']);
 
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');

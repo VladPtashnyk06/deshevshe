@@ -35,4 +35,7 @@ return [
         'api_key' => env('NOVAPOSHTA_API_KEY'),
     ],
 
+    'meest' => [
+        'api_key' => env('MEEST_API_KEY'),
+    ],
 ];
