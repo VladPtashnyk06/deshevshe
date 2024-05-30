@@ -3,14 +3,57 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 
 class MeestService
 {
     protected $apiKey;
+    protected $apiUrl;
 
     public function __construct()
     {
-        $this->apiKey = config('services.meest.api_key');
+        $this->apiUrl = config('services.meest.api_url');
+        $this->apiKey = $this->getCachedToken();
+    }
+
+    private function getToken()
+    {
+        $username = config('services.meest.username');
+        $password = config('services.meest.password');
+
+        $response = Http::post("{$this->apiUrl}/auth", [
+            'username' => $username,
+            'password' => $password
+        ]);
+
+        if ($response->successful()) {
+
+            $data = $response->json()['result'];
+            $token = $data['token'];
+
+            Cache::put('meest_token', $token, 86400);
+            Cache::put('meest_token_created_at', now(), 86400);
+
+            return $token;
+        }
+        return false;
+    }
+
+    private function getCachedToken()
+    {
+        $token = Cache::get('meest_token');
+        $tokenCreatedAt = Cache::get('meest_token_created_at');
+
+        if ($token && $tokenCreatedAt) {
+            $tokenAge = now()->diffInSeconds(Carbon::parse($tokenCreatedAt));
+
+            if ($tokenAge < 82800) {
+                return $token;
+            }
+        }
+
+        return $this->getToken();
     }
 
     public function getRegions()
@@ -19,7 +62,7 @@ class MeestService
             'accept' => 'application/json',
             'token' => $this->apiKey,
             'Content-Type' => 'application/json',
-        ])->post('https://api.meest.com/v3.0/openAPI/regionSearch', [
+        ])->post("{$this->apiUrl}/regionSearch", [
             'filters' => [
                 'regionID' => '',
                 'regionKATUU' => '',
@@ -38,7 +81,7 @@ class MeestService
             'accept' => 'application/json',
             'token' => $this->apiKey,
             'Content-Type' => 'application/json',
-        ])->post('https://api.meest.com/v3.0/openAPI/citySearch', [
+        ])->post("{$this->apiUrl}/citySearch", [
             'filters' => [
                 'cityID' => '',
                 'cityKATUU'=> '',
@@ -62,7 +105,7 @@ class MeestService
             'accept' => 'application/json',
             'token' => $this->apiKey,
             'Content-Type' => 'application/json',
-        ])->post('https://api.meest.com/v3.0/openAPI/branchSearch', [
+        ])->post("{$this->apiUrl}/branchSearch", [
             'filters' => [
                 'cityId' => $cityId,
                 'cityDescr' => $cityDescr,

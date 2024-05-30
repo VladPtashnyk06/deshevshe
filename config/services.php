@@ -36,6 +36,8 @@ return [
     ],
 
     'meest' => [
-        'api_key' => env('MEEST_API_KEY'),
+        'api_url' => env('MEEST_API_URL'),
+        'username' => env('MEEST_USERNAME'),
+        'password' => env('MEEST_PASSWORD'),
     ],
 ];
