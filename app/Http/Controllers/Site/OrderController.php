@@ -137,17 +137,31 @@ class OrderController extends Controller
             }
             $deliveryNameAndType = $request->validated('delivery_type');
             list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
-            Delivery::create([
-                'order_id' => $newOrder->id,
-                'delivery_name' => $deliveryName,
-                'delivery_method' => $deliveryType,
-                'region' => $request->validated('region'),
-                'city' => $request->validated('city'),
-                'cityRef' => $request->validated('cityRefHidden'),
-                'branch' => $request->validated('branch'),
-                'branchRef' => $request->validated('branchRefHidden'),
-                'address' => $request->validated('address'),
-            ]);
+            if ($deliveryName == 'NovaPoshta') {
+                Delivery::create([
+                    'order_id' => $newOrder->id,
+                    'delivery_name' => $deliveryName,
+                    'delivery_method' => $deliveryType,
+                    'region' => $request->validated('NovaPoshtaRegion'),
+                    'city' => $request->validated('city'),
+                    'cityRef' => $request->validated('cityRefHidden'),
+                    'branch' => $request->validated('branch'),
+                    'branchRef' => $request->validated('branchRefHidden'),
+                    'address' => $request->validated('address'),
+                ]);
+            } elseif ($deliveryName == 'Meest') {
+                Delivery::create([
+                    'order_id' => $newOrder->id,
+                    'delivery_name' => $deliveryName,
+                    'delivery_method' => $deliveryType,
+                    'region' => $request->validated('MeestRegion'),
+                    'city' => $request->validated('MeestCityInput'),
+                    'cityRef' => $request->validated('cityId'),
+                    'branch' => $request->validated('MeestBranchesInpute'),
+                    'branchRef' => $request->validated('branchID'),
+                    'address' => $request->validated('address'),
+                ]);
+            }
         }
 
         return redirect()->route('site.product.index');
