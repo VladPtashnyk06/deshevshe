@@ -17,7 +17,6 @@ use App\Http\Controllers\MeestController;
 /* =================================== */
 /*             NovaPoshta              */
 /* =================================== */
-Route::get('/regions', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('regions');
 Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCities'])->name('cities');
 Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
 
@@ -26,12 +25,10 @@ Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getB
 /* =================================== */
 Route::post('/meest/branches', [MeestController::class, 'getBranches']);
 Route::post('/meest/cities', [MeestController::class, 'getCities']);
-Route::get('/meest', [MeestController::class, 'index']);
 
 /* =================================== */
 /*             UkrPoshta               */
 /* =================================== */
-Route::get('/ukr', [\App\Http\Controllers\UkrPoshtaController::class, 'index'])->name('ukr.index');
 Route::get('/ukr/cities', [\App\Http\Controllers\UkrPoshtaController::class, 'getCities'])->name('ukr.cities');
 Route::get('/ukr/branches', [\App\Http\Controllers\UkrPoshtaController::class, 'getBranches'])->name('ukr.branches');
 
