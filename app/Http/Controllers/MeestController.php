@@ -17,8 +17,7 @@ class MeestController extends Controller
 
     public function index()
     {
-        $meestService = new MeestService();
-        $regions = $meestService->getRegions();
+        $regions = $this->meestService->getRegions();
 
         return view('site.example.meest.index', compact('regions'));
     }

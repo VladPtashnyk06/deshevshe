@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\UkrPoshtaController;
 use App\Http\Requests\OrderEditFirstRequest;
 use App\Http\Requests\OrderEditFourthRequest;
 use App\Http\Requests\OrderEditSecondRequest;
@@ -18,7 +19,9 @@ use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
+use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
+use App\Services\UkrPoshtaService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -104,6 +107,33 @@ class OrderController extends Controller
      */
     public function updateFirst(OrderEditFirstRequest $request, Order $order)
     {
+        $currency_rate_usd = session()->get('currency_rate_usd');
+        $currency_rate_eur = session()->get('currency_rate_eur');
+        if ($request->validated('currency') == 'UAH' && $order->currency == 'USD') {
+            $order->update([
+                'total_price' => $order->total_price * $currency_rate_usd,
+            ]);
+        } elseif ($request->validated('currency') == 'UAH' && $order->currency == 'EUR') {
+            $order->update([
+                'total_price' => $order->total_price * $currency_rate_eur,
+            ]);
+        } elseif ($request->validated('currency') == 'USD' && $order->currency == 'UAH') {
+            $order->update([
+                'total_price' => $order->total_price / $currency_rate_usd,
+            ]);
+        } elseif ($request->validated('currency') == 'USD' && $order->currency == 'EUR') {
+            $order->update([
+                'total_price' => ( $order->total_price * $currency_rate_eur ) / $currency_rate_usd,
+            ]);
+        } elseif ($request->validated('currency') == 'EUR' && $order->currency == 'UAH') {
+            $order->update([
+                'total_price' => $order->total_price / $currency_rate_eur,
+            ]);
+        } elseif ($request->validated('currency') == 'EUR' && $order->currency == 'USD') {
+            $order->update([
+                'total_price' => ( $order->total_price * $currency_rate_usd ) / $currency_rate_eur,
+            ]);
+        }
         $order->update([
             'user_name' => $request->validated('user_name'),
             'user_last_name' => $request->validated('user_last_name'),
@@ -178,21 +208,60 @@ class OrderController extends Controller
     public function editThird(Order $order)
     {
         $novaPoshtaService = new NovaPoshtaService();
-        $regions = $novaPoshtaService->getRegions();
-        return view('admin.orders.edit_third', compact('order', 'regions'));
+        $novaPoshtaRegions = $novaPoshtaService->getRegions();
+
+        $meestService = new MeestService();
+        $meestRegions = $meestService->getRegions();
+
+        $ukrPoshtaService = new UkrPoshtaService();
+        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+
+        $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
+        return view('admin.orders.edit_third', compact('order', 'novaPoshtaRegions', 'meestRegions', 'deliveryNameAndType', 'ukrPoshtaRegions'));
     }
 
     public function updateThird(OrderEditThirdRequest $request, Order $order)
     {
+//        dd($request->all());
         $order->update($request->validated());
 
         $delivery = Delivery::where('order_id', $order->id)->first();
-        $delivery->update([
-            'region' => $request->validated('region'),
-            'city' => $request->validated('city'),
-            'cityRef' => $request->validated('cityRefHidden'),
-            'address' => $request->validated('address'),
-        ]);
+        $deliveryNameAndType = $request->validated('delivery_type');
+        list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+        if ($deliveryName == 'NovaPoshta') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('NovaPoshtaRegion'),
+                'city' => $request->validated('NovaPoshtaCityInput'),
+                'cityRef' => $request->validated('cityRefHidden'),
+                'branch' => $request->validated('NovaPoshtaBranchesInput'),
+                'branchRef' => $request->validated('branchRefHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        } elseif ($deliveryName == 'Meest') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('MeestRegion'),
+                'city' => $request->validated('MeestCityInput'),
+                'cityRef' => $request->validated('meestCityIdHidden'),
+                'branch' => $request->validated('MeestBranchesInpute'),
+                'branchRef' => $request->validated('meestBranchIDHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        } else if ($deliveryName == 'UkrPoshta') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('UkrPoshtaRegion'),
+                'city' => $request->validated('UkrPoshtaCityInput'),
+                'cityRef' => $request->validated('ukrPoshtaCityIdHidden'),
+                'branch' => $request->validated('UkrPoshtaBranchesInput'),
+                'branchRef' => $request->validated('ukrPoshtaBranchIDHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        }
         return redirect()->route('operator.order.editFourth', $order->id);
     }
 
@@ -207,11 +276,6 @@ class OrderController extends Controller
     {
         $order->update($request->validated());
 
-        $delivery = Delivery::where('order_id', $order->id)->first();
-        $delivery->update([
-            'branch' => $request->validated('branch'),
-            'branchRef' => $request->validated('branchRefHidden'),
-        ]);
         return redirect()->route('operator.order.index');
     }
 

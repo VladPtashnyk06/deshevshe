@@ -9,8 +9,6 @@ class OrderEditFourthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'branch' => ['nullable', 'string'],
-            'branchRefHidden' => ['nullable', 'string'],
             'payment_method_id' => ['required'],
             'order_status_id' => ['required'],
             'comment' => ['nullable'],

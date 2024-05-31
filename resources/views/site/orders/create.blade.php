@@ -165,8 +165,8 @@
                                     </div>
                                     <div class="space-y-1 mb-4 text-gray-700">
                                         <div class="flex">
-                                            <img src="" alt="Лого(Meest)" class="mr-4">
-                                            <p>Meest</p>
+                                            <img src="" alt="Лого(УкрПошта)" class="mr-4">
+                                            <p>УкрПошта</p>
                                         </div>
                                         <div>
                                             <label>

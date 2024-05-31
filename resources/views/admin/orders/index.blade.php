@@ -74,7 +74,7 @@
                                 <td class="px-4 py-2 break-words max-w-xs text-xs">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span>{{ $order->id }}</span>
-                                        <a href="{{ route('operator.order.small-edit', $order->id) }}">
+                                        <a href="{{ route('operator.order.small-edit', $order->id) }}" onclick="return isOperator()">
                                             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                                  width="20px" height="20px" viewBox="0 0 497.25 497.25" style="fill: green;">
                                                 <path d="M248.625,172.125c-42.075,0-76.5,34.425-76.5,76.5s34.425,76.5,76.5,76.5s76.5-34.425,76.5-76.5
@@ -255,12 +255,12 @@
     //     window.location.reload();
     // }, 3 * 60 * 1000);
 
-    function isOperator() {
-        var operator = document.getElementById('operator_id');
-        if (operator.value == 'null') {
-            alert('Помилка: поміняйте статус, не вказаний оператор.');
-            return false;
-        }
-        return true;
-    }
+    // function isOperator() {
+    //     var operator = document.getElementById('operator_id');
+    //     if (operator.value == 'null') {
+    //         alert('Помилка: поміняйте статус, не вказаний оператор.');
+    //         return false;
+    //     }
+    //     return true;
+    // }
 </script>
