@@ -14,32 +14,33 @@ use App\Http\Controllers\MeestController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
-    Route::get('/', 'index')->name('site.product.index');
-});
-
-
 /* =================================== */
-/*                 Site                */
+/*             NovaPoshta              */
 /* =================================== */
-
 Route::get('/regions', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('regions');
 Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCities'])->name('cities');
 Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
-Route::get('/city/{ref}', [\App\Http\Controllers\DeliveryController::class, 'getCityByRef'])->name('getCityByRef');
-Route::get('/branch/{ref}', [\App\Http\Controllers\DeliveryController::class, 'getBranchByRef'])->name('getBranchByRef');
 
+/* =================================== */
+/*                 Meest               */
+/* =================================== */
 Route::post('/meest/branches', [MeestController::class, 'getBranches']);
 Route::post('/meest/cities', [MeestController::class, 'getCities']);
-Route::get('/meest/city/{ref}', [MeestController::class, 'getCityByRef']);
-Route::get('/meest/branch/{ref}', [MeestController::class, 'getBranchByRef']);
 Route::get('/meest', [MeestController::class, 'index']);
 
+/* =================================== */
+/*             UkrPoshta               */
+/* =================================== */
 Route::get('/ukr', [\App\Http\Controllers\UkrPoshtaController::class, 'index'])->name('ukr.index');
 Route::get('/ukr/cities', [\App\Http\Controllers\UkrPoshtaController::class, 'getCities'])->name('ukr.cities');
 Route::get('/ukr/branches', [\App\Http\Controllers\UkrPoshtaController::class, 'getBranches'])->name('ukr.branches');
 
+/* =================================== */
+/*                 Site                */
+/* =================================== */
+Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
+    Route::get('/', 'index')->name('site.product.index');
+});
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
 });

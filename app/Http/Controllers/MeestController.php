@@ -41,24 +41,4 @@ class MeestController extends Controller
 
         return response()->json($branches);
     }
-
-    public function getCityByRef(Request $request, $cityId)
-    {
-        $regionDescr = $request->input('regionDescr');
-        $regionId = $request->input('regionId');
-        $cities = $this->meestService->getCities($regionDescr, $regionId);
-        $city = collect($cities)->firstWhere('cityId', $cityId);
-
-        return response()->json($city);
-    }
-
-    public function getBranchByRef(Request $request, $branchId)
-    {
-        $cityId = $request->input('cityId');
-        $cityDescr = $request->input('cityDescr');
-        $branches = $this->meestService->getBranches($cityId, $cityDescr);
-        $branch = collect($branches)->firstWhere('branchId', $branchId);
-
-        return response()->json($branch);
-    }
 }
