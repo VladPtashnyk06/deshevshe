@@ -36,6 +36,10 @@ Route::get('/meest/city/{ref}', [MeestController::class, 'getCityByRef']);
 Route::get('/meest/branch/{ref}', [MeestController::class, 'getBranchByRef']);
 Route::get('/meest', [MeestController::class, 'index']);
 
+Route::get('/ukr', [\App\Http\Controllers\UkrPoshtaController::class, 'index'])->name('ukr.index');
+Route::get('/ukr/cities', [\App\Http\Controllers\UkrPoshtaController::class, 'getCities'])->name('ukr.cities');
+Route::get('/ukr/branches', [\App\Http\Controllers\UkrPoshtaController::class, 'getBranches'])->name('ukr.branches');
+
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
 });

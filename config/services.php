@@ -40,4 +40,8 @@ return [
         'username' => env('MEEST_USERNAME'),
         'password' => env('MEEST_PASSWORD'),
     ],
+
+    'ukrposhta' => [
+        'api_key' => env('UKRPOSHTA_API_KEY'),
+    ]
 ];
