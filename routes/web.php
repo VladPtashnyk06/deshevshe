@@ -74,6 +74,7 @@ Route::group(['prefix' => 'order'], function () {
         Route::post('/store', 'store')->name('site.order.store');
         Route::get('/oneOrder/{order}', 'oneOrder')->name('site.order.oneOrder');
         Route::get('/thank-you', 'thankYou')->name('site.order.thankYou');
+        Route::post('/update/one-order/{order}', 'updateOneOrder')->name('site.order.updateOneOrder');
     });
 });
 Route::controller(\App\Http\Controllers\Site\CartController::class)->group(function () {

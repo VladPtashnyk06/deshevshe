@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\UpdateOneOrderRequest;
 use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -86,7 +87,6 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-//        dd($request->all());
         if ($request->post('registration') == 'on') {
             if ($request->validated('password') == $request->validated('password_confirmation')) {
                 $newUser = User::create([
@@ -192,6 +192,62 @@ class OrderController extends Controller
 
     public function oneOrder(Order $order)
     {
-        return view('site.orders.one-order', compact('order'));
+        $paymentMethods = PaymentMethod::all();
+        $novaPoshtaService = new NovaPoshtaService();
+        $novaPoshtaRegions = $novaPoshtaService->getRegions();
+
+        $meestService = new MeestService();
+        $meestRegions = $meestService->getRegions();
+
+        $ukrPoshtaService = new UkrPoshtaService();
+        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+
+        $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
+        return view('site.orders.one-order', compact('order', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'deliveryNameAndType'));
+    }
+
+    public function updateOneOrder(UpdateOneOrderRequest $request, Order $order)
+    {
+        $order->update($request->validated());
+
+        $delivery = Delivery::where('order_id', $order->id)->first();
+        $deliveryNameAndType = $request->validated('delivery_type');
+        list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+        if ($deliveryName == 'NovaPoshta') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('NovaPoshtaRegion'),
+                'city' => $request->validated('NovaPoshtaCityInput'),
+                'cityRef' => $request->validated('cityRefHidden'),
+                'branch' => $request->validated('NovaPoshtaBranchesInput'),
+                'branchRef' => $request->validated('branchRefHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        } elseif ($deliveryName == 'Meest') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('MeestRegion'),
+                'city' => $request->validated('MeestCityInput'),
+                'cityRef' => $request->validated('meestCityIDHidden'),
+                'branch' => $request->validated('MeestBranchesInpute'),
+                'branchRef' => $request->validated('meestBranchIDHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        } else if ($deliveryName == 'UkrPoshta') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('UkrPoshtaRegion'),
+                'city' => $request->validated('UkrPoshtaCityInput'),
+                'cityRef' => $request->validated('ukrPoshtaCityIdHidden'),
+                'branch' => $request->validated('UkrPoshtaBranchesInput'),
+                'branchRef' => $request->validated('ukrPoshtaBranchIDHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        }
+
+        return redirect()->route('site.order.thankYou');
     }
 }
