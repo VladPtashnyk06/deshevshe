@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
+use App\Services\UkrPoshtaService;
 
 class OrderController extends Controller
 {
@@ -70,17 +71,22 @@ class OrderController extends Controller
         }
 
         $paymentMethods = PaymentMethod::all();
+
         $novaPoshtaService = new NovaPoshtaService();
         $novaPoshtaRegions = $novaPoshtaService->getRegions();
 
         $meestService = new MeestService();
         $meestRegions = $meestService->getRegions();
 
-        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions'));
+        $ukrPoshtaService = new UkrPoshtaService();
+        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+
+        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions'));
     }
 
     public function store(OrderRequest $request)
     {
+//        dd($request->all());
         if ($request->post('registration') == 'on') {
             if ($request->validated('password') == $request->validated('password_confirmation')) {
                 $newUser = User::create([
@@ -143,9 +149,9 @@ class OrderController extends Controller
                     'delivery_name' => $deliveryName,
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('NovaPoshtaRegion'),
-                    'city' => $request->validated('city'),
+                    'city' => $request->validated('NovaPoshtaCityInput'),
                     'cityRef' => $request->validated('cityRefHidden'),
-                    'branch' => $request->validated('branch'),
+                    'branch' => $request->validated('NovaPoshtaBranchesInput'),
                     'branchRef' => $request->validated('branchRefHidden'),
                     'address' => $request->validated('address'),
                 ]);
@@ -156,15 +162,32 @@ class OrderController extends Controller
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('MeestRegion'),
                     'city' => $request->validated('MeestCityInput'),
-                    'cityRef' => $request->validated('cityId'),
+                    'cityRef' => $request->validated('meestCityIdHidden'),
                     'branch' => $request->validated('MeestBranchesInpute'),
-                    'branchRef' => $request->validated('branchID'),
+                    'branchRef' => $request->validated('meestBranchIDHidden'),
+                    'address' => $request->validated('address'),
+                ]);
+            } else if ($deliveryName == 'UkrPoshta') {
+                Delivery::create([
+                    'order_id' => $newOrder->id,
+                    'delivery_name' => $deliveryName,
+                    'delivery_method' => $deliveryType,
+                    'region' => $request->validated('UkrPoshtaRegion'),
+                    'city' => $request->validated('UkrPoshtaCityInput'),
+                    'cityRef' => $request->validated('ukrPoshtaCityIdHidden'),
+                    'branch' => $request->validated('UkrPoshtaBranchesInput'),
+                    'branchRef' => $request->validated('ukrPoshtaBranchIDHidden'),
                     'address' => $request->validated('address'),
                 ]);
             }
         }
 
-        return redirect()->route('site.product.index');
+        return redirect()->route('site.order.thankYou');
+    }
+
+    public function thankYou()
+    {
+        return view('site.orders.thank-you');
     }
 
     public function oneOrder(Order $order)
