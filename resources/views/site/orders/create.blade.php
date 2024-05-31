@@ -1,6 +1,6 @@
 <x-app-layout>
     <main itemscope itemtype="http://schema.org/ItemList">
-        <section class="mx-auto py-12" style="max-width: 100rem">
+        <section class="mx-auto py-12" style="max-width: 105rem">
             <div class="bg-white shadow sm:rounded-lg p-6">
                 <h1 class="text-3xl font-semibold mb-6 text-center" itemprop="name">Створення замовлення</h1>
                 <div class="flex flex-col md:flex-row md:justify-between">
@@ -67,24 +67,27 @@
                                     <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                     <div class="mb-4">
                                         <label for="user_name" class="block text-gray-700">Ім'я</label>
-                                        <input type="text" id="user_name" name="user_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->name : old('name') }}" placeholder="Введіть ім'я">
+                                        <input type="text" id="user_name" name="user_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->name : old('user_name') }}" placeholder="Введіть ім'я">
                                     </div>
                                     <div class="mb-4">
                                         <label for="user_last_name" class="block text-gray-700">Прізвище</label>
-                                        <input type="text" id="user_last_name" name="user_last_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->last_name : old('last_name') }}" placeholder="Введіть прізвище">
+                                        <input type="text" id="user_last_name" name="user_last_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->last_name : old('user_last_name') }}" placeholder="Введіть прізвище">
                                     </div>
                                     <div class="mb-4">
+                                        @error('user_phone')
+                                        <span class="text-red-500">{{ htmlspecialchars("Ви ввели не правильний номер, він не відповідає вимогам українського номеру") }}</span>
+                                        @enderror
                                         <label for="user_phone" class="block text-gray-700">Номер телефону</label>
                                         <div class="flex">
                                     <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-900 text-sm">
                                         +380
                                     </span>
-                                            <input type="text" id="user_phone" name="user_phone" class="mt-1 block w-full pl-2 border-l-0 rounded-r-md" required value="{{ Auth::user() ? str_replace('+380', '', Auth::user()->phone) : old('phone') }}" placeholder="971231212">
+                                            <input type="text" id="user_phone" name="user_phone" class="mt-1 block w-full pl-2 border-l-0 rounded-r-md" required value="{{ Auth::user() ? str_replace('+380', '', Auth::user()->phone) : old('user_phone') }}" placeholder="971231212">
                                         </div>
                                     </div>
                                     <div class="mb-4">
                                         <label for="user_email" class="block text-gray-700">Електронна пошта</label>
-                                        <input type="email" id="user_email" name="user_email" class="mt-1 block w-full border rounded" required value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : old('email') }}" placeholder="example@gmail.com">
+                                        <input type="email" id="user_email" name="user_email" class="mt-1 block w-full border rounded" required value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : old('user_email') }}" placeholder="example@gmail.com">
                                     </div>
                                     @if(!Auth::user())
                                         <div class="mb-4">
@@ -160,6 +163,32 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <div class="space-y-1 mb-4 text-gray-700">
+                                        <div class="flex">
+                                            <img src="" alt="Лого(Meest)" class="mr-4">
+                                            <p>Meest</p>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="delivery_type" value="UkrPoshta_exspresBranch"> Доставка експрес у відділення - Укрпошта
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="delivery_type" value="UkrPoshta_exspresCourier"> Доставка експрес кур'єром - Укрпошта
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="delivery_type" value="UkrPoshta_branch"> Доставка стандартна у відділення - Укрпошта
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="delivery_type" value="UkrPoshta_courier"> Доставка стандартна кур'єром - Укрпошта
+                                            </label>
+                                        </div>
+                                    </div>
 
                                     <input type="hidden" name="categoryOfWarehouse" id="categoryOfWarehouse" value="Branch">
 
@@ -205,7 +234,7 @@
                                         </div>
 
                                         <div class="space-y-1 relative mb-4" id="cityContainer">
-                                            <input type="hidden" id="cityId" name="cityId" value="">
+                                            <input type="hidden" id="meestCityIdHidden" name="meestCityIdHidden" value="">
                                             <label for="MeestCityInput" class="block font-semibold">Місто</label>
                                             <input id="MeestCityInput" name="MeestCityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
                                             <ul id="MeestCityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
@@ -214,10 +243,40 @@
                                         </div>
 
                                         <div class="space-y-1 relative mb-4" id="MeestBranchesContainer">
-                                            <input type="hidden" name="branchID" id="branchID" value="">
+                                            <input type="hidden" name="meestBranchIDHidden" id="meestBranchIDHidden" value="">
                                             <label for="MeestBranchesInput" class="block font-semibold"></label>
                                             <input id="MeestBranchesInput" name="MeestBranchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
                                             <ul id="MeestBranchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+                                                <!-- Відділення будуть відображені тут -->
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div id="UkrPoshtaContainer" class="hidden text-gray-700">
+                                        <div class="space-y-1 mb-4">
+                                            <label for="UkrPoshtaRegion" class="block font-semibold">Регіон / Область</label>
+                                            <select name="UkrPoshtaRegion" id="UkrPoshtaRegion" class="w-full border rounded-md py-2 px-3">
+                                                <option value="">--- Виберіть ---</option>
+                                                @foreach($ukrPoshtaRegions as $region)
+                                                    <option value="{{ $region['REGION_ID'] }}">{{ ucfirst(strtolower($region['REGION_UA'])) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="space-y-1 relative mb-4" id="UkrPoshtaCityContainer">
+                                            <input type="hidden" id="ukrPoshtaCityIdHidden" name="ukrPoshtaCityIdHidden" value="">
+                                            <label for="UkrPoshtaCityInput" class="block font-semibold">Місто</label>
+                                            <input id="UkrPoshtaCityInput" name="UkrPoshtaCityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
+                                            <ul id="UkrPoshtaCityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+                                                <!-- Міста будуть відображені тут -->
+                                            </ul>
+                                        </div>
+
+                                        <div class="space-y-1 relative mb-4" id="UkrPoshtaBranchesContainer">
+                                            <input type="hidden" name="ukrPoshtaBranchIDHidden" id="ukrPoshtaBranchIDHidden" value="">
+                                            <label for="UkrPoshtaBranchesInput" class="block font-semibold">Відділення Укр-Пошти</label>
+                                            <input id="UkrPoshtaBranchesInput" name="UkrPoshtaBranchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
+                                            <ul id="UkrPoshtaBranchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                                                 <!-- Відділення будуть відображені тут -->
                                             </ul>
                                         </div>
@@ -267,19 +326,25 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
+        const MeestBranchesContainer = document.getElementById('MeestBranchesContainer');
         const MeestRegionSelect = document.getElementById('MeestRegion');
         const MeestCityInput = document.getElementById('MeestCityInput');
         const MeestBranchesInput = document.getElementById('MeestBranchesInput');
         const MeestCityList = document.getElementById('MeestCityList');
         const MeestBranchesList = document.getElementById('MeestBranchesList');
-        const MeestBranchesContainer = document.getElementById('MeestBranchesContainer');
+        const NovaPoshtaBranchesContainer = document.getElementById('NovaPoshtaBranchesContainer');
         const NovaPoshtaRegionSelect = document.getElementById('NovaPoshtaRegion');
         const NovaPoshtaCityInput = document.getElementById('NovaPoshtaCityInput');
         const NovaPoshtaBranchesInput = document.getElementById('NovaPoshtaBranchesInput');
         const NovaPoshtaCityList = document.getElementById('NovaPoshtaCityList');
         const NovaPoshtaBranchesList = document.getElementById('NovaPoshtaBranchesList');
+        const UkrPoshtaBranchesContainer = document.getElementById('UkrPoshtaBranchesContainer');
+        const UkrPoshtaRegionSelect = document.getElementById('UkrPoshtaRegion');
+        const UkrPoshtaCityInput = document.getElementById('UkrPoshtaCityInput');
+        const UkrPoshtaBranchesInput = document.getElementById('UkrPoshtaBranchesInput');
+        const UkrPoshtaCityList = document.getElementById('UkrPoshtaCityList');
+        const UkrPoshtaBranchesList = document.getElementById('UkrPoshtaBranchesList');
         const addressContainer = document.getElementById('addressContainer');
-        const NovaPoshtaBranchesContainer = document.getElementById('NovaPoshtaBranchesContainer');
         const cityRefHidden = document.getElementById('cityRefHidden');
         const branchRefHidden = document.getElementById('branchRefHidden');
         const deliveryTypeInputs = document.querySelectorAll('input[name="delivery_type"]');
@@ -296,12 +361,19 @@
             MeestCityList.innerHTML = '';
             MeestBranchesList.innerHTML = '';
         });
+        UkrPoshtaRegionSelect.addEventListener('change', function () {
+            UkrPoshtaCityInput.value = '';
+            UkrPoshtaBranchesInput.value = '';
+            UkrPoshtaCityList.innerHTML = '';
+            UkrPoshtaBranchesList.innerHTML = '';
+        })
 
         function updateFormVisibility() {
             const selectedDeliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
             const inputCategoryOfWarehouse = document.getElementById('categoryOfWarehouse');
             const novaPoshtaContainer = document.getElementById('NovaPoshtaContainer');
             const meestContainer = document.getElementById('MeestContainer');
+            const ukrPoshtaContainer = document.getElementById('UkrPoshtaContainer');
 
             const poshtaAndDelivery = selectedDeliveryType.split("_");
             let poshta = poshtaAndDelivery[0];
@@ -319,6 +391,7 @@
             if (poshta === 'NovaPoshta') {
                 meestContainer.classList.add('hidden');
                 novaPoshtaContainer.classList.remove('hidden');
+                ukrPoshtaContainer.classList.add('hidden');
                 if (delivery === 'branch') {
                     NovaPoshtaBranchesContainer.style.display = 'block';
                     addressContainer.style.display = 'none';
@@ -464,10 +537,11 @@
                         .catch(error => console.error('Error:', error));
                 }
             } else if (poshta === 'Meest') {
-                const cityId = document.getElementById('cityId');
-                const branchID = document.getElementById('branchID');
+                const cityId = document.getElementById('meestCityIdHidden');
+                const branchID = document.getElementById('meestBranchIDHidden');
                 novaPoshtaContainer.classList.add('hidden');
                 meestContainer.classList.remove('hidden');
+                ukrPoshtaContainer.classList.add('hidden');
 
                 if (delivery === 'branch') {
                     MeestBranchesContainer.style.display = 'block';
@@ -607,6 +681,130 @@
                             });
                             if (MeestBranchesList.children.length > 0) {
                                 MeestBranchesList.classList.remove('hidden');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+            } else if (poshta === 'UkrPoshta') {
+                const cityId = document.getElementById('ukrPoshtaCityIdHidden');
+                const branchID = document.getElementById('ukrPoshtaBranchIDHidden');
+                novaPoshtaContainer.classList.add('hidden');
+                meestContainer.classList.add('hidden');
+                ukrPoshtaContainer.classList.remove('hidden');
+
+                if (delivery === 'exspresBranch' || delivery === 'branch') {
+                    UkrPoshtaBranchesContainer.style.display = 'block';
+                    addressContainer.style.display = 'none';
+                    document.querySelector('#MeestBranchesContainer label').textContent = 'Відділення УкрПошта';
+                    UkrPoshtaCityInput.placeholder = 'Введіть назву відділення';
+                } else if (delivery === 'exspresCourier' || delivery === 'courier') {
+                    UkrPoshtaBranchesContainer.style.display = 'none';
+                    addressContainer.style.display = 'block';
+                }
+
+                UkrPoshtaCityInput.addEventListener('input', function() {
+                    const regionId = UkrPoshtaRegionSelect.value;
+                    const searchText = this.value.trim().toLowerCase();
+                    if (regionId && searchText.length > 0) {
+                        fetchCities(regionId, searchText);
+                    } else {
+                        UkrPoshtaCityList.innerHTML = '';
+                        UkrPoshtaCityList.classList.add('hidden');
+                    }
+                });
+
+                UkrPoshtaCityInput.addEventListener('focus', function() {
+                    const regionId = UkrPoshtaRegionSelect.value;
+                    if (regionId && UkrPoshtaCityInput.value.trim().length === 0) {
+                        fetchCities(regionId, '');
+                    } else if (UkrPoshtaCityInput.children.length > 0) {
+                        UkrPoshtaCityList.classList.remove('hidden');
+                    }
+                });
+
+                UkrPoshtaBranchesInput.addEventListener('input', function() {
+                    const searchText = this.value.trim().toLowerCase();
+                    const cityIdValue = cityId.value;
+                    if (cityIdValue && searchText.length > 1) {
+                        fetchBranches(cityId, searchText);
+                    } else {
+                        UkrPoshtaBranchesList.innerHTML = '';
+                        UkrPoshtaBranchesList.classList.add('hidden');
+                    }
+                });
+
+                UkrPoshtaBranchesInput.addEventListener('focus', function() {
+                    const cityIdValue = cityId.value;
+                    if (UkrPoshtaBranchesInput.value.trim().length === 0) {
+                        fetchBranches(cityIdValue, '');
+                    } else if (UkrPoshtaBranchesList.children.length > 0) {
+                        UkrPoshtaBranchesList.classList.remove('hidden');
+                    }
+                });
+
+                function fetchCities(regionId, searchText) {
+                    fetch(`/ukr/cities?regionId=${regionId}`, {
+                        method: 'GET',
+                        headers: {
+                            'accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            UkrPoshtaCityList.innerHTML = '';
+                            data.forEach(city => {
+                                if (city.CITY_UA.toLowerCase().startsWith(searchText)) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = city.CITY_UA;
+                                    listItem.setAttribute('data-value', city.CITY_ID);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        UkrPoshtaCityInput.value = city.CITY_UA;
+                                        cityId.value = city.CITY_ID;
+                                        UkrPoshtaCityList.classList.add('hidden');
+                                        UkrPoshtaBranchesInput.value = '';
+                                        UkrPoshtaBranchesList.innerHTML = '';
+                                    });
+                                    UkrPoshtaCityList.appendChild(listItem);
+                                }
+                            });
+                            if (UkrPoshtaCityList.children.length > 0) {
+                                UkrPoshtaCityList.classList.remove('hidden');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+
+                function fetchBranches(cityId, searchText) {
+                    console.log(cityId)
+                    fetch(`/ukr/branches?cityId=${cityId}`, {
+                        method: 'GET',
+                        headers: {
+                            'accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            UkrPoshtaBranchesList.innerHTML = '';
+                            data.forEach(branch => {
+                                const listItem = document.createElement('li');
+                                if (branch.POSTOFFICE_UA.toLowerCase().includes(searchText) || branch.STREET_UA_VPZ.toLowerCase().includes(searchText)) {
+                                    listItem.textContent = branch.POSTOFFICE_UA + ' ' + branch.STREET_UA_VPZ;
+                                    listItem.setAttribute('data-value', branch.POSTOFFICE_ID);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        UkrPoshtaBranchesInput.value = branch.POSTOFFICE_UA + ' ' + branch.STREET_UA_VPZ;
+                                        branchID.value = branch.POSTOFFICE_ID;
+                                        UkrPoshtaBranchesList.classList.add('hidden');
+                                    });
+                                    UkrPoshtaBranchesList.appendChild(listItem);
+                                }
+                            });
+                            if (UkrPoshtaBranchesList.children.length > 0) {
+                                UkrPoshtaBranchesList.classList.remove('hidden');
                             }
                         })
                         .catch(error => console.error('Error:', error));
