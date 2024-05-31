@@ -21,7 +21,7 @@ Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCit
 Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
 
 /* =================================== */
-/*                 Meest               */
+/*                Meest                */
 /* =================================== */
 Route::post('/meest/branches', [MeestController::class, 'getBranches']);
 Route::post('/meest/cities', [MeestController::class, 'getCities']);
