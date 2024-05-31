@@ -222,7 +222,6 @@ class OrderController extends Controller
 
     public function updateThird(OrderEditThirdRequest $request, Order $order)
     {
-//        dd($request->all());
         $order->update($request->validated());
 
         $delivery = Delivery::where('order_id', $order->id)->first();
@@ -293,8 +292,16 @@ class OrderController extends Controller
     {
         $paymentMethods = PaymentMethod::all();
         $novaPoshtaService = new NovaPoshtaService();
-        $regions = $novaPoshtaService->getRegions();
-        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'regions'));
+        $novaPoshtaRegions = $novaPoshtaService->getRegions();
+
+        $meestService = new MeestService();
+        $meestRegions = $meestService->getRegions();
+
+        $ukrPoshtaService = new UkrPoshtaService();
+        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+
+        $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
+        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'deliveryNameAndType'));
     }
 
     public function smallUpdate(OrderSmallRequest $request ,Order $order)
@@ -302,14 +309,42 @@ class OrderController extends Controller
         $order->update($request->validated());
 
         $delivery = Delivery::where('order_id', $order->id)->first();
-        $delivery->update([
-            'region' => $request->validated('region'),
-            'city' => $request->validated('city'),
-            'cityRef' => $request->validated('cityRefHidden'),
-            'branch' => $request->validated('branch'),
-            'branchRef' => $request->validated('branchRefHidden'),
-            'address' => $request->validated('address'),
-        ]);
+        $deliveryNameAndType = $request->validated('delivery_type');
+        list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+        if ($deliveryName == 'NovaPoshta') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('NovaPoshtaRegion'),
+                'city' => $request->validated('NovaPoshtaCityInput'),
+                'cityRef' => $request->validated('cityRefHidden'),
+                'branch' => $request->validated('NovaPoshtaBranchesInput'),
+                'branchRef' => $request->validated('branchRefHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        } elseif ($deliveryName == 'Meest') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('MeestRegion'),
+                'city' => $request->validated('MeestCityInput'),
+                'cityRef' => $request->validated('meestCityIDHidden'),
+                'branch' => $request->validated('MeestBranchesInpute'),
+                'branchRef' => $request->validated('meestBranchIDHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        } else if ($deliveryName == 'UkrPoshta') {
+            $delivery->update([
+                'delivery_name' => $deliveryName,
+                'delivery_method' => $deliveryType,
+                'region' => $request->validated('UkrPoshtaRegion'),
+                'city' => $request->validated('UkrPoshtaCityInput'),
+                'cityRef' => $request->validated('ukrPoshtaCityIdHidden'),
+                'branch' => $request->validated('UkrPoshtaBranchesInput'),
+                'branchRef' => $request->validated('ukrPoshtaBranchIDHidden'),
+                'address' => $request->validated('address'),
+            ]);
+        }
 
         return redirect()->route('operator.order.index');
     }
