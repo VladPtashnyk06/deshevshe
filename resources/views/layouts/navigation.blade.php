@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('site.product.index') }}">
+                    <a href="{{ route('site.index') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
@@ -26,7 +26,7 @@
                             {{ __('Замовлення') }}
                         </x-nav-link>
                     @else
-                        <x-nav-link :href="route('site.product.catalog.index')" :active="request()->routeIs('site.product.catalog.index')">
+                        <x-nav-link :href="route('site.catalog.index')" :active="request()->routeIs('site.catalog.index')">
                             {{ __('Продукти') }}
                         </x-nav-link>
                         @if(Auth::user() && Auth::user()->role == 'operator')

@@ -35,16 +35,16 @@ Route::get('/ukr/branches', [\App\Http\Controllers\UkrPoshtaController::class, '
 /* =================================== */
 /*                 Site                */
 /* =================================== */
-Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
-    Route::get('/', 'index')->name('site.product.index');
+Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(function () {
+    Route::get('/', 'index')->name('site.index');
+    Route::get('/catalog', 'catalog')->name('site.catalog.index');
+    Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
 });
 Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
-        Route::get('/catalog', 'catalog')->name('site.product.catalog.index');
-        Route::get('/catalog/show/{category}', 'show')->name('site.product.show');
         Route::get('/show-one-product/{product}', 'showOneProduct')->name('site.product.showOneProduct');
         Route::get('/viewed-products', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
         Route::get('/rec-products', 'recProducts')->name('site.product.recProducts');

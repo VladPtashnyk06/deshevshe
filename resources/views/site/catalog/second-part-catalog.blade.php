@@ -1,6 +1,6 @@
 <li class="border-b border-gray-200 py-4 relative group category-item">
     <div class="flex justify-between items-center">
-        <a href="{{ route('site.product.show', $category->id) }}" class="hover:bg-gray-300 p-4 w-full"><span
+        <a href="{{ route('site.catalog.show', $category->id) }}" class="hover:bg-gray-300 p-4 w-full"><span
                 class="text-lg font-semibold">{{ $category->title }}</span></a>
         @if($category->children->isNotEmpty())
             <svg class="w-6 h-6 text-gray-500 cursor-pointer transition-transform transform group-hover:rotate-180"
