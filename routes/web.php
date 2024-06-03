@@ -48,6 +48,7 @@ Route::group(['prefix' => 'product'], function () {
         Route::get('/show-one-product/{product}', 'showOneProduct')->name('site.product.showOneProduct');
         Route::get('/viewed-products', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
         Route::get('/rec-products', 'recProducts')->name('site.product.recProducts');
+        Route::get('/new-products', 'newProducts')->name('site.product.newProducts');
         Route::get('/get-sizes/{product_id}', 'getSizes')->name('site.product.getSizes');
         Route::get('/get-product/{product_id}', 'getProduct')->name('site.product.getProduct');
     });

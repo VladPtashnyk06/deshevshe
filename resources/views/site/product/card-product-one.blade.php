@@ -31,7 +31,7 @@
                                 @else
                                     {{ $product->status->title }}
                                 @endif
-                                <a href="{{ route('site.product.show', $product->category_id) }}" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md text-center transition duration-300 ease-in-out">Назад</a>
+                                <a href="{{ route('site.catalog.show', $product->category_id) }}" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md text-center transition duration-300 ease-in-out">Назад</a>
                             </div>
                         </div>
                     @if($product->comments->count() > 0)

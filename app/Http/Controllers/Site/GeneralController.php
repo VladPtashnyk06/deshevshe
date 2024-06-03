@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\RecProduct;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -41,9 +42,15 @@ class GeneralController extends Controller
             $viewedProducts = [];
         }
 
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
+        $newProducts = Product::where('created_at', '>=', $thirtyDaysAgo)
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+
         $blogs = Blog::all()->sortByDesc('created_at');
 
-        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs'));
+        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts'));
     }
     public function catalog(Request $request)
     {

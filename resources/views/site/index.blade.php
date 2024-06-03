@@ -4,6 +4,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 @include('site.product.include-views.rec-products')
                 @include('site.product.include-views.viewed-products')
+                @include('site.product.include-views.new-products')
                 @include('site.product.include-views.blogs')
             </div>
         </div>

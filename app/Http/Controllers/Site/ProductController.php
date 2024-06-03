@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\RecProduct;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -116,4 +117,13 @@ class ProductController extends Controller
         return response()->json(['productVariants' => $uniqueVariants]);
     }
 
+    public function newProducts()
+    {
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
+        $newProducts = Product::where('created_at', '>=', $thirtyDaysAgo)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('site.product.new-products', compact('newProducts'));
+    }
 }
