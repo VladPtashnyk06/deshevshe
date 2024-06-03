@@ -88,6 +88,30 @@ class OrderController extends Controller
             'operator_id' => $request->operator_id,
         ]);
 
+        if ($order->orderStatus->title == 'Пакують') {
+            foreach ($order->orderDetails()->get() as $orderDetail) {
+                $product = Product::find($orderDetail->product_id);
+                foreach ($product->productVariants as $productVariant) {
+                    if ($productVariant->color->title == $orderDetail->color && $productVariant->size->title == $orderDetail->size) {
+                        $productVariant->update([
+                            'quantity' => $productVariant->quantity - $orderDetail->quantity_product
+                        ]);
+                    }
+                }
+            }
+        } elseif ($order->orderStatus->title == 'Не відповідає' || $order->orderStatus->title == 'Повернення' || $order->orderStatus->title == 'Скасоване клієнтом') {
+            foreach ($order->orderDetails()->get() as $orderDetail) {
+                $product = Product::find($orderDetail->product_id);
+                foreach ($product->productVariants as $productVariant) {
+                    if ($productVariant->color->title == $orderDetail->color && $productVariant->size->title == $orderDetail->size) {
+                        $productVariant->update([
+                            'quantity' => $productVariant->quantity + $orderDetail->quantity_product
+                        ]);
+                    }
+                }
+            }
+        }
+
         return response()->json(['message' => 'Order status and operator updated successfully'], 200);
     }
 
@@ -274,6 +298,30 @@ class OrderController extends Controller
     public function updateFourth(OrderEditFourthRequest $request, Order $order)
     {
         $order->update($request->validated());
+
+        if ($order->orderStatus->title == 'Пакують') {
+            foreach ($order->orderDetails()->get() as $orderDetail) {
+                $product = Product::find($orderDetail->product_id);
+                foreach ($product->productVariants as $productVariant) {
+                    if ($productVariant->color->title == $orderDetail->color && $productVariant->size->title == $orderDetail->size) {
+                        $productVariant->update([
+                            'quantity' => $productVariant->quantity - $orderDetail->quantity_product
+                        ]);
+                    }
+                }
+            }
+        } elseif ($order->orderStatus->title == 'Не відповідає' || $order->orderStatus->title == 'Повернення' || $order->orderStatus->title == 'Скасоване клієнтом') {
+            foreach ($order->orderDetails()->get() as $orderDetail) {
+                $product = Product::find($orderDetail->product_id);
+                foreach ($product->productVariants as $productVariant) {
+                    if ($productVariant->color->title == $orderDetail->color && $productVariant->size->title == $orderDetail->size) {
+                        $productVariant->update([
+                            'quantity' => $productVariant->quantity + $orderDetail->quantity_product
+                        ]);
+                    }
+                }
+            }
+        }
 
         return redirect()->route('operator.order.index');
     }
