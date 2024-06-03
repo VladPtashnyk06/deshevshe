@@ -70,6 +70,7 @@
                         <select name="role" id="role" class="w-full border rounded px-3 py-2">
                             <option value="user" @if($user->role == 'user' ) selected @endif>User</option>
                             <option value="admin" @if($user->role == 'admin' ) selected @endif>Admin</option>
+                            <option value="admin" @if($user->role == 'operator' ) selected @endif>Operator</option>
                         </select>
                     </div>
 

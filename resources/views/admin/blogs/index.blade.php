@@ -45,7 +45,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $blog->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $blog->description }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ Str::limit($blog->description, 80) }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $blog->count_views }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ count($blog->comments) }}</td>
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">

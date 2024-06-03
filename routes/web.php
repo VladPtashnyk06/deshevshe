@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MeestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,22 +14,45 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+/* =================================== */
+/*             NovaPoshta              */
+/* =================================== */
+Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCities'])->name('cities');
+Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
 
-Route::get('/', function () {
-    return view('welcome');
+/* =================================== */
+/*                Meest                */
+/* =================================== */
+Route::post('/meest/branches', [MeestController::class, 'getBranches']);
+Route::post('/meest/cities', [MeestController::class, 'getCities']);
+
+/* =================================== */
+/*             UkrPoshta               */
+/* =================================== */
+Route::get('/ukr/cities', [\App\Http\Controllers\UkrPoshtaController::class, 'getCities'])->name('ukr.cities');
+Route::get('/ukr/branches', [\App\Http\Controllers\UkrPoshtaController::class, 'getBranches'])->name('ukr.branches');
+
+/* =================================== */
+/*                 Site                */
+/* =================================== */
+Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
+    Route::get('/', 'index')->name('site.product.index');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
+    Route::post('/change-currency', 'changeCurrency')->name('change-currency');
+});
 Route::group(['prefix' => 'product'], function () {
     Route::controller(\App\Http\Controllers\Site\ProductController::class)->group(function () {
-        Route::get('/', 'index')->name('site.product.index');
-        Route::get('/show/{category}', 'show')->name('site.product.show');
-        Route::get('/showOneProduct/{product}', 'showOneProduct')->name('site.product.showOneProduct');
-        Route::get('/viewedProducts', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
-        Route::get('/recProducts', 'recProducts')->name('site.product.recProducts');
+        Route::get('/catalog', 'catalog')->name('site.product.catalog.index');
+        Route::get('/catalog/show/{category}', 'show')->name('site.product.show');
+        Route::get('/show-one-product/{product}', 'showOneProduct')->name('site.product.showOneProduct');
+        Route::get('/viewed-products', 'recentlyViewedProducts')->name('site.product.recentlyViewedProducts');
+        Route::get('/rec-products', 'recProducts')->name('site.product.recProducts');
+        Route::get('/get-sizes/{product_id}', 'getSizes')->name('site.product.getSizes');
+        Route::get('/get-product/{product_id}', 'getProduct')->name('site.product.getProduct');
+    });
+    Route::controller(\App\Http\Controllers\Site\ProductCommentController::class)->group(function () {
+        Route::post('/comment/store', 'store')->name('site.product.comment.store');
     });
 });
 Route::group(['prefix' => 'blog'], function () {
@@ -40,12 +64,54 @@ Route::group(['prefix' => 'blog'], function () {
        Route::post('/comment/create', 'commentStore')->name('site.blog.commentStore');
     });
 });
+Route::group(['prefix' => 'order'], function () {
+    Route::controller(\App\Http\Controllers\Site\OrderController::class)->group(function () {
+        Route::get('/all-my-orders', 'index')->name('site.order.index');
+        Route::get('/create', 'create')->name('site.order.create');
+        Route::post('/store', 'store')->name('site.order.store');
+        Route::get('/oneOrder/{order}', 'oneOrder')->name('site.order.oneOrder');
+        Route::get('/thank-you', 'thankYou')->name('site.order.thankYou');
+        Route::post('/update/one-order/{order}', 'updateOneOrder')->name('site.order.updateOneOrder');
+    });
+});
+Route::controller(\App\Http\Controllers\Site\CartController::class)->group(function () {
+    Route::get('/cart', 'cartList')->name('cart');
+    Route::post('/cart-add', 'addToCart')->name('cart.store');
+    Route::patch('/cart-update', 'updateCart')->name('cart.update');
+    Route::delete('/cart-remove', 'removeCart')->name('cart.remove');
+});
 
-//
-//
-//          ADMIN
-//
-//
+///* =================================== */
+///*             Operator                */
+///* =================================== */\
+Route::middleware('auth.operator')->group(function () {
+    Route::group(['prefix' => 'operator'], function () {
+        Route::group(['prefix' => 'orders'], function () {
+            Route::controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
+                Route::get('/', 'index')->name('operator.order.index');
+                Route::post('/update-order-status/{id}', 'updateStatusAndOperator')->name('operator.order.updateOrderStatus');
+                Route::get('/user-orders/{user}', 'showUserOrders')->name('operator.order.showUserOrders');
+                Route::get('/edit-first/{order}', 'editFirst')->name('operator.order.editFirst');
+                Route::post('/edit-first/update/{order}', 'updateFirst')->name('operator.order.updateFirst');
+                Route::get('/edit-second/{order}', 'editSecond')->name('operator.order.editSecond');
+                Route::post('/edit-second/update/{order}', 'updateSecond')->name('operator.order.updateSecond');
+                Route::get('/edit-third/{order}', 'editThird')->name('operator.order.editThird');
+                Route::post('/edit-third/update/{order}', 'updateThird')->name('operator.order.updateThird');
+                Route::get('/edit-fourth/{order}', 'editFourth')->name('operator.order.editFourth');
+                Route::post('/edit-fourth/update/{order}', 'updateFourth')->name('operator.order.updateFourth');
+                Route::post('/update/{order}', 'update')->name('operator.order.update');
+                Route::get('/small-edit/{order}', 'smallEdit')->name('operator.order.small-edit');
+                Route::post('/small-edit/update/{order}', 'smallUpdate')->name('operator.order.smallUpdate');
+                Route::get('/add-additional-product/update', 'getProductsByCode')->name('operator.order.addAdditionalProduct');
+                Route::delete('/order-detail/delete/{order_detail}', 'orderDetailDestroy')->name('operator.order_detail.destroy');
+            });
+        });
+    });
+});
+
+///* =================================== */
+///*                 Admin                */
+///* =================================== */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -60,6 +126,14 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{user}', 'destroy')->name('user.destroy');
                 });
             });
+            Route::group(['prefix' => 'orders'], function () {
+                Route::controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
+                    Route::get('/', 'index')->name('order.index');
+                    Route::get('/edit/{order}', 'edit')->name('order.edit');
+                    Route::post('/update/{order}', 'update')->name('order.update');
+                    Route::delete('/delete/{order}', 'destroy')->name('order.destroy');
+                });
+            });
             Route::group(['prefix' => 'product'], function () {
                 Route::controller(\App\Http\Controllers\Admin\ProductController::class)->group(function () {
                     Route::get('/', 'index')->name('product.index');
@@ -67,9 +141,9 @@ Route::middleware('auth')->group(function () {
                     Route::post('/store', 'store')->name('product.store');
                     Route::get('/edit/{product}', 'edit')->name('product.edit');
                     Route::post('/update/{product}', 'update')->name('product.update');
-                    Route::delete('/deleteMedia/{media}', 'destroyMedia')->name('product.destroyMedia');
+                    Route::delete('/delete-media/{media}', 'destroyMedia')->name('product.destroyMedia');
                     Route::delete('/delete/{product}', 'destroy')->name('product.destroy');
-                    Route::delete('/deleteProductVariant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
+                    Route::delete('/delete-product-variant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
                 });
                 Route::group(['prefix' => 'color'], function () {
                     Route::controller(\App\Http\Controllers\Admin\ColorController::class)->group(function () {
@@ -145,10 +219,10 @@ Route::middleware('auth')->group(function () {
                     Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(function () {
                         Route::get('/', 'index')->name('category.index');
                         Route::get('/create', 'create')->name('category.create');
-                        Route::get('/createSubCategory/{category}', 'createSubCategory')->name('category.createSubCategory');
+                        Route::get('/create-sub-category/{category}', 'createSubCategory')->name('category.createSubCategory');
                         Route::post('/store', 'store')->name('category.store');
                         Route::get('/edit/{category}', 'edit')->name('category.edit');
-                        Route::post('/update/{category}', 'update')->name('category.update');
+                        Route::put('/update/{category}', 'update')->name('category.update');
                         Route::delete('/delete/{category}', 'destroy')->name('category.destroy');
                     });
                 });
@@ -158,15 +232,21 @@ Route::middleware('auth')->group(function () {
                         Route::get('/create', 'create')->name('blog.create');
                         Route::post('/store', 'store')->name('blog.store');
                         Route::get('/edit/{blog}', 'edit')->name('blog.edit');
-                        Route::get('/showComments/{blog}', 'showComments')->name('blog.showComments');
+                        Route::get('/show-comments/{blog}', 'showComments')->name('blog.showComments');
                         Route::post('/update/{blog}', 'update')->name('blog.update');
                         Route::delete('/delete/{blog}', 'destroy')->name('blog.destroy');
                     });
                     Route::controller(\App\Http\Controllers\Admin\BlogCommentController::class)->group(function () {
-                        Route::get('/createAnswer/{blog_comment}', 'commentAnswerCreate')->name('blog.commentAnswerCreate');
-                        Route::post('/storeAnswer', 'commentAnswerStore')->name('blog.commentAnswerStore');
-                        Route::delete('/deleteComment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
+                        Route::get('/create-answer/{blog_comment}', 'commentAnswerCreate')->name('blog.commentAnswerCreate');
+                        Route::post('/store-answer', 'commentAnswerStore')->name('blog.commentAnswerStore');
+                        Route::delete('/delete-comment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
                     });
+                });
+                Route::controller(\App\Http\Controllers\Admin\ProductCommentController::class)->group(function () {
+                    Route::get('/comments/{product}', 'index')->name('product.comments');
+                    Route::get('/comments/create/{product_comment}', 'create')->name('product.comments.create');
+                    Route::post('/comments/store', 'store')->name('product.comment.store');
+                    Route::delete('/comment/delete/{product_comment}', 'destroy')->name('product.comment.delete');
                 });
             });
         });

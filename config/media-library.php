@@ -39,7 +39,7 @@ return [
     /*
      * When enabled, media collections will be serialised using the default
      * laravel model serialization behaviour.
-     * 
+     *
      * Keep this option disabled if using Media Library Pro components (https://medialibrary.pro)
      */
     'use_default_collection_serialization' => false,
@@ -115,13 +115,13 @@ return [
             '-m85', // set maximum quality to 85%
             '--force', // ensure that progressive generation is always done also if a little bigger
             '--strip-all', // this strips out all text information such as comments and EXIF data
-            '--all-progressive', // this will make sure the resulting image is a progressive one
+            '--all-progressive', // this will make sure the resulting images is a progressive one
         ],
         Spatie\ImageOptimizer\Optimizers\Pngquant::class => [
             '--force', // required parameter for this package
         ],
         Spatie\ImageOptimizer\Optimizers\Optipng::class => [
-            '-i0', // this will result in a non-interlaced, progressive scanned image
+            '-i0', // this will result in a non-interlaced, progressive scanned images
             '-o2', // this set the optimization level to two (multiple IDAT compression trials)
             '-quiet', // required parameter for this package
         ],
@@ -133,7 +133,7 @@ return [
             '-O3', // this produces the slowest but best results
         ],
         Spatie\ImageOptimizer\Optimizers\Cwebp::class => [
-            '-m 6', // for the slowest compression method in order to get the best compression.
+            '-m 6', // for the slowest compression method in orders to get the best compression.
             '-pass 10', // for maximizing the amount of analysis pass.
             '-mt', // multithreading for some speed improvements.
             '-q 90', //quality factor that brings the least noticeable changes.
@@ -151,7 +151,7 @@ return [
     ],
 
     /*
-     * These generators will be used to create an image of media files.
+     * These generators will be used to create an images of media files.
      */
     'image_generators' => [
         Spatie\MediaLibrary\Conversions\ImageGenerators\Image::class,
@@ -163,13 +163,13 @@ return [
     ],
 
     /*
-     * The path where to store temporary files while performing image conversions.
+     * The path where to store temporary files while performing images conversions.
      * If set to null, storage_path('media-library/temp') will be used.
      */
     'temporary_directory_path' => null,
 
     /*
-     * The engine that should perform the image conversions.
+     * The engine that should perform the images conversions.
      * Should be either `gd` or `imagick`.
      */
     'image_driver' => env('IMAGE_DRIVER', 'gd'),
@@ -193,7 +193,7 @@ return [
 
     /*
      * When using the addMediaFromUrl method you may want to replace the default downloader.
-     * This is particularly useful when the url of the image is behind a firewall and
+     * This is particularly useful when the url of the images is behind a firewall and
      * need to add additional flags, possibly using curl.
      */
     'media_downloader' => Spatie\MediaLibrary\Downloaders\DefaultDownloader::class,
@@ -223,14 +223,14 @@ return [
         'width_calculator' => Spatie\MediaLibrary\ResponsiveImages\WidthCalculator\FileSizeOptimizedWidthCalculator::class,
 
         /*
-         * By default rendering media to a responsive image will add some javascript and a tiny placeholder.
+         * By default rendering media to a responsive images will add some javascript and a tiny placeholder.
          * This ensures that the browser can already determine the correct layout.
          */
         'use_tiny_placeholders' => true,
 
         /*
-         * This class will generate the tiny placeholder used for progressive image loading. By default
-         * the media library will use a tiny blurred jpg image.
+         * This class will generate the tiny placeholder used for progressive images loading. By default
+         * the media library will use a tiny blurred jpg images.
          */
         'tiny_placeholder_generator' => Spatie\MediaLibrary\ResponsiveImages\TinyPlaceholderGenerator\Blurred::class,
     ],

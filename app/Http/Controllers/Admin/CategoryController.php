@@ -19,31 +19,8 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = Category::all();
-        $uniqueParentIds = $categories->pluck('parent_id')->unique()->filter();
-        $parentCategories = Category::whereIn('id', $uniqueParentIds)->get();
-        $uniqueLevels = $categories->pluck('level')->unique();
-
-        $queryParams = $request->only(['parent_category', 'level']);
-        $filteredParams = array_filter($queryParams);
-
-        $query = Category::query();
-
-        if (isset($filteredParams['parent_category'])) {
-            if ($filteredParams['parent_category'] == 'null') {
-                $query->whereNull('parent_id');
-            } else {
-                $query->where('parent_id', $filteredParams['parent_category']);
-            }
-        }
-
-        if (isset($filteredParams['level'])) {
-            $query->where('level', $filteredParams['level']);
-        }
-
-        $categories = $query->get();
-
-        return view('admin.categories.index', compact('categories', 'uniqueLevels', 'parentCategories'));
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -52,14 +29,15 @@ class CategoryController extends Controller
      */
     public function createSubCategory(Category $category)
     {
-        return view('admin.categories.createSubCategory', compact('category'));
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+        return view('admin.categories.createSubCategory', compact('category', 'categories'));
     }
 
     /**
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function create() {
-        $categories = Category::all();
+        $categories = Category::with('children')->whereNull('parent_id')->get();
         return view('admin.categories.create', compact('categories'));
     }
 
@@ -69,16 +47,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        if (!$request->validated('parent_id') == null) {
-            $parentCategory = Category::findOrFail($request->validated('parent_id'));
-            Category::create([
-                'title' => $request->validated('title'),
-                'parent_id' => $request->validated('parent_id'),
-                'level' => $parentCategory->level + 1,
-            ]);
-        } else {
-            Category::create($request->validated());
-        }
+        Category::create($request->validated());
         return redirect()->route('category.index');
     }
 
@@ -88,7 +57,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+        return view('admin.categories.edit', compact('category', 'categories'));
     }
 
     /**

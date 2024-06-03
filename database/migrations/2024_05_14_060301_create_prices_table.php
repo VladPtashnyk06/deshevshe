@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('product_id')->unique()->constrained('products');
             $table->integer('pair');
             $table->integer('rec_pair');
             $table->integer('package')->nullable();

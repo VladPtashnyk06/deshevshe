@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-12 bg-gray-100">
         <div class="mx-auto sm:px-6 lg:px-8 max-w-7xl">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-3xl font-semibold mb-8 text-center">Блоги</h1>
+                    <h1 class="text-3xl font-semibold mb-8 text-center">Блог</h1>
                     <div class="flex flex-col items-center mb-8">
                         @if($blog->getMedia('blog'.$blog->id)->count() > 0)
                             @foreach($blog->getMedia('blog'.$blog->id) as $media)
@@ -40,9 +40,11 @@
             <form action="{{ route('blog.commentAnswerStore') }}" method="post" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 @csrf
 
-                <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
-                <input type="hidden" name="blog_id" value="{{ $comment->blog_id }}">
-                <input type="hidden" name="level" value="{{ $comment->level + 1}}">
+                @if(isset($comment))
+                    <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                    <input type="hidden" name="blog_id" value="{{ $comment->blog_id }}">
+                    <input type="hidden" name="level" value="{{ $comment->level + 1}}">
+                @endif
 
                 <div class="w-full grid grid-cols-2 gap-4">
                     <div class="mb-4">
@@ -87,7 +89,7 @@
                 @csrf
 
                 <input type="hidden" name="parent_comment_id" value="">
-                <input type="hidden" name="blog_id" value="{{ $comment->blog_id }}">
+                <input type="hidden" name="blog_id" value="{{ $blog->id }}">
                 <input type="hidden" name="level" value="1">
 
                 <div class="w-full grid grid-cols-2 gap-4">
@@ -114,7 +116,7 @@
                     @error('comment')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                     @enderror
-                    <label for="comment" class="block mb-2 font-bold">Відповідь на коментар</label>
+                    <label for="comment" class="block mb-2 font-bold">Коментар</label>
                     <textarea name="comment" id="comment" rows="4" class="w-full border rounded px-3 py-2"></textarea>
                 </div>
 

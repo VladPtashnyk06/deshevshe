@@ -39,7 +39,7 @@ class ProductController extends Controller
         $codes = Product::select('code')->distinct()->pluck('code');
         $categories = Category::all();
         $producers = Producer::all();
-        $queryParams = $request->only(['code', 'category_id', 'producer_id', 'top_product', 'product_promotion', 'rec_product']);
+        $queryParams = $request->only(['code', 'category_id', 'producer_id', 'top_product', 'product_promotion']);
         $filteredParams = array_filter($queryParams);
         $query = Product::query();
 
@@ -68,14 +68,6 @@ class ProductController extends Controller
                 $query->where('product_promotion', $filteredParams['product_promotion']);
             } else {
                 $query->where('product_promotion', 0);
-            }
-        }
-
-        if (isset($filteredParams['rec_product'])) {
-            if ($filteredParams['rec_product'] == 1) {
-                $query->where('rec_product', $filteredParams['rec_product']);
-            } else {
-                $query->where('rec_product', 0);
             }
         }
 
@@ -143,8 +135,8 @@ class ProductController extends Controller
 
         if ($request->post('additional')) {
             foreach ($request->validated('additional') as $imageData) {
-                if (isset($imageData['image'])) {
-                    $newProduct->addMedia($imageData['image'])->withCustomProperties([
+                if (isset($imageData['images'])) {
+                    $newProduct->addMedia($imageData['images'])->withCustomProperties([
                         'alt' => $imageData['alt'],
                         'main_image' => 0
                     ])->toMediaCollection($newProduct->id);
@@ -184,27 +176,40 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
 
+        $product->price()->update([
+            'pair' => $request->validated('pair'),
+            'rec_pair' => $request->validated('rec_pair'),
+            'package' => $request->validated('package'),
+            'rec_package' => $request->validated('rec_package'),
+            'retail' => $request->validated('retail'),
+        ]);
+
         foreach ($request->validated('productVariant') as $productVariantId => $productVariant) {
-            ProductVariant::updateOrCreate(
-                [
-                    'id' => $productVariantId,
-                ],
-                [
-                    'color_id' => $productVariant['color'],
-                    'size_id' => $productVariant['size'],
-                    'quantity' => $productVariant['quantity'],
-                ]
-            );
+            if (!ProductVariant::where('product_id', $product->id)->where('color_id', $productVariant['color'])->where('size_id', $productVariant['size'])) {
+                ProductVariant::updateOrCreate(
+                    [
+                        'id' => $productVariantId,
+                    ],
+                    [
+                        'product_id' => $product->id,
+                        'color_id' => $productVariant['color'],
+                        'size_id' => $productVariant['size'],
+                        'quantity' => $productVariant['quantity'],
+                    ]
+                );
+            }
         }
 
         if (!empty($request->validated('newProductVariant'))) {
             foreach ($request->validated('newProductVariant') as $key => $newProductVariant) {
-                ProductVariant::create([
-                    'product_id' => $product->id,
-                    'color_id' => $newProductVariant['color'],
-                    'size_id' => $newProductVariant['size'],
-                    'quantity' => $newProductVariant['quantity'],
-                ]);
+                if (empty(ProductVariant::where('product_id', $product->id)->where('color_id', $newProductVariant['color'])->where('size_id', $newProductVariant['size'])->first())) {
+                    ProductVariant::create([
+                        'product_id' => $product->id,
+                        'color_id' => $newProductVariant['color'],
+                        'size_id' => $newProductVariant['size'],
+                        'quantity' => $newProductVariant['quantity'],
+                    ]);
+                }
             }
         }
 
@@ -235,8 +240,8 @@ class ProductController extends Controller
 
         if ($request->validated('additional')) {
             foreach ($request->validated('additional') as $imageData) {
-                if (isset($imageData['image'])) {
-                    $product->addMedia($imageData['image'])->withCustomProperties([
+                if (isset($imageData['images'])) {
+                    $product->addMedia($imageData['images'])->withCustomProperties([
                         'alt' => $imageData['alt'],
                         'main_image' => 0
                     ])->toMediaCollection($product->id);
@@ -244,8 +249,8 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->validated('deleted_main_image')) {
-            $idDeletedPoster = $request->validated('deleted_main_image');
+        if ($request->post('deleted_main_image')) {
+            $idDeletedPoster = $request->post('deleted_main_image');
             Media::find($idDeletedPoster)->delete();
         }
 

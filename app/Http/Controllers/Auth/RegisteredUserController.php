@@ -28,10 +28,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $phone = $request->input('phone');
+
+        if (!str_starts_with($phone, '+380')) {
+            if (str_starts_with($phone, '0')) {
+                $phone = '+38' . $phone;
+            } else {
+                $phone = '+380' . $phone;
+            }
+        }
+
+        $request->merge(['phone' => $phone]);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'unique:users'],
+            'phone' => ['required', 'regex:/^\+380(39|67|68|96|97|98|50|66|95|99|63|73|93)\d{7}$/', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -46,6 +58,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('product.index');
     }
 }

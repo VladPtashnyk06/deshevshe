@@ -31,4 +31,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'novaposhta' => [
+        'api_key' => env('NOVAPOSHTA_API_KEY'),
+    ],
+
+    'meest' => [
+        'api_url' => env('MEEST_API_URL'),
+        'username' => env('MEEST_USERNAME'),
+        'password' => env('MEEST_PASSWORD'),
+    ],
+
+    'ukrposhta' => [
+        'api_key' => env('UKRPOSHTA_API_KEY'),
+    ]
 ];

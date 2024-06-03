@@ -191,18 +191,6 @@
                     </div>
 
                     <div class="mb-4">
-                        @error('rec_product')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="rec_product" class="block mb-2 font-bold">Рекомендаційний продукт</label>
-                        <select name="rec_product" id="rec_product" class="w-full border rounded px-3 py-2">
-                            <option value="0"> Так / Ні </option>
-                            <option value="1"> Так </option>
-                            <option value="0"> Ні </option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
                         @error('status_id')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror

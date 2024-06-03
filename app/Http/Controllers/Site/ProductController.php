@@ -3,21 +3,18 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Category;
-use App\Models\Characteristic;
-use App\Models\Color;
-use App\Models\Material;
-use App\Models\Package;
-use App\Models\Price;
-use App\Models\Producer;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\RecProduct;
-use App\Models\Size;
-use App\Models\Status;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ProductController extends Controller
 {
@@ -25,60 +22,18 @@ class ProductController extends Controller
      * @param Request $request
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        $products = Product::all();
-        $categories = Category::where('level', '1')->get();
-        $queryParams = $request->only(['category_id']);
-        $filteredParams = array_filter($queryParams);
-        $query = Product::query();
-
-        if (isset($filteredParams['category_id'])) {
-            $query->where('category_id', $filteredParams['category_id']);
-        }
-
-        $products = $query->get();
-        return view('site.filter.index', compact('products', 'categories'));
-    }
-
-    /**
-     * @param Category $category
-     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
-     */
-    public function show(Category $category)
-    {
-        $products = Product::where('category_id', $category->id)->get();
-        return view('site.product.show', compact('products'));
-    }
-
-    public function showOneProduct(Product $product)
-    {
-        $recProduct = RecProduct::where('product_id', $product->id)->first();
-        $recProduct->update([
-            'count_views' => $recProduct->count_views + 1,
-        ]);
-        if (!empty(session()->get('recentlyViewedProducts'))) {
-            foreach (session()->get('recentlyViewedProducts') as $key => $recentlyViewedProduct) {
-                foreach ($recentlyViewedProduct as $item) {
-                    if ($item == $product->id) {
-                        return view('site.product.oneProduct', compact('product'));
-                    } else {
-                        $recentlyViewedProducts = session()->get('recentlyViewedProducts');
-                        $recentlyViewedProducts['product_id'][] = $product->id;
-                        session()->put('recentlyViewedProducts', $recentlyViewedProducts);
-                    }
-                }
+        $recommendProducts = RecProduct::all();
+        foreach ($recommendProducts as $recommendProduct) {
+            if ($recommendProduct->count_views > 0) {
+                $recProducts[] = $recommendProduct;
             }
-        } else {
-            $recentlyViewedProducts['product_id'][] = $product->id;
-            session()->put('recentlyViewedProducts', $recentlyViewedProducts);
+        }
+        if (empty($recProducts)) {
+            $recProducts = [];
         }
 
-        return view('site.product.oneProduct', compact('product'));
-    }
-
-    public function recentlyViewedProducts()
-    {
         $recentlyViewedProducts = session()->get('recentlyViewedProducts');
         if (!empty($recentlyViewedProducts)) {
             foreach ($recentlyViewedProducts as $product) {
@@ -90,15 +45,143 @@ class ProductController extends Controller
             $viewedProducts = [];
         }
 
-        return view('site.product.viewedProduct', compact('viewedProducts'));
+        $blogs = Blog::all()->sortByDesc('created_at');
+
+        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs'));
+    }
+    public function catalog(Request $request)
+    {
+        $queryParams = $request->only(['category_id']);
+        $filteredParams = array_filter($queryParams);
+        $query = Product::query();
+
+        if (isset($filteredParams['category_id'])) {
+            $query->where('category_id', $filteredParams['category_id']);
+        }
+
+        $categories = Category::with(['children' => function ($query) {
+            $query->orderBy('level', 'asc');
+        }])
+            ->whereNull('parent_id')
+            ->orderBy('level', 'asc')
+            ->get();
+        $products = $query->get();
+        return view('site.catalog.first-part-catalog', compact('products', 'categories'));
     }
 
+    /**
+     * @param Category $category
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function show(Category $category)
+    {
+        $products = Product::where('category_id', $category->id)->get();
+
+        if (!$products->count() > 0) {
+            $categories = Category::where('parent_id', $category->id)->get();
+        } else {
+            $categories = [];
+        }
+
+        return view('site.product.cards-products', compact('products', 'categories'));
+    }
+
+    /**
+     * @param Product $product
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function showOneProduct(Product $product)
+    {
+        $recProduct = RecProduct::where('product_id', $product->id)->first();
+        if ($recProduct) {
+            $recProduct->update(['count_views' => $recProduct->count_views + 1]);
+        }
+
+        if (!empty(session()->get('recentlyViewedProducts'))) {
+            $recentlyViewedProducts = session()->get('recentlyViewedProducts', []);
+            foreach ($recentlyViewedProducts as $recentlyViewedProduct) {
+                foreach ($recentlyViewedProduct as $item) {
+                    if ($item == $product->id) {
+                        break;
+                    } else {
+                        $recentlyViewedProducts['product_id'][] = $product->id;
+                        session()->put('recentlyViewedProducts', $recentlyViewedProducts);
+                    }
+                }
+            }
+        } else {
+            $recentlyViewedProducts['product_id'][] = $product->id;
+            session()->put('recentlyViewedProducts', $recentlyViewedProducts);
+        }
+
+        return view('site.product.card-product-one', compact('product'));
+    }
+
+
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function recentlyViewedProducts()
+    {
+        $recentlyViewedProducts = session()->get('recentlyViewedProducts');
+        $viewedProducts = [];
+        if (!empty($recentlyViewedProducts)) {
+            foreach ($recentlyViewedProducts as $product) {
+                foreach ($product as $idProduct) {
+                    $viewedProducts[] = Product::find($idProduct);
+                }
+            }
+        }
+
+        return view('site.product.viewed-products', compact('viewedProducts', ));
+    }
+
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function recProducts()
     {
         $recommendProducts = RecProduct::all();
+        $recProducts = [];
         foreach ($recommendProducts as $recommendProduct) {
-            $recProducts[] = $recommendProduct;
+            if ($recommendProduct->count_views > 0) {
+                $recProducts[] = $recommendProduct;
+            }
         }
-        return view('site.product.recProduct', compact('recProducts'));
+
+        return view('site.product.rec-products', compact('recProducts'));
     }
+
+    /**
+     * @param $productId
+     * @return JsonResponse
+     */
+    public function getSizes($productId)
+    {
+        $product = Product::with('productVariants.size')->find($productId);
+
+        $sizeUniqueVariants = $product->productVariants->unique('size_id');
+
+        return response()->json(['sizeVariants' => $sizeUniqueVariants]);
+    }
+
+    /**
+     * @param $productId
+     * @return JsonResponse
+     */
+    public function getProduct($productId)
+    {
+        $product = Product::with('productVariants.color')->findOrFail($productId);
+
+        $uniqueVariants = $product->productVariants->unique('color_id');
+
+        return response()->json(['productVariants' => $uniqueVariants]);
+    }
+
 }
