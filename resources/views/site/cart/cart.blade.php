@@ -127,7 +127,7 @@
                                 </p>
                             @endif
                             <div class="flex flex-col space-y-2">
-                                <a class="text-center bg-gray-300 py-2 rounded hover:bg-gray-400 transition duration-300" href="{{ route('site.product.catalog.index') }}">
+                                <a class="text-center bg-gray-300 py-2 rounded hover:bg-gray-400 transition duration-300" href="{{ route('site.catalog.index') }}">
                                     Продовжити покупки
                                 </a>
                                 @if(!$belowMinimumAmount)
@@ -135,6 +135,9 @@
                                     Підтвердити
                                      </a>
                                 @endif
+                                <a class="text-center bg-gray-300 py-2 rounded hover:bg-gray-400 transition duration-300" href="{{ route('login') }}">
+                                    Увійти в особистий кабінет
+                                </a>
                             </div>
                         </div>
                     </div>
