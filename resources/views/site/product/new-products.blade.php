@@ -3,7 +3,19 @@
         <div class="mx-auto sm:px-6 lg:px-8 max-w-7xl">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-3xl font-semibold mb-6 text-center"><a href="{{ route('site.product.recProducts') }}">Нові продукти (надходження)</a></h1>
+                    <h1 class="text-3xl font-semibold mb-6 text-center">Нові продукти (надходження)</h1>
+                    <div class="mb-6 text-right">
+                        <form method="GET" action="{{ route('site.product.newProducts') }}" class="inline-block">
+                            <label for="sort" class="mr-2">Сортувати за:</label>
+                            <select name="sort" id="sort" onchange="this.form.submit()" class="border rounded px-2 py-1">
+                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Новизна</option>
+                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Ціна: від низької до високої</option>
+                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Ціна: від високої до низької</option>
+                                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Назва: від А до Я</option>
+                                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Назва: від Я до А</option>
+                            </select>
+                        </form>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         @if(!empty($newProducts))
                             @foreach($newProducts as $newProduct)

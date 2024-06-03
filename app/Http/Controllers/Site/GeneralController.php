@@ -33,10 +33,8 @@ class GeneralController extends Controller
 
         $recentlyViewedProducts = session()->get('recentlyViewedProducts');
         if (!empty($recentlyViewedProducts)) {
-            foreach ($recentlyViewedProducts as $product) {
-                foreach ($product as $idProduct) {
-                    $viewedProducts[] = Product::find($idProduct);
-                }
+            foreach ($recentlyViewedProducts as $idProduct) {
+                $viewedProducts[] = Product::find($idProduct);
             }
         } else {
             $viewedProducts = [];
@@ -76,9 +74,36 @@ class GeneralController extends Controller
      * @param Category $category
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function show(Category $category)
+    public function show(Category $category, Request $request)
     {
-        $products = Product::where('category_id', $category->id)->get();
+        $sort = $request->get('sort', 'newest');
+
+        $query = Product::where('category_id', $category->id);
+
+        switch ($sort) {
+            case 'price_asc':
+                $query->join('prices', 'products.id', '=', 'prices.product_id')
+                    ->select('products.*', 'prices.pair as price')
+                    ->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->join('prices', 'products.id', '=', 'prices.product_id')
+                    ->select('products.*', 'prices.pair as price')
+                    ->orderBy('price', 'desc');
+                break;
+            case 'name_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->get();
 
         if (!$products->count() > 0) {
             $categories = Category::where('parent_id', $category->id)->get();
@@ -86,6 +111,6 @@ class GeneralController extends Controller
             $categories = [];
         }
 
-        return view('site.product.cards-products', compact('products', 'categories'));
+        return view('site.product.cards-products', compact('products', 'categories', 'category'));
     }
 }

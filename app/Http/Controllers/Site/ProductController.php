@@ -30,22 +30,19 @@ class ProductController extends Controller
         $recProduct = RecProduct::where('product_id', $product->id)->first();
         if ($recProduct) {
             $recProduct->update(['count_views' => $recProduct->count_views + 1]);
+        } else {
+            RecProduct::create(['product_id' => $product->id]);
         }
 
         if (!empty(session()->get('recentlyViewedProducts'))) {
             $recentlyViewedProducts = session()->get('recentlyViewedProducts', []);
-            foreach ($recentlyViewedProducts as $recentlyViewedProduct) {
-                foreach ($recentlyViewedProduct as $item) {
-                    if ($item == $product->id) {
-                        break;
-                    } else {
-                        $recentlyViewedProducts['product_id'][] = $product->id;
-                        session()->put('recentlyViewedProducts', $recentlyViewedProducts);
-                    }
-                }
+
+            if (!in_array($product->id, $recentlyViewedProducts)) {
+                $recentlyViewedProducts[] = $product->id;
+                session()->put('recentlyViewedProducts', $recentlyViewedProducts);
             }
         } else {
-            $recentlyViewedProducts['product_id'][] = $product->id;
+            $recentlyViewedProducts[] = $product->id;
             session()->put('recentlyViewedProducts', $recentlyViewedProducts);
         }
 
@@ -63,10 +60,8 @@ class ProductController extends Controller
         $recentlyViewedProducts = session()->get('recentlyViewedProducts');
         $viewedProducts = [];
         if (!empty($recentlyViewedProducts)) {
-            foreach ($recentlyViewedProducts as $product) {
-                foreach ($product as $idProduct) {
-                    $viewedProducts[] = Product::find($idProduct);
-                }
+            foreach ($recentlyViewedProducts as $idProduct) {
+                $viewedProducts[] = Product::find($idProduct);
             }
         }
 
@@ -78,10 +73,41 @@ class ProductController extends Controller
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function recProducts()
+    public function recProducts(Request $request)
     {
-        $recommendProducts = RecProduct::all();
+        $sort = $request->get('sort', 'newest');
+        $query = RecProduct::query();
+
+        switch ($sort) {
+            case 'price_asc':
+                $query->join('prices', 'rec_products.product_id', '=', 'prices.product_id')
+                    ->select('rec_products.*', 'prices.pair as price')
+                    ->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->join('prices', 'rec_products.product_id', '=', 'prices.product_id')
+                    ->select('rec_products.*', 'prices.pair as price')
+                    ->orderBy('price', 'desc');
+                break;
+            case 'name_asc':
+                $query->join('products', 'rec_products.product_id', '=', 'products.id')
+                    ->select('rec_products.*', 'products.title as title')
+                    ->orderBy('title', 'asc');
+                break;
+            case 'name_desc':
+                $query->join('products', 'rec_products.product_id', '=', 'products.id')
+                    ->select('rec_products.*', 'products.title as title')
+                    ->orderBy('title', 'desc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $recommendProducts = $query->get();
         $recProducts = [];
+
         foreach ($recommendProducts as $recommendProduct) {
             if ($recommendProduct->count_views > 0) {
                 $recProducts[] = $recommendProduct;
@@ -117,12 +143,36 @@ class ProductController extends Controller
         return response()->json(['productVariants' => $uniqueVariants]);
     }
 
-    public function newProducts()
+    public function newProducts(Request $request)
     {
+        $sort = $request->get('sort', 'newest');
         $thirtyDaysAgo = Carbon::now()->subDays(30);
-        $newProducts = Product::where('created_at', '>=', $thirtyDaysAgo)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Product::query();
+
+        switch ($sort) {
+            case 'price_asc':
+                $query->join('prices', 'products.id', '=', 'prices.product_id')
+                    ->select('products.*', 'prices.pair as price')
+                    ->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->join('prices', 'products.id', '=', 'prices.product_id')
+                    ->select('products.*', 'prices.pair as price')
+                    ->orderBy('price', 'desc');
+                break;
+            case 'name_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $newProducts = $query->where('products.created_at', '>=', $thirtyDaysAgo)->get();
 
         return view('site.product.new-products', compact('newProducts'));
     }

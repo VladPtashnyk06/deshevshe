@@ -82,7 +82,7 @@ class ProductController extends Controller
      */
     public function allNeeds($view, $product = '')
     {
-        $categories = Category::all();
+        $categories = Category::with('children')->whereNull('parent_id')->get();
         $colors = Color::all();
         $producers = Producer::all();
         $sizes = Size::all();

@@ -40,7 +40,7 @@
                         <select name="category_id" id="category_id" class="w-full border rounded px-3 py-2">
                             <option value="">Всі категорії</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->title }}</option>
+                                @include('admin.categories.options-category', ['category' => $category, 'prefix' => ''])
                             @endforeach
                         </select>
                     </div>
