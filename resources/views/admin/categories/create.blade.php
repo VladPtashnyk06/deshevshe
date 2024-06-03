@@ -7,11 +7,29 @@
                     @csrf
 
                     <div class="mb-4">
+                        <label for="parent_id" class="block mb-2 font-bold">Виберіть батьківську категорію</label>
+                        <select name="parent_id" id="parent_id" class="w-full border rounded px-3 py-2">
+                            <option value="">Без категорії</option>
+                            @foreach($categories as $category)
+                                @include('admin.categories.options-category', ['category' => $category, 'prefix' => ''])
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
                         @error('title')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле обов'язкове і унікальне") }}</span>
                         @enderror
                         <label for="title" class="block mb-2 font-bold">Категорія</label>
                         <input type="text" name="title" id="title" class="w-full border rounded px-3 py-2" value="{{ old('title') }}">
+                    </div>
+
+                    <div class="mb-4">
+                        @error('title')
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле обов'язкове і унікальне") }}</span>
+                        @enderror
+                        <label for="level" class="block mb-2 font-bold">Порядок сортування</label>
+                        <input type="text" name="level" id="level" class="w-full border rounded px-3 py-2" placeholder="За замовчуванням 1" value="{{ !empty(old('level')) ? old('level') : 1 }}">
                     </div>
 
                     <div class="text-center mb-4">

@@ -222,7 +222,7 @@ Route::middleware('auth')->group(function () {
                         Route::get('/create-sub-category/{category}', 'createSubCategory')->name('category.createSubCategory');
                         Route::post('/store', 'store')->name('category.store');
                         Route::get('/edit/{category}', 'edit')->name('category.edit');
-                        Route::post('/update/{category}', 'update')->name('category.update');
+                        Route::put('/update/{category}', 'update')->name('category.update');
                         Route::delete('/delete/{category}', 'destroy')->name('category.destroy');
                     });
                 });

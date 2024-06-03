@@ -1,6 +1,6 @@
 <li class="border-b border-gray-200 py-4 relative group category-item">
     <div class="flex justify-between items-center">
-        <a href="{{ route('site.product.show', $category->id) }}"><span
+        <a href="{{ route('site.product.show', $category->id) }}" class="hover:bg-gray-300 p-4 w-full"><span
                 class="text-lg font-semibold">{{ $category->title }}</span></a>
         @if($category->children->isNotEmpty())
             <svg class="w-6 h-6 text-gray-500 cursor-pointer transition-transform transform group-hover:rotate-180"
@@ -11,7 +11,7 @@
             </svg>
         @endif
     </div>
-    <ul class="pl-6 mt-4 ml-2 border-l border-gray-200 hidden sub-category-list">
+    <ul class="pl-6 ml-2 border-l border-gray-200 hidden sub-category-list bg-white">
         @foreach($category->children as $child)
             @include('site.catalog.second-part-catalog', ['category' => $child])
         @endforeach

@@ -51,8 +51,6 @@ class ProductController extends Controller
     }
     public function catalog(Request $request)
     {
-        $products = Product::all();
-        $categories = Category::where('level', '1')->get();
         $queryParams = $request->only(['category_id']);
         $filteredParams = array_filter($queryParams);
         $query = Product::query();
@@ -61,6 +59,12 @@ class ProductController extends Controller
             $query->where('category_id', $filteredParams['category_id']);
         }
 
+        $categories = Category::with(['children' => function ($query) {
+            $query->orderBy('level', 'asc');
+        }])
+            ->whereNull('parent_id')
+            ->orderBy('level', 'asc')
+            ->get();
         $products = $query->get();
         return view('site.catalog.first-part-catalog', compact('products', 'categories'));
     }
