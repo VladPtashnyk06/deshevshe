@@ -6,6 +6,7 @@
                 @include('site.product.include-views.viewed-products')
                 @include('site.product.include-views.new-products')
                 @include('site.product.include-views.blogs')
+                @include('site.comments.block-comments')
             </div>
         </div>
     </div>
@@ -73,6 +74,37 @@
             }
 
             updateHeartIcon();
+        });
+
+        const openPopupLinks = document.querySelectorAll('.open-popup');
+        const popup = document.getElementById('comment-popup');
+        const popupContent = document.getElementById('popup-comment-content');
+        const popupName = document.getElementById('popup-comment-name');
+        const popupDate = document.getElementById('popup-comment-date');
+        const closePopupButton = document.querySelector('.close-popup');
+
+        openPopupLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const comment = link.getAttribute('data-comment');
+                const name = link.getAttribute('data-name');
+                const date = link.getAttribute('data-date');
+
+                popupContent.textContent = comment;
+                popupName.textContent = name;
+                popupDate.textContent = date;
+                popup.classList.remove('hidden');
+            });
+        });
+
+        closePopupButton.addEventListener('click', () => {
+            popup.classList.add('hidden');
+        });
+
+        popup.addEventListener('click', (event) => {
+            if (event.target === popup) {
+                popup.classList.add('hidden');
+            }
         });
     });
 </script>

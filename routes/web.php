@@ -85,6 +85,9 @@ Route::controller(\App\Http\Controllers\Site\CartController::class)->group(funct
     Route::patch('/cart-update', 'updateCart')->name('cart.update');
     Route::delete('/cart-remove', 'removeCart')->name('cart.remove');
 });
+Route::controller(\App\Http\Controllers\Site\CommentController::class)->group(function () {
+   Route::get('/all-comments', 'index')->name('site.comment.index');
+});
 
 ///* =================================== */
 ///*             Operator                */

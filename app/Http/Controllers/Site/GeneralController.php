@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\RecProduct;
 use Carbon\Carbon;
@@ -50,7 +51,9 @@ class GeneralController extends Controller
 
         $likedProducts = session()->get('likedProducts', []);
 
-        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts'));
+        $comments = Comment::orderByDesc('created_at')->take(4)->get();
+
+        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts', 'comments'));
     }
     public function catalog(Request $request)
     {
