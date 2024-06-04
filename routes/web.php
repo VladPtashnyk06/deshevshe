@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MeestController;
@@ -251,6 +252,16 @@ Route::middleware('auth')->group(function () {
                     Route::get('/comments/create/{product_comment}', 'create')->name('product.comments.create');
                     Route::post('/comments/store', 'store')->name('product.comment.store');
                     Route::delete('/comment/delete/{product_comment}', 'destroy')->name('product.comment.delete');
+                });
+            });
+            Route::controller(CommentController::class)->group(function () {
+                Route::prefix('comments')->group(function () {
+                    Route::get('/', 'index')->name('comment.index');
+                    Route::get('/create', 'create')->name('comment.create');
+                    Route::post('/store', 'store')->name('comment.store');
+                    Route::get('/edit/{comment}', 'edit')->name('comment.edit');
+                    Route::post('/update/{comment}', 'update')->name('comment.update');
+                    Route::delete('/delete/{comment}', 'destroy')->name('comment.destroy');
                 });
             });
         });

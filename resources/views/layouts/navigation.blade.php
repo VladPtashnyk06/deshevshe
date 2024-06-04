@@ -25,6 +25,9 @@
                         <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
                             {{ __('Замовлення') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('comment.index')" :active="request()->routeIs('comment.index')">
+                            {{ __('Коментар до сайту') }}
+                        </x-nav-link>
                     @else
                         <x-nav-link :href="route('site.catalog.index')" :active="request()->routeIs('site.catalog.index')">
                             {{ __('Продукти') }}
