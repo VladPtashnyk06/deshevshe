@@ -51,6 +51,9 @@ Route::group(['prefix' => 'product'], function () {
         Route::get('/new-products', 'newProducts')->name('site.product.newProducts');
         Route::get('/get-sizes/{product_id}', 'getSizes')->name('site.product.getSizes');
         Route::get('/get-product/{product_id}', 'getProduct')->name('site.product.getProduct');
+        Route::get('/likedProduct/{product}', 'likedProduct')->name('site.product.likedProduct');
+        Route::get('/unlinkedProduct/{product}', 'unlinkedProduct')->name('site.product.unlinkedProduct');
+        Route::get('/likedProducts', 'likedProducts')->name('site.product.likedProducts');
     });
     Route::controller(\App\Http\Controllers\Site\ProductCommentController::class)->group(function () {
         Route::post('/comment/store', 'store')->name('site.product.comment.store');

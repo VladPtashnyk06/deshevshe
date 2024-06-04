@@ -29,6 +29,9 @@
                         <x-nav-link :href="route('site.catalog.index')" :active="request()->routeIs('site.catalog.index')">
                             {{ __('Продукти') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('site.product.likedProducts')" :active="request()->routeIs('site.product.likedProducts')">
+                            {{ __('Вподобані продукти') }}
+                        </x-nav-link>
                         @if(Auth::user() && Auth::user()->role == 'operator')
                             <x-nav-link :href="route('operator.order.index')" :active="request()->routeIs('operator.order.index')">
                                 {{ __('Замовлення') }}

@@ -48,7 +48,9 @@ class GeneralController extends Controller
 
         $blogs = Blog::all()->sortByDesc('created_at');
 
-        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts'));
+        $likedProducts = session()->get('likedProducts', []);
+
+        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts'));
     }
     public function catalog(Request $request)
     {

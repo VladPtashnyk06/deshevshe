@@ -46,7 +46,13 @@ class ProductController extends Controller
             session()->put('recentlyViewedProducts', $recentlyViewedProducts);
         }
 
-        return view('site.product.card-product-one', compact('product'));
+        $likedProduct = false;
+        $likedProducts = session()->get('likedProducts', []);
+        if (in_array($product->id, $likedProducts)) {
+            $likedProduct = true;
+        }
+
+        return view('site.product.card-product-one', compact('product', 'likedProduct'));
     }
 
 
@@ -65,7 +71,9 @@ class ProductController extends Controller
             }
         }
 
-        return view('site.product.viewed-products', compact('viewedProducts', ));
+        $likedProducts = session()->get('likedProducts', []);
+
+        return view('site.product.viewed-products', compact('viewedProducts', 'likedProducts'));
     }
 
     /**
@@ -114,7 +122,9 @@ class ProductController extends Controller
             }
         }
 
-        return view('site.product.rec-products', compact('recProducts'));
+        $likedProducts = session()->get('likedProducts', []);
+
+        return view('site.product.rec-products', compact('recProducts', 'likedProducts'));
     }
 
     /**
@@ -173,7 +183,41 @@ class ProductController extends Controller
         }
 
         $newProducts = $query->where('products.created_at', '>=', $thirtyDaysAgo)->get();
+        $likedProducts = session()->get('likedProducts', []);
 
-        return view('site.product.new-products', compact('newProducts'));
+        return view('site.product.new-products', compact('newProducts', 'likedProducts'));
+    }
+
+    public function likedProduct(Product $product)
+    {
+        $likedProducts = session()->get('likedProducts', []);
+        if (!in_array($product->id, $likedProducts)) {
+            $likedProducts[] = $product->id;
+            session()->put('likedProducts', $likedProducts);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function unlinkedProduct(Product $product)
+    {
+        $likedProducts = session()->get('likedProducts', []);
+        if (($key = array_search($product->id, $likedProducts)) !== false) {
+            unset($likedProducts[$key]);
+        }
+        session()->put('likedProducts', $likedProducts);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function likedProducts()
+    {
+        $likedProducts = session()->get('likedProducts', []);
+        $products = [];
+        foreach ($likedProducts as $productId) {
+            $product = Product::find($productId);
+            $products[] = $product;
+        }
+        return view('site.product.liked-products', compact('products'));
     }
 }
