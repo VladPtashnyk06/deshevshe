@@ -116,6 +116,9 @@
             function removeProductFromLiked() {
                 fetch(`/product/unlinkedProduct/${productId}`)
                     .then(response => response.json())
+                    .then(data => {
+                        location.reload();
+                    })
                     .catch(error => {
                         console.error('Error fetching product:', error);
                     });
