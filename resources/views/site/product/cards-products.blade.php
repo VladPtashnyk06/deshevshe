@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-12 bg-gray-100">
-        <div class="mx-auto sm:px-6 lg:px-8 max-w-7xl">
+        <div class="mx-auto sm:px-6 lg:px-8" style="max-width: 100rem">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h1 class="text-3xl font-semibold mb-6 text-center">Продукти</h1>
@@ -18,59 +18,123 @@
                         </form>
                     </div>
 
-                    @if(!empty($categories))
+                    @if(!empty($categories) && $categories->isNotEmpty())
+                        @dump($categories)
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             @foreach($categories as $category)
                                 @include('site.catalog.second-part-catalog')
                             @endforeach
                         </div>
                     @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            @foreach($products as $product)
-                                <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center">
-                                    @foreach($product->getMedia($product->id) as $media)
-                                        @if($media->getCustomProperty('main_image') === 1)
-                                            <a href="{{ route('site.product.showOneProduct', $product->id) }}">
-                                                <img src="{{ $media->getUrl() }}"
-                                                     alt="{{ $media->getCustomProperty('alt') }}"
-                                                     class="h-40 w-auto rounded-md object-cover mb-4">
-                                            </a>
-                                        @endif
-                                    @endforeach
-                                    <div class="text-center">
-                                        <a href="{{ route('site.product.showOneProduct', $product->id) }}">
-                                            <p class="text-xl font-semibold mb-2">{{ $product->title }}</p>
-                                        </a>
-                                        @if($product->package)
-                                            <p class="text-lg mb-2">В упаковці: {{ $product->package->title }}</p>
-                                        @endif
-                                        <p class="text-lg mb-2">Колір, розмір, доступно:</p>
-                                        @foreach($product->productVariants()->get() as $productVariant)
-                                            <ul class="text-lg mb-2">
-                                                <li>{{ $productVariant->color->title }}
-                                                    - {{ $productVariant->size->title }}
-                                                    - {{ $productVariant->quantity }}</li>
-                                            </ul>
-                                        @endforeach
-
-                                        @if($product->price()->get())
-                                            @foreach($product->price()->get() as $price)
-                                                @include('site.product.price.index')
+                        <div class="flex flex-col lg:flex-row">
+                            <!-- Filters section -->
+                            <div class="lg:w-1/4 p-4 bg-gray-100 rounded-lg shadow-lg mb-6 lg:mb-0 lg:mr-6">
+                                <form method="GET" action="{{ route('site.catalog.show', $category->id) }}" class="inline-block">
+                                    <div class="mb-4">
+                                        <label for="color_id" class="block mb-2 font-semibold">Колір:</label>
+                                        <select name="color_id" id="color_id" onchange="this.form.submit()" class="w-full border rounded px-2 py-1">
+                                            <option value="">Виберіть колір</option>
+                                            @foreach($colors as $color)
+                                                <option value="{{ $color->id }}" {{ request('color_id') == $color->id ? 'selected' : '' }}>{{ $color->title }}</option>
                                             @endforeach
-                                        @else
-                                            <p class="text-lg mb-2">Ціна не вказана</p>
-                                        @endif
-                                        @if($product->status_id == 1)
-                                            <button onclick="openPopup({{ $product->id }})"
-                                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border">
-                                                В кошик
-                                            </button>
-                                        @else
-                                            {{ $product->status->title }}
-                                        @endif
+                                        </select>
                                     </div>
-                                </div>
-                            @endforeach
+                                    <div class="mb-4">
+                                        <label for="size_id" class="block mb-2 font-semibold">Розмір:</label>
+                                        <select name="size_id" id="size_id" onchange="this.form.submit()" class="w-full border rounded px-2 py-1">
+                                            <option value="">Виберіть розмір</option>
+                                            @foreach($sizes as $size)
+                                                <option value="{{ $size->id }}" {{ request('size_id') == $size->id ? 'selected' : '' }}>{{ $size->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="country_id" class="block mb-2 font-semibold">Країна виробник:</label>
+                                        <select name="country_id" id="country_id" onchange="this.form.submit()" class="w-full border rounded px-2 py-1">
+                                            <option value="">Виберіть країну</option>
+                                            @foreach($producers as $producer)
+                                                <option value="{{ $producer->id }}" {{ request('producer_id') == $producer->id ? 'selected' : '' }}>{{ $producer->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="status_id" class="block mb-2 font-semibold">Статус:</label>
+                                        <select name="status_id" id="status_id" onchange="this.form.submit()" class="w-full border rounded px-2 py-1">
+                                            <option value="">Виберіть статус</option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{ $status->id }}" {{ request('status_id') == $status->id ? 'selected' : '' }}>{{ $status->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Products section -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 flex-1">
+                                @if($products->count() > 0)
+                                    @foreach($products as $product)
+                                        <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center">
+                                            @foreach($product->getMedia($product->id) as $media)
+                                                @if($media->getCustomProperty('main_image') === 1)
+                                                    <a href="{{ route('site.product.showOneProduct', $product->id) }}">
+                                                        <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4">
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                            <div class="text-center">
+                                                <a href="{{ route('site.product.showOneProduct', $product->id) }}">
+                                                    <p class="text-xl font-semibold mb-2">{{ $product->title }}</p>
+                                                </a>
+                                                @if($product->package)
+                                                    <p class="text-lg mb-2">В упаковці: {{ $product->package->title }}</p>
+                                                @endif
+                                                <p class="text-lg mb-2">Колір, розмір, доступно:</p>
+                                                @if ($color_id || $size_id)
+                                                    <ul class="text-lg mb-2">
+                                                        @foreach($product->productVariants()->get() as $productVariant)
+                                                            @if ((!$color_id || $productVariant->color_id == $color_id) && (!$size_id || $productVariant->size_id == $size_id))
+                                                                <li>{{ $productVariant->color->title }} - {{ $productVariant->size->title }} - {{ $productVariant->quantity }}</li>
+                                                            @endif
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    @foreach($product->productVariants()->get() as $productVariant)
+                                                        <ul class="text-lg mb-2">
+                                                            <li>{{ $productVariant->color->title }} - {{ $productVariant->size->title }} - {{ $productVariant->quantity }}</li>
+                                                        </ul>
+                                                    @endforeach
+                                                @endif
+
+                                                @if($product->price()->get())
+                                                    @foreach($product->price()->get() as $price)
+                                                        @include('site.product.price.index')
+                                                    @endforeach
+                                                @endif
+                                                <div class="mt-4">
+                                                    @if($product->country_id)
+                                                        {{ $product->country->name }}
+                                                    @endif
+                                                </div>
+                                                <div class="mt-4">
+                                                    @if($product->status_id)
+                                                        {{ $product->status->title }}
+                                                    @endif
+                                                </div>
+                                                <div class="mt-4">
+                                                    @if($product->status_id == 1)
+                                                        <button onclick="openPopup({{ $product->id }})"
+                                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border">
+                                                            В кошик
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <h2><b>За таким фільтром товарів в цій категорії немає</b></h2>
+                                @endif
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -87,19 +151,19 @@
                     <form id="cart_form_popup" action="{{ route('cart.store') }}" method="post">
                         @csrf
                         <input type="hidden" id="popup_product_id" name="product_id" value="">
-                        @error('color_id')
+                        @error('color_id_popup')
                         <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково колір товару, щоб добавити його в кошик") }}</span>
                         @enderror
-                        <label for="color_id" class="block mb-2 font-bold">Виберіть колір:</label>
-                        <select name="color_id" id="color_id" class="w-full border rounded px-3 py-2">
+                        <label for="color_id_popup" class="block mb-2 font-bold">Виберіть колір:</label>
+                        <select name="color_id_popup" id="color_id_popup" class="w-full border rounded px-3 py-2">
                             <option value="" selected>Виберіть колір</option>
                         </select>
                         <div id="size-container" class="mt-4 hidden">
-                            @error('size_id')
+                            @error('size_id_popup')
                             <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково розмір товару, щоб добавити його в кошик") }}</span>
                             @enderror
-                            <label for="size_id" class="block mb-2 font-bold">Виберіть розмір:</label>
-                            <select name="size_id" id="size_id" class="w-full border rounded px-3 py-2">
+                            <label for="size_id_popup" class="block mb-2 font-bold">Виберіть розмір:</label>
+                            <select name="size_id_popup" id="size_id_popup" class="w-full border rounded px-3 py-2">
                                 <option value="" selected>Виберіть Розмір</option>
                             </select>
                         </div>
@@ -130,12 +194,7 @@
         fetch(`/product/get-product/${productId}`)
             .then(response => response.json())
             .then(productData => {
-                const colorSelect = document.getElementById('color_id');
-                colorSelect.innerHTML = '';
-                const firstOption = document.createElement('option');
-                firstOption.value = '';
-                firstOption.textContent = 'Виберіть колір';
-                colorSelect.appendChild(firstOption);
+                const colorSelect = document.getElementById('color_id_popup');
 
                 productData.productVariants.forEach(variant => {
                     const option = document.createElement('option');
@@ -144,10 +203,10 @@
                     colorSelect.appendChild(option);
                 });
 
-                document.getElementById('color_id').addEventListener('change', function () {
+                document.getElementById('color_id_popup').addEventListener('change', function () {
                     const colorId = this.value;
                     const sizeContainer = document.getElementById('size-container');
-                    const sizeSelect = document.getElementById('size_id');
+                    const sizeSelect = document.getElementById('size_id_popup');
 
                     sizeSelect.innerHTML = '';
 
@@ -174,11 +233,11 @@
     }
 
     function closePopup() {
-        const colorSelect = document.getElementById('color_id');
+        const colorSelect = document.getElementById('color_id_popup');
         colorSelect.innerHTML = '';
 
         const sizeContainer = document.getElementById('size-container');
-        const sizeSelect = document.getElementById('size_id');
+        const sizeSelect = document.getElementById('size_id_popup');
         sizeSelect.innerHTML = '';
         sizeContainer.classList.add('hidden');
 

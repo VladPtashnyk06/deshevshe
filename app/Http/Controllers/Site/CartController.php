@@ -214,7 +214,7 @@ class CartController extends Controller
     public function addToCart(CartRequest $request): RedirectResponse
     {
         $product = Product::find($request->post('product_id'));
-        $productVariant = ProductVariant::where('product_id', $request->post('product_id'))->where('color_id', $request->post('color_id'))->where('size_id', $request->post('size_id'))->first();
+        $productVariant = ProductVariant::where('product_id', $request->post('product_id'))->where('color_id', $request->post('color_id_popup'))->where('size_id', $request->post('size_id_popup'))->first();
 
         if(session()->get('currency') == 'USD') {
             $currency_rate_usd = session()->get('currency_rate_usd');

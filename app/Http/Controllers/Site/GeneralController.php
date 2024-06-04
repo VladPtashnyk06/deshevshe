@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Site;
 
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Comment;
+use App\Models\Producer;
 use App\Models\Product;
 use App\Models\RecProduct;
+use App\Models\Size;
+use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -82,8 +87,33 @@ class GeneralController extends Controller
     public function show(Category $category, Request $request)
     {
         $sort = $request->get('sort', 'newest');
+        $color_id = $request->get('color_id');
+        $size_id = $request->get('size_id');
+        $producer_id = $request->get('producer_id');
+        $status_id = $request->get('status_id');
 
         $query = Product::where('category_id', $category->id);
+
+        // Фільтрація
+        if ($color_id) {
+            $query->whereHas('productVariants.color', function ($q) use ($color_id) {
+                $q->where('id', $color_id);
+            });
+        }
+
+        if ($size_id) {
+            $query->whereHas('productVariants.size', function ($q) use ($size_id) {
+                $q->where('id', $size_id);
+            });
+        }
+
+        if ($producer_id) {
+            $query->where('producer_id', $producer_id);
+        }
+
+        if ($status_id) {
+            $query->where('status_id', $status_id);
+        }
 
         switch ($sort) {
             case 'price_asc':
@@ -116,6 +146,11 @@ class GeneralController extends Controller
             $categories = [];
         }
 
-        return view('site.product.cards-products', compact('products', 'categories', 'category'));
+        $colors = Color::all();
+        $sizes = Size::all();
+        $producers = Producer::all();
+        $statuses = Status::all();
+
+        return view('site.product.cards-products', compact('products', 'categories', 'category', 'color_id', 'size_id', 'producers', 'statuses', 'colors', 'sizes'));
     }
 }
