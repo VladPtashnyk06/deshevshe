@@ -140,7 +140,7 @@ class GeneralController extends Controller
                 break;
         }
 
-        $products = $query->get();
+        $products = $query->orderBy('top_product', 'desc')->get();
 
         if (!$products->count() > 0) {
             $categories = Category::where('parent_id', $category->id)->get();

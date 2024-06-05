@@ -6,10 +6,15 @@
                 <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center relative">
                     @foreach($recProduct->product->getMedia($recProduct->product_id) as $media)
                         @if($media->getCustomProperty('main_image') === 1)
-                            <a href="{{ route('site.product.showOneProduct', $recProduct->product_id) }}"><img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy"></a>
+                            <div class="relative">
+                                @if($product->top_product)
+                                    <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-bl">Топ</span>
+                                @endif
+                                <a href="{{ route('site.product.showOneProduct', $recProduct->product_id) }}"><img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy"></a>
+                            </div>
                         @endif
                     @endforeach
-                    <div class="absolute top-10 m-2 text-red-500" style="right: 16px">
+                    <div class="absolute top-8 ml-2 text-red-500" style="right: 16px">
                         <a href="#" class="heartLink" data-product-id="{{ $recProduct->product->id }}">
                             @if(in_array($recProduct->product->id, $likedProducts))
                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

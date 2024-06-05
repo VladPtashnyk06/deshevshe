@@ -7,7 +7,16 @@
                         <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center relative">
                             @foreach($product->getMedia($product->id) as $media)
                                 @if($media->getCustomProperty('main_image') === 1)
-                                    <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy">
+                                    <div class="relative">
+                                        @if($product->product_promotion)
+                                            <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-bl">Акція</span>
+                                        @elseif($product->top_product)
+                                            <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-bl">Топ</span>
+                                        @elseif(now()->diffInDays($product->created_at) <= 30)
+                                            <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-bl">Новинка</span>
+                                        @endif
+                                        <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy">
+                                    </div>
                                 @endif
                             @endforeach
                             <div class="absolute top-10 m-2 text-red-500" style="right: 16px">
