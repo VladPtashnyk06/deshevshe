@@ -14,7 +14,9 @@ return new class extends Migration {
             $table->integer('rec_pair');
             $table->integer('package')->nullable();
             $table->integer('rec_package')->nullable();
-            $table->integer('retail');
+            $table->integer('retail')->nullable();
+            $table->integer('promotional_price')->nullable();
+            $table->integer('promotional_rate')->nullable();
             $table->timestamps();
         });
     }

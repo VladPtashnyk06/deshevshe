@@ -16,17 +16,7 @@ class PromotionalController extends Controller
 {
     public function index()
     {
-        $promotionalProducts = Promotional::with(['product', 'productVariant'])
-            ->get()
-            ->map(function ($promotional) {
-                return [
-                    'product' =>$promotional->product,
-                    'product_variant' => $promotional->productVariant,
-                    'promotional_id' => $promotional->id,
-                    'promotional_price' => $promotional->promotional_price,
-                    'promotional_rate' => $promotional->promotional_rate,
-                ];
-            });
+        $promotionalProducts = Product::where('product_promotion', 1)->get();
 
         return view('admin.promotional.index', compact('promotionalProducts'));
     }
@@ -61,57 +51,45 @@ class PromotionalController extends Controller
         return view('admin.promotional.create', compact('codes', 'categories', 'producers', 'products'));
     }
 
-    public function store(PromotionalRequest $request)
+    public function store(Request $request)
     {
-        $product = Product::where('id', $request->validated('productId'))->first();
+        $product = Product::where('id', $request->post('productId'))->first();
         $product->update([
             'product_promotion' => 1
         ]);
-        $productPrice = $product->price;
-        $promotionalRate = $request->validated('promotionalRate');
-        $promotionalPrice = $productPrice->pair - ($productPrice->pair * ($promotionalRate / 100));
 
-        Promotional::updateOrCreate(
+        $product->price->update(
             [
-                'product_id' => $request->validated('productId'),
-                'product_variant_id' => $request->validated('productVariantId'),
-                'promotional_price' => $promotionalPrice,
-                'promotional_rate' => $promotionalRate
+                'promotional_price' => $product->price->pair - ($product->price->pair * ($request->post('promotionalRate') / 100)),
+                'promotional_rate' => $request->post('promotionalRate')
             ]
         );
 
         return redirect()->route('promotional.index');
     }
 
-    public function edit(Promotional $promotional)
+    public function edit(Product $product)
     {
-        $promotional->load('product', 'productVariant');
-
-        $promotionalProduct = [
-            'product' => $promotional->product,
-            'product_variant' => $promotional->productVariant,
-            'promotional_id' => $promotional->id,
-            'promotional_price' => $promotional->promotional_price,
-            'promotional_rate' => $promotional->promotional_rate,
-        ];
-
-        return view('admin.promotional.edit', compact('promotionalProduct'));
+        return view('admin.promotional.edit', compact('product'));
     }
 
-    public function update(Request $request, Promotional $promotional)
+    public function update(Request $request, Product $product)
     {
-        $productPrice = $promotional->product->price->pair;
-        $promotional->update([
-            'promotional_price' => $productPrice - ($productPrice * ($request->post('promotionalRate') / 100)),
-            'promotional_rate' => $request->post('promotionalRate')
-        ]);
+        $product->price->update(
+            [
+                'promotional_price' => $product->price->pair - ($product->price->pair * ($request->post('promotionalRate') / 100)),
+                'promotional_rate' => $request->post('promotionalRate')
+            ]
+        );
 
         return redirect()->route('promotional.index');
     }
 
-    public function destroy(Promotional $promotional)
+    public function destroy(Product $product)
     {
-        $promotional->delete();
+        $product->update([
+            'product_promotion' => 0
+        ]);
         return back();
     }
 }

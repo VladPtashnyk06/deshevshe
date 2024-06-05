@@ -254,9 +254,9 @@ Route::middleware('auth')->group(function () {
                     Route::get('/promotional', 'index')->name('promotional.index');
                     Route::get('/promotional/create', 'create')->name('promotional.create');
                     Route::post('/promotional/store', 'store')->name('promotional.store');
-                    Route::get('/promotional/edit/{promotional}', 'edit')->name('promotional.edit');
-                    Route::post('/promotional/update/{promotional}', 'update')->name('promotional.update');
-                    Route::delete('/promotional/delete/{promotional}', 'destroy')->name('promotional.delete');
+                    Route::get('/promotional/edit/{product}', 'edit')->name('promotional.edit');
+                    Route::post('/promotional/update/{product}', 'update')->name('promotional.update');
+                    Route::delete('/promotional/delete/{product}', 'destroy')->name('promotional.delete');
                 });
                 Route::controller(\App\Http\Controllers\Admin\ProductCommentController::class)->group(function () {
                     Route::get('/comments/{product}', 'index')->name('product.comments');

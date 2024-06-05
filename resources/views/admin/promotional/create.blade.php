@@ -57,7 +57,6 @@
                     </thead>
                     <tbody>
                     @foreach ($products as $product)
-                        @foreach($product->productVariants()->get() as $productVariant)
                             <tr class="text-center odd:bg-gray-200">
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
                                     @foreach($product->getMedia($product->id) as $media)
@@ -69,18 +68,25 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $productVariant->color->title }}<br></td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $productVariant->size->title }}<br></td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
+                                    @foreach($product->productVariants()->get() as $productVariant)
+                                        {{ $productVariant->color->title }}<br>
+                                    @endforeach
+                                </td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
+                                    @foreach($product->productVariants()->get() as $productVariant)
+                                        {{ $productVariant->size->title }}<br>
+                                    @endforeach
+                                </td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $productVariant->quantity }}<br></td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->package->title) ? $product->package->title : 'Не вказано' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->pair }}</td>
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
-                                    <a href="#" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border open-popup" data-product="{{ json_encode($product) }}" data-product-id="{{ $product->id }}" data-product-variant-id="{{ $productVariant->id }}" data-code="{{ $product->code }}" data-title="{{ $product->title }}" data-color="{{ $productVariant->color->title }}" data-size="{{ $productVariant->size->title }}" data-price="{{ $product->price->pair }}">Додати</a>
+                                    <a href="#" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border open-popup" data-product="{{ json_encode($product) }}" data-product-id="{{ $product->id }}" data-code="{{ $product->code }}" data-title="{{ $product->title }}" data-price="{{ $product->price->pair }}">Додати</a>
                                 </td>
                             </tr>
                         @endforeach
-                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -100,15 +106,12 @@
                         @csrf
 
                         <input type="hidden" name="productId" id="productId" value="">
-                        <input type="hidden" name="productVariantId" id="productVariantId" value="">
                         <table class="w-full mb-5">
                             <thead>
                             <tr class="text-center border-b-2 border-gray-700">
                                 <th class="p-2 text-lg">Зображення</th>
                                 <th class="p-2 text-lg">Код товару</th>
                                 <th class="p-2 text-lg">Назва товару</th>
-                                <th class="p-2 text-lg">Колір</th>
-                                <th class="p-2 text-lg">Розмір</th>
                                 <th class="p-2 text-lg">Ціна за пару</th>
                             </tr>
                             </thead>
@@ -117,8 +120,6 @@
                                 <td class="px-6 py-4" id="popup-image" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"></td>
                                 <td class="px-6 py-4" id="popup-code" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"></td>
                                 <td class="px-6 py-4" id="popup-title" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"></td>
-                                <td class="px-6 py-4" id="popup-color" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"></td>
-                                <td class="px-6 py-4" id="popup-size" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"></td>
                                 <td class="px-6 py-4" id="popup-price" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"></td>
                             </tr>
                             </tbody>
@@ -160,19 +161,13 @@
             event.preventDefault();
 
             const product = JSON.parse(button.getAttribute('data-product'));
-            const productVariantId = button.getAttribute('data-product-variant-id');
             const code = button.getAttribute('data-code');
             const title = button.getAttribute('data-title');
-            const color = button.getAttribute('data-color');
-            const size = button.getAttribute('data-size');
             const price = button.getAttribute('data-price');
 
             document.getElementById('productId').value = product.id;
-            document.getElementById('productVariantId').value = productVariantId;
             document.getElementById('popup-code').textContent = code;
             document.getElementById('popup-title').textContent = title;
-            document.getElementById('popup-color').textContent = color;
-            document.getElementById('popup-size').textContent = size;
             document.getElementById('popup-price').textContent = price;
             document.getElementById('popup-price').dataset.price = price;
 
