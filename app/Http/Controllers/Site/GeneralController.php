@@ -10,7 +10,6 @@ use App\Models\Color;
 use App\Models\Comment;
 use App\Models\Producer;
 use App\Models\Product;
-use App\Models\Promotional;
 use App\Models\RecProduct;
 use App\Models\Size;
 use App\Models\Status;
@@ -59,7 +58,9 @@ class GeneralController extends Controller
 
         $comments = Comment::orderByDesc('created_at')->take(4)->get();
 
-        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts', 'comments'));
+        $promotionalProducts = Product::where('product_promotion', 1)->get();
+
+        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts', 'comments', 'promotionalProducts'));
     }
     public function catalog(Request $request)
     {
@@ -153,21 +154,5 @@ class GeneralController extends Controller
         $statuses = Status::all();
 
         return view('site.product.cards-products', compact('products', 'categories', 'category', 'color_id', 'size_id', 'producers', 'statuses', 'colors', 'sizes'));
-    }
-
-    public function promotionalProducts()
-    {
-        $promotionalProducts = Promotional::with(['product', 'productVariant'])
-            ->get()
-            ->map(function ($promotional) {
-                return [
-                    'product' =>$promotional->product,
-                    'product_variant' => $promotional->productVariant,
-                    'promotional_price' => $promotional->promotional_price,
-                    'promotional_rate' => $promotional->promotional_rate,
-                ];
-            });
-
-        return view('admin.promotional.index', compact('promotionalProducts'));
     }
 }

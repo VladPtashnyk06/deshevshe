@@ -1,17 +1,17 @@
 <div class="p-6 text-gray-900">
-    <h1 class="text-3xl font-semibold mb-6 text-center"><a href="{{ route('site.product.newProducts') }}">Нові продукти (надходження)</a></h1>
+    <h1 class="text-3xl font-semibold mb-6 text-center"><a href="{{ route('site.product.promotionalProducts') }}">Акційні товари</a></h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @if(!empty($newProducts))
-            @foreach($newProducts as $newProduct)
+        @if(!empty($promotionalProducts))
+            @foreach($promotionalProducts as $promotionalProduct)
                 <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center relative">
-                    @foreach($newProduct->getMedia($newProduct->id) as $media)
+                    @foreach($promotionalProduct->getMedia($promotionalProduct->id) as $media)
                         @if($media->getCustomProperty('main_image') === 1)
-                            <a href="{{ route('site.product.showOneProduct', $newProduct->id) }}"><img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy"></a>
+                            <a href="{{ route('site.product.showOneProduct', $promotionalProduct->id) }}"><img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy"></a>
                         @endif
                     @endforeach
                     <div class="absolute top-10 m-2 text-red-500" style="right: 16px">
-                        <a href="#" class="heartLink" data-product-id="{{ $newProduct->id }}">
-                            @if(in_array($newProduct->id, $likedProducts))
+                        <a href="#" class="heartLink" data-product-id="{{ $promotionalProduct->id }}">
+                            @if(in_array($promotionalProduct->id, $likedProducts))
                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                      width="18px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
                                     <path d="M14.708,15.847C14.252,14.864,14,13.742,14,12.5s0.252-2.489,0.708-3.659c0.455-1.171,1.114-2.266,1.929-3.205
@@ -36,21 +36,21 @@
                         </a>
                     </div>
                     <div class="text-center">
-                        <a href="{{ route('site.product.showOneProduct', $newProduct->id) }}">
-                            <p class="text-xl font-semibold mb-2">{{ $newProduct->title }}</p>
+                        <a href="{{ route('site.product.showOneProduct', $promotionalProduct->id) }}">
+                            <p class="text-xl font-semibold mb-2">{{ $promotionalProduct->title }}</p>
                         </a>
-                        @if($newProduct->package)
-                            <p class="text-lg mb-2">В упаковці: {{ $newProduct->package->title }}</p>
+                        @if($promotionalProduct->package)
+                            <p class="text-lg mb-2">В упаковці: {{ $promotionalProduct->package->title }}</p>
                         @endif
                         <p class="text-lg mb-2">Колір, розмір, доступно:</p>
-                        @foreach($newProduct->productVariants()->get() as $productVariant)
+                        @foreach($promotionalProduct->productVariants()->get() as $productVariant)
                             <ul class="text-lg mb-2">
                                 <li>{{ $productVariant->color->title }} - {{ $productVariant->size->title }} - {{ $productVariant->quantity }}</li>
                             </ul>
                         @endforeach
 
-                        @if($newProduct->price()->get())
-                            @foreach($newProduct->price()->get() as $price)
+                        @if($promotionalProduct->price()->get())
+                            @foreach($promotionalProduct->price()->get() as $price)
                                 @include('site.product.price.index')
                             @endforeach
                         @else
@@ -60,7 +60,7 @@
                 </div>
             @endforeach
         @else
-            Немає нових товарів (надходжень)
+            Немає акційних товарів
         @endif
     </div>
 </div>

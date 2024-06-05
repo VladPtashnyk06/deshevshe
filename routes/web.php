@@ -55,6 +55,7 @@ Route::group(['prefix' => 'product'], function () {
         Route::get('/likedProduct/{product}', 'likedProduct')->name('site.product.likedProduct');
         Route::get('/unlinkedProduct/{product}', 'unlinkedProduct')->name('site.product.unlinkedProduct');
         Route::get('/likedProducts', 'likedProducts')->name('site.product.likedProducts');
+        Route::get('/promotionalProducts', 'promotionalProducts')->name('site.product.promotionalProducts');
     });
     Route::controller(\App\Http\Controllers\Site\ProductCommentController::class)->group(function () {
         Route::post('/comment/store', 'store')->name('site.product.comment.store');

@@ -5,6 +5,7 @@
                 @include('site.product.include-views.rec-products')
                 @include('site.product.include-views.viewed-products')
                 @include('site.product.include-views.new-products')
+                @include('site.product.include-views.promotional-products')
                 @include('site.product.include-views.blogs')
                 @include('site.comments.block-comments')
             </div>
