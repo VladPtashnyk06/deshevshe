@@ -1,7 +1,7 @@
 <div class="p-6 text-gray-900">
     <h1 class="text-3xl font-semibold mb-6 text-center"><a href="{{ route('site.comment.index') }}">Коментарі до сайту</a></h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @if(!empty($comments))
+        @if($comments->isNotEmpty())
             @foreach($comments as $comment)
                 <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center relative">
                     <div class="text-center">
