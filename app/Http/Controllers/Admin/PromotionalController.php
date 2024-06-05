@@ -90,6 +90,10 @@ class PromotionalController extends Controller
         $product->update([
             'product_promotion' => 0
         ]);
+        $product->price->update([
+            'promotional_price' => null,
+            'promotional_rate' => null
+        ]);
         return back();
     }
 }
