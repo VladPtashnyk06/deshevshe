@@ -198,17 +198,6 @@
                     </div>
 
                     <div class="mb-4">
-                        @error('product_promotion')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="product_promotion" class="block mb-2 font-bold">Промоакція</label>
-                        <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
-                            <option value="0" @if($product->product_promotion == 0 ) selected @endif> Ні </option>
-                            <option value="1" @if($product->product_promotion == 1 ) selected @endif> Так </option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
                         @error('top_product')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
