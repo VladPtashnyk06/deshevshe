@@ -276,6 +276,16 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete/{comment}', 'destroy')->name('comment.destroy');
                 });
             });
+            Route::controller(\App\Http\Controllers\Admin\PromoCodeController::class)->group(function () {
+                Route::prefix('promocodes')->group(function () {
+                    Route::get('/', 'index')->name('promoCode.index');
+                    Route::get('/create', 'create')->name('promoCode.create');
+                    Route::post('/store', 'store')->name('promoCode.store');
+                    Route::get('/edit/{promoCode}', 'edit')->name('promoCode.edit');
+                    Route::post('/update/{promoCode}', 'update')->name('promoCode.update');
+                    Route::delete('/delete/{promoCode}', 'destroy')->name('promoCode.destroy');
+                });
+            });
         });
     });
 });

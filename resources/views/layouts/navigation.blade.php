@@ -19,17 +19,20 @@
                         <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
                             {{ __('Продукт') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
-                            {{ __('Блог') }}
+                        <x-nav-link :href="route('promotional.index')" :active="request()->routeIs('promotional.index')">
+                            {{ __('Акційній товари') }}
                         </x-nav-link>
                         <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
                             {{ __('Замовлення') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('promoCode.index')" :active="request()->routeIs('promoCode.index')">
+                            {{ __('Промокоди') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
+                            {{ __('Блог') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('comment.index')" :active="request()->routeIs('comment.index')">
                             {{ __('Коментар до сайту') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('promotional.index')" :active="request()->routeIs('promotional.index')">
-                            {{ __('Акційній товари') }}
                         </x-nav-link>
                     @else
                         <x-nav-link :href="route('site.catalog.index')" :active="request()->routeIs('site.catalog.index')">

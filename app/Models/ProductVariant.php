@@ -48,9 +48,4 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Size::class);
     }
-
-    public function promotional(): HasOne
-    {
-        return $this->hasOne(Promotional::class, 'product_variant_id');
-    }
 }
