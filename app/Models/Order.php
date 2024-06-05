@@ -33,6 +33,7 @@ class Order extends Model
         'order_status_id',
         'payment_method_id',
         'operator_id',
+        'promo_code_id',
         'user_name',
         'user_last_name',
         'user_phone',

@@ -97,11 +97,11 @@
                                         <div id="passwordFields" class="hidden">
                                             <div class="mb-4">
                                                 <label for="password" class="block text-gray-700">Пароль</label>
-                                                <input type="password" id="password" name="password" class="mt-1 block w-full">
+                                                <input type="password" id="password" name="password" class="mt-1 block w-full border rounded">
                                             </div>
                                             <div class="mb-4">
                                                 <label for="password_confirmation" class="block text-gray-700">Підтвердження пароля</label>
-                                                <input type="password" id="password_confirmation" name="password_confirmation" class="mt-1 block w-full">
+                                                <input type="password" id="password_confirmation" name="password_confirmation" class="mt-1 block w-full border rounded">
                                             </div>
                                         </div>
                                     @endif
@@ -117,6 +117,15 @@
                                                 <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->title }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        @if ($errors->has('promo_code'))
+                                            <div class="alert alert-danger bg-red-500">
+                                                {{ $errors->first('promo_code') }}
+                                            </div>
+                                        @endif
+                                        <label for="promo_code" class="block text-gray-700">Промокод</label>
+                                        <input type="text" id="promo_code" name="promo_code" class="mt-1 block w-full border rounded">
                                     </div>
                                 </div>
                                 <div class="second md:w-2/3">

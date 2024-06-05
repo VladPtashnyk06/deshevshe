@@ -53,7 +53,8 @@ class OrderRequest extends FormRequest
             'ukrPoshtaCityIdHidden' => ['nullable', 'string'],
             'ukrPoshtaBranchIDHidden' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
-            'delivery_type' => ['required', 'string']
+            'delivery_type' => ['required', 'string'],
+            'promo_code' => ['nullable', 'string'],
         ];
     }
 }
