@@ -32,7 +32,7 @@
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
-                                <label for="product_promotion" class="block mb-2 font-bold">Промоційні продукти:</label>
+                                <label for="product_promotion" class="block mb-2 font-bold">Акційні продукти:</label>
                                 <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
                                     <option value=""> Всі </option>
                                     <option value="1" @if(request()->input('product_promotion') == '1') selected @endif> Так </option>
@@ -67,7 +67,7 @@
                             <th class="p-2 text-lg">Кількість товару</th>
                             <th class="p-2 text-lg">К-сть. в упакуванні</th>
                             <th class="p-2 text-lg">Виробник</th>
-                            <th class="p-2 text-lg">Промоакція</th>
+                            <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
                             <th class="p-2 text-lg">Ціна за пару</th>
                             <th class="p-2 text-lg">Роздрібна ціна</th>

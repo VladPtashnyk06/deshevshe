@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class ProductVariant extends Model
+class Promotional extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'product_variants';
+    protected $table = 'promotionals';
 
     /**
      * The primary key associated with the table.
@@ -29,9 +28,9 @@ class ProductVariant extends Model
      */
     protected $fillable = [
         'product_id',
-        'color_id',
-        'size_id',
-        'quantity',
+        'product_variant_id',
+        'promotional_price',
+        'promotional_rate',
     ];
 
     public function product(): BelongsTo
@@ -39,18 +38,8 @@ class ProductVariant extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function color(): BelongsTo
+    public function productVariant(): BelongsTo
     {
-        return $this->belongsTo(Color::class);
-    }
-
-    public function size(): BelongsTo
-    {
-        return $this->belongsTo(Size::class);
-    }
-
-    public function promotional(): HasOne
-    {
-        return $this->hasOne(Promotional::class, 'product_variant_id');
+        return $this->belongsTo(ProductVariant::class);
     }
 }

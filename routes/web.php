@@ -250,6 +250,14 @@ Route::middleware('auth')->group(function () {
                         Route::delete('/delete-comment/{blog_comment}', 'destroyComment')->name('blog.destroyComment');
                     });
                 });
+                Route::controller(\App\Http\Controllers\Admin\PromotionalController::class)->group(function () {
+                    Route::get('/promotional', 'index')->name('promotional.index');
+                    Route::get('/promotional/create', 'create')->name('promotional.create');
+                    Route::post('/promotional/store', 'store')->name('promotional.store');
+                    Route::get('/promotional/edit/{promotional}', 'edit')->name('promotional.edit');
+                    Route::post('/promotional/update/{promotional}', 'update')->name('promotional.update');
+                    Route::delete('/promotional/delete/{promotional}', 'destroy')->name('promotional.delete');
+                });
                 Route::controller(\App\Http\Controllers\Admin\ProductCommentController::class)->group(function () {
                     Route::get('/comments/{product}', 'index')->name('product.comments');
                     Route::get('/comments/create/{product_comment}', 'create')->name('product.comments.create');
