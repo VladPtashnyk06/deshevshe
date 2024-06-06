@@ -79,11 +79,13 @@
                             </div>
                         @endforeach
                     @endif
-                    <button type="button" onclick="addForm(this, {{ $product->id }})" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">Додати коментар</button>
+                    <button type="button" onclick="addForm(this, {{ $product->id }})" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full">Додати коментар</button>
+                    @include('site.product.include-views.related-products')
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Popup Modal -->
     <div id="popupModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">

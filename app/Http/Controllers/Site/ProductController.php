@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\RecProduct;
+use App\Models\RelatedProduct;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -52,7 +53,9 @@ class ProductController extends Controller
             $likedProduct = true;
         }
 
-        return view('site.product.card-product-one', compact('product', 'likedProduct'));
+        $relatedProducts = RelatedProduct::where('product_id', $product->id)->get();
+
+        return view('site.product.card-product-one', compact('product', 'likedProduct', 'relatedProducts'));
     }
 
 
