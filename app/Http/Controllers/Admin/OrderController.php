@@ -247,7 +247,6 @@ class OrderController extends Controller
 
     public function updateThird(OrderEditThirdRequest $request, Order $order)
     {
-//        dd($request->validated());
         $order->update($request->validated());
 
         $delivery = Delivery::where('order_id', $order->id)->first();

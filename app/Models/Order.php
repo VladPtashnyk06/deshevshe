@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Admin\PromoCodeController;
+use App\Events\OrderStatusChangedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,25 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'orders';
-
-    /**
-     * The primary key associated with the table.
-     *
-     * @var int
-     */
     protected $primaryKey = 'id';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<string, int>
-     */
     protected $fillable = [
         'user_id',
         'order_status_id',
@@ -44,6 +27,51 @@ class Order extends Model
         'currency',
         'comment',
     ];
+
+    public function setOrderStatusIdAttribute($value)
+    {
+        $this->attributes['order_status_id'] = $value;
+
+        $receivedStatusId = OrderStatus::where('title', 'Отримано')->first()->id;
+        $returnedStatusId = OrderStatus::where('title', 'Повернення')->first()->id;
+
+        if ($this->isDirty('order_status_id')) {
+            if ($value == $receivedStatusId) {
+                \Log::info('Order status changed to "Отримано"');
+                event(new OrderStatusChangedEvent($this));
+            } elseif ($value == $returnedStatusId && $this->getOriginal('order_status_id') == $receivedStatusId) {
+                \Log::info('Order status changed to "Повернення"');
+                $this->subtractPoints();
+                event(new OrderStatusChangedEvent($this));
+            }
+        }
+    }
+
+    public function calculatePoints()
+    {
+        $totalPrice = $this->total_price;
+
+        if ($totalPrice > 5000) {
+            return 500;
+        } elseif ($totalPrice > 2500) {
+            return 150;
+        } elseif ($totalPrice > 1000) {
+            return 50;
+        } else {
+            return 0;
+        }
+    }
+
+    public function subtractPoints()
+    {
+        $pointsToSubtract = $this->calculatePoints();
+
+        $user = $this->user;
+        if ($pointsToSubtract > 0) {
+            $user->points = max(0, $user->points - $pointsToSubtract);
+            $user->save();
+        }
+    }
 
     public function user(): BelongsTo
     {
@@ -69,6 +97,7 @@ class Order extends Model
     {
         return $this->hasOne(Delivery::class, 'order_id');
     }
+
     public function promoCode(): BelongsTo
     {
         return $this->belongsTo(PromoCode::class, 'promo_code_id');
