@@ -89,6 +89,11 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
+                    <div>
+                        <p class="text-gray-400">
+                            Бали: {{ Auth::user()->points }} {{ session()->get('currency') }}
+                        </p>
+                    </div>
                 </div>
             @else
                 <div class="flex items-center">
