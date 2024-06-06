@@ -18,6 +18,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\PromoCode;
 use App\Models\User;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
@@ -246,6 +247,7 @@ class OrderController extends Controller
 
     public function updateThird(OrderEditThirdRequest $request, Order $order)
     {
+//        dd($request->validated());
         $order->update($request->validated());
 
         $delivery = Delivery::where('order_id', $order->id)->first();
@@ -268,8 +270,8 @@ class OrderController extends Controller
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('MeestRegion'),
                 'city' => $request->validated('MeestCityInput'),
-                'cityRef' => $request->validated('meestCityIdHidden'),
-                'branch' => $request->validated('MeestBranchesInpute'),
+                'cityRef' => $request->validated('meestCityIDHidden'),
+                'branch' => $request->validated('MeestBranchesInput'),
                 'branchRef' => $request->validated('meestBranchIDHidden'),
                 'address' => $request->validated('address'),
             ]);
@@ -324,6 +326,42 @@ class OrderController extends Controller
         }
 
         return redirect()->route('operator.order.index');
+    }
+
+    public function updateOrderPromoCode(Request $request, Order $order)
+    {
+        if ($request->post('promo_code')) {
+            $promoCode = PromoCode::where('title', $request->post('promo_code'))->first();
+            if ($promoCode) {
+                if ($promoCode->quantity_now < $promoCode->quantity) {
+                    $promoCodeId = $promoCode->id;
+                    $phoneOrders = Order::where('user_phone', $order->user_phone)->get();
+                    $promoCodeUsed = false;
+                    foreach ($phoneOrders as $phoneOrder) {
+                        if ($phoneOrder->promo_code_id == $promoCodeId) {
+                            $promoCodeUsed = true;
+                            return back()->withErrors(['promo_code' => 'Цей користувач використовував цей промокод']);
+                        }
+                    }
+                    if ($promoCodeUsed == false) {
+                        $totalPrice = $order->total_price - ($order->total_price * ($promoCode->rate / 100));
+                        $promoCode->update([
+                            'quantity_now' => $promoCode->quantity_now + 1
+                        ]);
+                        $promoCodeId = $promoCode->id;
+                        $order->update([
+                            'promo_code_id' => $promoCodeId,
+                            'total_price' => $totalPrice,
+                        ]);
+                    }
+                } else {
+                    return back()->withErrors(['promo_code' => 'Цей промокод не доступний, закінчився']);
+                }
+            } else {
+                return back()->withErrors(['promo_code' => 'Такого промокоду немає']);
+            }
+        }
+        return back();
     }
 
     public function showUserOrders(User $user)

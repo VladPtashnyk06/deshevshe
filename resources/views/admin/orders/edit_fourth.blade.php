@@ -68,7 +68,11 @@
                         </tbody>
                     </table>
                     <div class="flex justify-end text-xl">
-                        <h2 class="font-bold">Загальна сума: {{ $order->total_price }} {{ $order->currency }}</h2>
+                        @if($order->promoCode)
+                            <h2 class="font-bold">Загальна сума з використаним промокодом ({{ $order->promoCode->title }}): {{ $order->total_price }} {{ $order->currency }}</h2>
+                        @else
+                            <h2 class="font-bold">Загальна сума: {{ $order->total_price }} {{ $order->currency }}</h2>
+                        @endif
                     </div>
 
                     <div class="mb-4">
@@ -82,12 +86,24 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="cupon" class="block mb-2 font-bold">Купон</label>
-                        <input type="text" name="cupon" id="cupon" class="w-full border rounded px-3 py-2" value="">
+                        <div class="flex flex-row items-end space-x-4">
+                            <div class="flex-1">
+                                @if ($errors->has('promo_code'))
+                                    <div class="alert alert-danger bg-red-500 text-white p-2 mb-2 rounded">
+                                        {{ $errors->first('promo_code') }}
+                                    </div>
+                                @endif
+                                <label for="promo_code" class="block mb-2 text-gray-700 font-medium">Промокод</label>
+                                <input type="text" name="promo_code" id="promo_code" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ $order->promoCode ? $order->promoCode->title . ' ( ' . $order->promoCode->rate . '% )' : '' }}">
+                            </div>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border" onclick="addPromoCode(this, {{ $order->id }})">Застосувати</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-4">
-                        <label for="balu" class="block mb-2 font-bold">Бали</label>
+                        <label for="balu" class="block mb-2 text-gray-700">Бали</label>
                         <input type="text" name="balu" id="balu" class="w-full border rounded px-3 py-2" value="">
                     </div>
 
@@ -114,8 +130,30 @@
                         </button>
                     </div>
                 </form>
+                @if (isset($order))
+                    <form action="{{ route('operator.order.updateOrderPromoCode', $order->id) }}" method="POST" id="promo_{{ $order->id }}">
+                        @csrf
+                    </form>
+                @endif
             </div>
         </section>
     </main>
 </x-app-layout>
+<script>
+    function addPromoCode(button, orderId) {
+        let promoCodeInput = document.getElementById('promo_code');
+        if (orderId) {
+            let form_id = '#promo_' + orderId;
+            let form = document.querySelector(form_id);
 
+            let hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'promo_code';
+            hiddenInput.value = promoCodeInput.value;
+
+            form.appendChild(hiddenInput);
+
+            form.submit();
+        }
+    }
+</script>
