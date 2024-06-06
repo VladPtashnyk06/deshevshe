@@ -266,6 +266,14 @@ Route::middleware('auth')->group(function () {
                     Route::post('/comments/store', 'store')->name('product.comment.store');
                     Route::delete('/comment/delete/{product_comment}', 'destroy')->name('product.comment.delete');
                 });
+                Route::controller(\App\Http\Controllers\Admin\RelatedProductController::class)->group(function () {
+                    Route::prefix('related-products')->group(function () {
+                        Route::get('/{product}', 'index')->name('related-product.index');
+                        Route::get('/create/{product}', 'create')->name('related-product.create');
+                        Route::post('/store/{product}', 'store')->name('related-product.store');
+                        Route::delete('/delete/{related_product}', 'destroy')->name('related-product.delete');
+                    });
+                });
             });
             Route::controller(CommentController::class)->group(function () {
                 Route::prefix('comments')->group(function () {
