@@ -154,6 +154,7 @@
                 });
 
                 document.getElementById('color_id_popup').addEventListener('change', function () {
+                    console.log('123')
                     const colorId = this.value;
                     const sizeContainer = document.getElementById('size-container');
                     const sizeSelect = document.getElementById('size_id_popup');
