@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Rating;
 use App\Models\RecProduct;
 use App\Models\RelatedProduct;
 use Carbon\Carbon;
@@ -189,6 +190,26 @@ class ProductController extends Controller
         $likedProducts = session()->get('likedProducts', []);
 
         return view('site.product.new-products', compact('newProducts', 'likedProducts'));
+    }
+
+    public function rateProduct(Request $request, Product $product)
+    {
+        $rating = $request->input('rating');
+
+        Rating::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+            ],
+            [
+                'rating' => $rating
+            ]
+        );
+
+        $newRating = $product->ratings()->avg('rating');
+        $product->update(['rating' => $newRating]);
+
+        return response()->json(['success' => true, 'newRating' => $newRating]);
     }
 
     public function likedProduct(Product $product)

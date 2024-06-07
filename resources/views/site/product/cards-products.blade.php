@@ -94,7 +94,25 @@
                                                 <a href="{{ route('site.product.showOneProduct', $product->id) }}">
                                                     <p class="text-xl font-semibold mb-2">{{ $product->title }}</p>
                                                 </a>
-                                                @if($product->package)
+                                                <div class="mt-4">
+                                                    <div class="flex justify-between">
+                                                        <div class="flex items-center rating" data-product-id="{{ $product->id }}">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                @if ($i <= $product->rating)
+                                                                    <svg class="w-6 h-6 cursor-pointer star text-gray-400" style="fill: yellow" data-rating="{{ $i }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                                        <path d="M10 15l-5.878 3.09 1.122-6.54L.364 7.65l6.564-.954L10 .684l3.072 6.012 6.564.954-4.88 4.9 1.122 6.54z"/>
+                                                                    </svg>
+                                                                @else
+                                                                    <svg class="w-6 h-6 cursor-pointer star text-gray-400" style="fill: gray" data-rating="{{ $i }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                                        <path d="M10 15l-5.878 3.09 1.122-6.54L.364 7.65l6.564-.954L10 .684l3.072 6.012 6.564.954-4.88 4.9 1.122 6.54z"/>
+                                                                    </svg>
+                                                                @endif
+                                                            @endfor
+                                                        </div>
+                                                        <span class="ml-2 text-gray-600 text-lg" id="rating-value-{{ $product->id }}">{{ $product->rating ? $product->rating : 0 }} / 5</span>
+                                                    </div>
+                                                </div>
+                                            @if($product->package)
                                                     <p class="text-lg mb-2">В упаковці: {{ $product->package->title }}</p>
                                                 @endif
                                                 <p class="text-lg mb-2">Колір, розмір, доступно:</p>
@@ -265,5 +283,63 @@
         document.getElementById('popupModal').classList.add('hidden');
         location.reload();
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.star');
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const rating = this.getAttribute('data-rating');
+                const starElements = this.closest('.rating').querySelectorAll('.star');
+                starElements.forEach(star => {
+                    if (star.getAttribute('data-rating') <= rating) {
+                        star.style = 'fill: yellow';
+                    } else {
+                        star.style = 'fill: gray';
+                    }
+                });
+            });
+
+            star.addEventListener('mouseout', function () {
+                const productId = this.closest('.rating').getAttribute('data-product-id');
+                const currentRating = document.getElementById(`rating-value-${productId}`).textContent.split(' ')[0];
+                const starElements = this.closest('.rating').querySelectorAll('.star');
+                starElements.forEach(star => {
+                    if (star.getAttribute('data-rating') <= currentRating) {
+                        star.style = 'fill: yellow';
+                    } else {
+                        star.style = 'fill: gray';
+                    }
+                });
+            });
+
+            star.addEventListener('click', function () {
+                const rating = this.getAttribute('data-rating');
+                const productId = this.closest('.rating').getAttribute('data-product-id');
+
+                fetch(`/product/rate-product/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        rating: rating
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const ratingValue = document.getElementById(`rating-value-${productId}`);
+                            var newRating = Math.round(data.newRating);
+                            ratingValue.textContent = `${newRating} / 5`;
+
+                            location.reload();
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+    });
 </script>
 
