@@ -14,6 +14,7 @@ use App\Models\Price;
 use App\Models\Producer;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Rating;
 use App\Models\RecProduct;
 use App\Models\Size;
 use App\Models\Status;
@@ -74,6 +75,49 @@ class ProductController extends Controller
         $products = $query->get();
         return view('admin.products.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
+
+    public function ratingProduct()
+    {
+        $products = Product::all();
+        $producers = Producer::all();
+        $categories = Category::all();
+        return view('admin.products.rating.index', compact('products', 'producers', 'categories'));
+    }
+
+    public function showRatingProduct(Product $product)
+    {
+        return view('admin.products.rating.show', compact('product'));
+    }
+
+    public function editRatingProduct(Product $product)
+    {
+        return view('admin.products.rating.edit', compact('product'));
+    }
+
+    public function updateRatingProduct(Product $product, Request $request)
+    {
+        $product->update([
+            'rating' => $request->post('rating'),
+        ]);
+        return redirect()->route('product.ratingProduct');
+    }
+
+    public function destroyRatingProduct(Rating $rating)
+    {
+        $productId = $rating->product_id;
+        $rating->delete();
+
+        $product = Product::find($productId);
+
+        $newRating = $product->ratings->avg('rating');
+
+        $product->update([
+            'rating' => $newRating
+        ]);
+
+        return back();
+    }
+
 
     /**
      * @param $view

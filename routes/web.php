@@ -157,6 +157,13 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete-media/{media}', 'destroyMedia')->name('product.destroyMedia');
                     Route::delete('/delete/{product}', 'destroy')->name('product.destroy');
                     Route::delete('/delete-product-variant/{productVariant}', 'destroyProductVariant')->name('product.destroyProductVariant');
+                    Route::group(['prefix' => 'rating'], function () {
+                        Route::get('/', 'ratingProduct')->name('product.ratingProduct');
+                        Route::get('/show/{product}', 'showRatingProduct')->name('product.showRatingProduct');
+                        Route::get('/edit/{product}', 'editRatingProduct')->name('product.editRatingProduct');
+                        Route::post('/update/{product}', 'updateRatingProduct')->name('product.updateRatingProduct');
+                        Route::delete('/delete/{rating}', 'destroyRatingProduct')->name('product.destroyRatingProduct');
+                    });
                 });
                 Route::group(['prefix' => 'color'], function () {
                     Route::controller(\App\Http\Controllers\Admin\ColorController::class)->group(function () {
