@@ -5,67 +5,43 @@
                 <h1 class="text-3xl font-semibold mb-6 text-center" itemprop="name">Створення замовлення</h1>
                 <div class="flex flex-col md:flex-row md:justify-between">
                     <div class="md:w-2/3">
-                        <h2 class="text-xl font-semibold mb-4">Вміст кошика</h2>
-                        @foreach($cartItems as $item)
-                            <div class="flex items-center mb-4 border-b p-6" style="padding-left: 0">
-                                <div class="flex-shrink-0 w-24 h-24">
-                                    <img src="{{ $item->attributes->imageUrl ?: asset('/img/_no_image.png') }}"
-                                         alt="Купити {{ $item->name }}" class="w-full h-full object-cover rounded h-48">
-                                </div>
-                                <div class="ml-4 flex-1">
-                                    <h2 class="text-lg font-semibold">{{ $item->name }}</h2>
-                                    <p class="text-gray-500">Код: {{ $item->attributes->code }}</p>
-                                    <p class="text-gray-500">Колір: {{ $item->attributes->color ?: 'Не вибраний' }}</p>
-                                    <p class="text-gray-500">Розмір: {{ $item->attributes->size ?: 'Не вибраний' }}</p>
-                                    <p class="text-lg font-semibold">{{ round($item->price, 2) . ' ' . $item->attributes->currency }}</p>
-                                </div>
-                                <form action="{{ route('cart.update') }}" method="post" class="flex">
-                                    @csrf
-                                    @method('patch')
-                                    <input type="hidden" name="id" value="{{ $item->id }}">
-                                    <input type="hidden" name="quantity" value="{{ $item->quantity }}">
-                                    @if($item->quantity < $item->attributes->product_quantity)
-                                        <button type="submit" name="quantityDed" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                                            <p class="px-2">{{ $item->quantity }}</p>
-                                        <button type="submit" name="quantityAdd" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
-                                    @else
-                                        <button type="submit" name="quantityDed" value="1" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                                        <p class="px-2">{{ $item->quantity }}</p>
-                                        <p>Максимальна доступна кількість</p>
+                        <h2 class="text-xl font-semibold mb-4">Товар</h2>
+                        <div class="flex items-center mb-4 border-b p-6" style="padding-left: 0">
+                            <div class="flex-shrink-0 w-24 h-24">
+                                @foreach($product->getMedia($product->id) as $media)
+                                    @if($media->getCustomProperty('main_image') === 1)
+                                            <a href="{{ route('site.product.showOneProduct', $product->id) }}">
+                                                <img src="{{ $media->getUrl() }}" alt="Купити {{ $media->getCustomProperty('alt') }}" class="w-full h-full object-cover rounded h-48">
+                                            </a>
                                     @endif
-                                </form>
+                                @endforeach
                             </div>
-                        @endforeach
+                            <div class="ml-4 flex-1">
+                                <h2 class="text-lg font-semibold">{{ $product->title }}</h2>
+                                <p class="text-gray-500">Код: {{ $product->code }}</p>
+                                <p class="text-gray-500">Колір: {{ $thisProductVariant->color->title ?: 'Не вибраний' }}</p>
+                                <p class="text-gray-500">Розмір: {{ $thisProductVariant->size->title ?: 'Не вибраний' }}</p>
+                                <p class="text-lg font-semibold">{{ round($product->price->pair, 2) . ' ' . session()->get('currency') }}</p>
+                            </div>
+                            <div class="ml-4">
+                                <p>Кількість: {{ $thisProductVariant->quantity }}</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="md:w-2/3 bg-gray-100 p-6 rounded-lg shadow-lg mt-6 md:mt-0">
                         <h2 class="text-xl font-semibold mb-4">Інформація про замовлення</h2>
                         <p class="flex justify-between">
                             <span>Загальна вартість:</span>
-                            <span>{{ number_format($totalPrice, 2, '.', ' ') . ' ' . session('currency') }}</span>
+                            <span>{{ number_format($product->price->pair * $thisProductVariant->quantity, 2, '.', ' ') . ' ' . session('currency') }}</span>
                         </p>
-                        <p class="flex justify-between">
-                            <span>Знижка:</span>
-                            <span>-{{ number_format($discount, 2, '.', ' ') . ' ' . session('currency') }}</span>
-                        </p>
-                        @if($freeShipping)
-                            <p class="flex justify-between">
-                                <span>Доставка:</span>
-                                <span>Безкоштовно</span>
-                            </p>
-                        @else
-                            <p class="flex justify-between">
-                                <span>Доставка:</span>
-                                <span>За Ваш рахунок</span>
-                            </p>
-                        @endif
                         <hr class="my-4">
                         <p class="flex justify-between text-lg font-semibold">
                             <span>До сплати:</span>
-                            <span>{{ number_format($totalDiscountPrice, 2, '.', ' ') . ' ' . session('currency') }}</span>
+                            <span>{{ number_format($product->price->pair * $thisProductVariant->quantity, 2, '.', ' ') . ' ' . session('currency') }}</span>
                         </p>
-                        @if($belowMinimumAmount)
+                        @if($product->price->pair * $thisProductVariant->quantity > 500)
                             <p class="text-red-500 mt-4 text-center">
-                                Мінімальна сума для замовлення {{ number_format($minimumAmount, 2, '.', ' ') }} {{ session('currency') }}.
+                                Мінімальна сума для замовлення 500 {{ session('currency') }}.
                             </p>
                         @endif
                         <form action="{{ route('site.order.store') }}" method="POST" class="mt-6">
@@ -73,8 +49,8 @@
 
                             <div class="flex">
                                 <div class="first md:w-2/3 mr-4">
-                                    <input type="hidden" name="total_price" value="{{ round($totalDiscountPrice, 2) }}">
-                                    <input type="hidden" name="cost_delivery" value="{{ $freeShipping ? 'Безкоштовно' : 'За Ваш рахунок' }}">
+                                    <input type="hidden" name="total_price" value="{{ round($product->price->pair * $thisProductVariant->quantity, 2) }}">
+{{--                                    <input type="hidden" name="cost_delivery" value="{{ $freeShipping ? 'Безкоштовно' : 'За Ваш рахунок' }}">--}}
                                     <input type="hidden" name="currency" value="{{ session('currency') }}">
                                     <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                     <div class="mb-4">
@@ -254,9 +230,9 @@
                                             <label for="MeestRegion" class="block font-semibold">Регіон / Область</label>
                                             <select name="MeestRegion" id="MeestRegion" class="w-full border rounded-md py-2 px-3">
                                                 <option value="">--- Виберіть ---</option>
-                                                    @foreach($meestRegions as $region)
-                                                        <option value="{{ $region['regionID'] }}">{{ ucfirst(strtolower($region['regionDescr']['descrUA'])) }}</option>
-                                                    @endforeach
+                                                @foreach($meestRegions as $region)
+                                                    <option value="{{ $region['regionID'] }}">{{ ucfirst(strtolower($region['regionDescr']['descrUA'])) }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
 

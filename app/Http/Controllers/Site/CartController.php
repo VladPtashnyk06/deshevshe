@@ -213,6 +213,9 @@ class CartController extends Controller
      */
     public function addToCart(CartRequest $request): RedirectResponse
     {
+        if ($request->validated('action_type') == 'buyFast') {
+            \Cart::clear();
+        }
         $product = Product::find($request->post('product_id'));
         $productVariant = ProductVariant::where('product_id', $request->post('product_id'))->where('color_id', $request->post('color_id_popup'))->where('size_id', $request->post('size_id_popup'))->first();
 
@@ -274,6 +277,9 @@ class CartController extends Controller
             ]);
         }
 
+        if ($request->validated('action_type') == 'buyFast') {
+            return redirect()->route('site.order.create');
+        }
         return to_route('cart');
     }
 

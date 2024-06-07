@@ -16,6 +16,8 @@ use App\Models\User;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
 use App\Services\UkrPoshtaService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -228,6 +230,40 @@ class OrderController extends Controller
         }
 
         return redirect()->route('site.order.thankYou');
+    }
+
+    public function updateCart(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'id' => 'required|string|max:12',
+            'quantity' => 'required|integer|max:1024',
+        ]);
+
+        if ($request->has('quantityDed') && ($validated['quantity'] > 1)) {
+            \Cart::update(
+                $validated['id'],
+                [
+                    'quantity' => [
+                        'relative' => false,
+                        'value' => $validated['quantity'] - 1,
+                    ],
+                ]
+            );
+        }
+
+        if ($request->has('quantityAdd')) {
+            \Cart::update(
+                $validated['id'],
+                [
+                    'quantity' => [
+                        'relative' => false,
+                        'value' => $validated['quantity'] + 1,
+                    ],
+                ]
+            );
+        }
+
+        return back()->with('cart', 'cart_updated');
     }
 
     public function thankYou()

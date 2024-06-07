@@ -131,9 +131,17 @@
                                                 </div>
                                                 <div class="mt-4">
                                                     @if($product->status_id == 1)
-                                                        <button onclick="openPopup({{ $product->id }})"
+                                                        <button onclick="openPopup({{ $product->id }}, 'cart')"
                                                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border">
                                                             В кошик
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                                <div class="mt-1">
+                                                    @if($product->status_id == 1)
+                                                        <button onclick="openPopup({{ $product->id }}, 'buyFast')"
+                                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full border">
+                                                            Купити бистро
                                                         </button>
                                                     @endif
                                                 </div>
@@ -157,9 +165,11 @@
             <div class="mt-3 text-center">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">Виберіть колір і розмір</h3>
                 <div class="mt-2 px-7 py-3">
-                    <form id="cart_form_popup" action="{{ route('cart.store') }}" method="post">
+                    <form id="cart_form_popup" action="" method="post">
                         @csrf
+
                         <input type="hidden" id="popup_product_id" name="product_id" value="">
+                        <input type="hidden" id="action_type" name="action_type" value="">
                         @error('color_id_popup')
                         <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково колір товару, щоб добавити його в кошик") }}</span>
                         @enderror
@@ -179,7 +189,7 @@
                         <div class="mt-4">
                             <button type="submit"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full">
-                                Додати в кошик
+                                Підтвердити
                             </button>
                         </div>
                     </form>
@@ -196,14 +206,25 @@
 </x-app-layout>
 
 <script>
-    function openPopup(productId) {
+    function openPopup(productId, actionType) {
         document.getElementById('popup_product_id').value = productId;
+        var actionTypeHidden = document.getElementById('action_type');
         document.getElementById('popupModal').classList.remove('hidden');
+
+        const form = document.getElementById('cart_form_popup');
+        if (actionType === 'cart') {
+            form.action = '{{ route('cart.store') }}';
+            actionTypeHidden.value = 'cart';
+        } else if (actionType === 'buyFast') {
+            form.action = '{{ route('cart.store') }}';
+            actionTypeHidden.value = 'buyFast';
+        }
 
         fetch(`/product/get-product/${productId}`)
             .then(response => response.json())
             .then(productData => {
                 const colorSelect = document.getElementById('color_id_popup');
+                colorSelect.innerHTML = '<option value="" selected>Виберіть колір</option>';
 
                 productData.productVariants.forEach(variant => {
                     const option = document.createElement('option');
@@ -216,7 +237,6 @@
                     const colorId = this.value;
                     const sizeContainer = document.getElementById('size-container');
                     const sizeSelect = document.getElementById('size_id_popup');
-
                     sizeSelect.innerHTML = '';
 
                     fetch(`/product/get-sizes/${productId}`)
@@ -224,8 +244,8 @@
                         .then(data => {
                             sizeContainer.classList.remove('hidden');
                             data.sizeVariants.forEach(size => {
-                                const option = document.createElement('option');
                                 if (size.color_id == colorId) {
+                                    const option = document.createElement('option');
                                     option.value = size.size.id;
                                     option.textContent = size.size.title;
                                     sizeSelect.appendChild(option);
@@ -242,15 +262,8 @@
     }
 
     function closePopup() {
-        const colorSelect = document.getElementById('color_id_popup');
-        colorSelect.innerHTML = '';
-
-        const sizeContainer = document.getElementById('size-container');
-        const sizeSelect = document.getElementById('size_id_popup');
-        sizeSelect.innerHTML = '';
-        sizeContainer.classList.add('hidden');
-
         document.getElementById('popupModal').classList.add('hidden');
         location.reload();
     }
 </script>
+
