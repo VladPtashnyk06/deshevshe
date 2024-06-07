@@ -96,19 +96,19 @@
                     <form id="cart_form_popup" action="{{ route('cart.store') }}" method="post">
                         @csrf
                         <input type="hidden" id="popup_product_id" name="product_id" value="">
-                        @error('color_id')
+                        @error('color_id_popup')
                         <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково колір товару, щоб добавити його в кошик") }}</span>
                         @enderror
-                        <label for="color_id" class="block mb-2 font-bold">Виберіть колір:</label>
-                        <select name="color_id" id="color_id" class="w-full border rounded px-3 py-2">
+                        <label for="color_id_popup" class="block mb-2 font-bold">Виберіть колір:</label>
+                        <select name="color_id_popup" id="color_id_popup" class="w-full border rounded px-3 py-2">
                             <option value="" selected>Виберіть колір</option>
                         </select>
                         <div id="size-container" class="mt-4 hidden">
-                            @error('size_id')
+                            @error('size_id_popup')
                             <span class="text-red-500">{{ htmlspecialchars("Виберіть обов'язково розмір товару, щоб добавити його в кошик") }}</span>
                             @enderror
-                            <label for="size_id" class="block mb-2 font-bold">Виберіть розмір:</label>
-                            <select name="size_id" id="size_id" class="w-full border rounded px-3 py-2">
+                            <label for="size_id_popup" class="block mb-2 font-bold">Виберіть розмір:</label>
+                            <select name="size_id_popup" id="size_id_popup" class="w-full border rounded px-3 py-2">
                                 <option value="" selected>Виберіть Розмір</option>
                             </select>
                         </div>
@@ -139,7 +139,7 @@
         fetch(`/product/get-product/${productId}`)
             .then(response => response.json())
             .then(productData => {
-                const colorSelect = document.getElementById('color_id');
+                const colorSelect = document.getElementById('color_id_popup');
                 colorSelect.innerHTML = '';
                 const firstOption = document.createElement('option');
                 firstOption.value = '';
@@ -153,10 +153,10 @@
                     colorSelect.appendChild(option);
                 });
 
-                document.getElementById('color_id').addEventListener('change', function () {
+                document.getElementById('color_id_popup').addEventListener('change', function () {
                     const colorId = this.value;
                     const sizeContainer = document.getElementById('size-container');
-                    const sizeSelect = document.getElementById('size_id');
+                    const sizeSelect = document.getElementById('size_id_popup');
 
                     sizeSelect.innerHTML = '';
 
@@ -183,11 +183,11 @@
     }
 
     function closePopup() {
-        const colorSelect = document.getElementById('color_id');
+        const colorSelect = document.getElementById('color_id_popup');
         colorSelect.innerHTML = '';
 
         const sizeContainer = document.getElementById('size-container');
-        const sizeSelect = document.getElementById('size_id');
+        const sizeSelect = document.getElementById('size_id_popup');
         sizeSelect.innerHTML = '';
         sizeContainer.classList.add('hidden');
 
