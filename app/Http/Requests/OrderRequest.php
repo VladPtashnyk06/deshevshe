@@ -55,6 +55,7 @@ class OrderRequest extends FormRequest
             'address' => ['nullable', 'string'],
             'delivery_type' => ['required', 'string'],
             'promo_code' => ['nullable', 'string'],
+            'points' => ['nullable', 'integer'],
         ];
     }
 }

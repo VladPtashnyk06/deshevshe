@@ -89,11 +89,13 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
-                    <div>
-                        <p class="text-gray-400">
-                            Бали: {{ Auth::user()->points }} {{ session()->get('currency') }}
-                        </p>
-                    </div>
+                    @if(Auth::user()->role == 'user')
+                        <div>
+                            <p class="text-gray-400">
+                                Бали: {{ Auth::user()->points }} {{ session()->get('currency') }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
             @else
                 <div class="flex items-center">

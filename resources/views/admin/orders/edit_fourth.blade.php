@@ -103,8 +103,15 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="balu" class="block mb-2 text-gray-700">Бали</label>
-                        <input type="text" name="balu" id="balu" class="w-full border rounded px-3 py-2" value="">
+                        <div class="flex flex-row items-end space-x-4">
+                            <div class="flex-1">
+                                <label for="points" class="block mb-2 text-gray-700">Бали</label>
+                                <input type="number" max="{{ $order->user->points }}" name="points" id="points" class="w-full border rounded px-3 py-2" placeholder="Максимальна кількість балів для цього користувача - {{ $order->user->points }} {{ session()->get('currency') }}">
+                            </div>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border" onclick="addPoints(this, {{ $order->id }})">Застосувати</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-4">
@@ -134,6 +141,9 @@
                     <form action="{{ route('operator.order.updateOrderPromoCode', $order->id) }}" method="POST" id="promo_{{ $order->id }}">
                         @csrf
                     </form>
+                    <form action="{{ route('operator.order.updateOrderPoints', $order->id) }}" method="POST" id="points_{{ $order->id }}">
+                        @csrf
+                    </form>
                 @endif
             </div>
         </section>
@@ -150,6 +160,23 @@
             hiddenInput.type = 'hidden';
             hiddenInput.name = 'promo_code';
             hiddenInput.value = promoCodeInput.value;
+
+            form.appendChild(hiddenInput);
+
+            form.submit();
+        }
+    }
+
+    function addPoints(button, orderId) {
+        let pointsInput = document.getElementById('points');
+        if (orderId) {
+            let form_id = '#points_' + orderId;
+            let form = document.querySelector(form_id);
+
+            let hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'points';
+            hiddenInput.value = pointsInput.value;
 
             form.appendChild(hiddenInput);
 

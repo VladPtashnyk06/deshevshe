@@ -363,6 +363,20 @@ class OrderController extends Controller
         return back();
     }
 
+    public function updateOrderPoints(Request $request, Order $order)
+    {
+        if ($request->post('points')) {
+            $order->update([
+                'total_price' => $order->total_price - $request->post('points')
+            ]);
+            $order->user->update([
+                'points' => $order->user->points - $request->post('points'),
+            ]);
+            session()->put('points_'.$order->id , $request->post('points'));
+        }
+        return back();
+    }
+
     public function showUserOrders(User $user)
     {
         $orders = Order::where('user_id', $user->id)

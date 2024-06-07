@@ -127,6 +127,19 @@ class OrderController extends Controller
                 return back()->withErrors(['promo_code' => 'Такого промокоду немає']);
             }
         }
+
+        if ($request->validated('points')) {
+            if (isset($totalPrice)) {
+                $totalPrice = $totalPrice - $request->validated('points');
+            } else {
+                $totalPrice = $request->validated('total_price') - $request->validated('points');
+            }
+            $user = User::find($request->validated('user_id'));
+            $user->update([
+                'points' => $user->points - $request->validated('points'),
+            ]);
+        }
+
         $orderStatus = OrderStatus::where('title', 'Нове')->first();
         if (isset($newUser)) {
             $newOrder = Order::create([
@@ -160,6 +173,7 @@ class OrderController extends Controller
             ]);
         }
         if (isset($newOrder)) {
+            session()->put('points_'.$newOrder->id , $request->validated('points'));
             $cartItems = \Cart::getContent()->sortBy('id');
             foreach ($cartItems as $item) {
                 $product = Product::find($item->attributes->product_id);

@@ -125,8 +125,14 @@
                                             </div>
                                         @endif
                                         <label for="promo_code" class="block text-gray-700">Промокод</label>
-                                        <input type="text" id="promo_code" name="promo_code" class="mt-1 block w-full border rounded">
+                                        <input type="text" id="promo_code" name="promo_code" class="mt-1 block w-full border rounded" placeholder="Введіть промокод">
                                     </div>
+                                    @if(Auth::user())
+                                        <div class="mb-4">
+                                            <label for="points" class="block text-gray-700">Бали</label>
+                                            <input type="number" id="points" max="{{ Auth::user()->points }}" name="points" class="mt-1 block w-full border rounded" placeholder="Максимальна кількість балів: {{ Auth::user()->points }} {{ session()->get('currency') }}">
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="second md:w-2/3">
                                     <h2 class="text-lg font-semibold">Спосіб доставки</h2>
