@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\NovaPoshtaService;
 use Illuminate\Http\Request;
 
-class DeliveryController extends Controller
+class NovaPoshtaController extends Controller
 {
     protected $novaPoshtaService;
 

@@ -18,8 +18,8 @@ use App\Http\Controllers\MeestController;
 /* =================================== */
 /*             NovaPoshta              */
 /* =================================== */
-Route::post('/cities', [\App\Http\Controllers\DeliveryController::class, 'getCities'])->name('cities');
-Route::post('/branches', [\App\Http\Controllers\DeliveryController::class, 'getBranches'])->name('branches');
+Route::post('/cities', [\App\Http\Controllers\NovaPoshtaController::class, 'getCities'])->name('cities');
+Route::post('/branches', [\App\Http\Controllers\NovaPoshtaController::class, 'getBranches'])->name('branches');
 
 /* =================================== */
 /*                Meest                */
