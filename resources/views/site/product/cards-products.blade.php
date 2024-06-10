@@ -98,15 +98,9 @@
                                                     <div class="flex justify-between">
                                                         <div class="flex items-center rating" data-product-id="{{ $product->id }}">
                                                             @for ($i = 1; $i <= 5; $i++)
-                                                                @if ($i <= $product->rating)
-                                                                    <svg class="w-6 h-6 cursor-pointer star text-gray-400" style="fill: yellow" data-rating="{{ $i }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                        <path d="M10 15l-5.878 3.09 1.122-6.54L.364 7.65l6.564-.954L10 .684l3.072 6.012 6.564.954-4.88 4.9 1.122 6.54z"/>
-                                                                    </svg>
-                                                                @else
-                                                                    <svg class="w-6 h-6 cursor-pointer star text-gray-400" style="fill: gray" data-rating="{{ $i }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                        <path d="M10 15l-5.878 3.09 1.122-6.54L.364 7.65l6.564-.954L10 .684l3.072 6.012 6.564.954-4.88 4.9 1.122 6.54z"/>
-                                                                    </svg>
-                                                                @endif
+                                                                <svg class="w-6 h-6 cursor-pointer star text-gray-400" style="fill: {{ $i <= $product->rating ? 'yellow' : 'gray' }}" data-rating="{{ $i }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                                    <path d="M10 15l-5.878 3.09 1.122-6.54L.364 7.65l6.564-.954L10 .684l3.072 6.012 6.564.954-4.88 4.9 1.122 6.54z"/>
+                                                                </svg>
                                                             @endfor
                                                         </div>
                                                         <span class="ml-2 text-gray-600 text-lg" id="rating-value-{{ $product->id }}">{{ $product->rating ? $product->rating : 0 }} / 5</span>
@@ -293,22 +287,22 @@
                 const starElements = this.closest('.rating').querySelectorAll('.star');
                 starElements.forEach(star => {
                     if (star.getAttribute('data-rating') <= rating) {
-                        star.style = 'fill: yellow';
+                        star.style.fill = 'yellow';
                     } else {
-                        star.style = 'fill: gray';
+                        star.style.fill = 'gray';
                     }
                 });
             });
 
             star.addEventListener('mouseout', function () {
                 const productId = this.closest('.rating').getAttribute('data-product-id');
-                const currentRating = document.getElementById(`rating-value-${productId}`).textContent.split(' ')[0];
+                const currentRating = parseFloat(document.getElementById(`rating-value-${productId}`).textContent.split(' ')[0]);
                 const starElements = this.closest('.rating').querySelectorAll('.star');
                 starElements.forEach(star => {
                     if (star.getAttribute('data-rating') <= currentRating) {
-                        star.style = 'fill: yellow';
+                        star.style.fill = 'yellow';
                     } else {
-                        star.style = 'fill: gray';
+                        star.style.fill = 'gray';
                     }
                 });
             });
@@ -331,10 +325,17 @@
                     .then(data => {
                         if (data.success) {
                             const ratingValue = document.getElementById(`rating-value-${productId}`);
-                            var newRating = Math.round(data.newRating);
+                            var newRating = Math.round(data.newRating * 10) / 10; // округлення до 1 знака після коми
                             ratingValue.textContent = `${newRating} / 5`;
 
-                            location.reload();
+                            const starElements = document.querySelectorAll(`.rating[data-product-id='${productId}'] .star`);
+                            starElements.forEach(star => {
+                                if (star.getAttribute('data-rating') <= newRating) {
+                                    star.style.fill = 'yellow';
+                                } else {
+                                    star.style.fill = 'gray';
+                                }
+                            });
                         }
                     })
                     .catch(error => console.error('Error:', error));
