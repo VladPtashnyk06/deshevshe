@@ -124,6 +124,7 @@ Route::middleware('auth.operator')->group(function () {
                 Route::get('/documentList','getDocumentList')->name('operator.order.getDocumentList');
                 Route::get('/thank-ttn/{order}', 'thankTTN')->name('operator.order.thankTTN');
                 Route::get('/pdf-ttn/{order}', 'ttnPdf')->name('operator.order.ttnPdf');
+                Route::delete('/ttn-destroy/{order}', 'destroy')->name('operator.order.ttnDestroy');
             });
         });
     });

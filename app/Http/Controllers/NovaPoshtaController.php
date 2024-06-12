@@ -37,32 +37,11 @@ class NovaPoshtaController extends Controller
         return response()->json($branches);
     }
 
-    public function getCounterparties()
-    {
-        $counterparties = $this->novaPoshtaService->getCounterparties();
-
-        return response()->json($counterparties);
-    }
-
     public function getDocumentList()
     {
         $documentList = $this->novaPoshtaService->getDocumentList();
 
         return response()->json($documentList);
-    }
-
-    public function getScanSheetList()
-    {
-        $scanSheetList = $this->novaPoshtaService->getScanSheetList();
-
-        return response()->json($scanSheetList);
-    }
-
-    public function getScanSheet()
-    {
-        $scanSheet = $this->novaPoshtaService->getScanSheet();
-
-        return response()->json($scanSheet);
     }
 
     public function createTTN(Order $order)
@@ -141,7 +120,7 @@ class NovaPoshtaController extends Controller
             $afterpaymentOnGoodsCost = '';
         }
         if ($delivery->delivery_method == 'postomat') {
-            $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $volumetricVolume, $volumetricWidth, $volumetricLength, $volumetricHeight);
+            $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight);
         } else {
             $response = $novaPoshtaService->storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost);
         }
@@ -182,5 +161,15 @@ class NovaPoshtaController extends Controller
     public function ttnPdf(NovaPoshtaService $novaPoshtaService, Order $order)
     {
         return $novaPoshtaService->ttnPdf($order);
+    }
+
+    public function destroy(NovaPoshtaService $novaPoshtaService, Order $order)
+    {
+        $novaPoshtaService->destroy($order->ref);
+        $order->update([
+            'ref' => '',
+            'int_doc_number' => ''
+        ]);
+        return redirect()->back();
     }
 }

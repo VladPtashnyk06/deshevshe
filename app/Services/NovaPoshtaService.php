@@ -40,45 +40,6 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
-    public function getCounterparties()
-    {
-        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
-            'apiKey' => $this->apiKey,
-            'modelName' => 'CounterpartyGeneral',
-            'calledMethod' => 'getCounterparties',
-            'methodProperties' => [
-                'CounterpartyProperty' => 'Sender',
-            ],
-        ]);
-
-        return $response->json()['data'];
-    }
-
-    public function getScanSheetList()
-    {
-        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
-            'apiKey' => $this->apiKey,
-            'modelName' => 'ScanSheetGeneral',
-            'calledMethod' => 'getScanSheetList',
-        ]);
-
-        return $response->json()['data'];
-    }
-
-    public function getScanSheet()
-    {
-        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
-            'apiKey' => $this->apiKey,
-            'modelName' => 'ScanSheetGeneral',
-            'calledMethod' => 'getScanSheet',
-            'methodProperties' => [
-                'Ref' => '9a8d8ce3-2413-11ef-bcd0-48df37b921da',
-            ],
-        ]);
-
-        return $response->json()['data'];
-    }
-
     public function getDocumentList()
     {
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
@@ -207,4 +168,15 @@ class NovaPoshtaService
         return redirect()->to($url);
     }
 
+    public function destroy($refTTN)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            "modelName"  => "InternetDocumentGeneral",
+            "calledMethod" => "delete",
+            "methodProperties" => [
+                "DocumentRefs" => $refTTN
+            ]
+        ]);
+    }
 }
