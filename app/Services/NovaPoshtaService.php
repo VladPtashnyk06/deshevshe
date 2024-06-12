@@ -113,7 +113,7 @@ class NovaPoshtaService
         return $response->json();
     }
 
-    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight){
+    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -147,13 +147,14 @@ class NovaPoshtaService
                 "OwnershipForm" => "",
                 "RecipientContactName" => "",
                 "EDRPOU" => "",
-                "OptionsSeat" => [
+                "OptionsSeat" => [[
                     "volumetricVolume" => $volumeGeneral,
                     "volumetricWidth" => $volumetricWidth,
                     "volumetricLength" => $volumetricLength,
                     "volumetricHeight" => $volumetricHeight,
                     "weight" => $weight,
-                ]
+                ]],
+                "AfterpaymentOnGoodsCost" => $afterpaymentOnGoodsCost
             ]
         ]);
 
