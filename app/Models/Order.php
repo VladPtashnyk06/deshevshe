@@ -26,6 +26,8 @@ class Order extends Model
         'total_price',
         'currency',
         'comment',
+        'int_doc_number',
+        'ref',
     ];
 
     public function setOrderStatusIdAttribute($value)

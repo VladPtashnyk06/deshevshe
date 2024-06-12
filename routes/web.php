@@ -118,6 +118,13 @@ Route::middleware('auth.operator')->group(function () {
                 Route::get('/add-additional-product/update', 'getProductsByCode')->name('operator.order.addAdditionalProduct');
                 Route::delete('/order-detail/delete/{order_detail}', 'orderDetailDestroy')->name('operator.order_detail.destroy');
             });
+            Route::controller(\App\Http\Controllers\NovaPoshtaController::class)->group(function () {
+                Route::get('/ttn/create/{order}', 'createTTN')->name('operator.order.createTTN');
+                Route::post('/ttn/store/{delivery}', 'storeTTN')->name('operator.order.storeTTN');
+                Route::get('/documentList','getDocumentList')->name('operator.order.getDocumentList');
+                Route::get('/thank-ttn/{order}', 'thankTTN')->name('operator.order.thankTTN');
+                Route::get('/pdf-ttn/{order}', 'ttnPdf')->name('operator.order.ttnPdf');
+            });
         });
     });
 });

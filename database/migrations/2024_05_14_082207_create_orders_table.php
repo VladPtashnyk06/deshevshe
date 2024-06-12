@@ -21,6 +21,8 @@ return new class extends Migration {
             $table->string('cost_delivery');
             $table->integer('total_price');
             $table->string('currency');
+            $table->string('int_doc_number')->nullable();
+            $table->string('ref')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
         });
