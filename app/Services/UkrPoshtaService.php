@@ -169,5 +169,17 @@ class UkrPoshtaService
         return response($response->body(), 200)
             ->header('Content-Type', 'application/pdf');
     }
+    public function destroy(Order $order)
+    {
+        $orderRef = $order->ref;
+        $url = "https://dev.ukrposhta.ua/ecom/0.0.1/shipments/$orderRef?token=$this->token";
+
+        $response = Http::withHeaders([
+            'accept' => '*/*',
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ])->delete($url);
+
+        return response()->json(['error' => 'Failed to delete the shipment'], $response->status());
+    }
 
 }

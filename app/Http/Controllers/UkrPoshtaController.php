@@ -230,4 +230,17 @@ class UkrPoshtaController extends Controller
 
         return [$street, $house, $flat];
     }
+
+    public function destroy(UkrPoshtaService $ukrPoshtaService, Order $order)
+    {
+        $response = $ukrPoshtaService->destroy($order);
+        if ($response) {
+            $order->update([
+                'int_doc_number' => null,
+                'ref' => null
+            ]);
+        }
+
+        return redirect()->back();
+    }
 }
