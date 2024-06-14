@@ -780,7 +780,6 @@
                 }
 
                 function fetchBranches(cityId, searchText) {
-                    console.log(cityId)
                     fetch(`/ukr/branches?cityId=${cityId}`, {
                         method: 'GET',
                         headers: {
@@ -790,7 +789,6 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data)
                             UkrPoshtaBranchesList.innerHTML = '';
                             data.forEach(branch => {
                                 const listItem = document.createElement('li');

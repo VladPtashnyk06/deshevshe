@@ -111,8 +111,6 @@
         let recipientHouse = form.recipient_house ? form.recipient_house.value : '';
         let recipientFlat = form.recipient_flat ? form.recipient_flat.value : '';
 
-        console.log(orderId, width, height, length, weight, description)
-
         fetch(`/operator/orders/novaposhta/ttn/store/${deliveryId}`, {
             method: 'POST',
             headers: {

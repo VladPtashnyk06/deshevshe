@@ -134,9 +134,6 @@
         let senderPhoneNumber = form.sender_phone_number ? form.sender_phone_number.value : '';
         let senderEdrpou = form.sender_edrpou ? form.sender_edrpou.value : '';
 
-        console.log(width, height, length, weight, description, postcode, senderCity, senderName, senderPhoneNumber, senderEdrpou)
-        console.log(senderUuid)
-
         fetch(`/operator/orders/ukrposhta/ttn/store/{{$order->delivery->id}}`, {
             method: 'POST',
             headers: {
@@ -164,7 +161,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log(data)
                 if (data) {
                     window.location.href = `/operator/orders/ukrposhta/thank-ttn/{{$order->id}}`;
                 }

@@ -134,8 +134,6 @@
             .then(data => {
                 selectProduct.innerHTML = '<option value="">Виберіть товар</option>';
 
-                console.log(data)
-
                 data.forEach(product => {
                     if (Array.isArray(product.product_variants)) {
                         product.product_variants.forEach(variant => {

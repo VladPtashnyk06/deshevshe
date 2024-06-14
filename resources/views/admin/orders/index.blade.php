@@ -228,8 +228,8 @@
                                             </g>
                                         </svg>
                                     </a>
-                                    @if($order->int_doc_number && $order->ref)
-                                        <a href="{{ route('operator.order.novaPoshta.ttnPdf', $order->id) }}" target="_blank" class="p-2" onclick="return isOperator()">
+                                    @if($order->ref)
+                                        <a href="{{ $order->delivery->delivery_name == "NovaPoshta" ? route('operator.order.novaPoshta.ttnPdf', $order->id) : ($order->delivery->delivery_name == "UkrPoshta" ? route('operator.order.ukrPoshta.ttnPdf', $order->id) : '#') }}" target="_blank" class="p-2" onclick="return isOperator()">
                                             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M7.9393 16.4004H8.58466C8.76358 16.4004 8.90202 16.3375 9 16.2115C9.09798 16.0856 9.14697 15.9025 9.14697 15.6621C9.14697 15.4125 9.09691 15.2145 8.99681 15.068C8.8967 14.9192 8.76251 14.8436 8.59425 14.8413H7.9393V16.4004Z" fill="black"/>
                                                 <path d="M11.6645 14.8413V18.1621H11.9457C12.2588 18.1621 12.4792 18.0739 12.607 17.8977C12.7348 17.7191 12.8019 17.4123 12.8083 16.9773V16.1085C12.8083 15.6415 12.7476 15.3164 12.6262 15.1332C12.5048 14.9478 12.2982 14.8505 12.0064 14.8413H11.6645Z" fill="black"/>
@@ -324,7 +324,6 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Response from server:', data);
                     window.location.reload();
                 })
                 .catch(error => {
