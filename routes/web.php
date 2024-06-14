@@ -119,12 +119,23 @@ Route::middleware('auth.operator')->group(function () {
                 Route::delete('/order-detail/delete/{order_detail}', 'orderDetailDestroy')->name('operator.order_detail.destroy');
             });
             Route::controller(\App\Http\Controllers\NovaPoshtaController::class)->group(function () {
-                Route::get('/ttn/create/{order}', 'createTTN')->name('operator.order.createTTN');
-                Route::post('/ttn/store/{delivery}', 'storeTTN')->name('operator.order.storeTTN');
-                Route::get('/documentList','getDocumentList')->name('operator.order.getDocumentList');
-                Route::get('/thank-ttn/{order}', 'thankTTN')->name('operator.order.thankTTN');
-                Route::get('/pdf-ttn/{order}', 'ttnPdf')->name('operator.order.ttnPdf');
-                Route::delete('/ttn-destroy/{order}', 'destroy')->name('operator.order.ttnDestroy');
+                Route::group(['prefix' => 'novaposhta'], function () {
+                    Route::get('/ttn/create/{order}', 'createTTN')->name('operator.order.novaPoshta.createTTN');
+                    Route::post('/ttn/store/{delivery}', 'storeTTN')->name('operator.order.novaPoshta.storeTTN');
+                    Route::get('/documentList','getDocumentList')->name('operator.order.novaPoshta.getDocumentList');
+                    Route::get('/thank-ttn/{order}', 'thankTTN')->name('operator.order.novaPoshta.thankTTN');
+                    Route::get('/pdf-ttn/{order}', 'ttnPdf')->name('operator.order.novaPoshta.ttnPdf');
+                    Route::delete('/ttn-destroy/{order}', 'destroy')->name('operator.order.novaPoshta.ttnDestroy');
+                });
+            });
+            Route::controller(\App\Http\Controllers\UkrPoshtaController::class)->group(function () {
+                Route::group(['prefix' => 'ukrposhta'], function () {
+                    Route::post('/ttn/create/{order}', 'getSenderByPhone')->name('operator.order.ukrPoshta.createTTN');
+                    Route::post('/ttn/store/{delivery}', 'storeTTN')->name('operator.order.ukrPoshta.storeTTN');
+                    Route::get('/thank-ttn/{order}', 'thankTTN')->name('operator.order.ukrPoshta.thankTTN');
+                    Route::get('/pdf-ttn/{order}', 'ttnPdf')->name('operator.order.ukrPoshta.ttnPdf');
+                    Route::delete('/ttn-destroy/{order}', 'destroy')->name('operator.order.ukrPoshta.ttnDestroy');
+                });
             });
         });
     });

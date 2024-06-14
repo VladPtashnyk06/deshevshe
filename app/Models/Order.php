@@ -20,6 +20,7 @@ class Order extends Model
         'promo_code_id',
         'user_name',
         'user_last_name',
+        'user_middle_name',
         'user_phone',
         'user_email',
         'cost_delivery',

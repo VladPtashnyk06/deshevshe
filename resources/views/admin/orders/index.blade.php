@@ -229,14 +229,14 @@
                                         </svg>
                                     </a>
                                     @if($order->int_doc_number && $order->ref)
-                                        <a href="{{ route('operator.order.ttnPdf', $order->id) }}" target="_blank" class="p-2" onclick="return isOperator()">
+                                        <a href="{{ route('operator.order.novaPoshta.ttnPdf', $order->id) }}" target="_blank" class="p-2" onclick="return isOperator()">
                                             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M7.9393 16.4004H8.58466C8.76358 16.4004 8.90202 16.3375 9 16.2115C9.09798 16.0856 9.14697 15.9025 9.14697 15.6621C9.14697 15.4125 9.09691 15.2145 8.99681 15.068C8.8967 14.9192 8.76251 14.8436 8.59425 14.8413H7.9393V16.4004Z" fill="black"/>
                                                 <path d="M11.6645 14.8413V18.1621H11.9457C12.2588 18.1621 12.4792 18.0739 12.607 17.8977C12.7348 17.7191 12.8019 17.4123 12.8083 16.9773V16.1085C12.8083 15.6415 12.7476 15.3164 12.6262 15.1332C12.5048 14.9478 12.2982 14.8505 12.0064 14.8413H11.6645Z" fill="black"/>
                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M19.937 8.68L19.9276 8.65196C19.9204 8.62974 19.9132 8.60787 19.904 8.586C19.855 8.48 19.794 8.379 19.708 8.293L13.708 2.293C13.622 2.207 13.521 2.146 13.415 2.097C13.3943 2.08736 13.3727 2.08056 13.3508 2.07367C13.3409 2.07056 13.331 2.06742 13.321 2.064C13.237 2.036 13.151 2.018 13.062 2.013C13.0519 2.01208 13.0424 2.00925 13.033 2.00647C13.0221 2.0032 13.0113 2 13 2H6C4.897 2 4 2.897 4 4V20C4 21.103 4.897 22 6 22H18C19.103 22 20 21.103 20 20V9C20 8.98867 19.9968 8.97792 19.9935 8.96697C19.9907 8.95762 19.9879 8.94813 19.987 8.938C19.982 8.85 19.965 8.764 19.937 8.68ZM13 4V9H18L13 4ZM7.9393 17.2418V19H7V14H8.58466C9.04473 14 9.41108 14.1534 9.68371 14.4602C9.95847 14.7669 10.0958 15.1653 10.0958 15.6552C10.0958 16.1451 9.9606 16.5321 9.6901 16.8159C9.4196 17.0998 9.04473 17.2418 8.5655 17.2418H7.9393ZM10.7252 19V14H11.9553C12.4984 14 12.9308 14.1854 13.2524 14.5563C13.5761 14.9272 13.7412 15.4354 13.7476 16.081V16.8915C13.7476 17.5485 13.5857 18.0648 13.262 18.4402C12.9404 18.8134 12.4963 19 11.9297 19H10.7252ZM15.3642 16.9602H16.8243V16.1223H15.3642V14.8413H17V14H14.4249V19H15.3642V16.9602Z" fill="black"/>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('operator.order.ttnDestroy', $order->id) }}" method="post">
+                                        <form action="{{ route('operator.order.novaPoshta.ttnDestroy', $order->id) }}" method="post">
                                             @csrf
                                             @method('DELETE')
 
@@ -247,7 +247,7 @@
                                             </button>
                                         </form>
                                     @else
-                                        <a href="{{ route('operator.order.createTTN', $order->id) }}" class="p-2" onclick="return isOperator()">
+                                        <a href="{{ $order->delivery->delivery_name == 'NovaPoshta' ? route('operator.order.novaPoshta.createTTN', $order->id) : '#' }}" class="p-2" onclick="{{ $order->delivery->delivery_name == 'UkrPoshta' ? 'getSender('. $order->id .')' : '' }}">
                                             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                                  width="20px" viewBox="0 0 401.994 401.994" style="enable-background:new 0 0 401.994 401.994;fill: green"
                                                  xml:space="preserve">
@@ -266,6 +266,28 @@
                         @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div id="senderPhonePopup" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onclick="closePopup(event)">
+                    <div class="bg-white p-8 rounded shadow-lg w-full max-w-2xl relative" onclick="event.stopPropagation()">
+                        <button class="absolute top-2 right-2 text-gray-700 text-3xl" style="width: 50px; height: 50px;" onclick="closePopup()">&times;</button>
+                        <form action="" method="post" id="senderForm">
+                            @csrf
+                            <div class="mb-4">
+                                <label for="sender_phone" class="block text-gray-700">Введіть телефон відправника</label>
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-900 text-sm">
+                                        +380
+                                    </span>
+                                    <input type="text" id="sender_phone" name="sender_phone" class="mt-1 block w-full pl-2 border-l-0 rounded-r-md border border-gray-300" required placeholder="971231212">
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300">
+                                    Перевірити чи є такий відправник
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -309,6 +331,24 @@
                     console.error('There was a problem with the fetch operation:', error);
                 });
         });
+    }
+
+    function getSender(orderId) {
+        const senderPhonePopup = document.getElementById('senderPhonePopup');
+
+        const senderForm = document.getElementById('senderForm');
+
+        senderForm.action = `/operator/orders/ukrposhta/ttn/create/${orderId}`;
+
+        senderPhonePopup.classList.remove('hidden');
+    }
+
+    function closePopup(event) {
+        if (event) {
+            event.preventDefault();
+        }
+        const senderPhonePopup = document.getElementById('senderPhonePopup');
+        senderPhonePopup.classList.add('hidden');
     }
 
     // setInterval(function() {

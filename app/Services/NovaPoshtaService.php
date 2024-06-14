@@ -163,8 +163,8 @@ class NovaPoshtaService
 
     public function ttnPdf(Order $order)
     {
-        $orderId = $order->int_doc_number;
-        $url = "https://my.novaposhta.ua/orders/printDocument/orders[]/" . $orderId . "/type/pdf/apiKey/$this->apiKey";
+        $orderRef = $order->ref;
+        $url = "https://my.novaposhta.ua/orders/printMarking100x100/orders[]/$orderRef/type/pdf/apiKey/$this->apiKey/zebra";
 
         return redirect()->to($url);
     }

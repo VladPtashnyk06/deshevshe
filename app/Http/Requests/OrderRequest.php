@@ -29,6 +29,7 @@ class OrderRequest extends FormRequest
             'payment_method_id' => ['required'],
             'user_name' => ['required', 'string'],
             'user_last_name' => ['required', 'string'],
+            'user_middle_name' => ['required', 'string'],
             'user_phone' => ['required', 'regex:/^\+380(39|67|68|96|97|98|50|66|95|99|63|73|93)\d{7}$/'],
             'user_email' => ['nullable', 'string'],
             'password' => ['nullable'],

@@ -78,12 +78,16 @@
                                     <input type="hidden" name="currency" value="{{ session('currency') }}">
                                     <input type="hidden" name="user_id" value="{{ Auth::user() ? Auth::user()->id : '' }}">
                                     <div class="mb-4">
+                                        <label for="user_last_name" class="block text-gray-700">Прізвище</label>
+                                        <input type="text" id="user_last_name" name="user_last_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->last_name : old('user_last_name') }}" placeholder="Введіть прізвище">
+                                    </div>
+                                    <div class="mb-4">
                                         <label for="user_name" class="block text-gray-700">Ім'я</label>
                                         <input type="text" id="user_name" name="user_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->name : old('user_name') }}" placeholder="Введіть ім'я">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="user_last_name" class="block text-gray-700">Прізвище</label>
-                                        <input type="text" id="user_last_name" name="user_last_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->last_name : old('user_last_name') }}" placeholder="Введіть прізвище">
+                                        <label for="user_middle_name" class="block text-gray-700">По батькові</label>
+                                        <input type="text" id="user_middle_name" name="user_middle_name" class="mt-1 block w-full border rounded" required value="{{ Auth::user() ? Auth::user()->middle_name : old('user_middle_name') }}" placeholder="Введіть по батькові">
                                     </div>
                                     <div class="mb-4">
                                         @error('user_phone')
@@ -744,7 +748,7 @@
                     const regionId = UkrPoshtaRegionSelect.value;
                     if (regionId && UkrPoshtaCityInput.value.trim().length === 0) {
                         fetchCities(regionId, '');
-                    } else if (UkrPoshtaCityInput.children.length > 0) {
+                    } else if (UkrPoshtaCityInput.children.length >= 0) {
                         UkrPoshtaCityList.classList.remove('hidden');
                     }
                 });

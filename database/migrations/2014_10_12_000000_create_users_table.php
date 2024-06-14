@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('last_name');
+            $table->string('middle_name')->nullable()->default(null);
             $table->string('phone')->unique();
             $table->string('email')->unique()->nullable();
             $table->integer('points')->default(0);

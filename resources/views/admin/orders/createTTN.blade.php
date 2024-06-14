@@ -113,7 +113,7 @@
 
         console.log(orderId, width, height, length, weight, description)
 
-        fetch(`/operator/orders/ttn/store/${deliveryId}`, {
+        fetch(`/operator/orders/novaposhta/ttn/store/${deliveryId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -137,7 +137,7 @@
             )
             .then(data => {
                 if (data.success) {
-                    window.location.href = `/operator/orders/thank-ttn/${orderId}`;
+                    window.location.href = `/operator/orders/novaposhta/thank-ttn/${orderId}`;
                 } else {
                     console.error('Error:', data.message);
                 }

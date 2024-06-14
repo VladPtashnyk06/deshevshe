@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('promo_code_id')->nullable()->constrained('promo_codes');
             $table->string('user_name')->nullable();
             $table->string('user_last_name')->nullable();
+            $table->string('user_middle_name')->nullable();
             $table->string('user_phone', 15)->nullable();
             $table->string('user_email')->nullable();
             $table->string('cost_delivery');

@@ -97,6 +97,7 @@ class OrderController extends Controller
                     'email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                     'name' => $request->validated('user_name'),
                     'last_name' => $request->validated('user_last_name'),
+                    'middle_name' => $request->validated('user_middle_name'),
                     'password' => \Hash::make($request->validated('password')),
                 ]);
             }
@@ -152,6 +153,7 @@ class OrderController extends Controller
                 'cost_delivery' => $request->validated('cost_delivery'),
                 'user_name' => $request->validated('user_name'),
                 'user_last_name' => $request->validated('user_last_name'),
+                'user_middle_name' => $request->validated('user_middle_name'),
                 'user_phone' => $request->validated('user_phone'),
                 'user_email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                 'total_price' => isset($totalPrice) ? $totalPrice : $request->validated('total_price'),
@@ -167,6 +169,7 @@ class OrderController extends Controller
                 'cost_delivery' => $request->validated('cost_delivery'),
                 'user_name' => $request->validated('user_name'),
                 'user_last_name' => $request->validated('user_last_name'),
+                'user_middle_name' => $request->validated('user_middle_name'),
                 'user_phone' => $request->validated('user_phone'),
                 'user_email' => $request->validated('user_email') ? $request->validated('user_email') : null,
                 'total_price' => isset($totalPrice) ? $totalPrice : $request->validated('total_price'),
