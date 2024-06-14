@@ -53,7 +53,7 @@ class NovaPoshtaController extends Controller
         if ($delivery->delivery_method == 'courier') {
             list($recipientAddressName, $recipientHouse, $recipientFlat) = $this->parseAddress($delivery->address);
         }
-        return view('admin.orders.createTTN', compact('order', 'delivery', 'recipientAddressName', 'recipientHouse', 'recipientFlat'));
+        return view('admin.orders.novaPoshta.createTTN', compact('order', 'delivery', 'recipientAddressName', 'recipientHouse', 'recipientFlat'));
     }
 
     public function storeTTN(Request $request, NovaPoshtaService $novaPoshtaService, Delivery $delivery)
