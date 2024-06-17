@@ -5,6 +5,19 @@
                 <h2 class="text-2xl font-semibold mb-4 text-center">Сформувати ТТН</h2>
                 <form id="ttnForm">
 
+                    <div class="mb-4">
+                        @error('sender_ref')
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
+                        @enderror
+                        <label for="sender_ref" class="block mb-2 font-bold">Відправник</label>
+                        <select name="sender_ref" id="sender_ref" class="w-full border rounded px-3 py-2">
+                            <option value=""> Всі відправники </option>
+                            @foreach($senders as $sender)
+                                <option value="{{ $sender['Ref'] }}"> {{ $sender['CounterpartyFullName'] }} </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <input type="hidden" name="delivery_id" value="{{ $delivery->id }}">
                     <input type="hidden" name="order_id" value="{{ $order->id }}">
 
@@ -99,6 +112,7 @@
 
         const csrfToken = '{{ csrf_token() }}';
         const form = event.target;
+        const senderRef = form.sender_ref.value;
         const width = form.width.value;
         const height = form.height.value;
         const length = form.length.value;
@@ -118,6 +132,7 @@
                 'X-CSRF-TOKEN': csrfToken
             },
             body: JSON.stringify({
+                sender_ref: senderRef,
                 order_id: orderId,
                 width: width,
                 length: length,

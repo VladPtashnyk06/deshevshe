@@ -46,6 +46,9 @@ class NovaPoshtaController extends Controller
 
     public function createTTN(Order $order)
     {
+        $novaPoshtaService = new NovaPoshtaService();
+        $senders = $novaPoshtaService->getSenders();
+//        dd($senders);
         $delivery = Delivery::where('order_id', $order->id)->first();
         $recipientAddressName = '';
         $recipientHouse = '';
@@ -53,7 +56,7 @@ class NovaPoshtaController extends Controller
         if ($delivery->delivery_method == 'courier') {
             list($recipientAddressName, $recipientHouse, $recipientFlat) = $this->parseAddress($delivery->address);
         }
-        return view('admin.orders.novaPoshta.createTTN', compact('order', 'delivery', 'recipientAddressName', 'recipientHouse', 'recipientFlat'));
+        return view('admin.orders.novaPoshta.createTTN', compact('order', 'delivery', 'recipientAddressName', 'recipientHouse', 'recipientFlat', 'senders'));
     }
 
     public function storeTTN(Request $request, NovaPoshtaService $novaPoshtaService, Delivery $delivery)
@@ -119,10 +122,13 @@ class NovaPoshtaController extends Controller
         } else {
             $afterpaymentOnGoodsCost = '';
         }
+        if ($request->post('sender_ref')) {
+            $senderRef = $request->post('sender_ref');
+        }
         if ($delivery->delivery_method == 'postomat') {
-            $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost);
+            $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $senderRef, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost);
         } else {
-            $response = $novaPoshtaService->storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost);
+            $response = $novaPoshtaService->storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $senderRef, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost);
         }
 
         if (isset($response) && $response && $response['data'][0]['Ref']) {

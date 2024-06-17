@@ -71,7 +71,21 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
-    public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost){
+    public function getSenders()
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'CounterpartyGeneral',
+            'calledMethod' => 'getCounterparties',
+            'methodProperties' => [
+                'CounterpartyProperty' => 'Sender',
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $senderRef, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost){
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -88,7 +102,7 @@ class NovaPoshtaService
                 "Description" => $description,
                 "Cost" => $cost,
                 "CitySender" => "e71f8e8f-4b33-11e4-ab6d-005056801329",
-                "Sender" => "7fabb148-938f-11ee-a60f-48df37b921db",
+                "Sender" => $senderRef,
                 "SenderAddress" => "0d545f60-e1c2-11e3-8c4a-0050568002cf",
                 "ContactSender" => "093f2700-940f-11ee-a60f-48df37b921db",
                 "SendersPhone" => "380673130651",
@@ -113,7 +127,7 @@ class NovaPoshtaService
         return $response->json();
     }
 
-    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
+    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $senderRef, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -129,7 +143,7 @@ class NovaPoshtaService
                 "Description" => $description,
                 "Cost" => $cost,
                 "CitySender" => "e71f8e8f-4b33-11e4-ab6d-005056801329",
-                "Sender" => "7fabb148-938f-11ee-a60f-48df37b921db",
+                "Sender" => $senderRef,
                 "SenderAddress" => "0d545f60-e1c2-11e3-8c4a-0050568002cf",
                 "ContactSender" => "093f2700-940f-11ee-a60f-48df37b921db",
                 "SendersPhone" => "380673130651",
@@ -171,7 +185,7 @@ class NovaPoshtaService
 
     public function destroy($refTTN)
     {
-        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+        Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
             "calledMethod" => "delete",
