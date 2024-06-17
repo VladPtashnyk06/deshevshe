@@ -40,6 +40,22 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
+    public function getCitiesByString($cityName)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'searchSettlements',
+            'methodProperties' => [
+                'CityName' => $cityName,
+                'Limit' => '1',
+                'Page' => '1'
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
     public function getDocumentList()
     {
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
@@ -47,8 +63,8 @@ class NovaPoshtaService
             'modelName' => 'InternetDocumentGeneral',
             'calledMethod' => 'getDocumentList',
             'methodProperties' => [
-                'DateTimeFrom' => '12.06.2024',
-                'DateTimeTo' => '12.06.2024',
+                'DateTimeFrom' => '17.06.2024',
+                'DateTimeTo' => '17.06.2024',
                 'GetFullList' => '1',
             ],
         ]);
@@ -85,7 +101,35 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
-    public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $senderRef, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost){
+    public function getCounterpartyContactPersons($ref)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'CounterpartyGeneral',
+            'calledMethod' => 'getCounterpartyContactPersons',
+            'methodProperties' => [
+                'Ref' => $ref,
+                'Page' => '1'
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+    public function getWarehouses($cityRef)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getWarehouses',
+            'methodProperties' => [
+                'CityRef' => $cityRef,
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost){
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -94,17 +138,17 @@ class NovaPoshtaService
                 "PayerType" => $payerType,
                 "PaymentMethod" => "Cash",
                 "DateTime" => now()->format('d.m.Y'),
-                "CargoType" => "Cargo",
+                "CargoType" => 'Parcel',
                 "VolumeGeneral" => $volumeGeneral,
                 "Weight" => $weight,
                 "ServiceType" => $serviceType,
                 "SeatsAmount" => "1",
                 "Description" => $description,
                 "Cost" => $cost,
-                "CitySender" => "e71f8e8f-4b33-11e4-ab6d-005056801329",
+                "CitySender" => $citySender,
                 "Sender" => $senderRef,
-                "SenderAddress" => "0d545f60-e1c2-11e3-8c4a-0050568002cf",
-                "ContactSender" => "093f2700-940f-11ee-a60f-48df37b921db",
+                "SenderAddress" => $senderAddress,
+                "ContactSender" => $contactSender,
                 "SendersPhone" => "380673130651",
                 "RecipientsPhone" => $recipientsPhone,
                 "NewAddress" => "1",
@@ -127,7 +171,7 @@ class NovaPoshtaService
         return $response->json();
     }
 
-    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $senderRef, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
+    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -136,16 +180,16 @@ class NovaPoshtaService
                 "PayerType" => $payerType,
                 "PaymentMethod" => "Cash",
                 "DateTime" => now()->format('d.m.Y'),
-                "CargoType" => "Cargo",
+                "CargoType" => 'Parcel',
                 "Weight" => $weight,
                 "ServiceType" => $serviceType,
                 "SeatsAmount" => "1",
                 "Description" => $description,
                 "Cost" => $cost,
-                "CitySender" => "e71f8e8f-4b33-11e4-ab6d-005056801329",
+                "CitySender" => $citySender,
                 "Sender" => $senderRef,
-                "SenderAddress" => "0d545f60-e1c2-11e3-8c4a-0050568002cf",
-                "ContactSender" => "093f2700-940f-11ee-a60f-48df37b921db",
+                "SenderAddress" => $senderAddress,
+                "ContactSender" => $contactSender,
                 "SendersPhone" => "380673130651",
                 "RecipientsPhone" => $recipientsPhone,
                 "NewAddress" => "1",

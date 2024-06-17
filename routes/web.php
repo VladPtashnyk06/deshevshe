@@ -121,6 +121,9 @@ Route::middleware('auth.operator')->group(function () {
             Route::controller(\App\Http\Controllers\NovaPoshtaController::class)->group(function () {
                 Route::group(['prefix' => 'novaposhta'], function () {
                     Route::get('/ttn/create/{order}', 'createTTN')->name('operator.order.novaPoshta.createTTN');
+                    Route::post('/ttn/create/getCitiesByName', 'getCitiesByName')->name('operator.order.novaPoshta.createTTN.getCitiesByName');
+                    Route::post('/ttn/create/getCounterpartyContactPersons', 'getCounterpartyContactPersons')->name('operator.order.novaPoshta.createTTN.getCounterpartyContactPersons');
+                    Route::post('/ttn/create/getWarehouses', 'getWarehouses')->name('operator.order.novaPoshta.createTTN.getWarehouses');
                     Route::post('/ttn/store/{delivery}', 'storeTTN')->name('operator.order.novaPoshta.storeTTN');
                     Route::get('/documentList','getDocumentList')->name('operator.order.novaPoshta.getDocumentList');
                     Route::get('/thank-ttn/{order}', 'thankTTN')->name('operator.order.novaPoshta.thankTTN');

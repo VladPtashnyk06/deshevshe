@@ -366,6 +366,7 @@
         const NovaPoshtaBranchesContainer = document.getElementById('NovaPoshtaBranchesContainer');
         const NovaPoshtaRegionSelect = document.getElementById('NovaPoshtaRegion');
         const NovaPoshtaCityInput = document.getElementById('NovaPoshtaCityInput');
+
         const NovaPoshtaBranchesInput = document.getElementById('NovaPoshtaBranchesInput');
         const NovaPoshtaCityList = document.getElementById('NovaPoshtaCityList');
         const NovaPoshtaBranchesList = document.getElementById('NovaPoshtaBranchesList');
