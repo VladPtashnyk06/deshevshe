@@ -130,6 +130,7 @@ class NovaPoshtaService
     }
 
     public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost){
+        $recipientNameParts = explode(' ', $recipientName, 2);
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -164,7 +165,11 @@ class NovaPoshtaService
                 "OwnershipForm" => "",
                 "RecipientContactName" => "",
                 "EDRPOU" => "",
-                "AfterpaymentOnGoodsCost" => $afterpaymentOnGoodsCost
+                "AfterpaymentOnGoodsCost" => $afterpaymentOnGoodsCost,
+                "ContactRecipient" => [[
+                    "FirstName" => $recipientNameParts[0],
+                    "LastName" => $recipientNameParts[1] ?? ''
+                ]]
             ]
         ]);
 
@@ -172,6 +177,7 @@ class NovaPoshtaService
     }
 
     public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
+        $recipientNameParts = explode(' ', $recipientName, 2);
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -212,7 +218,11 @@ class NovaPoshtaService
                     "volumetricHeight" => $volumetricHeight,
                     "weight" => $weight,
                 ]],
-                "AfterpaymentOnGoodsCost" => $afterpaymentOnGoodsCost
+                "AfterpaymentOnGoodsCost" => $afterpaymentOnGoodsCost,
+                "ContactRecipient" => [[
+                    "FirstName" => $recipientNameParts[0],
+                    "LastName" => $recipientNameParts[1] ?? ''
+                ]]
             ]
         ]);
 

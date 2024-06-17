@@ -89,75 +89,45 @@ class NovaPoshtaController extends Controller
             $order = Order::find($request->post('order_id'));
         }
         if (isset($order)) {
-            if ($order->cost_delivery == 'За Ваш рахунок') {
-                $payerType = 'Recipient';
-            } else {
-                $payerType = 'Sender';
-            }
-            if (isset($order->total_price)) {
-                $cost = $order->total_price;
-            }
-            if (isset($order->user_phone)) {
-                $recipientsPhone = $order->user_phone;
-            }
+            $payerType = ($order->cost_delivery == 'За Ваш рахунок') ? 'Recipient' : 'Sender';
+            $cost = $order->total_price ?? null;
+            $recipientsPhone = $order->user_phone ?? null;
         }
+
         if (!empty($request->post('width')) && !empty($request->post('height')) && !empty($request->post('length'))) {
             $volumetricWidth =  $request->post('width') / 100;
             $volumetricLength = $request->post('height') / 100;
             $volumetricHeight = $request->post('length') / 100;
-            $volumetricVolume = $request->post('width') * $request->post('height') * $request->post('length');
             $volumeGeneral = $volumetricWidth * $volumetricLength * $volumetricHeight;
         }
-        if (!empty($request->post('weight'))) {
-            $weight = strval($request->post('weight'));
-        }
+        $weight = !empty($request->post('weight')) ? strval($request->post('weight')) : '';
+
         if ($delivery->delivery_method == 'courier') {
             $serviceType = "WarehouseDoors";
-            if ($request->post('recipient_address_name')) {
-                $recipientAddressName = 'вул. '. $request->post('recipient_address_name');
-            }
-            if ($request->post('recipient_house')) {
-                $recipientHouse = $request->post('recipient_house');
-            }
-            if ($request->post('recipient_flat')) {
-                $recipientFlat = $request->post('recipient_flat');
-            }
+            $recipientAddressName = $request->post('recipient_address_name') ? 'вул. '. $request->post('recipient_address_name') : '';
+            $recipientHouse = $request->post('recipient_house') ?? '';
+            $recipientFlat = $request->post('recipient_flat') ?? '';
         } else {
             $serviceType = 'WarehouseWarehouse';
             $recipientAddressName = $this->extractBranchNumber($delivery->branch);
             $recipientHouse = '';
             $recipientFlat = '';
         }
-        if ($request->post('description')) {
-            $description = $request->post('description');
-        }
-        if (isset($delivery->city)) {
-            $recipientCityName = $delivery->city;
-        }
-        if (isset($order->user_name) && isset($order->user_last_name)) {
-//            $recipientName = $order->user_name .' '. $order->user_last_name;
-            $recipientName = 'Тест Тест';
-        }
+
+        $description = $request->post('description') ?? '';
+
+        $recipientCityName = $delivery->city ?? '';
+        $recipientName = $order->user_name && $order->user_last_name ? $order->user_name .' '. $order->user_last_name : 'Тест Тест';
         if ($request->post('recipient_type')) {
             $recipientType = $request->post('recipient_type');
         }
-        if ($order->paymentMethod->title == 'Оплата при доставці') {
-            $afterpaymentOnGoodsCost = $order->total_price;
-        } else {
-            $afterpaymentOnGoodsCost = '';
-        }
-        if ($request->post('sender_ref')) {
-            $senderRef = $request->post('sender_ref');
-        }
-        if ($request->post('city_ref_hidden')) {
-            $citySender = $request->post('city_ref_hidden');
-        }
-        if ($request->post('contacts_person_ref')) {
-            $contactSender = $request->post('contacts_person_ref');
-        }
-        if ($request->post('sender_address')) {
-            $senderAddress = $request->post('sender_address');
-        }
+        $afterpaymentOnGoodsCost = ($order->paymentMethod->title == 'Оплата при доставці') ? $order->total_price : '';
+
+        $senderRef = $request->post('sender_ref') ?? '';
+        $citySender = $request->post('city_ref_hidden') ?? '';
+        $contactSender = $request->post('contacts_person_ref') ?? '';
+        $senderAddress = $request->post('sender_address') ?? '';
+
         if ($delivery->delivery_method == 'postomat') {
             $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost);
         } else {
