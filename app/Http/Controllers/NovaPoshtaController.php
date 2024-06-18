@@ -117,7 +117,8 @@ class NovaPoshtaController extends Controller
         $description = $request->post('description') ?? '';
 
         $recipientCityName = $delivery->city ?? '';
-        $recipientName = $order->user_name && $order->user_last_name ? $order->user_name .' '. $order->user_last_name : 'Тест Тест';
+//        $recipientName = $order->user_name && $order->user_last_name ? $order->user_name .' '. $order->user_last_name : 'Тест Тест';
+        $recipientName = 'Тест Тест';
         if ($request->post('recipient_type')) {
             $recipientType = $request->post('recipient_type');
         }
