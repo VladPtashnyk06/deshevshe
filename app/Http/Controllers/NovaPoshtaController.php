@@ -20,9 +20,10 @@ class NovaPoshtaController extends Controller
 
     public function getCities(Request $request)
     {
-        $regionRef = $request->input('region');
+        $regionRef = $request->input('region_ref');
+        $findByString = $request->input('findByString');
 
-        $cities = $this->novaPoshtaService->getCities($regionRef);
+        $cities = $this->novaPoshtaService->getCities($regionRef, $findByString);
 
         return response()->json($cities);
     }
@@ -36,14 +37,42 @@ class NovaPoshtaController extends Controller
         return response()->json($citiesByName);
     }
 
+    public function getStreets(Request $request)
+    {
+        $cityName = $request->input('city_name');
+
+        $ref = $this->novaPoshtaService->getRef($cityName);
+
+        $streets = $this->novaPoshtaService->getStreets($ref[0]['Ref']);
+
+        return response()->json($streets);
+    }
+
     public function getBranches(Request $request)
     {
         $cityRef = $request->input('city');
-        $categoryOfWarehouse = $request->input('categoryOfWarehouse');
 
-        $branches = $this->novaPoshtaService->getBranches($cityRef, $categoryOfWarehouse);
+        $branches = $this->novaPoshtaService->getBranches($cityRef);
 
         return response()->json($branches);
+    }
+
+    public function getDistricts(Request $request)
+    {
+        $regionRef = $request->input('region');
+
+        $districts = $this->novaPoshtaService->getDistricts($regionRef);
+
+        return response()->json($districts);
+    }
+
+    public function getVillages(Request $request)
+    {
+        $districtRef = $request->input('district_ref');
+
+        $villages = $this->novaPoshtaService->getVillages($districtRef);
+
+        return response()->json($villages);
     }
 
     public function getDocumentList()
@@ -72,15 +101,9 @@ class NovaPoshtaController extends Controller
     public function createTTN(Order $order)
     {
         $senders = $this->novaPoshtaService->getSenders();
-//        dd($senders);
         $delivery = Delivery::where('order_id', $order->id)->first();
-        $recipientAddressName = '';
-        $recipientHouse = '';
-        $recipientFlat = '';
-        if ($delivery->delivery_method == 'courier') {
-            list($recipientAddressName, $recipientHouse, $recipientFlat) = $this->parseAddress($delivery->address);
-        }
-        return view('admin.orders.novaPoshta.createTTN', compact('order', 'delivery', 'recipientAddressName', 'recipientHouse', 'recipientFlat', 'senders'));
+
+        return view('admin.orders.novaPoshta.createTTN', compact('order', 'delivery', 'senders'));
     }
 
     public function storeTTN(Request $request, NovaPoshtaService $novaPoshtaService, Delivery $delivery)
@@ -101,24 +124,25 @@ class NovaPoshtaController extends Controller
             $volumeGeneral = $volumetricWidth * $volumetricLength * $volumetricHeight;
         }
         $weight = !empty($request->post('weight')) ? strval($request->post('weight')) : '';
-
+        $recipientArea = $delivery->region;
+        $recipientAreaRegions = $delivery->district ? $delivery->district : '';
+        $recipientCityName = $delivery->city ? $delivery->city : (stripos($delivery->village, 'село ') === 0 ? str_replace('село ', '', $delivery->village) : (stripos($delivery->village, 'селище міського типу ') === 0 ? str_replace('селище міського типу ', '', $delivery->village) : ''));
         if ($delivery->delivery_method == 'courier') {
             $serviceType = "WarehouseDoors";
-            $recipientAddressName = $request->post('recipient_address_name') ? 'вул. '. $request->post('recipient_address_name') : '';
-            $recipientHouse = $request->post('recipient_house') ?? '';
-            $recipientFlat = $request->post('recipient_flat') ?? '';
+            $recipientAddressName = $delivery->street;
+            $recipientHouse = $delivery->house;
+            $recipientFlat = $delivery->flat ? $delivery->flat : '';
         } else {
             $serviceType = 'WarehouseWarehouse';
-            $recipientAddressName = $this->extractBranchNumber($delivery->branch);
+            $recipientAddressName = $delivery->branchNumber;
             $recipientHouse = '';
             $recipientFlat = '';
         }
 
         $description = $request->post('description') ?? '';
 
-        $recipientCityName = $delivery->city ?? '';
 //        $recipientName = $order->user_name && $order->user_last_name ? $order->user_name .' '. $order->user_last_name : 'Тест Тест';
-        $recipientName = 'Тест Тест';
+        $recipientName = 'Влад Пташник';
         if ($request->post('recipient_type')) {
             $recipientType = $request->post('recipient_type');
         }
@@ -128,11 +152,12 @@ class NovaPoshtaController extends Controller
         $citySender = $request->post('city_ref_hidden') ?? '';
         $contactSender = $request->post('contacts_person_ref') ?? '';
         $senderAddress = $request->post('sender_address') ?? '';
+        $settlementType = $delivery->village ? $this->getSettlementType($delivery->village) : 'місто';
 
         if ($delivery->delivery_method == 'postomat') {
-            $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost);
+            $response = $novaPoshtaService->storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientArea, $recipientAreaRegions, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $settlementType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost);
         } else {
-            $response = $novaPoshtaService->storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost);
+            $response = $novaPoshtaService->storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientArea, $recipientAreaRegions, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $settlementType, $afterpaymentOnGoodsCost);
         }
 
         if (isset($response) && $response && $response['data'][0]['Ref']) {
@@ -145,28 +170,24 @@ class NovaPoshtaController extends Controller
         return $response;
     }
 
+    function getSettlementType($village) {
+        if (strpos($village, 'село') !== false) {
+            return 'село';
+        } elseif (strpos($village, 'селище міського типу') !== false) {
+            return 'селище міського типу';
+        } else {
+            return 'місто';
+        }
+    }
+
+    public function getBrucnhesVillages()
+    {
+        return $this->novaPoshtaService->getBranchesVillages();
+    }
+
     public function thankTTN(Order $order)
     {
         return view('admin.orders.thankTTN', ['order' => $order]);
-    }
-
-    private function parseAddress($address)
-    {
-        $pattern = '/^(.*)\s(\d+),?\s?кв?\s?(\d+)?$/u';
-        preg_match($pattern, $address, $matches);
-
-        $street = isset($matches[1]) ? $matches[1] : '';
-        $house = isset($matches[2]) ? $matches[2] : '';
-        $flat = isset($matches[3]) ? $matches[3] : '';
-
-        return [$street, $house, $flat];
-    }
-
-    function extractBranchNumber($branch) {
-        if (preg_match('/№(\d+)/', $branch, $matches)) {
-            return $matches[1];
-        }
-        return null;
     }
 
     public function ttnPdf(NovaPoshtaService $novaPoshtaService, Order $order)

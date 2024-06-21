@@ -90,6 +90,7 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
+//        dd($request->validated());
         if ($request->post('registration') == 'on') {
             if ($request->validated('password') == $request->validated('password_confirmation')) {
                 $newUser = User::create([
@@ -198,12 +199,21 @@ class OrderController extends Controller
                     'order_id' => $newOrder->id,
                     'delivery_name' => $deliveryName,
                     'delivery_method' => $deliveryType,
-                    'region' => $request->validated('NovaPoshtaRegion'),
-                    'city' => $request->validated('NovaPoshtaCityInput'),
-                    'cityRef' => $request->validated('cityRefHidden'),
-                    'branch' => $request->validated('NovaPoshtaBranchesInput'),
-                    'branchRef' => $request->validated('branchRefHidden'),
-                    'address' => $request->validated('address'),
+                    'region' => $request->validated('nova_poshta_region'),
+                    'regionRef' => $request->validated('nova_poshta_region_ref'),
+                    'city' => $request->validated('nova_poshta_city_input'),
+                    'cityRef' => $request->validated('city_ref'),
+                    'branch' => $request->validated('nova_poshta_branches_input'),
+                    'branchNumber' => $request->validated('branch_number'),
+                    'branchRef' => $request->validated('branch_ref'),
+                    'district' => $request->validated('district_input'),
+                    'districtRef' => $request->validated('district_ref'),
+                    'village' => $request->validated('village_input'),
+                    'villageRef' => $request->validated('village_ref'),
+                    'street' => $request->validated('street_input'),
+                    'streetRef' => $request->validated('street_ref'),
+                    'house' => $request->validated('house'),
+                    'flat' => $request->validated('flat'),
                 ]);
             } elseif ($deliveryName == 'Meest') {
                 Delivery::create([
@@ -215,7 +225,13 @@ class OrderController extends Controller
                     'cityRef' => $request->validated('meestCityIdHidden'),
                     'branch' => $request->validated('MeestBranchesInpute'),
                     'branchRef' => $request->validated('meestBranchIDHidden'),
-                    'address' => $request->validated('address'),
+                    'district' => $request->validated('district_input'),
+                    'districtRef' => $request->validated('district_ref'),
+                    'village' => $request->validated('village_input'),
+                    'villageRef' => $request->validated('village_ref'),
+                    'street' => $request->validated('street_input'),
+                    'streetRef' => $request->validated('street_ref'),
+                    'flat' => $request->validated('flat'),
                 ]);
             } else if ($deliveryName == 'UkrPoshta') {
                 Delivery::create([
@@ -227,7 +243,13 @@ class OrderController extends Controller
                     'cityRef' => $request->validated('ukrPoshtaCityIdHidden'),
                     'branch' => $request->validated('UkrPoshtaBranchesInput'),
                     'branchRef' => $request->validated('ukrPoshtaBranchIDHidden'),
-                    'address' => $request->validated('address'),
+                    'district' => $request->validated('district_input'),
+                    'districtRef' => $request->validated('district_ref'),
+                    'village' => $request->validated('village_input'),
+                    'villageRef' => $request->validated('village_ref'),
+                    'street' => $request->validated('street_input'),
+                    'streetRef' => $request->validated('street_ref'),
+                    'flat' => $request->validated('flat'),
                 ]);
             }
         }

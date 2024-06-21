@@ -106,7 +106,7 @@
                         <div class="flex flex-row items-end space-x-4">
                             <div class="flex-1">
                                 <label for="points" class="block mb-2 text-gray-700">Бали</label>
-                                <input type="number" max="{{ $order->user->points }}" name="points" id="points" class="w-full border rounded px-3 py-2" placeholder="Максимальна кількість балів для цього користувача - {{ $order->user->points }} {{ session()->get('currency') }}">
+                                <input type="number" min="0" max="{{ $order->user ? $order->user->points : '0'}}" name="points" id="points" class="w-full border rounded px-3 py-2" placeholder="{{$order->user ? ('Максимальна кількість балів для цього користувача - '. $order->user->points .' '. session()->get('currency')) : 'Користувач не зареєстрований' }}">
                             </div>
                             <div class="flex-shrink-0">
                                 <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border" onclick="addPoints(this, {{ $order->id }})">Застосувати</button>

@@ -31,11 +31,21 @@ class Delivery extends Model
         'delivery_name',
         'delivery_method',
         'region',
+        'regionRef',
         'city',
         'cityRef',
         'branch',
         'branchRef',
-        'address',
+        'district',
+        'branchNumber',
+        'districtRef',
+        'village',
+        'villageRef',
+        'villageRef',
+        'street',
+        'streetRef',
+        'house',
+        'flat',
     ];
 
     public function order(): BelongsTo

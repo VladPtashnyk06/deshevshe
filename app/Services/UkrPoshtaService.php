@@ -15,8 +15,8 @@ class UkrPoshtaService
     protected $token;
     public function __construct()
     {
-//        $this->apiKey = config('services.ukrposhta.api_key');
-        $this->apiKey = '3d3b0242-3f14-3118-9765-968f8ca3fb2d';
+        $this->apiKey = config('services.ukrposhta.api_key');
+//        $this->apiKey = '3d3b0242-3f14-3118-9765-968f8ca3fb2d';
         $this->token = 'ec6e7fbc-8a93-4008-bcca-d5500aa5c43c';
     }
 

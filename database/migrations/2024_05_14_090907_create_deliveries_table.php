@@ -13,11 +13,20 @@ return new class extends Migration {
             $table->string('delivery_name');
             $table->string('delivery_method');
             $table->string('region');
-            $table->string('city');
-            $table->string('cityRef');
+            $table->string('regionRef');
+            $table->string('city')->nullable();
+            $table->string('cityRef')->nullable();
             $table->string('branch')->nullable();
+            $table->string('branchNumber')->nullable();
             $table->string('branchRef')->nullable();
-            $table->string('address')->nullable();
+            $table->string('district')->nullable();
+            $table->string('districtRef')->nullable();
+            $table->string('village')->nullable();
+            $table->string('villageRef')->nullable();
+            $table->string('street')->nullable();
+            $table->string('streetRef')->nullable();
+            $table->string('house')->nullable();
+            $table->string('flat')->nullable();
             $table->timestamps();
         });
     }

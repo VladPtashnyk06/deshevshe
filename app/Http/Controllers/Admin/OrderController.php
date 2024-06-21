@@ -242,7 +242,12 @@ class OrderController extends Controller
         $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
 
         $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
-        return view('admin.orders.edit_third', compact('order', 'novaPoshtaRegions', 'meestRegions', 'deliveryNameAndType', 'ukrPoshtaRegions'));
+        if ($order->delivery->district) {
+            $deliveryLocation = 'Village';
+        } else {
+            $deliveryLocation = 'City';
+        }
+        return view('admin.orders.edit_third', compact('order', 'novaPoshtaRegions', 'meestRegions', 'deliveryNameAndType', 'ukrPoshtaRegions', 'deliveryLocation'));
     }
 
     public function updateThird(OrderEditThirdRequest $request, Order $order)
@@ -256,12 +261,21 @@ class OrderController extends Controller
             $delivery->update([
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
-                'region' => $request->validated('NovaPoshtaRegion'),
-                'city' => $request->validated('NovaPoshtaCityInput'),
-                'cityRef' => $request->validated('cityRefHidden'),
-                'branch' => $request->validated('NovaPoshtaBranchesInput'),
-                'branchRef' => $request->validated('branchRefHidden'),
-                'address' => $request->validated('address'),
+                'region' => $request->validated('nova_poshta_region'),
+                'regionRef' => $request->validated('nova_poshta_region_ref'),
+                'city' => $request->validated('nova_poshta_city_input'),
+                'cityRef' => $request->validated('city_ref'),
+                'branch' => $request->validated('nova_poshta_branches_input'),
+                'branchNumber' => $request->validated('branch_number'),
+                'branchRef' => $request->validated('branch_ref'),
+                'district' => $request->validated('district_input'),
+                'districtRef' => $request->validated('district_ref'),
+                'village' => $request->validated('village_input'),
+                'villageRef' => $request->validated('village_ref'),
+                'street' => $request->validated('street_input'),
+                'streetRef' => $request->validated('street_ref'),
+                'house' => $request->validated('house'),
+                'flat' => $request->validated('flat'),
             ]);
         } elseif ($deliveryName == 'Meest') {
             $delivery->update([
@@ -400,7 +414,12 @@ class OrderController extends Controller
         $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
 
         $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
-        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'deliveryNameAndType'));
+        if ($order->delivery->district) {
+            $deliveryLocation = 'Village';
+        } else {
+            $deliveryLocation = 'City';
+        }
+        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'deliveryNameAndType', 'deliveryLocation'));
     }
 
     public function smallUpdate(OrderSmallRequest $request ,Order $order)
@@ -414,12 +433,21 @@ class OrderController extends Controller
             $delivery->update([
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
-                'region' => $request->validated('NovaPoshtaRegion'),
-                'city' => $request->validated('NovaPoshtaCityInput'),
-                'cityRef' => $request->validated('cityRefHidden'),
-                'branch' => $request->validated('NovaPoshtaBranchesInput'),
-                'branchRef' => $request->validated('branchRefHidden'),
-                'address' => $request->validated('address'),
+                'region' => $request->validated('nova_poshta_region'),
+                'regionRef' => $request->validated('nova_poshta_region_ref'),
+                'city' => $request->validated('nova_poshta_city_input'),
+                'cityRef' => $request->validated('city_ref'),
+                'branch' => $request->validated('nova_poshta_branches_input'),
+                'branchNumber' => $request->validated('branch_number'),
+                'branchRef' => $request->validated('branch_ref'),
+                'district' => $request->validated('district_input'),
+                'districtRef' => $request->validated('district_ref'),
+                'village' => $request->validated('village_input'),
+                'villageRef' => $request->validated('village_ref'),
+                'street' => $request->validated('street_input'),
+                'streetRef' => $request->validated('street_ref'),
+                'house' => $request->validated('house'),
+                'flat' => $request->validated('flat'),
             ]);
         } elseif ($deliveryName == 'Meest') {
             $delivery->update([

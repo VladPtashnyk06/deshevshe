@@ -47,7 +47,7 @@
                                 <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
                                 @enderror
                                 <label for="warehouse" class="block mb-2 font-bold">Відділення</label>
-                                <select name="warehouse" id="warehouse" class="w-full border rounded px-3 py-2" disabled>
+                                <select name="warehouse" id="warehouse" class="w-full max-h-48 border rounded px-3 py-2  bg-white" disabled>
                                     <option value=""> Всі відділення </option>
                                 </select>
                             </div>
@@ -100,30 +100,6 @@
                         <input type="text" name="description" id="description" class="w-full border rounded px-3 py-2" value="">
                     </div>
 
-                    @if($delivery->delivery_method == 'courier')
-                        <div class="mb-4">
-                            @error('recipient_address_name')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
-                            @enderror
-                            <label for="recipient_address_name" class="block mb-2 font-bold">Вулиця</label>
-                            <input type="text" name="recipient_address_name" id="recipient_address_name" class="w-full border rounded px-3 py-2" value="{{ $recipientAddressName ? $recipientAddressName : old('recipient_address_name') }}">
-                        </div>
-                        <div class="mb-4">
-                            @error('recipient_house')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
-                            @enderror
-                            <label for="recipient_house" class="block mb-2 font-bold">№ Будинку</label>
-                            <input type="text" name="recipient_house" id="recipient_house" class="w-full border rounded px-3 py-2" value="{{ $recipientHouse ? $recipientHouse : old('recipient_house') }}">
-                        </div>
-                        <div class="mb-4">
-                            @error('recipient_flat')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
-                            @enderror
-                            <label for="recipient_flat" class="block mb-2 font-bold">№ Квартири</label>
-                            <input type="text" name="recipient_flat" id="recipient_flat" class="w-full border rounded px-3 py-2" value="{{ $recipientFlat ? $recipientFlat : old('recipient_flat') }}">
-                        </div>
-                    @endif
-
                     <div class="mb-4">
                         @error('recipient_type')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення та унікальним") }}</span>
@@ -156,7 +132,7 @@
         NovaPoshtaCityInput.addEventListener('input', function() {
             const searchText = this.value.trim().toLowerCase();
 
-            if (searchText.length > 0) {
+            if (searchText.length >= 0) {
                 NovaPoshtaFetchCities(searchText);
             } else {
                 NovaPoshtaCityList.innerHTML = '';
@@ -184,22 +160,24 @@
                 .then(response => response.json())
                 .then(data => {
                     NovaPoshtaCityList.innerHTML = '';
-
                     if (data[0] && data[0].Addresses) {
+
                         data[0].Addresses.forEach(city => {
-                            if (city.MainDescription.toLowerCase().startsWith(searchText)) {
-                                const listItem = document.createElement('li');
-                                listItem.textContent = city.MainDescription;
-                                listItem.setAttribute('data-value', city.DeliveryCity);
-                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
-                                listItem.addEventListener('click', function() {
-                                    NovaPoshtaCityInput.value = city.MainDescription;
-                                    cityRefHidden.value = city.DeliveryCity;
-                                    NovaPoshtaCityList.classList.add('hidden');
-                                    fetchWarehouses(city.DeliveryCity);
-                                    warehouseSelect.removeAttribute('disabled');
-                                });
-                                NovaPoshtaCityList.appendChild(listItem);
+                            if (city.SettlementTypeCode.toLowerCase().startsWith('м')) {
+                                if (city.MainDescription.toLowerCase().startsWith(searchText)) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = city.MainDescription;
+                                    listItem.setAttribute('data-value', city.DeliveryCity);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        NovaPoshtaCityInput.value = city.MainDescription;
+                                        cityRefHidden.value = city.DeliveryCity;
+                                        NovaPoshtaCityList.classList.add('hidden');
+                                        fetchWarehouses(city.DeliveryCity);
+                                        warehouseSelect.removeAttribute('disabled');
+                                    });
+                                    NovaPoshtaCityList.appendChild(listItem);
+                                }
                             }
                         });
                     }
@@ -301,9 +279,6 @@
         const recipientType = form.recipient_type.value;
         const cityRefHidden = form.city_ref_hidden.value;
         const contactPersonRef = form.contacts_person_ref.value;
-        let recipientAddressName = form.recipient_address_name ? form.recipient_address_name.value : '';
-        let recipientHouse = form.recipient_house ? form.recipient_house.value : '';
-        let recipientFlat = form.recipient_flat ? form.recipient_flat.value : '';
 
         fetch(`/operator/orders/novaposhta/ttn/store/${deliveryId}`, {
             method: 'POST',
@@ -319,9 +294,6 @@
                 height: height,
                 weight: weight,
                 description: description,
-                recipient_address_name: recipientAddressName,
-                recipient_house: recipientHouse,
-                recipient_flat: recipientFlat,
                 recipient_type: recipientType,
                 city_ref_hidden: cityRefHidden,
                 contacts_person_ref: contactPersonRef,

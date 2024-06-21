@@ -19,21 +19,68 @@ class NovaPoshtaService
     {
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
-            'modelName' => 'Address',
-            'calledMethod' => 'getAreas',
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getSettlementAreas',
         ]);
 
         return $response->json()['data'];
     }
 
-    public function getCities($regionRef)
+    public function getDistricts($regionRef)
     {
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
-            'modelName' => 'Address',
-            'calledMethod' => 'getCities',
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getSettlementCountryRegion',
             'methodProperties' => [
                 'AreaRef' => $regionRef,
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function getBranchesVillages()
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getWarehouses',
+            'methodProperties' => [
+                'SettlementRef' => '',
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function getVillages($districtRef)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getSettlements',
+            'methodProperties' => [
+                'RegionRef' => $districtRef,
+                'Warehouse' => '1'
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function getCities($regionRef, $findByString)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getSettlements',
+            'methodProperties' => [
+                'AreaRef' => $regionRef,
+                'FindByString' => $findByString,
+                'Warehouse' => '1',
+                'Limit' => '1460',
+                'Page' => '1'
             ],
         ]);
 
@@ -48,8 +95,22 @@ class NovaPoshtaService
             'calledMethod' => 'searchSettlements',
             'methodProperties' => [
                 'CityName' => $cityName,
-                'Limit' => '1',
                 'Page' => '1'
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function getStreets($cityRef)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getStreet',
+            'methodProperties' => [
+                'CityRef' => $cityRef,
+                'FindByString' => '',
             ],
         ]);
 
@@ -72,15 +133,29 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
-    public function getBranches($cityRef, $categoryOfWarehouse)
+    public function getBranches($cityRef)
     {
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             'modelName' => 'AddressGeneral',
             'calledMethod' => 'getWarehouses',
             'methodProperties' => [
-                'CityRef' => $cityRef,
-                'CategoryOfWarehouse' => $categoryOfWarehouse,
+                'SettlementRef' => $cityRef,
+            ],
+        ]);
+
+        return $response->json()['data'];
+    }
+
+    public function getRef($cityName)
+    {
+        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
+            'apiKey' => $this->apiKey,
+            'modelName' => 'AddressGeneral',
+            'calledMethod' => 'getCities',
+            'methodProperties' => [
+                'FindByString' => $cityName,
+                'Page' => '1',
             ],
         ]);
 
@@ -129,7 +204,7 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
-    public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $afterpaymentOnGoodsCost){
+    public function storeTTNForBranchOrCourier($payerType, $volumeGeneral, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientArea, $recipientAreaRegions, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $settlementType, $afterpaymentOnGoodsCost){
         $recipientNameParts = explode(' ', $recipientName, 2);
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
@@ -154,14 +229,14 @@ class NovaPoshtaService
                 "RecipientsPhone" => $recipientsPhone,
                 "NewAddress" => "1",
                 "RecipientCityName" => $recipientCityName,
-                "RecipientArea" => "",
-                "RecipientAreaRegions" => "",
+                "RecipientArea" => $recipientArea,
+                "RecipientAreaRegions" => $recipientAreaRegions,
                 "RecipientAddressName" => $recipientAddressName,
                 "RecipientHouse" => $recipientHouse,
                 "RecipientFlat" => $recipientFlat,
                 "RecipientName" => $recipientName,
                 "RecipientType" => $recipientType,
-                "SettlementType" => "місто",
+                "SettlementType" => $settlementType,
                 "OwnershipForm" => "",
                 "RecipientContactName" => "",
                 "EDRPOU" => "",
@@ -176,8 +251,7 @@ class NovaPoshtaService
         return $response->json();
     }
 
-    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
-        $recipientNameParts = explode(' ', $recipientName, 2);
+    public function storeTTNForPostomat($payerType, $weight, $serviceType, $description, $cost, $citySender, $senderRef, $senderAddress, $contactSender, $recipientsPhone, $recipientCityName, $recipientArea, $recipientAreaRegions, $recipientAddressName, $recipientHouse, $recipientFlat, $recipientName, $recipientType, $settlementType, $volumeGeneral, $volumetricWidth, $volumetricLength, $volumetricHeight, $afterpaymentOnGoodsCost){
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
             'apiKey' => $this->apiKey,
             "modelName"  => "InternetDocumentGeneral",
@@ -200,14 +274,14 @@ class NovaPoshtaService
                 "RecipientsPhone" => $recipientsPhone,
                 "NewAddress" => "1",
                 "RecipientCityName" => $recipientCityName,
-                "RecipientArea" => "",
-                "RecipientAreaRegions" => "",
+                "RecipientArea" => $recipientArea,
+                "RecipientAreaRegions" => $recipientAreaRegions,
                 "RecipientAddressName" => $recipientAddressName,
                 "RecipientHouse" => $recipientHouse,
                 "RecipientFlat" => $recipientFlat,
                 "RecipientName" => $recipientName,
                 "RecipientType" => $recipientType,
-                "SettlementType" => "місто",
+                "SettlementType" => $settlementType,
                 "OwnershipForm" => "",
                 "RecipientContactName" => "",
                 "EDRPOU" => "",
@@ -219,10 +293,7 @@ class NovaPoshtaService
                     "weight" => $weight,
                 ]],
                 "AfterpaymentOnGoodsCost" => $afterpaymentOnGoodsCost,
-                "ContactRecipient" => [[
-                    "FirstName" => $recipientNameParts[0],
-                    "LastName" => $recipientNameParts[1] ?? ''
-                ]]
+                "ContactRecipient" => ''
             ]
         ]);
 
