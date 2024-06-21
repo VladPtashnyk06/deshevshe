@@ -32,7 +32,7 @@
                                 </select>
                             </div>
                             <div class="mb-4 ml-4" style="flex: 1;">
-                                <label for="product_promotion" class="block mb-2 font-bold">Промоційні продукти:</label>
+                                <label for="product_promotion" class="block mb-2 font-bold">Акційні продукти:</label>
                                 <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
                                     <option value=""> Всі </option>
                                     <option value="1" @if(request()->input('product_promotion') == '1') selected @endif> Так </option>
@@ -67,7 +67,7 @@
                             <th class="p-2 text-lg">Кількість товару</th>
                             <th class="p-2 text-lg">К-сть. в упакуванні</th>
                             <th class="p-2 text-lg">Виробник</th>
-                            <th class="p-2 text-lg">Промоакція</th>
+                            <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
                             <th class="p-2 text-lg">Ціна за пару</th>
                             <th class="p-2 text-lg">Роздрібна ціна</th>
@@ -116,14 +116,27 @@
                                         <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->retail }}</td>
                                     @endif
                                 @endforeach
-                                <td class="px-6 py-4 text-right" style="vertical-align: top;">
-                                    <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 block">Редагувати</a>
-                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 w-full">Видалити</button>
-                                        <a href="{{ route('product.comments', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full">Всі коментарі</a>
-                                    </form>
+                                <td class="px-6 py-4 text-right flex" style="vertical-align: top;">
+                                    <div class="mr-4">
+                                        <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 block" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
+                                            Редагувати
+                                        </a>
+                                        <form action="{{ route('product.destroy', $product->id) }}" method="POST" class="mb-2">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
+                                                Видалити
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div>
+                                        <a href="{{ route('related-product.index', $product->id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full mb-2" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
+                                            Супутні
+                                        </a>
+                                        <a href="{{ route('product.comments', $product->id) }}" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
+                                            Коментарі
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

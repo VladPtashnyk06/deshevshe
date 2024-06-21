@@ -101,14 +101,25 @@
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" viewBox="0 0 16 16" class="inline-block" style="fill: black">
                                             <path d="M8 0c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM13.2 5.3c0.4 0 0.7 0.3 1.1 0.3-0.3 0.4-1.6 0.4-2-0.1 0.3-0.1 0.5-0.2 0.9-0.2zM1 8c0-0.4 0-0.8 0.1-1.3 0.1 0 0.2 0.1 0.3 0.1 0 0 0.1 0.1 0.1 0.2 0 0.3 0.3 0.5 0.5 0.5 0.8 0.1 1.1 0.8 1.8 1 0.2 0.1 0.1 0.3 0 0.5-0.6 0.8-0.1 1.4 0.4 1.9 0.5 0.4 0.5 0.8 0.6 1.4 0 0.7 0.1 1.5 0.4 2.2-2.5-1.2-4.2-3.6-4.2-6.5zM8 15c-0.7 0-1.5-0.1-2.1-0.3-0.1-0.2-0.1-0.4 0-0.6 0.4-0.8 0.8-1.5 1.3-2.2 0.2-0.2 0.4-0.4 0.4-0.7 0-0.2 0.1-0.5 0.2-0.7 0.3-0.5 0.2-0.8-0.2-0.9-0.8-0.2-1.2-0.9-1.8-1.2s-1.2-0.5-1.7-0.2c-0.2 0.1-0.5 0.2-0.5-0.1 0-0.4-0.5-0.7-0.4-1.1-0.1 0-0.2 0-0.3 0.1s-0.2 0.2-0.4 0.1c-0.2-0.2-0.1-0.4-0.1-0.6 0.1-0.2 0.2-0.3 0.4-0.4 0.4-0.1 0.8-0.1 1 0.4 0.3-0.9 0.9-1.4 1.5-1.8 0 0 0.8-0.7 0.9-0.7s0.2 0.2 0.4 0.3c0.2 0 0.3 0 0.3-0.2 0.1-0.5-0.2-1.1-0.6-1.2 0-0.1 0.1-0.1 0.1-0.1 0.3-0.1 0.7-0.3 0.6-0.6 0-0.4-0.4-0.6-0.8-0.6-0.2 0-0.4 0-0.6 0.1-0.4 0.2-0.9 0.4-1.5 0.4 1.1-0.8 2.5-1.2 3.9-1.2 0.3 0 0.5 0 0.8 0-0.6 0.1-1.2 0.3-1.6 0.5 0.6 0.1 0.7 0.4 0.5 0.9-0.1 0.2 0 0.4 0.2 0.5s0.4 0.1 0.5-0.1c0.2-0.3 0.6-0.4 0.9-0.5 0.4-0.1 0.7-0.3 1-0.7 0-0.1 0.1-0.1 0.2-0.2 0.6 0.2 1.2 0.6 1.8 1-0.1 0-0.1 0.1-0.2 0.1-0.2 0.2-0.5 0.3-0.2 0.7 0.1 0.2 0 0.3-0.1 0.4-0.2 0.1-0.3 0-0.4-0.1s-0.1-0.3-0.4-0.3c-0.1 0.2-0.4 0.3-0.4 0.6 0.5 0 0.4 0.4 0.5 0.7-0.6 0.1-0.8 0.4-0.5 0.9 0.1 0.2-0.1 0.3-0.2 0.4-0.4 0.6-0.8 1-0.8 1.7s0.5 1.4 1.3 1.3c0.9-0.1 0.9-0.1 1.2 0.7 0 0.1 0.1 0.2 0.1 0.3 0.1 0.2 0.2 0.4 0.1 0.6-0.3 0.8 0.1 1.4 0.4 2 0.1 0.2 0.2 0.3 0.3 0.4-1.3 1.4-3 2.2-5 2.2z"></path>
                                         </svg>
-                                        Червоне(Кіровоградська обл).
+                                        {{ $order->delivery->region .' область, '. ($order->delivery->city ? $order->delivery->city : $order->delivery->district .', '. $order->delivery->village) }}
+{{--                                        @dd($order->delivery->region .' область, '. ($order->delivery->city ? $order->delivery->city : $order->delivery->district .', '. $order->delivery->village))--}}
                                     </p>
                                     <p>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" viewBox="0 0 16 16" class="inline-block" style="fill: black">
                                             <path d="M8 1.4l-2 1.3v-1.7h-2v3l-4 2.6 0.6 0.8 7.4-4.8 7.4 4.8 0.6-0.8z"></path>
                                             <path d="M8 4l-6 4v7h5v-3h2v3h5v-7z"></path>
                                         </svg>
-                                        Пункт приймання-видачі (до 30 кг); вул, Перемоги, 3
+                                        @if($order->delivery->delivery_method == 'branch')
+                                            {{ $order->delivery->branch }}
+                                        @elseif($order->delivery->delivery_method == 'exspresBranch')
+                                            {{ $order->delivery->branch }}
+                                        @elseif($order->delivery->delivery_method == 'courier')
+                                            {{ (stripos($order->delivery->street, 'вул') !== false ? $order->delivery->street : 'вул. ' . $order->delivery->street) . ', буд. '. $order->delivery->house . ($order->delivery->flat ? ', кв. '. $order->delivery->flat : '') }}
+                                        @elseif($order->delivery->delivery_method == 'exspresCourier')
+                                            {{ (stripos($order->delivery->street, 'вул') !== false ? $order->delivery->street : 'вул. ' . $order->delivery->street) . ', буд. '. $order->delivery->house . ($order->delivery->flat ? ', кв. '. $order->delivery->flat : '') }}
+                                        @elseif($order->delivery->delivery_method == 'postomat')
+                                            {{ $order->delivery->branch }}
+                                        @endif
                                     </p>
                                     <p>
                                         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -133,7 +144,7 @@
 		c11.784,0,22.687-3.495,31.983-9.329L301.393,241.631z M9.448,89.085C3.554,98.44,0,109.429,0,121.305v242.602
 		c0,10.637,2.978,20.498,7.789,29.174l153.183-171.44L9.448,89.085z"/>
                                         </svg>
-                                        {{ $order->user_email ? $order->user_email : 'Немає' }}
+                                        {{ $order->user_email ? $order->user_email : 'Не вказана' }}
                                     </p>
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" class="inline-block">
@@ -145,7 +156,24 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-truck" width="12" height="12" viewBox="0 0 24 24" class="inline-block">
                                             <path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z" />
                                         </svg>
-                                        Доставка у відділення - Нова пошта
+                                        @if($order->delivery->delivery_method == 'branch')
+                                            Доставка у відділення -
+                                        @elseif($order->delivery->delivery_method == 'exspresBranch')
+                                            Доставка експрес у відділення -
+                                        @elseif($order->delivery->delivery_method == 'courier')
+                                            Доставка кур'єром -
+                                        @elseif($order->delivery->delivery_method == 'exspresCourier')
+                                            Доставка експрес кур'єром -
+                                        @elseif($order->delivery->delivery_method == 'postomat')
+                                            Доставка в поштомат -
+                                        @endif
+                                        @if($order->delivery->delivery_name == 'NovaPoshta')
+                                            Нова пошта
+                                        @elseif($order->delivery->delivery_name == 'Meest')
+                                            Meest
+                                        @elseif($order->delivery->delivery_name == 'UkrPoshta')
+                                            Укр пошта
+                                        @endif
                                     </p>
                                 </td>
                                 <td class="py-4 max-w-xs text-xs">
@@ -193,7 +221,7 @@
                                 <td class="break-words max-w-60 text-xs">{{ $order->created_at }}</td>
                                 <td class="break-words max-w-60 text-xs">{{ $order->updated_at }}</td>
                                 <td class="break-words max-w-xs text-center">
-                                    <a href="{{ route('operator.order.editFirst', $order->id) }}" class="inline-block text-blue-500 hover:text-blue-700" onclick="return isOperator()">
+                                    <a href="{{ route('operator.order.editFirst', $order->id) }}" class="p-2" onclick="return isOperator()">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 128 128">
                                             <g>
                                                 <path d="M36.108,110.473l70.436-70.436L87.963,21.457L17.526,91.893c-0.378,0.302-0.671,0.716-0.803,1.22   l-5.476,20.803c-0.01,0.04-0.01,0.082-0.019,0.121c-0.018,0.082-0.029,0.162-0.039,0.247c-0.007,0.075-0.009,0.147-0.009,0.222   c-0.001,0.077,0.001,0.147,0.009,0.225c0.01,0.084,0.021,0.166,0.039,0.246c0.008,0.04,0.008,0.082,0.019,0.121   c0.007,0.029,0.021,0.055,0.031,0.083c0.023,0.078,0.053,0.154,0.086,0.23c0.029,0.067,0.057,0.134,0.09,0.196   c0.037,0.066,0.077,0.127,0.121,0.189c0.041,0.063,0.083,0.126,0.13,0.184c0.047,0.059,0.1,0.109,0.152,0.162   c0.053,0.054,0.105,0.105,0.163,0.152c0.056,0.048,0.119,0.09,0.182,0.131c0.063,0.043,0.124,0.084,0.192,0.12   c0.062,0.033,0.128,0.062,0.195,0.09c0.076,0.033,0.151,0.063,0.23,0.087c0.028,0.009,0.054,0.023,0.083,0.031   c0.04,0.01,0.081,0.01,0.121,0.02c0.081,0.017,0.162,0.028,0.246,0.037c0.077,0.009,0.148,0.011,0.224,0.01   c0.075,0,0.147-0.001,0.223-0.008c0.084-0.011,0.166-0.022,0.247-0.039c0.04-0.01,0.082-0.01,0.121-0.02l20.804-5.475   C35.393,111.146,35.808,110.853,36.108,110.473z M19.651,108.349c-0.535-0.535-1.267-0.746-1.964-0.649l3.183-12.094l11.526,11.525   L20.3,110.313C20.398,109.616,20.188,108.884,19.651,108.349z" style="fill: orangered;"/>
@@ -201,11 +229,66 @@
                                             </g>
                                         </svg>
                                     </a>
+                                    @if($order->ref)
+                                        <a href="{{ $order->delivery->delivery_name == "NovaPoshta" ? route('operator.order.novaPoshta.ttnPdf', $order->id) : ($order->delivery->delivery_name == "UkrPoshta" ? route('operator.order.ukrPoshta.ttnPdf', $order->id) : '#') }}" target="_blank" class="p-2" onclick="return isOperator()">
+                                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.9393 16.4004H8.58466C8.76358 16.4004 8.90202 16.3375 9 16.2115C9.09798 16.0856 9.14697 15.9025 9.14697 15.6621C9.14697 15.4125 9.09691 15.2145 8.99681 15.068C8.8967 14.9192 8.76251 14.8436 8.59425 14.8413H7.9393V16.4004Z" fill="black"/>
+                                                <path d="M11.6645 14.8413V18.1621H11.9457C12.2588 18.1621 12.4792 18.0739 12.607 17.8977C12.7348 17.7191 12.8019 17.4123 12.8083 16.9773V16.1085C12.8083 15.6415 12.7476 15.3164 12.6262 15.1332C12.5048 14.9478 12.2982 14.8505 12.0064 14.8413H11.6645Z" fill="black"/>
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.937 8.68L19.9276 8.65196C19.9204 8.62974 19.9132 8.60787 19.904 8.586C19.855 8.48 19.794 8.379 19.708 8.293L13.708 2.293C13.622 2.207 13.521 2.146 13.415 2.097C13.3943 2.08736 13.3727 2.08056 13.3508 2.07367C13.3409 2.07056 13.331 2.06742 13.321 2.064C13.237 2.036 13.151 2.018 13.062 2.013C13.0519 2.01208 13.0424 2.00925 13.033 2.00647C13.0221 2.0032 13.0113 2 13 2H6C4.897 2 4 2.897 4 4V20C4 21.103 4.897 22 6 22H18C19.103 22 20 21.103 20 20V9C20 8.98867 19.9968 8.97792 19.9935 8.96697C19.9907 8.95762 19.9879 8.94813 19.987 8.938C19.982 8.85 19.965 8.764 19.937 8.68ZM13 4V9H18L13 4ZM7.9393 17.2418V19H7V14H8.58466C9.04473 14 9.41108 14.1534 9.68371 14.4602C9.95847 14.7669 10.0958 15.1653 10.0958 15.6552C10.0958 16.1451 9.9606 16.5321 9.6901 16.8159C9.4196 17.0998 9.04473 17.2418 8.5655 17.2418H7.9393ZM10.7252 19V14H11.9553C12.4984 14 12.9308 14.1854 13.2524 14.5563C13.5761 14.9272 13.7412 15.4354 13.7476 16.081V16.8915C13.7476 17.5485 13.5857 18.0648 13.262 18.4402C12.9404 18.8134 12.4963 19 11.9297 19H10.7252ZM15.3642 16.9602H16.8243V16.1223H15.3642V14.8413H17V14H14.4249V19H15.3642V16.9602Z" fill="black"/>
+                                            </svg>
+                                        </a>
+                                        <form action="{{ $order->delivery->delivery_name == "NovaPoshta" ? route('operator.order.novaPoshta.ttnDestroy', $order->id) : ($order->delivery->delivery_name == "UkrPoshta" ? route('operator.order.ukrPoshta.ttnDestroy', $order->id) : '#') }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit">
+                                                <svg width="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill: red">
+                                                    <path d="m24,78c0,4.968 4.029,9 9,9h30c4.968,0 9-4.032 9-9l6-48h-60l6,48zm33-39h6v39h-6v-39zm-12,0h6v39h-6v-39zm-12,0h6v39h-6v-39zm43.5-21h-19.5c0,0-1.344-6-3-6h-12c-1.659,0-3,6-3,6h-19.5c-2.487,0-4.5,2.013-4.5,4.5s0,4.5 0,4.5h66c0,0 0-2.013 0-4.5s-2.016-4.5-4.5-4.5z"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ $order->delivery->delivery_name == 'NovaPoshta' ? route('operator.order.novaPoshta.createTTN', $order->id) : '#' }}" class="p-2" onclick="{{ $order->delivery->delivery_name == 'UkrPoshta' ? 'getSender('. $order->id .')' : '' }}">
+                                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                 width="20px" viewBox="0 0 401.994 401.994" style="enable-background:new 0 0 401.994 401.994;fill: green"
+                                                 xml:space="preserve">
+                                                <path d="M394,154.175c-5.331-5.33-11.806-7.994-19.417-7.994H255.811V27.406c0-7.611-2.666-14.084-7.994-19.414
+            C242.488,2.666,236.02,0,228.398,0h-54.812c-7.612,0-14.084,2.663-19.414,7.993c-5.33,5.33-7.994,11.803-7.994,19.414v118.775
+            H27.407c-7.611,0-14.084,2.664-19.414,7.994S0,165.973,0,173.589v54.819c0,7.618,2.662,14.086,7.992,19.411
+            c5.33,5.332,11.803,7.994,19.414,7.994h118.771V374.59c0,7.611,2.664,14.089,7.994,19.417c5.33,5.325,11.802,7.987,19.414,7.987
+            h54.816c7.617,0,14.086-2.662,19.417-7.987c5.332-5.331,7.994-11.806,7.994-19.417V255.813h118.77
+            c7.618,0,14.089-2.662,19.417-7.994c5.329-5.325,7.994-11.793,7.994-19.411v-54.819C401.991,165.973,399.332,159.502,394,154.175z"
+                                                />
+                                            </svg>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div id="senderPhonePopup" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onclick="closePopup(event)">
+                    <div class="bg-white p-8 rounded shadow-lg w-full max-w-2xl relative" onclick="event.stopPropagation()">
+                        <button class="absolute top-2 right-2 text-gray-700 text-3xl" style="width: 50px; height: 50px;" onclick="closePopup()">&times;</button>
+                        <form action="" method="post" id="senderForm">
+                            @csrf
+                            <div class="mb-4">
+                                <label for="sender_phone" class="block text-gray-700">Введіть телефон відправника</label>
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-900 text-sm">
+                                        +380
+                                    </span>
+                                    <input type="text" id="sender_phone" name="sender_phone" class="mt-1 block w-full pl-2 border-l-0 rounded-r-md border border-gray-300" required placeholder="971231212">
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300">
+                                    Перевірити чи є такий відправник
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -242,13 +325,30 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Response from server:', data);
                     window.location.reload();
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
         });
+    }
+
+    function getSender(orderId) {
+        const senderPhonePopup = document.getElementById('senderPhonePopup');
+
+        const senderForm = document.getElementById('senderForm');
+
+        senderForm.action = `/operator/orders/ukrposhta/ttn/create/${orderId}`;
+
+        senderPhonePopup.classList.remove('hidden');
+    }
+
+    function closePopup(event) {
+        if (event) {
+            event.preventDefault();
+        }
+        const senderPhonePopup = document.getElementById('senderPhonePopup');
+        senderPhonePopup.classList.add('hidden');
     }
 
     // setInterval(function() {

@@ -38,6 +38,18 @@
                                 <span>{{ $order->total_price }} {{ $order->currency }}</span>
                             </p>
                             <p class="flex justify-between">
+                                <span>Промокод:</span>
+                                <span>{{ $order->promoCode ? $order->promoCode->title. ' ( ' . $order->promoCode->rate . '% )' : 'Немає промокоду'}}</span>
+                            </p>
+                            <p class="flex justify-between">
+                                <span>
+                                    Бали:
+                                </span>
+                                <span>
+                                    {{ session()->get('points_'.$order->id) ? 'Використанно - '.session()->get('points_'.$order->id).' '.session()->get('currency') : 'Бали не використанні' }}
+                                </span>
+                            </p>
+                            <p class="flex justify-between">
                                 <span>Доставка:</span>
                                 <span>{{ $order->cost_delivery }}</span>
                             </p>

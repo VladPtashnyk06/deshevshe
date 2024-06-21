@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -44,6 +45,7 @@ class Product extends Model implements HasMedia
         'product_promotion',
         'top_product',
         'rec_product',
+        'rating',
     ];
 
     public function category(): BelongsTo
@@ -89,5 +91,9 @@ class Product extends Model implements HasMedia
     public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ProductComment::class, 'product_id');
+    }
+    public function ratings():HasMany
+    {
+        return $this->hasMany(Rating::class);
     }
 }

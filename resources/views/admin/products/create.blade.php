@@ -40,7 +40,7 @@
                         <select name="category_id" id="category_id" class="w-full border rounded px-3 py-2">
                             <option value="">Всі категорії</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->title }}</option>
+                                @include('admin.categories.options-category', ['category' => $category, 'prefix' => ''])
                             @endforeach
                         </select>
                     </div>
@@ -163,18 +163,6 @@
                             @foreach($characteristics as $characteristic)
                                 <option value="{{ $characteristic->id }}">Висота: {{ $characteristic->height }}cm Ширина: {{ $characteristic->width }}cm Довжина: {{ $characteristic->length }}cm</option>
                             @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        @error('product_promotion')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="product_promotion" class="block mb-2 font-bold">Промоакція</label>
-                        <select name="product_promotion" id="product_promotion" class="w-full border rounded px-3 py-2">
-                            <option value="0"> Так / Ні </option>
-                            <option value="1"> Так </option>
-                            <option value="0"> Ні </option>
                         </select>
                     </div>
 

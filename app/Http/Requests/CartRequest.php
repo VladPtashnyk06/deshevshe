@@ -10,8 +10,9 @@ class CartRequest extends FormRequest
     {
         return [
             'product_id' => ['required'],
-            'color_id' => ['required'],
-            'size_id' => ['required'],
+            'color_id_popup' => ['required'],
+            'size_id_popup' => ['required'],
+            'action_type' => ['required']
         ];
     }
 

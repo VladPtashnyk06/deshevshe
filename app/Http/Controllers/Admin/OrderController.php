@@ -18,6 +18,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\PromoCode;
 use App\Models\User;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
@@ -241,7 +242,12 @@ class OrderController extends Controller
         $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
 
         $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
-        return view('admin.orders.edit_third', compact('order', 'novaPoshtaRegions', 'meestRegions', 'deliveryNameAndType', 'ukrPoshtaRegions'));
+        if ($order->delivery->district) {
+            $deliveryLocation = 'Village';
+        } else {
+            $deliveryLocation = 'City';
+        }
+        return view('admin.orders.edit_third', compact('order', 'novaPoshtaRegions', 'meestRegions', 'deliveryNameAndType', 'ukrPoshtaRegions', 'deliveryLocation'));
     }
 
     public function updateThird(OrderEditThirdRequest $request, Order $order)
@@ -255,12 +261,21 @@ class OrderController extends Controller
             $delivery->update([
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
-                'region' => $request->validated('NovaPoshtaRegion'),
-                'city' => $request->validated('NovaPoshtaCityInput'),
-                'cityRef' => $request->validated('cityRefHidden'),
-                'branch' => $request->validated('NovaPoshtaBranchesInput'),
-                'branchRef' => $request->validated('branchRefHidden'),
-                'address' => $request->validated('address'),
+                'region' => $request->validated('nova_poshta_region'),
+                'regionRef' => $request->validated('nova_poshta_region_ref'),
+                'city' => $request->validated('nova_poshta_city_input'),
+                'cityRef' => $request->validated('city_ref'),
+                'branch' => $request->validated('nova_poshta_branches_input'),
+                'branchNumber' => $request->validated('branch_number'),
+                'branchRef' => $request->validated('branch_ref'),
+                'district' => $request->validated('district_input'),
+                'districtRef' => $request->validated('district_ref'),
+                'village' => $request->validated('village_input'),
+                'villageRef' => $request->validated('village_ref'),
+                'street' => $request->validated('street_input'),
+                'streetRef' => $request->validated('street_ref'),
+                'house' => $request->validated('house'),
+                'flat' => $request->validated('flat'),
             ]);
         } elseif ($deliveryName == 'Meest') {
             $delivery->update([
@@ -268,8 +283,8 @@ class OrderController extends Controller
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('MeestRegion'),
                 'city' => $request->validated('MeestCityInput'),
-                'cityRef' => $request->validated('meestCityIdHidden'),
-                'branch' => $request->validated('MeestBranchesInpute'),
+                'cityRef' => $request->validated('meestCityIDHidden'),
+                'branch' => $request->validated('MeestBranchesInput'),
                 'branchRef' => $request->validated('meestBranchIDHidden'),
                 'address' => $request->validated('address'),
             ]);
@@ -326,6 +341,56 @@ class OrderController extends Controller
         return redirect()->route('operator.order.index');
     }
 
+    public function updateOrderPromoCode(Request $request, Order $order)
+    {
+        if ($request->post('promo_code')) {
+            $promoCode = PromoCode::where('title', $request->post('promo_code'))->first();
+            if ($promoCode) {
+                if ($promoCode->quantity_now < $promoCode->quantity) {
+                    $promoCodeId = $promoCode->id;
+                    $phoneOrders = Order::where('user_phone', $order->user_phone)->get();
+                    $promoCodeUsed = false;
+                    foreach ($phoneOrders as $phoneOrder) {
+                        if ($phoneOrder->promo_code_id == $promoCodeId) {
+                            $promoCodeUsed = true;
+                            return back()->withErrors(['promo_code' => 'Цей користувач використовував цей промокод']);
+                        }
+                    }
+                    if ($promoCodeUsed == false) {
+                        $totalPrice = $order->total_price - ($order->total_price * ($promoCode->rate / 100));
+                        $promoCode->update([
+                            'quantity_now' => $promoCode->quantity_now + 1
+                        ]);
+                        $promoCodeId = $promoCode->id;
+                        $order->update([
+                            'promo_code_id' => $promoCodeId,
+                            'total_price' => $totalPrice,
+                        ]);
+                    }
+                } else {
+                    return back()->withErrors(['promo_code' => 'Цей промокод не доступний, закінчився']);
+                }
+            } else {
+                return back()->withErrors(['promo_code' => 'Такого промокоду немає']);
+            }
+        }
+        return back();
+    }
+
+    public function updateOrderPoints(Request $request, Order $order)
+    {
+        if ($request->post('points')) {
+            $order->update([
+                'total_price' => $order->total_price - $request->post('points')
+            ]);
+            $order->user->update([
+                'points' => $order->user->points - $request->post('points'),
+            ]);
+            session()->put('points_'.$order->id , $request->post('points'));
+        }
+        return back();
+    }
+
     public function showUserOrders(User $user)
     {
         $orders = Order::where('user_id', $user->id)
@@ -349,7 +414,12 @@ class OrderController extends Controller
         $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
 
         $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
-        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'deliveryNameAndType'));
+        if ($order->delivery->district) {
+            $deliveryLocation = 'Village';
+        } else {
+            $deliveryLocation = 'City';
+        }
+        return view('admin.orders.small-edit', compact('order', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'deliveryNameAndType', 'deliveryLocation'));
     }
 
     public function smallUpdate(OrderSmallRequest $request ,Order $order)
@@ -363,12 +433,21 @@ class OrderController extends Controller
             $delivery->update([
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
-                'region' => $request->validated('NovaPoshtaRegion'),
-                'city' => $request->validated('NovaPoshtaCityInput'),
-                'cityRef' => $request->validated('cityRefHidden'),
-                'branch' => $request->validated('NovaPoshtaBranchesInput'),
-                'branchRef' => $request->validated('branchRefHidden'),
-                'address' => $request->validated('address'),
+                'region' => $request->validated('nova_poshta_region'),
+                'regionRef' => $request->validated('nova_poshta_region_ref'),
+                'city' => $request->validated('nova_poshta_city_input'),
+                'cityRef' => $request->validated('city_ref'),
+                'branch' => $request->validated('nova_poshta_branches_input'),
+                'branchNumber' => $request->validated('branch_number'),
+                'branchRef' => $request->validated('branch_ref'),
+                'district' => $request->validated('district_input'),
+                'districtRef' => $request->validated('district_ref'),
+                'village' => $request->validated('village_input'),
+                'villageRef' => $request->validated('village_ref'),
+                'street' => $request->validated('street_input'),
+                'streetRef' => $request->validated('street_ref'),
+                'house' => $request->validated('house'),
+                'flat' => $request->validated('flat'),
             ]);
         } elseif ($deliveryName == 'Meest') {
             $delivery->update([

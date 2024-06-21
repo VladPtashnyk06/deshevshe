@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('site.product.index') }}">
+                    <a href="{{ route('site.index') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
@@ -19,15 +19,30 @@
                         <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
                             {{ __('Продукт') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
-                            {{ __('Блог') }}
+                        <x-nav-link :href="route('promotional.index')" :active="request()->routeIs('promotional.index')">
+                            {{ __('Акційній товари') }}
                         </x-nav-link>
                         <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
                             {{ __('Замовлення') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('promoCode.index')" :active="request()->routeIs('promoCode.index')">
+                            {{ __('Промокоди') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
+                            {{ __('Блог') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('comment.index')" :active="request()->routeIs('comment.index')">
+                            {{ __('Коментар до сайту') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('product.ratingProduct')" :active="request()->routeIs('product.ratingProduct')">
+                            {{ __('Рейтинги товарів') }}
+                        </x-nav-link>
                     @else
-                        <x-nav-link :href="route('site.product.catalog.index')" :active="request()->routeIs('site.product.catalog.index')">
+                        <x-nav-link :href="route('site.catalog.index')" :active="request()->routeIs('site.catalog.index')">
                             {{ __('Продукти') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('site.product.likedProducts')" :active="request()->routeIs('site.product.likedProducts')">
+                            {{ __('Вподобані продукти') }}
                         </x-nav-link>
                         @if(Auth::user() && Auth::user()->role == 'operator')
                             <x-nav-link :href="route('operator.order.index')" :active="request()->routeIs('operator.order.index')">
@@ -77,6 +92,13 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
+                    @if(Auth::user()->role == 'user')
+                        <div>
+                            <p class="text-gray-400">
+                                Бали: {{ Auth::user()->points }} {{ session()->get('currency') }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
             @else
                 <div class="flex items-center">

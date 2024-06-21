@@ -31,6 +31,8 @@
                                     <div>
                                         <p><span class="font-semibold">Статус:</span> {{ $order->orderStatus->title }}</p>
                                         <p><span class="font-semibold">Вартість замовлення:</span> {{ number_format($order->total_price, 2, '.', ' ') . ' ' . $order->currency }}</p>
+                                        <p><span class="font-semibold">Промокод:</span> {{ $order->promoCode ? $order->promoCode->title . '( ' . $order->promoCode->rate . ' )' : 'Промокд не використаний'}}</p>
+                                        <p><span class="font-semibold">Бали:</span> {{ session()->get('points_'.$order->id) ? 'Використанно - '.session()->get('points_'.$order->id).' '.session()->get('currency') : 'Бали не використанні' }}</p>
                                          <form action="{{ route('site.order.oneOrder', $order->id) }}" method="GET">
                                              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 mt-4">Деталі замовлення</button>
                                          </form>

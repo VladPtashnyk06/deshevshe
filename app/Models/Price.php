@@ -33,6 +33,8 @@ class Price extends Model
         'package',
         'rec_package',
         'retail',
+        'promotional_price',
+        'promotional_rate',
     ];
 
     public function product(): BelongsTo
