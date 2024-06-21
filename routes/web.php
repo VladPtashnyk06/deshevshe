@@ -43,7 +43,6 @@ Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaControll
 /* =================================== */
 Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(function () {
     Route::get('/dashboard', 'index')->name('site.index');
-    Route::get('/', 'view')->name('site.index');
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
 });
