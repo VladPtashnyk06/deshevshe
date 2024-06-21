@@ -15,8 +15,8 @@ class UkrPoshtaService
     protected $token;
     public function __construct()
     {
-        $this->apiKey = config('services.ukrposhta.api_key');
-//        $this->apiKey = '3d3b0242-3f14-3118-9765-968f8ca3fb2d';
+//        $this->apiKey = config('services.ukrposhta.api_key');
+        $this->apiKey = '3d3b0242-3f14-3118-9765-968f8ca3fb2d';
         $this->token = 'ec6e7fbc-8a93-4008-bcca-d5500aa5c43c';
     }
 
@@ -30,17 +30,17 @@ class UkrPoshtaService
         return $response->json()['Entries']['Entry'];
     }
 
-    public function getCities($regionId)
-    {
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->apiKey,
-        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_city_by_region_id_and_district_id_and_city_ua', [
-            'region_id' => $regionId,
-        ]);
-
-        return $response->json()['Entries']['Entry'];
-    }
+//    public function getCities($regionId)
+//    {
+//        $response = Http::withHeaders([
+//            'accept' => 'application/json',
+//            'Authorization' => 'Bearer ' . $this->apiKey,
+//        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_city_by_region_id_and_district_id_and_city_ua', [
+//            'region_id' => $regionId,
+//        ]);
+//
+//        return $response->json()['Entries']['Entry'];
+//    }
 
     public function getBranches($cityId)
     {
@@ -54,12 +54,41 @@ class UkrPoshtaService
         return $response->json()['Entries']['Entry'];
     }
 
+    public function getDistricts($regionId)
+    {
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_districts_by_region_id_and_district_ua?region_id='.$regionId);
+
+        return $response->json()['Entries']['Entry'];
+    }
+
+    public function getCities($districtId, $regionId, $cityUa = '', $koatuu = '', $katottg = '')
+    {
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_city_by_region_id_and_district_id_and_city_ua', [
+            'district_id' => $districtId,
+            'region_id' => $regionId,
+            'city_ua' => $cityUa,
+            'koatuu' => $koatuu,
+            'katottg' => $katottg
+        ]);
+
+        return $response->json()['Entries']['Entry'];
+    }
+
     public function getStreetByCityId($cityId, $street = "")
     {
         $response = Http::withHeaders([
             'accept' => 'application/json',
             'Authorization' => 'Bearer ' . $this->apiKey,
-        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_street_by_region_id_and_district_id_and_city_id_and_street_ua?region_id={regionId}&district_id={districtId}&city_id='.$cityId.'&street_ua='.$street.'');
+        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_street_by_region_id_and_district_id_and_city_id_and_street_ua', [
+            'city_id' => $cityId,
+            'street_ua' => $street
+        ]);
 
         return $response->json()['Entries']['Entry'];
     }
