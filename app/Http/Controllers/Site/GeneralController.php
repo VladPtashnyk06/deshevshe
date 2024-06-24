@@ -21,10 +21,6 @@ use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
-    public function view()
-    {
-        return view('site.view');
-    }
     /**
      * @param Request $request
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View

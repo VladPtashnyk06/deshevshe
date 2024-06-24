@@ -37,13 +37,13 @@ Route::post('/meest/cities', [MeestController::class, 'getCities']);
 Route::get('/get-ukr-poshta-cities', [\App\Http\Controllers\UkrPoshtaController::class, 'getCities'])->name('ukr-poshta.get-cities');
 Route::get('/get-ukr-poshta-branches', [\App\Http\Controllers\UkrPoshtaController::class, 'getBranches'])->name('ukr.get-branches');
 Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaController::class, 'getDistricts'])->name('ukr-poshta.get-districts');
+Route::get('/get-ukr-poshta-streets', [\App\Http\Controllers\UkrPoshtaController::class, 'getStreetByCityId'])->name('ukr-poshta.get-street-by-city-id');
 
 /* =================================== */
 /*                 Site                */
 /* =================================== */
 Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('site.index');
-    Route::get('/', 'view')->name('site.index');
+    Route::get('/', 'index')->name('site.index');
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
 });

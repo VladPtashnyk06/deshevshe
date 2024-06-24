@@ -20,9 +20,13 @@ class UkrPoshtaController extends Controller
 
     public function getCities(Request $request)
     {
-        $regionId = $request->input('regionId');
+        $districtId = $request->input('district_id');
+        $regionId = $request->input('region_id');
+        $cityUa = $request->input('city_ua', '');
+        $koatuu = $request->input('koatuu', '');
+        $katottg = $request->input('katottg', '');
 
-        $cities = $this->ukrPoshtaService->getCities($regionId);
+        $cities = $this->ukrPoshtaService->getCities($districtId, $regionId, $cityUa, $koatuu, $katottg);
 
         return response()->json($cities);
     }
@@ -36,8 +40,20 @@ class UkrPoshtaController extends Controller
         return response()->json($branches);
     }
 
-    public function getStreetByCityId($cityId, $street = "")
+    public function getDistricts(Request $request)
     {
+        $regionId = $request->input('regionId');
+
+        $districts = $this->ukrPoshtaService->getDistricts($regionId);
+
+        return response()->json($districts);
+    }
+
+    public function getStreetByCityId(Request $request)
+    {
+        $cityId = $request->input('cityId');
+        $street = '';
+
         return $this->ukrPoshtaService->getStreetByCityId($cityId, $street);
     }
 
@@ -53,25 +69,16 @@ class UkrPoshtaController extends Controller
 
     public function storeAddressForClient(UkrPoshtaService $ukrPoshtaService, Delivery $delivery)
     {
-        $city = $delivery->city;
-        $cityId = $delivery->cityRef;
-        if ($delivery->delivery_method == 'courier' || $delivery->delivery_method == 'exspresCourier') {
-            list($street, $houseNumber, $apartmentNumber) = $this->parseAddress($delivery->address);
-        } else {
-            list($street, $houseNumber, $apartmentNumber) = '';
+        $city = $delivery->city ? $delivery->city : '';
+        $street = $delivery->street ? $delivery->street : '';
+        $streetId = $delivery->streetRef ? $delivery->streetRef : '';
+        $houseNumber = $delivery->house ? $delivery->house : '';
+        $apartmentNumber = $delivery->flat ? $delivery->flat : '';
+        if ($streetId && $houseNumber) {
+            $postcode = $this->getPostcodes($streetId, $houseNumber)[0]['POSTCODE'];
         }
-        $streets = $this->getStreetByCityId($cityId, $street);
-        foreach ($streets as $streetByPostcode) {
-            if ($streetByPostcode['STREETTYPE_UA'] == 'вулиця') {
-                $streetId = $streetByPostcode['STREET_ID'];
-                if ($streetId) {
-                    $houseNumber = $houseNumber ? $houseNumber : '';
-                    $postcode = $this->getPostcodes($streetId, $houseNumber)[0]['POSTCODE'];
-                    return $ukrPoshtaService->createAddress($postcode, $city, $street, $houseNumber, $apartmentNumber);
-                }
-            }
-        }
-        return false;
+
+        return $ukrPoshtaService->createAddress($postcode, $city, $street, $houseNumber, $apartmentNumber);
     }
 
     public function getSenderByPhone(Request $request, Order $order)
@@ -217,18 +224,6 @@ class UkrPoshtaController extends Controller
     public function ttnPdf(UkrPoshtaService $ukrPoshtaService, Order $order)
     {
         return $ukrPoshtaService->ttnPdf($order);
-    }
-
-    private function parseAddress($address)
-    {
-        $pattern = '/^(.*)\s(\d+),?\s?кв?\s?(\d+)?$/u';
-        preg_match($pattern, $address, $matches);
-
-        $street = isset($matches[1]) ? $matches[1] : '';
-        $house = isset($matches[2]) ? $matches[2] : '';
-        $flat = isset($matches[3]) ? $matches[3] : '';
-
-        return [$street, $house, $flat];
     }
 
     public function destroy(UkrPoshtaService $ukrPoshtaService, Order $order)
