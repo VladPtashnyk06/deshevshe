@@ -11,7 +11,7 @@
             </div>
             <div>
                 <label>
-                    <input type="radio" name="delivery_type" value="NovaPoshta_branch" checked> Доставка у відділення - Нова Пошта
+                    <input type="radio" name="delivery_type" value="NovaPoshta_branch"> Доставка у відділення - Нова Пошта
                 </label>
             </div>
             <div>
@@ -79,7 +79,7 @@
     <div id="delivery_location_type_container" class="flex grid grid-cols-2 justify-items-center mb-4">
         <div>
             <label>
-                <input type="radio" name="delivery_location_type" value="City"> Місто
+                <input type="radio" name="delivery_location_type" value="City" checked> Місто
             </label>
         </div>
         <div>
@@ -89,11 +89,14 @@
         </div>
     </div>
 
-    <input type="hidden" id="city_name" name="city_name" value="">
-    <input type="hidden" id="branch_number" name="branch_number" value="">
+    <input type="hidden" id="region" name="region" value="{{ $order->delivery->region ? $order->delivery->region : '' }}">
+    <input type="hidden" id="city_name" name="city_name" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
+    <input type="hidden" id="city_ref" name="city_ref" value="{{ $order->delivery->cityRef ? $order->delivery->cityRef : '' }}">
+    <input type="hidden" id="branch_number" name="branch_number" value="{{ $order->delivery->branchNumber ? $order->delivery->branchNumber : '' }}">
+    <input type="hidden" id="branch_name" name="branch_name" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
+    <input type="hidden" id="branch_ref" name="branch_ref" value="{{ $order->delivery->branchRef ? $order->delivery->branchRef : '' }}">
     <div id="nova_poshta_container">
         <div class="space-y-1 mb-4" id="nova_poshta_region_div">
-            <input type="hidden" id="nova_poshta_region" name="nova_poshta_region" value="{{ $order->delivery->region ? $order->delivery->region : '' }}">
             <label for="nova_poshta_region_ref" class="block font-semibold">Регіон / Область *</label>
             <select name="nova_poshta_region_ref" id="nova_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
                 <option value="" selected>--- Виберіть ---</option>
@@ -105,7 +108,6 @@
 
         <div id="nova_postha_city_and_branch">
             <div class="space-y-1 relative mb-4 inputCity" id="nova_poshta_city_div">
-                <input type="hidden" id="city_ref" name="city_ref" value="{{ $order->delivery->cityRef ? $order->delivery->cityRef : '' }}">
                 <label for="nova_poshta_city_input" class="block font-semibold">Місто *</label>
                 <input id="nova_poshta_city_input" name="nova_poshta_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
                 <ul id="nova_poshta_city_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
@@ -114,7 +116,6 @@
             </div>
 
             <div class="space-y-1 relative mb-4" id="nova_poshta_branch_div">
-                <input type="hidden" id="branch_ref" name="branch_ref" value="{{ $order->delivery->branchRef ? $order->delivery->branchRef : '' }}">
                 <label for="nova_poshta_branches_input" class="block font-semibold"></label>
                 <input id="nova_poshta_branches_input" name="nova_poshta_branches_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
                 <ul id="nova_poshta_branches_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
@@ -124,10 +125,10 @@
         </div>
     </div>
 
-    <div id="MeestContainer" class="hidden">
+    <div id="meest_container" class="hidden">
         <div class="space-y-1 mb-4">
-            <label for="MeestRegion" class="block font-semibold">Регіон / Область</label>
-            <select name="MeestRegion" id="MeestRegion" class="w-full border rounded-md py-2 px-3">
+            <label for="meest_region_ref" class="block font-semibold">Регіон / Область</label>
+            <select name="meest_region_ref" id="meest_region_ref" class="w-full border rounded-md py-2 px-3">
                 <option value="">--- Виберіть ---</option>
                 @foreach($meestRegions as $region)
                     <option value="{{ $region['regionID'] }}" {{ $order->delivery->regionRef == $region['regionID'] ? 'selected' : '' }}>{{ ucfirst(strtolower($region['regionDescr']['descrUA'])) }}</option>
@@ -136,30 +137,28 @@
         </div>
 
         <div id="meest_city_and_branch">
-            <div class="space-y-1 relative mb-4 inputCity" id="cityContainer">
-                <input type="hidden" id="meestCityIdHidden" name="meestCityIdHidden" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
-                <label for="MeestCityInput" class="block font-semibold">Місто</label>
-                <input id="MeestCityInput" name="MeestCityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста">
-                <ul id="MeestCityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+            <div class="space-y-1 relative mb-4 inputCity" id="meest_city_div">
+                <label for="meest_city_input" class="block font-semibold">Місто</label>
+                <input id="meest_city_input" name="meest_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
+                <ul id="meest_city_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Міста будуть відображені тут -->
                 </ul>
             </div>
 
-            <div class="space-y-1 relative mb-4" id="MeestBranchesContainer">
-                <input type="hidden" name="meestBranchIDHidden" id="meestBranchIDHidden" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
-                <label for="MeestBranchesInput" class="block font-semibold"></label>
-                <input id="MeestBranchesInput" name="MeestBranchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення">
-                <ul id="MeestBranchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+            <div class="space-y-1 relative mb-4" id="meest_branch_div">
+                <label for="meest_branches_input" class="block font-semibold"></label>
+                <input id="meest_branches_input" name="meest_branches_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
+                <ul id="meest_branches_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Відділення будуть відображені тут -->
                 </ul>
             </div>
         </div>
     </div>
 
-    <div id="UkrPoshtaContainer" class="hidden">
+    <div id="ukr_poshta_container" class="hidden">
         <div class="space-y-1 mb-4">
-            <label for="UkrPoshtaRegion" class="block font-semibold">Регіон / Область</label>
-            <select name="UkrPoshtaRegion" id="UkrPoshtaRegion" class="w-full border rounded-md py-2 px-3">
+            <label for="ukr_poshta_region_ref" class="block font-semibold">Регіон / Область</label>
+            <select name="ukr_poshta_region_ref" id="ukr_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
                 <option value="">--- Виберіть ---</option>
                 @foreach($ukrPoshtaRegions as $region)
                     <option value="{{ $region['REGION_ID'] }}" {{ $region['REGION_ID'] == $order->delivery->regionRef ? 'selected' : ''}}>{{ ucfirst(strtolower($region['REGION_UA'])) }}</option>
@@ -168,20 +167,18 @@
         </div>
 
         <div id="ukr_postha_city_and_branch">
-            <div class="space-y-1 relative mb-4 inputCity" id="UkrPoshtaCityContainer">
-                <input type="hidden" id="ukrPoshtaCityIdHidden" name="ukrPoshtaCityIdHidden" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
-                <label for="UkrPoshtaCityInput" class="block font-semibold">Місто</label>
-                <input id="UkrPoshtaCityInput" name="UkrPoshtaCityInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
-                <ul id="UkrPoshtaCityList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+            <div class="space-y-1 relative mb-4 inputCity" id="ukr_poshta_city_div">
+                <label for="ukr_poshta_city_input" class="block font-semibold">Місто</label>
+                <input id="ukr_poshta_city_input" name="ukr_poshta_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
+                <ul id="ukr_poshta_city_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Міста будуть відображені тут -->
                 </ul>
             </div>
 
-            <div class="space-y-1 relative mb-4" id="UkrPoshtaBranchesContainer">
-                <input type="hidden" name="ukrPoshtaBranchIDHidden" id="ukrPoshtaBranchIDHidden" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
-                <label for="UkrPoshtaBranchesInput" class="block font-semibold">Відділення Укр-Пошти</label>
-                <input id="UkrPoshtaBranchesInput" name="UkrPoshtaBranchesInput" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
-                <ul id="UkrPoshtaBranchesList" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
+            <div class="space-y-1 relative mb-4" id="ukr_poshta_branch_div">
+                <label for="ukr_poshta_branches_input" class="block font-semibold">Відділення Укр-Пошти</label>
+                <input id="ukr_poshta_branches_input" name="ukr_poshta_branches_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву відділення" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
+                <ul id="ukr_poshta_branches_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Відділення будуть відображені тут -->
                 </ul>
             </div>
@@ -207,12 +204,12 @@
             </ul>
         </div>
     </div>
-    <div class="space-y-1 mb-4" id="addressContainer">
+    <div class="space-y-1 mb-4" id="address_container">
         <div>
             <div class="space-y-1 relative mb-4" id="">
                 <input type="hidden" name="street_ref" id="street_ref" value="{{ $order->delivery->streetRef ? $order->delivery->streetRef : '' }}">
                 <label for="street_input" class="block font-semibold">Вулиця *</label>
-                <input id="street_input" name="street_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву вулиці" value="{{ $order->delivery->street ? (stripos($order->delivery->street, 'вул. ') === 0 ? str_replace('вул. ', '', $order->delivery->street) : $order->delivery->street) : '' }}">
+                <input id="street_input" name="street_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву вулиці" value="{{ $order->delivery->street ? $order->delivery->street : '' }}">
                 <ul id="street_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Відділення будуть відображені тут -->
                 </ul>

@@ -386,11 +386,6 @@
         </section>
     </main>
 </x-app-layout>
-<input type="hidden" id="region" name="region" value="">
-<input type="hidden" id="city_name" name="city_name" value="">
-<input type="hidden" id="branch_number" name="branch_number" value="">
-<input type="hidden" id="city_ref" name="city_ref" value="">
-<input type="hidden" id="branch_ref" name="branch_ref" value="">
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const RegistrationCheckbox = document.getElementById('registration');
