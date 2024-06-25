@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Mail\CallbackRequest;
 use Illuminate\Http\Request;
-use App\Mail\TestEmail;
 use Mail;
 
 class MailController extends Controller
