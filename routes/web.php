@@ -173,6 +173,8 @@ Route::middleware('auth')->group(function () {
             Route::group(['prefix' => 'users'], function () {
                 Route::controller(\App\Http\Controllers\Admin\UserController::class)->group(function () {
                     Route::get('/', 'index')->name('user.index');
+                    Route::get('/create', 'createOperator')->name('user.createOperator');
+                    Route::post('/store', 'storeOperator')->name('user.storeOperator');
                     Route::get('/edit/{user}', 'edit')->name('user.edit');
                     Route::post('/update/{user}', 'update')->name('user.update');
                     Route::delete('/delete/{user}', 'destroy')->name('user.destroy');
