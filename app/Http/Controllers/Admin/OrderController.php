@@ -11,6 +11,8 @@ use App\Http\Requests\OrderEditSecondRequest;
 use App\Http\Requests\OrderEditThirdRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderSmallRequest;
+use App\Mail\OrderClientMail;
+use App\Mail\OrderMail;
 use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -27,6 +29,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -111,6 +114,12 @@ class OrderController extends Controller
                     }
                 }
             }
+        }
+
+        if ($order->orderStatus->title == 'Відравлено') {
+//            return response()->json(['message' => '123'], 200);
+            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderClientMail($order));
+            Mail::to('vlad1990pb@gmail.com')->send(new OrderClientMail($order));
         }
 
         return response()->json(['message' => 'Order status and operator updated successfully'], 200);
@@ -409,14 +418,24 @@ class OrderController extends Controller
         return back();
     }
 
-    public function showUserOrders(User $user)
+    public function showUserOrders(Order $order)
     {
-        $orders = Order::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if ($order->user_id) {
+            $orders = Order::where('user_id', $order->user_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $user = User::find($order->user_id);
+            $ordersPhone = $order->user_phone;
+        } else {
+            $orders = Order::where('user_phone', $order->user_phone)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $user = '';
+            $ordersPhone = $order->user_phone;
+        }
 
         $allUsers = User::all();
-        return view('admin.orders.user-orders', compact('user','orders', 'allUsers'));
+        return view('admin.orders.user-orders', compact('orders', 'allUsers', 'user', 'ordersPhone'));
     }
 
     public function smallEdit(Order $order)

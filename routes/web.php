@@ -118,7 +118,7 @@ Route::middleware('auth.operator')->group(function () {
             Route::controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
                 Route::get('/', 'index')->name('operator.order.index');
                 Route::post('/update-order-status/{id}', 'updateStatusAndOperator')->name('operator.order.updateOrderStatus');
-                Route::get('/user-orders/{user}', 'showUserOrders')->name('operator.order.showUserOrders');
+                Route::get('/user-orders/{order}', 'showUserOrders')->name('operator.order.showUserOrders');
                 Route::get('/edit-first/{order}', 'editFirst')->name('operator.order.editFirst');
                 Route::post('/edit-first/update/{order}', 'updateFirst')->name('operator.order.updateFirst');
                 Route::get('/edit-second/{order}', 'editSecond')->name('operator.order.editSecond');

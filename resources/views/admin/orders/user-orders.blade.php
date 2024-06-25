@@ -3,7 +3,7 @@
         <div class="mx-auto sm:px-6 lg:px-8" style="max-width: 114rem">
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg bg-white">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-2xl font-semibold mb-2 text-center">Всі замовлення {{ $user->name }} {{ $user->last_name }}</h1>
+                    <h1 class="text-2xl font-semibold mb-2 text-center">Всі замовлення {{ $user ? $user->name .' '. $user->last_name .' '. $ordersPhone : $ordersPhone }}</h1>
                     <table class="w-full mb-5 border-collapse">
                         <thead>
                             <tr class="text-center border-b-2 border-gray-700">

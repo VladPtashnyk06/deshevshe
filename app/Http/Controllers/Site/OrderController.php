@@ -257,6 +257,7 @@ class OrderController extends Controller
                     'flat' => $request->validated('flat'),
                 ]);
             }
+            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderMail($newOrder));
             Mail::to('vlad1990pb@gmail.com')->send(new OrderMail($newOrder));
         }
 

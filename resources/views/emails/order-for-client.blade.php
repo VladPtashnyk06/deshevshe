@@ -49,14 +49,9 @@
             text-align: left;
             padding: 8px;
         }
-        .product-image {
-            text-align: center;
-            margin: 10px 0;
-        }
-        .product-image img {
-            max-width: 100px;
-            height: auto;
-            border-radius: 5px;
+        .order-details th, .product-details th {
+            background-color: #f4f4f4;
+            color: #333;
         }
         .footer {
             text-align: center;
@@ -71,6 +66,14 @@
         }
         .mar {
             margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .text-center {
+            text-align: center;
+            margin: 20px 0;
+        }
+        h2 {
+            color: #333;
         }
     </style>
 </head>
@@ -144,7 +147,7 @@
                 @endif
                 @if($order->delivery->village)
                     <tr>
-                        <th>Місто</th>
+                        <th>Село</th>
                         <td>{{ $order->delivery->village }}</td>
                     </tr>
                 @endif
@@ -175,6 +178,9 @@
             </table>
         </div>
         <h2>Деталі замовлення:</h2>
+        @if($order->int_doc_number)
+            <h1>ТТН: {{ $order->int_doc_number }}</h1>
+        @endif
         <table class="product-details">
             <thead>
             <tr>
@@ -197,6 +203,9 @@
             @endforeach
             </tbody>
         </table>
+    </div>
+    <div class="text-center">
+        <h2>Сума: {{ $order->total_price .' '. $order->currency }}</h2>
     </div>
     <div class="footer">
         <p>Цей лист був згенерований автоматично. Будь ласка, не відповідайте на нього.</p>
