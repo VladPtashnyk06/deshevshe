@@ -14,6 +14,7 @@ use App\Http\Controllers\MeestController;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
+
 */
 /* =================================== */
 /*             NovaPoshta              */
@@ -39,6 +40,16 @@ Route::get('/get-ukr-poshta-branches', [\App\Http\Controllers\UkrPoshtaControlle
 Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaController::class, 'getDistricts'])->name('ukr-poshta.get-districts');
 Route::get('/get-ukr-poshta-streets', [\App\Http\Controllers\UkrPoshtaController::class, 'getStreetByCityId'])->name('ukr-poshta.get-street-by-city-id');
 
+
+use App\Http\Controllers\MailController;
+
+Route::get('send-email', [MailController::class, 'sendEmail']);
+
+Route::get('/callback', function () {
+    return view('site.callback-form');
+});
+
+Route::post('/send-callback', [MailController::class, 'sendCallbackRequest']);
 /* =================================== */
 /*                 Site                */
 /* =================================== */

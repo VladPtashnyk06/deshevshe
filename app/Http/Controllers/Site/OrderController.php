@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\UpdateOneOrderRequest;
+use App\Mail\OrderMail;
 use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -18,6 +19,7 @@ use App\Services\NovaPoshtaService;
 use App\Services\UkrPoshtaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -255,6 +257,7 @@ class OrderController extends Controller
                     'flat' => $request->validated('flat'),
                 ]);
             }
+            Mail::to('vlad1990pb@gmail.com')->send(new OrderMail($newOrder));
         }
 
         return redirect()->route('site.order.thankYou');
