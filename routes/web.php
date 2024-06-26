@@ -57,6 +57,8 @@ Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(fu
     Route::get('/', 'index')->name('site.index');
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
+    Route::get('/search', 'search')->name('search');
+
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');

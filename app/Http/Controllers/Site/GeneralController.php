@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GeneralController extends Controller
@@ -62,6 +63,11 @@ class GeneralController extends Controller
 
         return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts', 'comments', 'promotionalProducts'));
     }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
     public function catalog(Request $request)
     {
         $queryParams = $request->only(['category_id']);
@@ -96,7 +102,6 @@ class GeneralController extends Controller
 
         $query = Product::where('category_id', $category->id);
 
-        // Фільтрація
         if ($color_id) {
             $query->whereHas('productVariants.color', function ($q) use ($color_id) {
                 $q->where('id', $color_id);
@@ -155,4 +160,34 @@ class GeneralController extends Controller
 
         return view('site.product.cards-products', compact('products', 'categories', 'category', 'color_id', 'size_id', 'producers', 'statuses', 'colors', 'sizes'));
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        $products = Product::where('title', 'LIKE', "%{$query}%")
+            ->with('media')
+            ->get();
+
+        $results = $products->map(function ($product) {
+            $mediaItem = $product->getMedia($product->id)->first(function ($media) {
+                return $media->getCustomProperty('main_image') === 1;
+            });
+
+            return [
+                'id' => $product->id,
+                'title' => $product->title,
+                'price' => $product->price->pair,
+                'currency' => 'UAH',
+                'image' => $mediaItem ? $mediaItem->getUrl() : '',
+                'alt' => $mediaItem ? $mediaItem->getCustomProperty('alt') : '',
+            ];
+        });
+
+        return response()->json($results);
+    }
+
 }

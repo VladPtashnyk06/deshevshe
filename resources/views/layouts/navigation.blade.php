@@ -109,6 +109,15 @@
                 </div>
             @endif
 
+            <div class="relative flex items-center ml-6 w-full" style="max-width: 350px;">
+                <div class="flex-grow">
+                    <input type="text" class="border rounded w-full px-4 py-2 shadow-sm focus:ring focus:ring-indigo-300 focus:border-indigo-300" name="search" id="search" placeholder="Пошук товарів...">
+                    <ul id="search-results" class="absolute bg-white border rounded mt-1 w-full z-10 hidden shadow-lg max-h-60 overflow-y-auto">
+                        <!-- Результати пошуку будуть тут -->
+                    </ul>
+                </div>
+            </div>
+
             <!-- Currency Selector and Cart -->
             @if(!Auth::user() || Auth::user()->role == 'user')
                 <div class="flex items-center ml-4">
@@ -181,3 +190,123 @@
         @endif
     </div>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search');
+        const resultsContainer = document.getElementById('search-results');
+
+        searchInput.addEventListener('input', function() {
+            let query = this.value;
+
+            if (query.length > 0) {
+                fetch(`/search?query=${query}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsContainer.innerHTML = '';
+
+                        data.forEach(product => {
+                            let li = document.createElement('li');
+                            li.classList.add('p-4', 'border-b', 'hover:bg-gray-100', 'flex', 'items-center');
+
+                            let productLink = document.createElement('a');
+                            productLink.href = `/product/${product.id}`;
+                            productLink.classList.add('flex', 'items-center', 'w-full');
+
+                            let productImage = document.createElement('img');
+                            productImage.src = product.image;
+                            productImage.alt = product.alt;
+                            productImage.classList.add('h-16', 'w-16', 'rounded-md', 'object-cover', 'mr-4');
+                            productLink.appendChild(productImage);
+
+                            let productInfo = document.createElement('div');
+                            productInfo.classList.add('flex', 'flex-col');
+
+                            let productTitle = document.createElement('p');
+                            productTitle.textContent = product.title;
+                            productTitle.classList.add('text-gray-800', 'font-semibold', 'text-sm', 'mb-1');
+                            productInfo.appendChild(productTitle);
+
+                            let productPrice = document.createElement('p');
+                            productPrice.textContent = `${product.price} ${product.currency}`;
+                            productPrice.classList.add('text-gray-600', 'text-sm');
+                            productInfo.appendChild(productPrice);
+
+                            productLink.appendChild(productInfo);
+                            li.appendChild(productLink);
+                            resultsContainer.appendChild(li);
+                        });
+
+                        resultsContainer.classList.remove('hidden');
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                resultsContainer.innerHTML = '';
+                resultsContainer.classList.add('hidden');
+            }
+        });
+
+        searchInput.addEventListener('focus', function() {
+            let query = this.value;
+
+            if (query.length >= 0) {
+                fetch(`/search?query=${query}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsContainer.innerHTML = '';
+
+                        data.forEach(product => {
+                            let li = document.createElement('li');
+                            li.classList.add('p-4', 'border-b', 'hover:bg-gray-100', 'flex', 'items-center');
+
+                            let productLink = document.createElement('a');
+                            productLink.href = `/product/${product.id}`;
+                            productLink.classList.add('flex', 'items-center', 'w-full');
+
+                            let productImage = document.createElement('img');
+                            productImage.src = product.image;
+                            productImage.alt = product.alt;
+                            productImage.classList.add('h-16', 'w-16', 'rounded-md', 'object-cover', 'mr-4');
+                            productLink.appendChild(productImage);
+
+                            let productInfo = document.createElement('div');
+                            productInfo.classList.add('flex', 'flex-col');
+
+                            let productTitle = document.createElement('p');
+                            productTitle.textContent = product.title;
+                            productTitle.classList.add('text-gray-800', 'font-semibold', 'text-sm', 'mb-1');
+                            productInfo.appendChild(productTitle);
+
+                            let productPrice = document.createElement('p');
+                            productPrice.textContent = `${product.price} ${product.currency}`;
+                            productPrice.classList.add('text-gray-600', 'text-sm');
+                            productInfo.appendChild(productPrice);
+
+                            productLink.appendChild(productInfo);
+                            li.appendChild(productLink);
+                            resultsContainer.appendChild(li);
+                        });
+
+                        resultsContainer.classList.remove('hidden');
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                resultsContainer.innerHTML = '';
+                resultsContainer.classList.add('hidden');
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
+                resultsContainer.classList.add('hidden');
+            }
+        });
+    });
+</script>
