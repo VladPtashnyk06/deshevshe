@@ -76,12 +76,46 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
 
-    public function ratingProduct()
+    public function ratingProduct(Request $request)
     {
-        $products = Product::all();
-        $producers = Producer::all();
+        $prices = Price::all();
+        $codes = Product::select('code')->distinct()->pluck('code');
         $categories = Category::all();
-        return view('admin.products.rating.index', compact('products', 'producers', 'categories'));
+        $producers = Producer::all();
+        $queryParams = $request->only(['code', 'category_id', 'producer_id', 'top_product', 'product_promotion']);
+        $filteredParams = array_filter($queryParams);
+        $query = Product::query();
+
+        if (isset($filteredParams['code'])) {
+            $query->where('code', 'LIKE', '%' . $filteredParams['code'] . '%');
+        }
+
+        if (isset($filteredParams['producer_id'])) {
+            $query->where('producer_id', $filteredParams['producer_id']);
+        }
+
+        if (isset($filteredParams['category_id'])) {
+            $query->where('category_id', $filteredParams['category_id']);
+        }
+
+        if (isset($filteredParams['top_product'])) {
+            if ($filteredParams['top_product'] == 1) {
+                $query->where('top_product', $filteredParams['top_product']);
+            } else {
+                $query->where('top_product', 0);
+            }
+        }
+
+        if (isset($filteredParams['product_promotion'])) {
+            if ($filteredParams['product_promotion'] == 1) {
+                $query->where('product_promotion', $filteredParams['product_promotion']);
+            } else {
+                $query->where('product_promotion', 0);
+            }
+        }
+
+        $products = $query->get();
+        return view('admin.products.rating.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
 
     public function showRatingProduct(Product $product)

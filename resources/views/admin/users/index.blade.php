@@ -3,6 +3,9 @@
         <div class="mx-auto sm:px-6 lg:px-8" style="max-width: 95rem">
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg bg-white">
                 <div class="p-6 text-gray-900">
+                    <div class="text-center mb-4">
+                        <a href="{{ route('user.createOperator') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Створити оператора</a>
+                    </div>
                     <h1 class="text-2xl font-semibold mb-2 text-center">Користувачі</h1>
                     <form action="{{ route('user.index') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
                         <div class="mb-4" style="flex: 1;">
@@ -23,6 +26,7 @@
                                 <option value=""> Всі </option>
                                 <option value="admin" @if(request()->input('role') == 'admin') selected @endif> Admin </option>
                                 <option value="user" @if(request()->input('role') == 'user') selected @endif> User </option>
+                                <option value="operator" @if(request()->input('role') == 'operator') selected @endif> Operator </option>
                             </select>
                         </div>
                         <div class="ml-2 mb-4">
@@ -49,8 +53,8 @@
                         @foreach ($users as $user)
                             <tr class="text-center odd:bg-gray-200">
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->name }} {{ $user->last_name }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->phone }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->email }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->phone ? $user->phone : 'Немає' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->email ? $user->email : 'Немає' }}</td>
                                 @if(!count($usersAddresses) == 0)
                                     @foreach($usersAddresses as $usersAddress)
                                         @if($usersAddress->user_id == $user->id)

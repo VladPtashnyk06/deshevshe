@@ -5,7 +5,7 @@
                 <div class="p-6 text-gray-900">
                     <h1 class="text-2xl font-semibold mb-2 text-center">Рейтинг продуктів</h1>
                     <div class="text-center mb-4">
-                        <form action="{{ route('product.index') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
+                        <form action="{{ route('product.ratingProduct') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
                             <div class="mb-4" style="flex: 1;">
                                 <label for="code" class="block mb-2 font-bold">Код товару:</label>
                                 <input type="text" name="code" id="code" value="{{ !empty(request()->input('code')) ? request()->input('code') : '' }}">
@@ -47,7 +47,7 @@
                             <div class="ml-2 mb-4">
                                 <div class="mt-4">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border">Застосувати фільтри</button>
-                                    <button type="button" onclick="window.location='{{ route('product.index') }}'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border ml-2">Очистити фільтри</button>
+                                    <button type="button" onclick="window.location='{{ route('product.ratingProduct') }}'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out border ml-2">Очистити фільтри</button>
                                 </div>
                             </div>
                         </form>

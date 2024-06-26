@@ -26,19 +26,25 @@ class LoginRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge([
-            'phone' => $this->normalizePhoneNumber($this->phone),
-        ]);
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => $this->normalizePhoneNumber($this->phone),
+            ]);
+        }
     }
 
     /**
      * Normalize the phone number by adding country code if missing.
      *
-     * @param  string  $phoneNumber
-     * @return string
+     * @param  string|null  $phoneNumber
+     * @return string|null
      */
-    protected function normalizePhoneNumber(string $phoneNumber): string
+    protected function normalizePhoneNumber(?string $phoneNumber): ?string
     {
+        if ($phoneNumber === null) {
+            return null;
+        }
+
         $normalizedPhone = preg_replace('/\D/', '', $phoneNumber);
 
         if (substr($normalizedPhone, 0, 1) === '0') {
@@ -58,7 +64,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string'],
+            'login_method' => ['required', 'string', 'in:phone,email,name'],
+            'phone' => ['required_if:login_method,phone', 'nullable', 'string'],
+            'email' => ['required_if:login_method,email', 'nullable', 'string', 'email'],
+            'name' => ['required_if:login_method,name', 'nullable', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -72,11 +81,22 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('phone', 'password'), $this->boolean('remember'))) {
+        $loginMethod = $this->input('login_method');
+        $credentials['password'] = $this->input('password');
+
+        if ($loginMethod === 'email') {
+            $credentials['email'] = $this->input('email');
+        } elseif ($loginMethod === 'phone') {
+            $credentials['phone'] = $this->input('phone');
+        } else {
+            $credentials['name'] = $this->input('name');
+        }
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'phone' => trans('auth.failed'),
+                'login' => trans('auth.failed'),
             ]);
         }
 
@@ -99,7 +119,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'phone' => trans('auth.throttle', [
+            'login' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -111,6 +131,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('phone')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('login_method')).'|'.$this->ip());
     }
 }

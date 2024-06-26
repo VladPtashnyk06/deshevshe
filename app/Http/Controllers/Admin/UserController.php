@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Testing\Fluent\Concerns\Has;
 
 class UserController extends Controller
 {
@@ -44,6 +45,21 @@ class UserController extends Controller
         $users = $query->get();
         $usersAddresses = UserAddress::all();
         return view('admin.users.index', compact('users', 'usersAddresses'));
+    }
+
+    public function createOperator() {
+        return view('admin.users.create-operator');
+    }
+
+    public function storeOperator(Request $request) {
+        User::create([
+            'name' => $request->post('name'),
+            'last_name' => $request->post('name'),
+            'password' => \Hash::make($request->post('password')),
+            'role' => 'operator'
+        ]);
+
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -82,5 +98,10 @@ class UserController extends Controller
     public function destroy(User $user) {
         $user->delete();
         return back();
+    }
+
+    public function loginForOperator()
+    {
+        return view('auth.login-for-operator');
     }
 }

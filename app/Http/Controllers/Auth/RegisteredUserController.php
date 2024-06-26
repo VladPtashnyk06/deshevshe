@@ -43,14 +43,18 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
             'phone' => ['required', 'regex:/^\+380(39|67|68|96|97|98|50|66|95|99|63|73|93)\d{7}$/', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
+            'middle_name' => $request->middle_name ? $request->middle_name : null,
             'phone' => $request->phone,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
@@ -58,6 +62,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('product.index');
+        return redirect()->route('site.index');
     }
 }

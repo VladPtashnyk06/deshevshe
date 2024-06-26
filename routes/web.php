@@ -14,6 +14,7 @@ use App\Http\Controllers\MeestController;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
+
 */
 /* =================================== */
 /*             NovaPoshta              */
@@ -39,6 +40,16 @@ Route::get('/get-ukr-poshta-branches', [\App\Http\Controllers\UkrPoshtaControlle
 Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaController::class, 'getDistricts'])->name('ukr-poshta.get-districts');
 Route::get('/get-ukr-poshta-streets', [\App\Http\Controllers\UkrPoshtaController::class, 'getStreetByCityId'])->name('ukr-poshta.get-street-by-city-id');
 
+
+use App\Http\Controllers\MailController;
+
+Route::get('send-email', [MailController::class, 'sendEmail']);
+
+Route::get('/callback', function () {
+    return view('site.callback-form');
+});
+
+Route::post('/send-callback', [MailController::class, 'sendCallbackRequest']);
 /* =================================== */
 /*                 Site                */
 /* =================================== */
@@ -46,6 +57,8 @@ Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(fu
     Route::get('/', 'index')->name('site.index');
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
+    Route::get('/search', 'search')->name('search');
+
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
@@ -107,7 +120,7 @@ Route::middleware('auth.operator')->group(function () {
             Route::controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
                 Route::get('/', 'index')->name('operator.order.index');
                 Route::post('/update-order-status/{id}', 'updateStatusAndOperator')->name('operator.order.updateOrderStatus');
-                Route::get('/user-orders/{user}', 'showUserOrders')->name('operator.order.showUserOrders');
+                Route::get('/user-orders/{order}', 'showUserOrders')->name('operator.order.showUserOrders');
                 Route::get('/edit-first/{order}', 'editFirst')->name('operator.order.editFirst');
                 Route::post('/edit-first/update/{order}', 'updateFirst')->name('operator.order.updateFirst');
                 Route::get('/edit-second/{order}', 'editSecond')->name('operator.order.editSecond');
@@ -162,6 +175,8 @@ Route::middleware('auth')->group(function () {
             Route::group(['prefix' => 'users'], function () {
                 Route::controller(\App\Http\Controllers\Admin\UserController::class)->group(function () {
                     Route::get('/', 'index')->name('user.index');
+                    Route::get('/create', 'createOperator')->name('user.createOperator');
+                    Route::post('/store', 'storeOperator')->name('user.storeOperator');
                     Route::get('/edit/{user}', 'edit')->name('user.edit');
                     Route::post('/update/{user}', 'update')->name('user.update');
                     Route::delete('/delete/{user}', 'destroy')->name('user.destroy');
