@@ -19,8 +19,32 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        $query = Category::query();
+
+        $filter = false;
+
+        if ($request->filled('id')) {
+            $filter = true;
+            $query->where('id', $request->input('id'));
+        }
+
+        if ($request->filled('title')) {
+            $filter = true;
+            $query->where('title', 'like', '%' . $request->input('title') . '%');
+        }
+
+        if ($request->filled('level')) {
+            $filter = true;
+            $query->where('level', $request->input('level'));
+        }
+
+        $filterCategories = $query->get();
+        foreach ($filterCategories as $category) {
+            $category->title = $this->buildCategoryChain($category);
+        }
         $categories = Category::with('children')->whereNull('parent_id')->get();
-        return view('admin.categories.index', compact('categories'));
+
+        return view('admin.categories.index', compact('categories', 'filterCategories', 'filter'));
     }
 
     /**
@@ -29,8 +53,18 @@ class CategoryController extends Controller
      */
     public function createSubCategory(Category $category)
     {
-        $categories = Category::with('children')->whereNull('parent_id')->get();
-        return view('admin.categories.createSubCategory', compact('category', 'categories'));
+        $categoryChain = $this->buildCategoryChain($category);
+        return view('admin.categories.createSubCategory', compact('category', 'categoryChain'));
+    }
+
+    private function buildCategoryChain(Category $category)
+    {
+        $chain = [];
+        while ($category) {
+            array_unshift($chain, $category->title);
+            $category = $category->parent;
+        }
+        return implode(' > ', $chain);
     }
 
     /**

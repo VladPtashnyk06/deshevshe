@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('site.index') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <x-application-logo class="block h-9 w-auto fill-current" />
                     </a>
                 </div>
 
@@ -109,14 +109,16 @@
                 </div>
             @endif
 
-            <div class="relative flex items-center ml-6 w-full" style="max-width: 350px;">
-                <div class="flex-grow">
-                    <input type="text" class="border rounded w-full px-4 py-2 shadow-sm focus:ring focus:ring-indigo-300 focus:border-indigo-300" name="search" id="search" placeholder="Пошук товарів...">
-                    <ul id="search-results" class="absolute bg-white border rounded mt-1 w-full z-10 hidden shadow-lg max-h-60 overflow-y-auto">
-                        <!-- Результати пошуку будуть тут -->
-                    </ul>
+            @if(!Auth::user() || Auth::user()->role == 'user')
+                <div class="relative flex items-center ml-6 w-full" style="max-width: 350px;">
+                    <div class="flex-grow">
+                        <input type="text" class="border rounded w-full px-4 py-2 shadow-sm focus:ring focus:ring-indigo-300 focus:border-indigo-300" name="search" id="search" placeholder="Пошук товарів...">
+                        <ul id="search-results" class="absolute bg-white border rounded mt-1 w-full z-10 hidden shadow-lg max-h-60 overflow-y-auto">
+                            <!-- Результати пошуку будуть тут -->
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <!-- Currency Selector and Cart -->
             @if(!Auth::user() || Auth::user()->role == 'user')
@@ -141,7 +143,7 @@
                                         C326.5,211.375,293.844,256,256,256c-37.813,0-70.5-44.625-78.25-102.094C186.156,148.125,192,138.938,192,128
                                         c0-17.688-14.313-32-32-32s-32,14.313-32,32c0,12.563,7.438,23.188,17.938,28.406C155.125,232.063,200.031,288,256,288
                                         s100.875-55.938,110.062-131.594C376.594,151.188,384,140.563,384,128z"/>
-                        </svg>
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -195,118 +197,120 @@
         const searchInput = document.getElementById('search');
         const resultsContainer = document.getElementById('search-results');
 
-        searchInput.addEventListener('input', function() {
-            let query = this.value;
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                let query = this.value;
 
-            if (query.length > 0) {
-                fetch(`/search?query=${query}`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        resultsContainer.innerHTML = '';
-
-                        data.forEach(product => {
-                            let li = document.createElement('li');
-                            li.classList.add('p-4', 'border-b', 'hover:bg-gray-100', 'flex', 'items-center');
-
-                            let productLink = document.createElement('a');
-                            productLink.href = `/product/${product.id}`;
-                            productLink.classList.add('flex', 'items-center', 'w-full');
-
-                            let productImage = document.createElement('img');
-                            productImage.src = product.image;
-                            productImage.alt = product.alt;
-                            productImage.classList.add('h-16', 'w-16', 'rounded-md', 'object-cover', 'mr-4');
-                            productLink.appendChild(productImage);
-
-                            let productInfo = document.createElement('div');
-                            productInfo.classList.add('flex', 'flex-col');
-
-                            let productTitle = document.createElement('p');
-                            productTitle.textContent = product.title;
-                            productTitle.classList.add('text-gray-800', 'font-semibold', 'text-sm', 'mb-1');
-                            productInfo.appendChild(productTitle);
-
-                            let productPrice = document.createElement('p');
-                            productPrice.textContent = `${product.price} ${product.currency}`;
-                            productPrice.classList.add('text-gray-600', 'text-sm');
-                            productInfo.appendChild(productPrice);
-
-                            productLink.appendChild(productInfo);
-                            li.appendChild(productLink);
-                            resultsContainer.appendChild(li);
-                        });
-
-                        resultsContainer.classList.remove('hidden');
+                if (query.length > 0) {
+                    fetch(`/search?query=${query}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
                     })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                resultsContainer.innerHTML = '';
-                resultsContainer.classList.add('hidden');
-            }
-        });
+                        .then(response => response.json())
+                        .then(data => {
+                            resultsContainer.innerHTML = '';
 
-        searchInput.addEventListener('focus', function() {
-            let query = this.value;
+                            data.forEach(product => {
+                                let li = document.createElement('li');
+                                li.classList.add('p-4', 'border-b', 'hover:bg-gray-100', 'flex', 'items-center');
 
-            if (query.length >= 0) {
-                fetch(`/search?query=${query}`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        resultsContainer.innerHTML = '';
+                                let productLink = document.createElement('a');
+                                productLink.href = `/product/${product.id}`;
+                                productLink.classList.add('flex', 'items-center', 'w-full');
 
-                        data.forEach(product => {
-                            let li = document.createElement('li');
-                            li.classList.add('p-4', 'border-b', 'hover:bg-gray-100', 'flex', 'items-center');
+                                let productImage = document.createElement('img');
+                                productImage.src = product.image;
+                                productImage.alt = product.alt;
+                                productImage.classList.add('h-16', 'w-16', 'rounded-md', 'object-cover', 'mr-4');
+                                productLink.appendChild(productImage);
 
-                            let productLink = document.createElement('a');
-                            productLink.href = `/product/${product.id}`;
-                            productLink.classList.add('flex', 'items-center', 'w-full');
+                                let productInfo = document.createElement('div');
+                                productInfo.classList.add('flex', 'flex-col');
 
-                            let productImage = document.createElement('img');
-                            productImage.src = product.image;
-                            productImage.alt = product.alt;
-                            productImage.classList.add('h-16', 'w-16', 'rounded-md', 'object-cover', 'mr-4');
-                            productLink.appendChild(productImage);
+                                let productTitle = document.createElement('p');
+                                productTitle.textContent = product.title;
+                                productTitle.classList.add('text-gray-800', 'font-semibold', 'text-sm', 'mb-1');
+                                productInfo.appendChild(productTitle);
 
-                            let productInfo = document.createElement('div');
-                            productInfo.classList.add('flex', 'flex-col');
+                                let productPrice = document.createElement('p');
+                                productPrice.textContent = `${product.price} ${product.currency}`;
+                                productPrice.classList.add('text-gray-600', 'text-sm');
+                                productInfo.appendChild(productPrice);
 
-                            let productTitle = document.createElement('p');
-                            productTitle.textContent = product.title;
-                            productTitle.classList.add('text-gray-800', 'font-semibold', 'text-sm', 'mb-1');
-                            productInfo.appendChild(productTitle);
+                                productLink.appendChild(productInfo);
+                                li.appendChild(productLink);
+                                resultsContainer.appendChild(li);
+                            });
 
-                            let productPrice = document.createElement('p');
-                            productPrice.textContent = `${product.price} ${product.currency}`;
-                            productPrice.classList.add('text-gray-600', 'text-sm');
-                            productInfo.appendChild(productPrice);
+                            resultsContainer.classList.remove('hidden');
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.classList.add('hidden');
+                }
+            });
 
-                            productLink.appendChild(productInfo);
-                            li.appendChild(productLink);
-                            resultsContainer.appendChild(li);
-                        });
+            searchInput.addEventListener('focus', function() {
+                let query = this.value;
 
-                        resultsContainer.classList.remove('hidden');
+                if (query.length >= 0) {
+                    fetch(`/search?query=${query}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
                     })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                resultsContainer.innerHTML = '';
-                resultsContainer.classList.add('hidden');
-            }
-        });
+                        .then(response => response.json())
+                        .then(data => {
+                            resultsContainer.innerHTML = '';
 
-        document.addEventListener('click', function(event) {
-            if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
-                resultsContainer.classList.add('hidden');
-            }
-        });
+                            data.forEach(product => {
+                                let li = document.createElement('li');
+                                li.classList.add('p-4', 'border-b', 'hover:bg-gray-100', 'flex', 'items-center');
+
+                                let productLink = document.createElement('a');
+                                productLink.href = `/product/${product.id}`;
+                                productLink.classList.add('flex', 'items-center', 'w-full');
+
+                                let productImage = document.createElement('img');
+                                productImage.src = product.image;
+                                productImage.alt = product.alt;
+                                productImage.classList.add('h-16', 'w-16', 'rounded-md', 'object-cover', 'mr-4');
+                                productLink.appendChild(productImage);
+
+                                let productInfo = document.createElement('div');
+                                productInfo.classList.add('flex', 'flex-col');
+
+                                let productTitle = document.createElement('p');
+                                productTitle.textContent = product.title;
+                                productTitle.classList.add('text-gray-800', 'font-semibold', 'text-sm', 'mb-1');
+                                productInfo.appendChild(productTitle);
+
+                                let productPrice = document.createElement('p');
+                                productPrice.textContent = `${product.price} ${product.currency}`;
+                                productPrice.classList.add('text-gray-600', 'text-sm');
+                                productInfo.appendChild(productPrice);
+
+                                productLink.appendChild(productInfo);
+                                li.appendChild(productLink);
+                                resultsContainer.appendChild(li);
+                            });
+
+                            resultsContainer.classList.remove('hidden');
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
+                    resultsContainer.classList.add('hidden');
+                }
+            });
+        }
     });
 </script>

@@ -9,14 +9,14 @@
                     <!-- Last Name -->
                     <div class="mb-4">
                         <label for="last_name" class="block text-gray-700 font-medium mb-2">Прізвище*</label>
-                        <input type="text" id="last_name" name="last_name" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="last_name" value="{{ old('last_name') }}">
+                        <input type="text" id="last_name" name="last_name" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autofocus  autocomplete="last_name" value="{{ old('last_name') }}">
                         <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                     </div>
 
                     <!-- Name -->
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 font-medium mb-2">Ім'я*</label>
-                        <input type="text" id="name" name="name" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autofocus autocomplete="name" value="{{ old('name') }}">
+                        <input type="text" id="name" name="name" class="block w-full border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500" required autocomplete="name" value="{{ old('name') }}">
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 

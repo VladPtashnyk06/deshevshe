@@ -7,6 +7,14 @@
                     @csrf
 
                     <div class="mb-4">
+                        @error('id')
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле обов'язкове і унікальне") }}</span>
+                        @enderror
+                        <label for="id" class="block mb-2 font-bold">ID</label>
+                        <input type="number" name="id" id="id" class="w-full border rounded px-3 py-2" value="{{ old('id') }}">
+                    </div>
+
+                    <div class="mb-4">
                         <label for="parent_id" class="block mb-2 font-bold">Виберіть батьківську категорію</label>
                         <select name="parent_id" id="parent_id" class="w-full border rounded px-3 py-2">
                             <option value="">Без категорії</option>
