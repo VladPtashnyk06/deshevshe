@@ -24,5 +24,11 @@
         <x-nav-link :href="route('producer.index')" :active="request()->routeIs('producer.index')">
             {{ __('Виробник') }}
         </x-nav-link>
+        <x-nav-link :href="route('promotional.index')" :active="request()->routeIs('promotional.index')">
+            {{ __('Акційній товари') }}
+        </x-nav-link>
+        <x-nav-link :href="route('product.ratingProduct')" :active="request()->routeIs('product.ratingProduct')">
+            {{ __('Рейтинги товарів') }}
+        </x-nav-link>
     </div>
 </header>
