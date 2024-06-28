@@ -29,7 +29,9 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -78,7 +80,7 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders', 'orderStatuses', 'operators'));
     }
 
-    public function updateStatusAndOperator($orderId, Request $request)
+    public function updateStatusAndOperator(Request $request, $orderId)
     {
         $request->validate([
             'status_id' => 'required',
@@ -92,22 +94,25 @@ class OrderController extends Controller
             'operator_id' => $request->operator_id,
         ]);
 
-        if ($order->orderStatus->title == 'Пакують') {
+        if ($order->orderStatus->title === 'Пакують') {
+            $this->handlePackingStatus($order);
+
+
             foreach ($order->orderDetails()->get() as $orderDetail) {
                 $product = Product::find($orderDetail->product_id);
                 foreach ($product->productVariants as $productVariant) {
-                    if ($productVariant->color->title == $orderDetail->color && $productVariant->size->title == $orderDetail->size) {
+                    if ($productVariant->color->title === $orderDetail->color && $productVariant->size->title === $orderDetail->size) {
                         $productVariant->update([
                             'quantity' => $productVariant->quantity - $orderDetail->quantity_product
                         ]);
                     }
                 }
             }
-        } elseif ($order->orderStatus->title == 'Не відповідає' || $order->orderStatus->title == 'Повернення' || $order->orderStatus->title == 'Скасоване клієнтом') {
+        } elseif (in_array($order->orderStatus->title, ['Не відповідає', 'Повернення', 'Скасоване клієнтом'])) {
             foreach ($order->orderDetails()->get() as $orderDetail) {
                 $product = Product::find($orderDetail->product_id);
                 foreach ($product->productVariants as $productVariant) {
-                    if ($productVariant->color->title == $orderDetail->color && $productVariant->size->title == $orderDetail->size) {
+                    if ($productVariant->color->title === $orderDetail->color && $productVariant->size->title === $orderDetail->size) {
                         $productVariant->update([
                             'quantity' => $productVariant->quantity + $orderDetail->quantity_product
                         ]);
@@ -116,14 +121,93 @@ class OrderController extends Controller
             }
         }
 
-        if ($order->orderStatus->title == 'Відравлено') {
-//            return response()->json(['message' => '123'], 200);
-            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderClientMail($order));
+        if ($order->orderStatus->title === 'Відравлено') {
             Mail::to('vlad1990pb@gmail.com')->send(new OrderClientMail($order));
         }
 
         return response()->json(['message' => 'Order status and operator updated successfully'], 200);
     }
+
+    protected function handlePackingStatus(Order $order)
+    {
+        $filePath = storage_path('app/orders/orders.json');
+
+        if (Storage::disk('local')->exists('orders/orders.json')) {
+            $ordersData = json_decode(Storage::disk('local')->get('orders/orders.json'), true);
+        } else {
+            $ordersData = [];
+        }
+
+        $orderData = $this->formatOrderData($order);
+
+        $ordersData[] = $orderData;
+
+        Storage::disk('local')->put('orders/orders.json', json_encode($ordersData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+//        $this->sendOrderDataTo1C($filePath, $ordersData);
+    }
+
+
+    protected function formatOrderData(Order $order)
+    {
+        return [
+            'order' => [
+                'id' => $order->id,
+                'user_id' => $order->user_id ? $order->user_id : null,
+                'order_status' => $order->orderStatus->title,
+                'payment_method' => $order->paymentMethod->title,
+                'user_name' => $order->user_name,
+                'user_last_name' => $order->user_last_name,
+                'user_middle_name' => $order->user_middle_name,
+                'user_phone' => $order->user_phone,
+                'user_email' => $order->user_email,
+                'cost_delivery' => $order->cost_delivery,
+                'total_price' => $order->total_price,
+                'currency' => $order->currency,
+                'comment' => $order->comment ?? null,
+            ],
+            'details' => $order->orderDetails->map(function($orderDetail) {
+                return [
+                    'product_code' => $orderDetail->product->code,
+                    'color_id' => $orderDetail->color_id,
+                    'color' => $orderDetail->color,
+                    'size_id' => $orderDetail->size_id,
+                    'size' => $orderDetail->size,
+                    'quantity' => $orderDetail->quantity_product,
+                    'product_total_price' => $orderDetail->product_total_price,
+                ];
+            })->toArray(),
+            'delivery' => [
+                'delivery_name' => $order->delivery->delivery_name == 'NovaPoshta' ? 'Нова Пошта' : ($order->delivery->delivery_name == 'Meest' ? 'Meest' : ($order->delivery->delivery_name == 'UkrPoshta' ? 'Укр Пошта' : '')),
+                'delivery_method' => $order->delivery->delivery_method == 'branch' ? 'Відділення' : ($order->delivery->delivery_method == 'exspresBranch' ? 'Експрес відділення' : ($order->delivery->delivery_method == 'postomat' ? 'Поштомат' : ($order->delivery->delivery_method == 'courier' ? 'Кур`єр' : ($order->delivery->delivery_method == 'exspresCourier' ? 'Експрес кур`єр' : '')))),
+                'region' => $order->delivery->region,
+                'regionRef' => $order->delivery->regionRef,
+                'city' => $order->delivery->city,
+                'cityRef' => $order->delivery->cityRef,
+                'branch' => $order->delivery->branch,
+                'branchNumber' => $order->delivery->branchNumber,
+                'branchRef' => $order->delivery->branchRef,
+                'district' => $order->delivery->district,
+                'districtRef' => $order->delivery->districtRef,
+                'village' => $order->delivery->village,
+                'villageRef' => $order->delivery->villageRef,
+                'street' => $order->delivery->street,
+                'streetRef' => $order->delivery->streetRef,
+                'house' => $order->delivery->house,
+                'flat' => $order->delivery->flat,
+            ]
+        ];
+    }
+
+//    protected function sendOrderDataTo1C($fileName, $orderData)
+//    {
+//        $url = 'https://app.super-price.test/api/1c/orders';
+//
+//        Http::post($url, [
+//            'file_name' => $fileName,
+//            'order_data' => $orderData,
+//        ]);
+//    }
 
     /**
      * @param Order $order

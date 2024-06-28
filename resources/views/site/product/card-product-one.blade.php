@@ -65,10 +65,6 @@
                                         <span class="ml-2 text-gray-600 text-lg" id="rating-value-{{ $product->id }}">{{ $product->rating ? $product->rating : 0 }} / 5</span>
                                     </div>
                                 </div>
-                                @if($product->package)
-                                    <p class="text-lg mb-2">В упаковці: {{ $product->package->title }}</p>
-                                @endif
-
                                 @if($product->price()->get())
                                     @foreach($product->price()->get() as $price)
                                         @include('site.product.price.index')
@@ -182,9 +178,12 @@
                         .then(response => response.json())
                         .then(data => {
                             sizeContainer.classList.remove('hidden');
-                            data.sizeVariants.forEach(size => {
-                                const option = document.createElement('option');
+                            console.log(data)
+                            const sizeVariantsArray = Object.values(data.sizeVariants);
+
+                            sizeVariantsArray.forEach(size => {
                                 if (size.color_id == colorId) {
+                                    const option = document.createElement('option');
                                     option.value = size.size.id;
                                     option.textContent = size.size.title;
                                     sizeSelect.appendChild(option);

@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('characteristics', function (Blueprint $table) {
             $table->id();
-            $table->integer('height');
+            $table->integer('height')->nullable();
             $table->integer('width');
             $table->integer('length');
             $table->timestamps();

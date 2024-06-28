@@ -144,7 +144,7 @@
                 @endif
                 @if($order->delivery->village)
                     <tr>
-                        <th>Місто</th>
+                        <th>Село</th>
                         <td>{{ $order->delivery->village }}</td>
                     </tr>
                 @endif

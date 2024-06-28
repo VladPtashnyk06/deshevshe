@@ -375,9 +375,11 @@
                                 </div>
                             </div>
                             <div class="flex justify-end">
-                                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
-                                    Оформити замовлення
-                                </button>
+                                @if($totalPrice >= 500)
+                                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
+                                        Оформити замовлення
+                                    </button>
+                                @endif
                             </div>
                         </form>
                     </div>
@@ -1118,6 +1120,12 @@
                         MeestBranchesList.classList.add('hidden');
                     }
                 });
+
+                if (MeestRegionSelect && Region) {
+                    MeestRegionSelect.addEventListener('change', function() {
+                        Region.value = this.selectedOptions[0].text;
+                    });
+                }
 
                 function MeestFetchCities(regionId, searchText) {
                     fetch('/meest/cities', {

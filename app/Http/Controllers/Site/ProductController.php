@@ -139,9 +139,18 @@ class ProductController extends Controller
     {
         $product = Product::with('productVariants.size')->find($productId);
 
-        $sizeUniqueVariants = $product->productVariants->unique('size_id');
+        $sizeVariants = $product->productVariants->map(function($variant) {
+            return [
+                'color_id' => $variant->color_id,
+                'size_id' => $variant->size_id,
+                'size' => $variant->size,
+                'quantity' => $variant->quantity,
+                'created_at' => $variant->created_at,
+                'updated_at' => $variant->updated_at,
+            ];
+        });
 
-        return response()->json(['sizeVariants' => $sizeUniqueVariants]);
+        return response()->json(['sizeVariants' => $sizeVariants]);
     }
 
     /**
