@@ -101,7 +101,7 @@
         DeliveryLocationTypeRadios.forEach(input => {
             if (input.value === DeliveryLocation) {
                 input.checked = true;
-                let type = DeliveryLocation;
+                type = DeliveryLocation;
             }
         });
 
@@ -275,6 +275,8 @@
         function updateFormVisibility() {
             let selectedDeliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
             const inputCategoryOfWarehouse = document.getElementById('categoryOfWarehouse');
+
+            console.log(type)
 
             let poshtaAndDelivery = selectedDeliveryType.split("_");
             let poshta = poshtaAndDelivery[0];

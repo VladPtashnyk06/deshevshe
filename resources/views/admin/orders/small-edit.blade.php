@@ -122,7 +122,7 @@
         DeliveryLocationTypeRadios.forEach(input => {
             if (input.value === DeliveryLocation) {
                 input.checked = true;
-                let type = DeliveryLocation;
+                type = DeliveryLocation;
             }
         });
 
