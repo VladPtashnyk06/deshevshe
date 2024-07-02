@@ -31,6 +31,12 @@ class UkrPoshtaController extends Controller
         return response()->json($cities);
     }
 
+    public function getShipments()
+    {
+        $shipments = $this->ukrPoshtaService->getShipments();
+        return response()->json($shipments);
+    }
+
     public function getBranches(Request $request)
     {
         $cityId = $request->input('cityId');
@@ -103,6 +109,7 @@ class UkrPoshtaController extends Controller
         $phone = $request->input('sender_phone');
         if ($phone) {
             $sender = $this->ukrPoshtaService->getClientByPhone($phone);
+//            dd($sender);
             if (!empty($sender) && $sender[0]) {
                 if ($sender[0]['type'] == 'COMPANY') {
                     $sender = $sender[0];

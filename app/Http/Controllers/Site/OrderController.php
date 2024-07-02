@@ -92,7 +92,6 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-//        dd($request->validated());
         if ($request->post('registration') == 'on') {
             if ($request->validated('password') == $request->validated('password_confirmation')) {
                 $newUser = User::create([
@@ -188,14 +187,30 @@ class OrderController extends Controller
                 OrderDetail::create([
                     'order_id' => $newOrder->id,
                     'product_id' => $item->attributes->product_id,
+                    'color_id' => $item->attributes->color_id,
+                    'size_id' => $item->attributes->size_id,
                     'color' => $item->attributes->color,
                     'size' => $item->attributes->size,
-                    'product_total_price' => $product->price->pair * $item->quantity,
+                    'product_total_price' => $product->price->retail * $item->quantity,
                     'quantity_product' => $item->quantity
                 ]);
             }
             $deliveryNameAndType = $request->validated('delivery_type');
             list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+            $settlementType = null;
+            $settlement = null;
+            if ($request->validated('nova_poshta_city_input') || $request->validated('meest_city_input') || $request->validated('ukr_poshta_city_input')) {
+                $settlementType = 'місто';
+            } elseif ($request->validated('village_input')) {
+                $village = $request->validated('village_input');
+
+                preg_match('/(с\.|село|смт|селище міського типу)\s+(.+)/ui', $village, $matches);
+
+                if (!empty($matches)) {
+                    $settlementType = $matches[1];
+                    $settlement = $matches[2];
+                }
+            }
             if ($deliveryName == 'NovaPoshta') {
                 Delivery::create([
                     'order_id' => $newOrder->id,
@@ -203,15 +218,14 @@ class OrderController extends Controller
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('region'),
                     'regionRef' => $request->validated('nova_poshta_region_ref'),
-                    'city' => $request->validated('nova_poshta_city_input'),
-                    'cityRef' => $request->validated('city_ref'),
+                    'settlementType' => $settlementType,
+                    'settlement' => $request->validated('nova_poshta_city_input') ?? $settlement,
+                    'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                     'branch' => $request->validated('nova_poshta_branches_input'),
                     'branchNumber' => $request->validated('branch_number'),
                     'branchRef' => $request->validated('branch_ref'),
                     'district' => $request->validated('district_input'),
                     'districtRef' => $request->validated('district_ref'),
-                    'village' => $request->validated('village_input'),
-                    'villageRef' => $request->validated('village_ref'),
                     'street' => $request->validated('street_input'),
                     'streetRef' => $request->validated('street_ref'),
                     'house' => $request->validated('house'),
@@ -222,17 +236,19 @@ class OrderController extends Controller
                     'order_id' => $newOrder->id,
                     'delivery_name' => $deliveryName,
                     'delivery_method' => $deliveryType,
-                    'region' => $request->validated('MeestRegion'),
-                    'city' => $request->validated('MeestCityInput'),
-                    'cityRef' => $request->validated('meestCityIdHidden'),
-                    'branch' => $request->validated('MeestBranchesInpute'),
-                    'branchRef' => $request->validated('meestBranchIDHidden'),
+                    'region' => $request->validated('region'),
+                    'regionRef' => $request->validated('meest_region_ref'),
+                    'settlementType' => $settlementType,
+                    'settlement' => $request->validated('meest_city_input') ?? $settlement,
+                    'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
+                    'branch' => $request->validated('meest_branches_input'),
+                    'branchNumber' => '',
+                    'branchRef' => $request->validated('branch_ref'),
                     'district' => $request->validated('district_input'),
                     'districtRef' => $request->validated('district_ref'),
-                    'village' => $request->validated('village_input'),
-                    'villageRef' => $request->validated('village_ref'),
                     'street' => $request->validated('street_input'),
                     'streetRef' => $request->validated('street_ref'),
+                    'house' => $request->validated('house'),
                     'flat' => $request->validated('flat'),
                 ]);
             } else if ($deliveryName == 'UkrPoshta') {
@@ -242,22 +258,21 @@ class OrderController extends Controller
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('region'),
                     'regionRef' => $request->validated('ukr_poshta_region_ref'),
-                    'city' => $request->validated('ukr_poshta_city_input'),
-                    'cityRef' => $request->validated('city_ref'),
+                    'settlementType' => $settlementType,
+                    'settlement' => $request->validated('ukr_poshta_city_input') ?? $settlement,
+                    'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                     'branch' => $request->validated('ukr_poshta_branches_input'),
                     'branchNumber' => '',
                     'branchRef' => $request->validated('branch_ref'),
                     'district' => $request->validated('district_input'),
                     'districtRef' => $request->validated('district_ref'),
-                    'village' => $request->validated('village_input'),
-                    'villageRef' => $request->validated('village_ref'),
                     'street' => $request->validated('street_input'),
                     'streetRef' => $request->validated('street_ref'),
                     'house' => $request->validated('house'),
                     'flat' => $request->validated('flat'),
                 ]);
             }
-            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderMail($newOrder));
+//            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderMail($newOrder));
             Mail::to('vlad1990pb@gmail.com')->send(new OrderMail($newOrder));
         }
 

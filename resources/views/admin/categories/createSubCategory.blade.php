@@ -7,23 +7,36 @@
                     @csrf
 
                     <div class="mb-4">
+                        @error('id')
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле обов'язкове і унікальне") }}</span>
+                        @enderror
+                        <label for="id" class="block mb-2 font-bold">ID</label>
+                        <input type="number" name="id" id="id" class="w-full border rounded px-3 py-2" value="{{ old('id') }}">
+                    </div>
+
+                    <div class="mb-4">
                         @error('title')
                         <span class="text-red-500">Це поле обов'язкове і унікальне</span>
                         @enderror
                         <label for="title_parent" class="block mb-2 font-bold">Категорія</label>
-                        @foreach($categories as $cat)
-                            @include('admin.categories.options-sub_category-create', ['cat' => $cat, 'category' => $category, 'prefix' => ''])
-                        @endforeach
-                        <label for="title" class="block mb-2 font-bold mt-3">Під-категорія</label>
-                        <input type="text" name="title" id="title" class="w-full border rounded px-3 py-2" value="{{ old('title') }}">
+                        <input type="text" name="title_parent" id="title_parent" class="w-full border rounded px-3 py-2" value="{{ $categoryChain }}" disabled>
+                        <input type="hidden" name="parent_id" id="parent_id" value="{{ $category->id }}">
                     </div>
 
                     <div class="mb-4">
                         @error('title')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле обов'язкове і унікальне") }}</span>
                         @enderror
+                        <label for="title" class="block mb-2 font-bold">Під-категорія</label>
+                        <input type="text" name="title" id="title" class="w-full border rounded px-3 py-2" value="{{ old('title') }}">
+                    </div>
+
+                    <div class="mb-4">
+                        @error('level')
+                        <span class="text-red-500">{{ htmlspecialchars("Це поле обов'язкове і унікальне") }}</span>
+                        @enderror
                         <label for="level" class="block mb-2 font-bold">Порядок сортування</label>
-                        <input type="text" name="level" id="level" class="w-full border rounded px-3 py-2" placeholder="За замовчуванням 1" value="{{ !empty(old('level')) ? old('level') : 1 }}">
+                        <input type="number" name="level" id="level" class="w-full border rounded px-3 py-2" placeholder="За замовчуванням 1" value="{{ old('level', 1) }}">
                     </div>
 
                     <div class="text-center mb-4">

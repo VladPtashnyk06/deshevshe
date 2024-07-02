@@ -1,5 +1,8 @@
 <tr class="text-center odd:bg-gray-200">
     <td class="px-6 py-4 font-bold" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
+        {{ $category->id }}
+    </td>
+    <td class="px-6 py-4 font-bold" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
         {{ $prefix }} {{ $category->title }}
     </td>
     <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">

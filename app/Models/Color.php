@@ -26,6 +26,7 @@ class Color extends Model
      * @var array<string>
      */
     protected $fillable = [
+        'id',
         'title',
     ];
 }

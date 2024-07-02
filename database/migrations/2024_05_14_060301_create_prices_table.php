@@ -10,11 +10,11 @@ return new class extends Migration {
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->unique()->constrained('products');
-            $table->integer('pair');
-            $table->integer('rec_pair');
+            $table->integer('pair')->nullable();
+            $table->integer('rec_pair')->nullable();
             $table->integer('package')->nullable();
             $table->integer('rec_package')->nullable();
-            $table->integer('retail')->nullable();
+            $table->integer('retail');
             $table->integer('promotional_price')->nullable();
             $table->integer('promotional_rate')->nullable();
             $table->timestamps();

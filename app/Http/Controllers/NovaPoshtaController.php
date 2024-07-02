@@ -199,8 +199,8 @@ class NovaPoshtaController extends Controller
     {
         $novaPoshtaService->destroy($order->ref);
         $order->update([
-            'ref' => '',
-            'int_doc_number' => ''
+            'ref' => null,
+            'int_doc_number' => null
         ]);
         return redirect()->back();
     }

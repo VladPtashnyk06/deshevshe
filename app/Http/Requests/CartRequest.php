@@ -12,7 +12,7 @@ class CartRequest extends FormRequest
             'product_id' => ['required'],
             'color_id_popup' => ['required'],
             'size_id_popup' => ['required'],
-            'action_type' => ['required']
+            'action_type' => ['nullable']
         ];
     }
 

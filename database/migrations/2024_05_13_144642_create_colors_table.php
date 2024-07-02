@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('colors', function (Blueprint $table) {
-            $table->id();
-            $table->string('title')->unique();
+            $table->unsignedBigInteger('id')->primary();
+            $table->string('title');
             $table->timestamps();
         });
     }

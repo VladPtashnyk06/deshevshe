@@ -101,7 +101,7 @@
         DeliveryLocationTypeRadios.forEach(input => {
             if (input.value === DeliveryLocation) {
                 input.checked = true;
-                let type = DeliveryLocation;
+                type = DeliveryLocation;
             }
         });
 
@@ -275,6 +275,8 @@
         function updateFormVisibility() {
             let selectedDeliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
             const inputCategoryOfWarehouse = document.getElementById('categoryOfWarehouse');
+
+            console.log(type)
 
             let poshtaAndDelivery = selectedDeliveryType.split("_");
             let poshta = poshtaAndDelivery[0];
@@ -1070,8 +1072,8 @@
                                         listItem.setAttribute('data-value', city.CITY_ID);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
-                                            VillageInput.value = city.CITY_UA;
-                                            CityName.value = city.CITY_UA;
+                                            VillageInput.value = city.CITYTYPE_UA + ' ' + city.CITY_UA;
+                                            CityName.value = null;
                                             VillageRef.value = city.CITY_ID;
                                             VillageList.classList.add('hidden');
                                             UkrPoshtaBranchesInput.value = '';

@@ -15,9 +15,10 @@ class UkrPoshtaService
     protected $token;
     public function __construct()
     {
-//        $this->apiKey = config('services.ukrposhta.api_key');
-        $this->apiKey = '3d3b0242-3f14-3118-9765-968f8ca3fb2d';
-        $this->token = 'ec6e7fbc-8a93-4008-bcca-d5500aa5c43c';
+        $this->apiKey = config('services.ukrposhta.api_key');
+//        $this->apiKey = '3d3b0242-3f14-3118-9765-968f8ca3fb2d';
+//        $this->token = 'ec6e7fbc-8a93-4008-bcca-d5500aa5c43c';
+        $this->token = '06c1edc3-adc8-48a0-bb55-033117e69058';
     }
 
     public function getRegions()
@@ -30,17 +31,18 @@ class UkrPoshtaService
         return $response->json()['Entries']['Entry'];
     }
 
-//    public function getCities($regionId)
-//    {
-//        $response = Http::withHeaders([
-//            'accept' => 'application/json',
-//            'Authorization' => 'Bearer ' . $this->apiKey,
-//        ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_city_by_region_id_and_district_id_and_city_ua', [
-//            'region_id' => $regionId,
-//        ]);
-//
-//        return $response->json()['Entries']['Entry'];
-//    }
+    public function getShipments()
+    {
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ])->get('https://www.ukrposhta.ua/ecom/0.0.1/shipments', [
+            'senderUuid' => '03b8b7bc-0903-4d05-922a-87db812bd9aa',
+            'token' => '06c1edc3-adc8-48a0-bb55-033117e69058'
+        ]);
+
+        return $response->json();
+    }
 
     public function getBranches($cityId)
     {

@@ -9,6 +9,7 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => ['required', 'integer'],
             'title' => ['required'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'level' => ['nullable', 'integer'],

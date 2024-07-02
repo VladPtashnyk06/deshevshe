@@ -6,7 +6,9 @@
                     <h1 class="text-3xl font-semibold mb-6 text-center">Продукти</h1>
                     <ul class="p-4 rounded-lg">
                         @foreach($categories as $category)
-                            @include('site.catalog.second-part-catalog', ['category' => $category])
+                            @if($category->level >= 1 )
+                                @include('site.catalog.second-part-catalog', ['category' => $category])
+                            @endif
                         @endforeach
                     </ul>
                 </div>

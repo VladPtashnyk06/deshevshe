@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('package_id')->nullable()->constrained('packages');
             $table->foreignId('material_id')->nullable()->constrained('materials');
             $table->foreignId('characteristic_id')->nullable()->constrained('characteristics');
-            $table->string('title');
+            $table->string('title')->index();
             $table->text('description');
             $table->integer('code')->unique();
             $table->string('model')->nullable();

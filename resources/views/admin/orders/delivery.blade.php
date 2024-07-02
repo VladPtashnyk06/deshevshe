@@ -90,8 +90,8 @@
     </div>
 
     <input type="hidden" id="region" name="region" value="{{ $order->delivery->region ? $order->delivery->region : '' }}">
-    <input type="hidden" id="city_name" name="city_name" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
-    <input type="hidden" id="city_ref" name="city_ref" value="{{ $order->delivery->cityRef ? $order->delivery->cityRef : '' }}">
+    <input type="hidden" id="city_name" name="city_name" value="{{ $order->delivery->settlementType == 'місто' ? $order->delivery->settlement : '' }}">
+    <input type="hidden" id="city_ref" name="city_ref" value="{{ $order->delivery->settlementType == 'місто' ? $order->delivery->settlementRef : '' }}">
     <input type="hidden" id="branch_number" name="branch_number" value="{{ $order->delivery->branchNumber ? $order->delivery->branchNumber : '' }}">
     <input type="hidden" id="branch_name" name="branch_name" value="{{ $order->delivery->branch ? $order->delivery->branch : '' }}">
     <input type="hidden" id="branch_ref" name="branch_ref" value="{{ $order->delivery->branchRef ? $order->delivery->branchRef : '' }}">
@@ -109,7 +109,7 @@
         <div id="nova_postha_city_and_branch">
             <div class="space-y-1 relative mb-4 inputCity" id="nova_poshta_city_div">
                 <label for="nova_poshta_city_input" class="block font-semibold">Місто *</label>
-                <input id="nova_poshta_city_input" name="nova_poshta_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
+                <input id="nova_poshta_city_input" name="nova_poshta_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->settlementType == 'місто' ? $order->delivery->settlement : '' }}">
                 <ul id="nova_poshta_city_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Міста будуть відображені тут -->
                 </ul>
@@ -139,7 +139,7 @@
         <div id="meest_city_and_branch">
             <div class="space-y-1 relative mb-4 inputCity" id="meest_city_div">
                 <label for="meest_city_input" class="block font-semibold">Місто</label>
-                <input id="meest_city_input" name="meest_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
+                <input id="meest_city_input" name="meest_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->settlementType == 'місто' ? $order->delivery->settlement : '' }}">
                 <ul id="meest_city_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Міста будуть відображені тут -->
                 </ul>
@@ -169,7 +169,7 @@
         <div id="ukr_postha_city_and_branch">
             <div class="space-y-1 relative mb-4 inputCity" id="ukr_poshta_city_div">
                 <label for="ukr_poshta_city_input" class="block font-semibold">Місто</label>
-                <input id="ukr_poshta_city_input" name="ukr_poshta_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->city ? $order->delivery->city : '' }}">
+                <input id="ukr_poshta_city_input" name="ukr_poshta_city_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву міста" value="{{ $order->delivery->settlementType == 'місто' ? $order->delivery->settlement : '' }}">
                 <ul id="ukr_poshta_city_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                     <!-- Міста будуть відображені тут -->
                 </ul>
@@ -196,9 +196,9 @@
         </div>
 
         <div class="space-y-1 relative mb-4" id="">
-            <input type="hidden" name="village_ref" id="village_ref" value="{{ $order->delivery->villageRef ? $order->delivery->villageRef : '' }}">
+            <input type="hidden" name="village_ref" id="village_ref" value="{{ ($order->delivery->settlementType !== 'місто' && $order->delivery->settlementType) ? $order->delivery->settlementRef : '' }}">
             <label for="village_input" class="block font-semibold">Село *</label>
-            <input id="village_input" name="village_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву села" value="{{ $order->delivery->village ? $order->delivery->village : '' }}">
+            <input id="village_input" name="village_input" class="w-full border rounded-md py-2 px-3" placeholder="Введіть назву села" value="{{ ($order->delivery->settlementType !== 'місто' && $order->delivery->settlementType) ? $order->delivery->settlement : '' }}">
             <ul id="village_list" class="absolute z-10 mt-1 bg-white border rounded-md shadow-md hidden w-full max-h-48 overflow-y-auto">
                 <!-- Відділення будуть відображені тут -->
             </ul>

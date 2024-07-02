@@ -136,16 +136,10 @@
                         <td>{{ $order->delivery->district }}</td>
                     </tr>
                 @endif
-                @if($order->delivery->city)
+                @if($order->delivery->settlement)
                     <tr>
-                        <th>Місто</th>
-                        <td>{{ $order->delivery->city }}</td>
-                    </tr>
-                @endif
-                @if($order->delivery->village)
-                    <tr>
-                        <th>Місто</th>
-                        <td>{{ $order->delivery->village }}</td>
+                        <th>{{ ucfirst($order->delivery->settlementType) }}</th>
+                        <td>{{ $order->delivery->settlement }}</td>
                     </tr>
                 @endif
                 @if($order->delivery->branch)

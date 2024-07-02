@@ -375,9 +375,11 @@
                                 </div>
                             </div>
                             <div class="flex justify-end">
-                                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
-                                    Оформити замовлення
-                                </button>
+                                @if($totalPrice >= 500)
+                                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
+                                        Оформити замовлення
+                                    </button>
+                                @endif
                             </div>
                         </form>
                     </div>
@@ -1119,6 +1121,12 @@
                     }
                 });
 
+                if (MeestRegionSelect && Region) {
+                    MeestRegionSelect.addEventListener('change', function() {
+                        Region.value = this.selectedOptions[0].text;
+                    });
+                }
+
                 function MeestFetchCities(regionId, searchText) {
                     fetch('/meest/cities', {
                         method: 'POST',
@@ -1366,7 +1374,8 @@
                                 if (type === 'City') {
                                     if (city.CITY_UA.toLowerCase().startsWith(searchText) && city.CITYTYPE_UA.toLowerCase().includes('місто')) {
                                         const listItem = document.createElement('li');
-                                        listItem.textContent = city.CITY_UA;
+                                        console.log(city)
+                                        listItem.textContent = city.CITYTYPE_UA + ' ' + city.CITY_UA;
                                         listItem.setAttribute('data-value', city.CITY_ID);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
@@ -1382,12 +1391,13 @@
                                 } else {
                                     if (city.CITY_UA.toLowerCase().startsWith(searchText) && !city.CITYTYPE_UA.toLowerCase().includes('місто')) {
                                         const listItem = document.createElement('li');
-                                        listItem.textContent = city.CITY_UA;
+                                        console.log(city)
+                                        listItem.textContent = city.CITYTYPE_UA + ' ' + city.CITY_UA;
                                         listItem.setAttribute('data-value', city.CITY_ID);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
-                                            VillageInput.value = city.CITY_UA;
-                                            CityName.value = city.CITY_UA;
+                                            VillageInput.value = city.CITYTYPE_UA + ' ' + city.CITY_UA;
+                                            CityName.value = null;
                                             VillageRef.value = city.CITY_ID;
                                             VillageList.classList.add('hidden');
                                             UkrPoshtaBranchesInput.value = '';

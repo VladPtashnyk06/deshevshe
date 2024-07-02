@@ -39,6 +39,7 @@ Route::get('/get-ukr-poshta-cities', [\App\Http\Controllers\UkrPoshtaController:
 Route::get('/get-ukr-poshta-branches', [\App\Http\Controllers\UkrPoshtaController::class, 'getBranches'])->name('ukr.get-branches');
 Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaController::class, 'getDistricts'])->name('ukr-poshta.get-districts');
 Route::get('/get-ukr-poshta-streets', [\App\Http\Controllers\UkrPoshtaController::class, 'getStreetByCityId'])->name('ukr-poshta.get-street-by-city-id');
+Route::get('/get-shipments', [\App\Http\Controllers\UkrPoshtaController::class, 'getShipments'])->name('ukr-poshta.get-shipments');
 
 
 use App\Http\Controllers\MailController;
@@ -135,6 +136,8 @@ Route::middleware('auth.operator')->group(function () {
                 Route::get('/small-edit/{order}', 'smallEdit')->name('operator.order.small-edit');
                 Route::post('/small-edit/update/{order}', 'smallUpdate')->name('operator.order.smallUpdate');
                 Route::get('/add-additional-product/update', 'getProductsByCode')->name('operator.order.addAdditionalProduct');
+                Route::get('/add-ttn-to-order/{order}', 'addTtnToOrder')->name('operator.order.addTtnToOrder');
+                Route::post('/update-ttn-to-order/{order}', 'updateTTNtoOrder')->name('operator.order.updateTTNtoOrder');
                 Route::delete('/order-detail/delete/{order_detail}', 'orderDetailDestroy')->name('operator.order_detail.destroy');
             });
             Route::controller(\App\Http\Controllers\NovaPoshtaController::class)->group(function () {
@@ -172,6 +175,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::group(['prefix' => 'admin'], function () {
         Route::middleware('auth.admin')->group(function () {
+            Route::group(['prefix' => 'api'], function () {
+                Route::controller(\App\Http\Controllers\Admin\ApiKeyController::class)->group(function () {
+                    Route::get('/', 'index')->name('api.index');
+                    Route::get('/edit', 'edit')->name('api.edit');
+                    Route::post('/update', 'update')->name('api.update');
+                });
+            });
             Route::group(['prefix' => 'users'], function () {
                 Route::controller(\App\Http\Controllers\Admin\UserController::class)->group(function () {
                     Route::get('/', 'index')->name('user.index');
