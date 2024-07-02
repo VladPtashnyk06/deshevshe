@@ -43,5 +43,11 @@ return [
 
     'ukrposhta' => [
         'api_key' => env('UKRPOSHTA_API_KEY'),
-    ]
+    ],
+
+    'turbosms' => [
+        'api_token' => env('TURBOSMS_API_TOKEN'),
+        'sender' => env('TURBOSMS_SENDER'),
+        'is_test' => env('TURBOSMS_IS_TEST'),
+    ],
 ];

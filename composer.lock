@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af4717215d68e24e4480559790645912",
+    "content-hash": "33717b966174a265f09c75c05906417b",
     "packages": [
         {
             "name": "brick/math",
@@ -568,6 +568,65 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
+        },
+        {
+            "name": "fomvasss/laravel-notification-channel-turbo-sms",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fomvasss/laravel-notification-channel-turbosms.git",
+                "reference": "b2ba670fb8b3acb70e1ce0c3f5847743fe0d13b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fomvasss/laravel-notification-channel-turbosms/zipball/b2ba670fb8b3acb70e1ce0c3f5847743fe0d13b1",
+                "reference": "b2ba670fb8b3acb70e1ce0c3f5847743fe0d13b1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/notifications": "^5.5|^6|^7|^8|^9|^10|^11",
+                "illuminate/support": "^5.5|^6|^7|^8|^9|^10|^11",
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NotificationChannels\\TurboSms\\TurboSmsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NotificationChannels\\TurboSms\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fomin Vasil",
+                    "email": "fomvasss@gmail.com",
+                    "homepage": "https://github.com/fomvasss",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package makes it easy to send notifications using [turbosms.ua](https://turbosms.ua) with Laravel 5.5+",
+            "homepage": "https://github.com/fomvasss/laravel-notification-channel-turbo-sms",
+            "keywords": [
+                "laravel",
+                "notifications",
+                "sms",
+                "turbo-sms",
+                "ТурбоСМС"
+            ],
+            "support": {
+                "issues": "https://github.com/fomvasss/laravel-notification-channel-turbosms/issues",
+                "source": "https://github.com/fomvasss/laravel-notification-channel-turbosms/tree/1.2.0"
+            },
+            "time": "2024-03-20T19:19:06+00:00"
         },
         {
             "name": "fruitcake/php-cors",

@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Super Price'),
+    'name' => env('APP_NAME', 'Deshevhse'),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
+        NotificationChannels\TurboSms\TurboSmsServiceProvider::class,
     ])->toArray(),
 
     /*
