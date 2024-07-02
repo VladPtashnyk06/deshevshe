@@ -197,6 +197,20 @@ class OrderController extends Controller
             }
             $deliveryNameAndType = $request->validated('delivery_type');
             list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+            $settlementType = null;
+            $settlement = null;
+            if ($request->validated('nova_poshta_city_input') || $request->validated('meest_city_input') || $request->validated('ukr_poshta_city_input')) {
+                $settlementType = 'місто';
+            } elseif ($request->validated('village_input')) {
+                $village = $request->validated('village_input');
+
+                preg_match('/(с\.|село|смт|селище міського типу)\s+(.+)/ui', $village, $matches);
+
+                if (!empty($matches)) {
+                    $settlementType = $matches[1];
+                    $settlement = $matches[2];
+                }
+            }
             if ($deliveryName == 'NovaPoshta') {
                 Delivery::create([
                     'order_id' => $newOrder->id,
@@ -204,15 +218,14 @@ class OrderController extends Controller
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('region'),
                     'regionRef' => $request->validated('nova_poshta_region_ref'),
-                    'city' => $request->validated('nova_poshta_city_input'),
-                    'cityRef' => $request->validated('city_ref'),
+                    'settlementType' => $settlementType,
+                    'settlement' => $request->validated('nova_poshta_city_input') ?? $settlement,
+                    'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                     'branch' => $request->validated('nova_poshta_branches_input'),
                     'branchNumber' => $request->validated('branch_number'),
                     'branchRef' => $request->validated('branch_ref'),
                     'district' => $request->validated('district_input'),
                     'districtRef' => $request->validated('district_ref'),
-                    'village' => $request->validated('village_input'),
-                    'villageRef' => $request->validated('village_ref'),
                     'street' => $request->validated('street_input'),
                     'streetRef' => $request->validated('street_ref'),
                     'house' => $request->validated('house'),
@@ -225,15 +238,14 @@ class OrderController extends Controller
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('region'),
                     'regionRef' => $request->validated('meest_region_ref'),
-                    'city' => $request->validated('meest_city_input'),
-                    'cityRef' => $request->validated('city_ref'),
+                    'settlementType' => $settlementType,
+                    'settlement' => $request->validated('meest_city_input') ?? $settlement,
+                    'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                     'branch' => $request->validated('meest_branches_input'),
                     'branchNumber' => '',
                     'branchRef' => $request->validated('branch_ref'),
                     'district' => $request->validated('district_input'),
                     'districtRef' => $request->validated('district_ref'),
-                    'village' => $request->validated('village_input'),
-                    'villageRef' => $request->validated('village_ref'),
                     'street' => $request->validated('street_input'),
                     'streetRef' => $request->validated('street_ref'),
                     'house' => $request->validated('house'),
@@ -246,15 +258,14 @@ class OrderController extends Controller
                     'delivery_method' => $deliveryType,
                     'region' => $request->validated('region'),
                     'regionRef' => $request->validated('ukr_poshta_region_ref'),
-                    'city' => $request->validated('ukr_poshta_city_input'),
-                    'cityRef' => $request->validated('city_ref'),
+                    'settlementType' => $settlementType,
+                    'settlement' => $request->validated('ukr_poshta_city_input') ?? $settlement,
+                    'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                     'branch' => $request->validated('ukr_poshta_branches_input'),
                     'branchNumber' => '',
                     'branchRef' => $request->validated('branch_ref'),
                     'district' => $request->validated('district_input'),
                     'districtRef' => $request->validated('district_ref'),
-                    'village' => $request->validated('village_input'),
-                    'villageRef' => $request->validated('village_ref'),
                     'street' => $request->validated('street_input'),
                     'streetRef' => $request->validated('street_ref'),
                     'house' => $request->validated('house'),

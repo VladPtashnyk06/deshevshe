@@ -9,11 +9,10 @@ use Carbon\Carbon;
 class MeestService
 {
     protected $apiKey;
-    protected $apiUrl;
+    protected $apiUrl = 'https://api.meest.com/v3.0/openAPI';
 
     public function __construct()
     {
-        $this->apiUrl = config('services.meest.api_url');
         $this->apiKey = $this->getCachedToken();
     }
 

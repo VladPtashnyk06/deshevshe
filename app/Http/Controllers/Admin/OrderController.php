@@ -128,28 +128,70 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order status and operator updated successfully'], 200);
     }
 
-    protected function handlePackingStatus(Order $order)
+    public function addTTNtoOrder(Order $order)
+    {
+        return view('admin.orders.add-ttn', compact('order'));
+    }
+
+    public function updateTTNtoOrder(Order $order, Request $request)
+    {
+        $order->update([
+            'int_doc_number' => $request->input('ttn'),
+        ]);
+        return redirect()->route('operator.order.index');
+    }
+
+    protected function handlePackingStatus($order)
     {
         $filePath = storage_path('app/orders/orders.json');
 
         if (Storage::disk('local')->exists('orders/orders.json')) {
-            $ordersData = json_decode(Storage::disk('local')->get('orders/orders.json'), true);
+            $fileContent = Storage::disk('local')->get('orders/orders.json');
+            if (empty($fileContent)) {
+                $ordersData = [];
+            } else {
+                $ordersData = json_decode($fileContent, true);
+            }
         } else {
             $ordersData = [];
         }
 
         $orderData = $this->formatOrderData($order);
 
-        $ordersData[] = $orderData;
+        $existingOrderKey = null;
+        foreach ($ordersData as $key => $existingOrder) {
+            if ($existingOrder['order']['id'] == $order->id) {
+                $existingOrderKey = $key;
+                break;
+            }
+        }
+
+        if ($existingOrderKey !== null) {
+            $ordersData[$existingOrderKey] = $orderData;
+        } else {
+            $ordersData[] = $orderData;
+        }
 
         Storage::disk('local')->put('orders/orders.json', json_encode($ordersData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-//        $this->sendOrderDataTo1C($filePath, $ordersData);
+//    $this->sendOrderDataTo1C($filePath, $ordersData);
     }
 
 
     protected function formatOrderData(Order $order)
     {
+        if ($order->delivery->delivery_name == 'UkrPoshta') {
+            $branch = $order->delivery->branch;
+
+            preg_match('/(\d{5})\s*(.*?)[,\s]+(.*?)\s*([0-9\/]*)$/', $branch, $matches);
+
+            if (!empty($matches)) {
+                $postal_code = $matches[1];
+            } else {
+                $postal_code = null;
+            }
+        }
+
         return [
             'order' => [
                 'id' => $order->id,
@@ -165,6 +207,7 @@ class OrderController extends Controller
                 'total_price' => $order->total_price,
                 'currency' => $order->currency,
                 'comment' => $order->comment ?? null,
+                'created_at' => $order->created_at
             ],
             'details' => $order->orderDetails->map(function($orderDetail) {
                 return [
@@ -182,15 +225,14 @@ class OrderController extends Controller
                 'delivery_method' => $order->delivery->delivery_method == 'branch' ? 'Відділення' : ($order->delivery->delivery_method == 'exspresBranch' ? 'Експрес відділення' : ($order->delivery->delivery_method == 'postomat' ? 'Поштомат' : ($order->delivery->delivery_method == 'courier' ? 'Кур`єр' : ($order->delivery->delivery_method == 'exspresCourier' ? 'Експрес кур`єр' : '')))),
                 'region' => $order->delivery->region,
                 'regionRef' => $order->delivery->regionRef,
-                'city' => $order->delivery->city,
-                'cityRef' => $order->delivery->cityRef,
+                'settlementType' => $order->delivery->settlementType,
+                'settlement' => $order->delivery->settlement,
+                'settlementRef' => $order->delivery->settlementRef,
                 'branch' => $order->delivery->branch,
-                'branchNumber' => $order->delivery->branchNumber,
+                'branchNumber' => $order->delivery->delivery_name == 'UkrPoshta' ? $postal_code : $order->delivery->branchNumber,
                 'branchRef' => $order->delivery->branchRef,
                 'district' => $order->delivery->district,
                 'districtRef' => $order->delivery->districtRef,
-                'village' => $order->delivery->village,
-                'villageRef' => $order->delivery->villageRef,
                 'street' => $order->delivery->street,
                 'streetRef' => $order->delivery->streetRef,
                 'house' => $order->delivery->house,
@@ -350,21 +392,34 @@ class OrderController extends Controller
         $delivery = Delivery::where('order_id', $order->id)->first();
         $deliveryNameAndType = $request->validated('delivery_type');
         list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+        $settlementType = null;
+        $settlement = null;
+        if ($request->validated('city_name')) {
+            $settlementType = 'місто';
+        } elseif ($request->validated('village_input')) {
+            $village = $request->validated('village_input');
+
+            preg_match('/(с\.|село|смт|селище міського типу)\s+(.+)/ui', $village, $matches);
+
+            if (!empty($matches)) {
+                $settlementType = $matches[1];
+                $settlement = $matches[2];
+            }
+        }
         if ($deliveryName == 'NovaPoshta') {
             $delivery->update([
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
                 'regionRef' => $request->validated('nova_poshta_region_ref'),
-                'city' => $request->validated('city_name'),
-                'cityRef' => $request->validated('city_ref'),
+                'settlementType' => $settlementType,
+                'settlement' => $request->validated('city_name') ?? $settlement,
+                'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                 'branch' => $request->validated('branch_name'),
                 'branchNumber' => $request->validated('branch_number'),
                 'branchRef' => $request->validated('branch_ref'),
                 'district' => $request->validated('district_input'),
                 'districtRef' => $request->validated('district_ref'),
-                'village' => $request->validated('village_input'),
-                'villageRef' => $request->validated('village_ref'),
                 'street' => $request->validated('street_input'),
                 'streetRef' => $request->validated('street_ref'),
                 'house' => $request->validated('house'),
@@ -376,8 +431,9 @@ class OrderController extends Controller
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
                 'regionRef' => $request->validated('meest_region_ref'),
-                'city' => $request->validated('city_name'),
-                'cityRef' => $request->validated('city_ref'),
+                'settlementType' => $settlementType,
+                'settlement' => $request->validated('city_name') ?? $settlement,
+                'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                 'branch' => $request->validated('branch_name'),
                 'branchNumber' => $request->validated('branch_number'),
                 'branchRef' => $request->validated('branch_ref'),
@@ -396,8 +452,9 @@ class OrderController extends Controller
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
                 'regionRef' => $request->validated('ukr_poshta_region_ref'),
-                'city' => $request->validated('city_name'),
-                'cityRef' => $request->validated('city_ref'),
+                'settlementType' => $settlementType,
+                'settlement' => $request->validated('city_name') ?? $settlement,
+                'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                 'branch' => $request->validated('branch_name'),
                 'branchNumber' => $request->validated('branch_number'),
                 'branchRef' => $request->validated('branch_ref'),
@@ -550,21 +607,34 @@ class OrderController extends Controller
         $delivery = Delivery::where('order_id', $order->id)->first();
         $deliveryNameAndType = $request->validated('delivery_type');
         list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);
+        $settlementType = null;
+        $settlement = null;
+        if ($request->validated('city_name')) {
+            $settlementType = 'місто';
+        } elseif ($request->validated('village_input')) {
+            $village = $request->validated('village_input');
+
+            preg_match('/(с\.|село|смт|селище міського типу)\s+(.+)/ui', $village, $matches);
+
+            if (!empty($matches)) {
+                $settlementType = $matches[1];
+                $settlement = $matches[2];
+            }
+        }
         if ($deliveryName == 'NovaPoshta') {
             $delivery->update([
                 'delivery_name' => $deliveryName,
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
                 'regionRef' => $request->validated('nova_poshta_region_ref'),
-                'city' => $request->validated('city_name'),
-                'cityRef' => $request->validated('city_ref'),
+                'settlementType' => $settlementType,
+                'settlement' => $request->validated('city_name') ?? $settlement,
+                'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                 'branch' => $request->validated('branch_name'),
                 'branchNumber' => $request->validated('branch_number'),
                 'branchRef' => $request->validated('branch_ref'),
                 'district' => $request->validated('district_input'),
                 'districtRef' => $request->validated('district_ref'),
-                'village' => $request->validated('village_input'),
-                'villageRef' => $request->validated('village_ref'),
                 'street' => $request->validated('street_input'),
                 'streetRef' => $request->validated('street_ref'),
                 'house' => $request->validated('house'),
@@ -576,15 +646,14 @@ class OrderController extends Controller
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
                 'regionRef' => $request->validated('meest_region_ref'),
-                'city' => $request->validated('city_name'),
-                'cityRef' => $request->validated('city_ref'),
+                'settlementType' => $settlementType,
+                'settlement' => $request->validated('city_name') ?? $settlement,
+                'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                 'branch' => $request->validated('branch_name'),
                 'branchNumber' => $request->validated('branch_number'),
                 'branchRef' => $request->validated('branch_ref'),
                 'district' => $request->validated('district_input'),
                 'districtRef' => $request->validated('district_ref'),
-                'village' => $request->validated('village_input'),
-                'villageRef' => $request->validated('village_ref'),
                 'street' => $request->validated('street_input'),
                 'streetRef' => $request->validated('street_ref'),
                 'house' => $request->validated('house'),
@@ -596,15 +665,14 @@ class OrderController extends Controller
                 'delivery_method' => $deliveryType,
                 'region' => $request->validated('region'),
                 'regionRef' => $request->validated('ukr_poshta_region_ref'),
-                'city' => $request->validated('city_name'),
-                'cityRef' => $request->validated('city_ref'),
+                'settlementType' => $settlementType,
+                'settlement' => $request->validated('city_name') ?? $settlement,
+                'settlementRef' => $request->validated('city_ref') ?? $request->validated('village_ref'),
                 'branch' => $request->validated('branch_name'),
                 'branchNumber' => $request->validated('branch_number'),
                 'branchRef' => $request->validated('branch_ref'),
                 'district' => $request->validated('district_input'),
                 'districtRef' => $request->validated('district_ref'),
-                'village' => $request->validated('village_input'),
-                'villageRef' => $request->validated('village_ref'),
                 'street' => $request->validated('street_input'),
                 'streetRef' => $request->validated('street_ref'),
                 'house' => $request->validated('house'),
