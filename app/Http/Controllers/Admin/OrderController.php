@@ -29,9 +29,12 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\OrderStatusUpdate;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -123,6 +126,23 @@ class OrderController extends Controller
 
         if ($order->orderStatus->title === 'Відравлено') {
             Mail::to('vlad1990pb@gmail.com')->send(new OrderClientMail($order));
+
+            $orders = Order::whereDate('created_at', Carbon::today())
+                ->where('order_status_id', $order->order_status_id)
+                ->get();
+
+            foreach ($orders as $order) {
+                if ($order->int_doc_number) {
+                    $userPhone = str_replace('+', '', $order->user_phone);
+                    $message = "Ваше замовлення було відправлено. Ваша ТТН: {$order->int_doc_number}. Дякуємо Вам за замовлення.";
+
+                    File::put(storage_path('logs/laravel.log'), '');
+                    if ($userPhone) {
+                        \Log::info("Відправлене SMS до {$userPhone} з повідомленям: {$message}");
+                        $order->notify(new OrderStatusUpdate($message));
+                    }
+                }
+            }
         }
 
         return response()->json(['message' => 'Order status and operator updated successfully'], 200);

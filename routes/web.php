@@ -24,7 +24,6 @@ Route::post('/get-nova-poshta-branches', [\App\Http\Controllers\NovaPoshtaContro
 Route::post('/get-nova-poshta-streets', [\App\Http\Controllers\NovaPoshtaController::class, 'getStreets'])->name('nova-poshta.get-streets');
 Route::post('/get-nova-poshta-settlement-districts', [\App\Http\Controllers\NovaPoshtaController::class, 'getDistricts'])->name('nova-poshta.get-settlement-districts');
 Route::post('/get-nova-poshta-settlement-villages', [\App\Http\Controllers\NovaPoshtaController::class, 'getVillages'])->name('nova-poshta.get-settlement-villages');
-Route::get('/getBrucnhesVillages', [\App\Http\Controllers\NovaPoshtaController::class, 'getBrucnhesVillages'])->name('nova-poshta.getBrucnhesVillages');
 
 /* =================================== */
 /*                Meest                */

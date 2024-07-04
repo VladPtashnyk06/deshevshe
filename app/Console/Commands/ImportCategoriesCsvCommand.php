@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use League\Csv\Reader;
 use App\Models\Category;
@@ -19,7 +18,7 @@ class ImportCategoriesCsvCommand extends Command
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');
-            return;
+            return ;
         }
 
         $csv = Reader::createFromPath($filePath, 'r');
@@ -28,20 +27,14 @@ class ImportCategoriesCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title', 'parent_id', 'level']));
 
-        foreach ($records as &$record) {
-            if ($record['parent_id'] == '') {
-                $record['parent_id'] = null;
-            }
-        }
-
-        foreach ($records as $record) {
+        foreach ($records as $category) {
             Category::updateOrCreate(
-                ['id' => $record['id']],
+                ['id' => $category['id']],
                 [
-                    'id' => $record['id'],
-                    'title' => $record['title'],
-                    'parent_id' => $record['parent_id'],
-                    'level' => $record['level'],
+                    'id' => $category['id'],
+                    'title' => $category['title'],
+                    'parent_id' => $category['parent_id'] == '' ? null : $category['parent_id'],
+                    'level' => $category['level'],
                     'updated_at' => Carbon::now(),
                     'created_at' => Carbon::now(),
                 ]

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Delivery;
 use App\Models\Order;
+use App\Models\UkrPoshtaDistrict;
+use App\Models\UkrPoshtaRegion;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
 use App\Services\UkrPoshtaService;
@@ -22,11 +24,15 @@ class UkrPoshtaController extends Controller
     {
         $districtId = $request->input('district_id');
         $regionId = $request->input('region_id');
-        $cityUa = $request->input('city_ua', '');
-        $koatuu = $request->input('koatuu', '');
-        $katottg = $request->input('katottg', '');
 
-        $cities = $this->ukrPoshtaService->getCities($districtId, $regionId, $cityUa, $koatuu, $katottg);
+        if (empty($districtId)) {
+            $region = UkrPoshtaRegion::where('region_id', $regionId)->first();
+            $cities = $region ? $region->settlements()->get() : [];
+        } else {
+            $district = UkrPoshtaDistrict::where('district_id', $districtId)->first();
+            $cities = $district ? $district->settlements()->get() : [];
+            return $cities;
+        }
 
         return response()->json($cities);
     }
@@ -50,7 +56,9 @@ class UkrPoshtaController extends Controller
     {
         $regionId = $request->input('regionId');
 
-        $districts = $this->ukrPoshtaService->getDistricts($regionId);
+        $region = UkrPoshtaRegion::where('region_id', $regionId)->first();
+
+        $districts = $region->districts()->get();
 
         return response()->json($districts);
     }

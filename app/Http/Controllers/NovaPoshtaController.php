@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Delivery;
+use App\Models\NovaPoshtaDistrict;
+use App\Models\NovaPoshtaSettlement;
+use App\Models\NovaPoshtaRegion;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\NovaPoshtaService;
@@ -20,10 +23,9 @@ class NovaPoshtaController extends Controller
 
     public function getCities(Request $request)
     {
-        $regionRef = $request->input('region_ref');
-        $findByString = $request->input('findByString');
-
-        $cities = $this->novaPoshtaService->getCities($regionRef, $findByString);
+        $regionId = $request->input('region_id');
+        $region = NovaPoshtaRegion::where('id', $regionId)->first();
+        $cities = $region->cities()->get();
 
         return response()->json($cities);
     }
@@ -51,17 +53,24 @@ class NovaPoshtaController extends Controller
     public function getBranches(Request $request)
     {
         $cityRef = $request->input('city');
+        $settlementType = $request->input('settlementType');
 
-        $branches = $this->novaPoshtaService->getBranches($cityRef);
+        if ($settlementType == 'місто') {
+            $city = NovaPoshtaSettlement::where('ref', $cityRef)->where('settlement_type_description', $settlementType)->first();
+        } else {
+            $city = NovaPoshtaSettlement::where('ref', $cityRef)->first();
+        }
+
+        $branches = $city->warehouses()->get();
 
         return response()->json($branches);
     }
 
     public function getDistricts(Request $request)
     {
-        $regionRef = $request->input('region');
-
-        $districts = $this->novaPoshtaService->getDistricts($regionRef);
+        $regionId = $request->input('region_id');
+        $region = NovaPoshtaRegion::where('id', $regionId)->first();
+        $districts = $region->districts()->get();
 
         return response()->json($districts);
     }
@@ -70,7 +79,9 @@ class NovaPoshtaController extends Controller
     {
         $districtRef = $request->input('district_ref');
 
-        $villages = $this->novaPoshtaService->getVillages($districtRef);
+        $district = NovaPoshtaDistrict::where('ref', $districtRef)->first();
+
+        $villages = $district->villages()->get();
 
         return response()->json($villages);
     }
@@ -178,11 +189,6 @@ class NovaPoshtaController extends Controller
         } else {
             return 'місто';
         }
-    }
-
-    public function getBrucnhesVillages()
-    {
-        return $this->novaPoshtaService->getBranchesVillages();
     }
 
     public function thankTTN(Order $order)

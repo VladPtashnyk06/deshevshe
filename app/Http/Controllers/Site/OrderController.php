@@ -7,12 +7,15 @@ use App\Http\Requests\OrderRequest;
 use App\Http\Requests\UpdateOneOrderRequest;
 use App\Mail\OrderMail;
 use App\Models\Delivery;
+use App\Models\MeestRegion;
+use App\Models\NovaPoshtaRegion;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\PromoCode;
+use App\Models\UkrPoshtaRegion;
 use App\Models\User;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
@@ -77,15 +80,9 @@ class OrderController extends Controller
         }
 
         $paymentMethods = PaymentMethod::all();
-
-        $novaPoshtaService = new NovaPoshtaService();
-        $novaPoshtaRegions = $novaPoshtaService->getRegions();
-
-        $meestService = new MeestService();
-        $meestRegions = $meestService->getRegions();
-
-        $ukrPoshtaService = new UkrPoshtaService();
-        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+        $novaPoshtaRegions = NovaPoshtaRegion::all();
+        $meestRegions = MeestRegion::all();
+        $ukrPoshtaRegions = UkrPoshtaRegion::all();
 
         return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions'));
     }
