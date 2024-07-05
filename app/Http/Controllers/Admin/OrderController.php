@@ -14,6 +14,8 @@ use App\Http\Requests\OrderSmallRequest;
 use App\Mail\OrderClientMail;
 use App\Mail\OrderMail;
 use App\Models\Delivery;
+use App\Models\MeestRegion;
+use App\Models\NovaPoshtaRegion;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
@@ -21,6 +23,7 @@ use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\PromoCode;
+use App\Models\UkrPoshtaRegion;
 use App\Models\User;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
@@ -336,17 +339,19 @@ class OrderController extends Controller
 
     public function updateSecond(OrderEditSecondRequest $request, Order $order)
     {
-        foreach ($request->validated('product') as $orderDetailId => $quantity) {
-            $orderDetail = OrderDetail::find($orderDetailId);
-            $product = Product::find($orderDetail->product_id);
-            $orderDetail->update([
-                'product_total_price' => $product->price->pair *  $quantity['quantity_product'],
-                'quantity_product' => $quantity['quantity_product']
-            ]);
+        if ($request->validated('product')) {
+            foreach ($request->validated('product') as $orderDetailId => $quantity) {
+                $orderDetail = OrderDetail::find($orderDetailId);
+                $product = Product::find($orderDetail->product_id);
+                $orderDetail->update([
+                    'product_total_price' => $product->price->retail *  $quantity['quantity_product'],
+                    'quantity_product' => $quantity['quantity_product']
+                ]);
+            }
         }
 
-        $allOrderDetails = OrderDetail::where('order_id', $order->id)->get();
         $totalPrice = 0;
+        $allOrderDetails = OrderDetail::where('order_id', $order->id)->get();
         foreach ($allOrderDetails as $orderDetail) {
             $totalPrice += $orderDetail->product_total_price;
         }
@@ -374,9 +379,11 @@ class OrderController extends Controller
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $productVariant->product_id,
+                    'color_id' => $productVariant->color_id,
+                    'size_id' => $productVariant->size_id,
                     'color' => $productVariant->color->title,
                     'size' => $productVariant->size->title,
-                    'product_total_price' => $product->price->pair * $additionalProduct['quantity'],
+                    'product_total_price' => $product->price->retail * $additionalProduct['quantity'],
                     'quantity_product' => $additionalProduct['quantity']
                 ]);
             }
@@ -387,14 +394,11 @@ class OrderController extends Controller
 
     public function editThird(Order $order)
     {
-        $novaPoshtaService = new NovaPoshtaService();
-        $novaPoshtaRegions = $novaPoshtaService->getRegions();
+        $novaPoshtaRegions = NovaPoshtaRegion::all();
 
-        $meestService = new MeestService();
-        $meestRegions = $meestService->getRegions();
+        $meestRegions = MeestRegion::all();
 
-        $ukrPoshtaService = new UkrPoshtaService();
-        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+        $ukrPoshtaRegions = UkrPoshtaRegion::all();
 
         $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
         if ($order->delivery->district) {
@@ -602,14 +606,9 @@ class OrderController extends Controller
     public function smallEdit(Order $order)
     {
         $paymentMethods = PaymentMethod::all();
-        $novaPoshtaService = new NovaPoshtaService();
-        $novaPoshtaRegions = $novaPoshtaService->getRegions();
-
-        $meestService = new MeestService();
-        $meestRegions = $meestService->getRegions();
-
-        $ukrPoshtaService = new UkrPoshtaService();
-        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
+        $novaPoshtaRegions = NovaPoshtaRegion::all();
+        $meestRegions = MeestRegion::all();
+        $ukrPoshtaRegions = UkrPoshtaRegion::all();
 
         $deliveryNameAndType = $order->delivery->delivery_name.'_'.$order->delivery->delivery_method;
         if ($order->delivery->district) {

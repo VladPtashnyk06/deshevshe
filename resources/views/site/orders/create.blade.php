@@ -247,7 +247,7 @@
                                             <select name="nova_poshta_region_ref" id="nova_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
                                                 <option value="" selected>--- Виберіть ---</option>
                                                 @foreach($novaPoshtaRegions as $region)
-                                                    <option value="{{ $region->id }}">{{ $region->description }}</option>
+                                                    <option value="{{ $region->ref }}">{{ $region->description }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -798,11 +798,11 @@
                 }
 
                 NovaPoshtaCityInput.addEventListener('input', function() {
-                    const regionId = NovaPoshtaRegionSelect.value;
+                    const regionRef = NovaPoshtaRegionSelect.value;
                     const searchText = this.value.trim().toLowerCase();
 
-                    if (regionId && searchText.length >= 0) {
-                        NovaPoshtaFetchCities(regionId, searchText);
+                    if (regionRef && searchText.length >= 0) {
+                        NovaPoshtaFetchCities(regionRef, searchText);
                     } else {
                         NovaPoshtaCityList.innerHTML = '';
                         NovaPoshtaCityList.classList.add('hidden');
@@ -893,14 +893,14 @@
                     }
                 });
 
-                function NovaPoshtaFetchCities(regionId, searchText) {
+                function NovaPoshtaFetchCities(regionRef, searchText) {
                     fetch('/get-nova-poshta-cities', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ region_id: regionId, findByString: searchText })
+                        body: JSON.stringify({ region_ref: regionRef, findByString: searchText })
                     })
                         .then(response => response.json() )
                         .then(data => {

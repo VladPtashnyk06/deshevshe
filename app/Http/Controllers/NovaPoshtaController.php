@@ -23,8 +23,8 @@ class NovaPoshtaController extends Controller
 
     public function getCities(Request $request)
     {
-        $regionId = $request->input('region_id');
-        $region = NovaPoshtaRegion::where('id', $regionId)->first();
+        $regionRef = $request->input('region_ref');
+        $region = NovaPoshtaRegion::where('ref', $regionRef)->first();
         $cities = $region->cities()->get();
 
         return response()->json($cities);
@@ -68,8 +68,8 @@ class NovaPoshtaController extends Controller
 
     public function getDistricts(Request $request)
     {
-        $regionId = $request->input('region_id');
-        $region = NovaPoshtaRegion::where('id', $regionId)->first();
+        $regionRef = $request->input('region_ref');
+        $region = NovaPoshtaRegion::where('ref', $regionRef)->first();
         $districts = $region->districts()->get();
 
         return response()->json($districts);
