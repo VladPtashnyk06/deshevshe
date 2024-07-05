@@ -139,11 +139,11 @@ class OrderController extends Controller
                     $userPhone = str_replace('+', '', $order->user_phone);
                     $message = "Ваше замовлення було відправлено. Ваша ТТН: {$order->int_doc_number}. Дякуємо Вам за замовлення.";
 
-                    File::put(storage_path('logs/laravel.log'), '');
-                    if ($userPhone) {
-                        \Log::info("Відправлене SMS до {$userPhone} з повідомленям: {$message}");
-                        $order->notify(new OrderStatusUpdate($message));
-                    }
+//                    File::put(storage_path('logs/laravel.log'), '');
+//                    if ($userPhone) {
+//                        \Log::info("Відправлене SMS до {$userPhone} з повідомленям: {$message}");
+//                        $order->notify(new OrderStatusUpdate($message));
+//                    }
                 }
             }
         }

@@ -23,9 +23,9 @@ class OrderStatusUpdate extends Notification
     public function toTurboSms($notifiable)
     {
         return (new TurboSmsMessage())
-            ->from('Deshevshe')
+            ->from(config('services.turbosms.sender'))
             ->content($this->message)
-            ->test(true);
+            ->test(config('services.turbosms.is_test'));
     }
 
     public function toArray($notifiable)
