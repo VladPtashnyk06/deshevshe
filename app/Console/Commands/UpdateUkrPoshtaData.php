@@ -19,8 +19,7 @@ class UpdateUkrPoshtaData extends Command
         $this->updateRegions();
         $this->updateDistricts();
         $this->updateSettlements();
-        $this->updateBranches();
-        $this->info('Meest data updated successfully');
+        $this->info('UkrPoshta data updated successfully');
     }
 
     private function updateRegions()

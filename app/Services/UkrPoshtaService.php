@@ -68,7 +68,7 @@ class UkrPoshtaService
 
     public function getCities($districtId, $regionId, $cityUa = '', $koatuu = '', $katottg = '')
     {
-        $response = Http::withHeaders([
+        $response = Http::timeout(120)->withHeaders([
             'accept' => 'application/json',
             'Authorization' => 'Bearer ' . $this->apiKey,
         ])->get('https://www.ukrposhta.ua/address-classifier-ws/get_city_by_region_id_and_district_id_and_city_ua', [

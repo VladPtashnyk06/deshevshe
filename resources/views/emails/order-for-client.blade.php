@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Нове замовлення №{{ $order->id }}</title>
+    <title>Нове замовлення</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;

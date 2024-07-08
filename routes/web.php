@@ -351,10 +351,13 @@ Route::middleware('auth')->group(function () {
                 Route::prefix('promocodes')->group(function () {
                     Route::get('/', 'index')->name('promoCode.index');
                     Route::get('/create', 'create')->name('promoCode.create');
+                    Route::get('/add-promocode/{promoCode}', 'addPromoCode')->name('promoCode.add-promocode');
+                    Route::post('/store-promocde-user/{promoCode}', 'storePromoCodeForUser')->name('promoCode.store-promocde-user');
                     Route::post('/store', 'store')->name('promoCode.store');
                     Route::get('/edit/{promoCode}', 'edit')->name('promoCode.edit');
                     Route::post('/update/{promoCode}', 'update')->name('promoCode.update');
                     Route::delete('/delete/{promoCode}', 'destroy')->name('promoCode.destroy');
+                    Route::delete('/delete-promocode-user/{promoCode}', 'destroyUserPromoCode')->name('promoCode.delete-promocode-user');
                 });
             });
         });
