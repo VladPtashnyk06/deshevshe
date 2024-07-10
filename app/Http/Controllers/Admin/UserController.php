@@ -21,10 +21,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::all();
+        $admins = User::where('role', 'admin')->get();
+        $operators = User::where('role', 'operator')->get();
         $queryParams = $request->only(['name_and_last_name', 'phone', 'email', 'role']);
         $filteredParams = array_filter($queryParams);
-        $query = User::query();
+        $query = User::query()->where('role', 'user');
 
         if (isset($filteredParams['name_and_last_name'])) {
             $query->orWhere('name', 'LIKE', '%' . $filteredParams['name_and_last_name'] . '%')->orWhere('last_name', 'LIKE', '%' . $filteredParams['name_and_last_name'] . '%');
@@ -38,13 +39,9 @@ class UserController extends Controller
             $query->where('email', 'LIKE', '%' . $filteredParams['email'] . '%');
         }
 
-        if (isset($filteredParams['role'])) {
-            $query->where('role', $filteredParams['role']);
-        }
-
-        $users = $query->get();
+        $users = $query->paginate(25);
         $usersAddresses = UserAddress::all();
-        return view('admin.users.index', compact('users', 'usersAddresses'));
+        return view('admin.users.index', compact('admins', 'operators', 'users', 'usersAddresses'));
     }
 
     public function createOperator() {
@@ -59,7 +56,7 @@ class UserController extends Controller
             'role' => 'operator'
         ]);
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('user.index');
     }
 
     /**

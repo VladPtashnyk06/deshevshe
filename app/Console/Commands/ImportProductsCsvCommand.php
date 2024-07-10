@@ -49,10 +49,7 @@ class ImportProductsCsvCommand extends Command
                     'category_id' => $record['category_id'],
                     'producer_id' => '2',
                     'status_id' => 1,
-                    'package_id' => null,
                     'material_id' => 1,
-                    'description' => '',
-                    'model' => $record['model'] == '' ? null : $record['model'],
                 ]
             );
             ProductVariant::updateOrCreate(

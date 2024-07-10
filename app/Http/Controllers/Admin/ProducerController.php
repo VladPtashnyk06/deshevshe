@@ -17,7 +17,7 @@ class ProducerController extends Controller
      */
     public function index()
     {
-        $producers = Producer::all();
+        $producers = Producer::paginate(25);
         return view('admin.producers.index', compact('producers'));
     }
 

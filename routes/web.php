@@ -202,6 +202,7 @@ Route::middleware('auth')->group(function () {
             Route::group(['prefix' => 'product'], function () {
                 Route::controller(\App\Http\Controllers\Admin\ProductController::class)->group(function () {
                     Route::get('/', 'index')->name('product.index');
+                    Route::get('/show/{product}', 'show')->name('product.show');
                     Route::get('/create', 'create')->name('product.create');
                     Route::post('/store', 'store')->name('product.store');
                     Route::get('/edit/{product}', 'edit')->name('product.edit');

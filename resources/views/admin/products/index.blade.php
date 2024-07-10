@@ -4,10 +4,10 @@
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg bg-white">
                 <div class="p-6 text-gray-900">
                     <h1 class="text-2xl font-semibold mb-2 text-center">Продукти</h1>
-                    <div class="text-center mb-4">
-                        <a href="{{ route('product.create') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Створити продукт</a>
-                    </div>
-                    <div class="text-center mb-4">
+{{--                    <div class="text-center mb-4">--}}
+{{--                        <a href="{{ route('product.create') }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Створити продукт</a>--}}
+{{--                    </div>--}}
+                    <div class="text-center mb-4 mt-10">
                         <form action="{{ route('product.index') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
                             <div class="mb-4" style="flex: 1;">
                                 <label for="code" class="block mb-2 font-bold">Код товару:</label>
@@ -62,9 +62,9 @@
                             <th class="p-2 text-lg">Код товару</th>
                             <th class="p-2 text-lg">Назва товару</th>
                             <th class="p-2 text-lg">Категорія</th>
-                            <th class="p-2 text-lg">Колір</th>
-                            <th class="p-2 text-lg">Розмір</th>
-                            <th class="p-2 text-lg">Кількість товару</th>
+                            <th class="p-2 text-lg">Бренд</th>
+                            <th class="p-2 text-lg">Стать</th>
+                            <th class="p-2 text-lg">Сезон</th>
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
@@ -85,21 +85,9 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($product->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->color->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($product->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->size->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($product->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->quantity }}<br>
-                                    @endforeach
-                                </td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->brand->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->sex->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->season->title ?? 'Не вказанно' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
@@ -121,7 +109,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                    <div>
+                                    <div class="mr-4">
                                         <a href="{{ route('related-product.index', $product->id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full mb-2" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
                                             Супутні
                                         </a>
@@ -129,11 +117,19 @@
                                             Коментарі
                                         </a>
                                     </div>
+                                    <div>
+                                        <a href="{{ route('product.show', $product->id) }}" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full mb-2" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
+                                            Переглянути
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $products->links() }}
+                    </div>
                 </div>
             </div>
         </div>

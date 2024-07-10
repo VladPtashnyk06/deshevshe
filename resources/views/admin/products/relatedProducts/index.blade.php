@@ -54,8 +54,13 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="text-center mb-4">
-                        <a href="{{ route('related-product.create', $product->id) }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Додати супутній товар</a>
+                    <div class="w-full flex grid grid-cols-2">
+                        <div class="text-center mb-4 w-3/6 mr-2">
+                            <a href="{{ route('product.index') }}" class="bg-gray-600 hover:bg-gray-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Назад</a>
+                        </div>
+                        <div class="text-center mb-4 w-3/6">
+                            <a href="{{ route('related-product.create', $product->id) }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Додати супутній товар</a>
+                        </div>
                     </div>
 
                     <h1 class="text-2xl font-semibold mb-2 text-center">Супутні товари</h1>

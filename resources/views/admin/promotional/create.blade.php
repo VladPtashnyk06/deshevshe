@@ -4,6 +4,9 @@
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white">
                 <h2 class="text-2xl font-semibold mb-4 text-center">Додати акційний товар</h2>
                 <div class="text-center mb-4">
+                    <a href="{{ route('promotional.index') }}" class="bg-gray-600 hover:bg-gray-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Назад</a>
+                </div>
+                <div class="text-center mb-4">
                     <form action="{{ route('promotional.create') }}" method="GET" style="display: flex; align-items: center; justify-content: center;">
                         <div class="mb-4 mr-4" style="flex: 1;">
                             <label for="code" class="block mb-2 font-bold">Код товару:</label>
@@ -46,12 +49,13 @@
                         <th class="p-2 text-lg">Код товару</th>
                         <th class="p-2 text-lg">Назва товару</th>
                         <th class="p-2 text-lg">Категорія</th>
-                        <th class="p-2 text-lg">Колір</th>
-                        <th class="p-2 text-lg">Розмір</th>
-                        <th class="p-2 text-lg">Кількість товару</th>
-                        <th class="p-2 text-lg">К-сть. в упакуванні</th>
+                        <th class="p-2 text-lg">Бренд</th>
+                        <th class="p-2 text-lg">Стать</th>
+                        <th class="p-2 text-lg">Сезон</th>
                         <th class="p-2 text-lg">Виробник</th>
-                        <th class="p-2 text-lg">Ціна за пару</th>
+                        <th class="p-2 text-lg">Акційний</th>
+                        <th class="p-2 text-lg">Топ продукт</th>
+                        <th class="p-2 text-lg">Роздрібна ціна</th>
                         <th class="p-2 text-lg">Дії</th>
                     </tr>
                     </thead>
@@ -68,27 +72,23 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($product->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->color->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($product->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->size->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $productVariant->quantity }}<br></td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->package->title) ? $product->package->title : 'Не вказано' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->brand->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->sex->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->season->title ?? 'Не вказанно' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->pair }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->retail ?? 'Не вказанно' }}</td>
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
-                                    <a href="#" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border open-popup" data-product="{{ json_encode($product) }}" data-product-id="{{ $product->id }}" data-code="{{ $product->code }}" data-title="{{ $product->title }}" data-price="{{ $product->price->pair }}">Додати</a>
+                                    <a href="#" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border open-popup" data-product="{{ json_encode($product) }}" data-product-id="{{ $product->id }}" data-code="{{ $product->code }}" data-title="{{ $product->title }}" data-price="{{ $product->price->retail }}">Додати</a>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4">
+                    {{ $products->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -112,7 +112,7 @@
                                 <th class="p-2 text-lg">Зображення</th>
                                 <th class="p-2 text-lg">Код товару</th>
                                 <th class="p-2 text-lg">Назва товару</th>
-                                <th class="p-2 text-lg">Ціна за пару</th>
+                                <th class="p-2 text-lg">Роздрібна ціна</th>
                             </tr>
                             </thead>
                             <tbody>

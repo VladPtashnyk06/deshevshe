@@ -17,7 +17,7 @@ class CharacteristicController extends Controller
      */
     public function index()
     {
-        $characteristics = Characteristic::all();
+        $characteristics = Characteristic::paginate(25);
         return view('admin.characteristics.index', compact('characteristics'));
     }
 

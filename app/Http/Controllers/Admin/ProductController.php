@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\Characteristic;
 use App\Models\Color;
 use App\Models\Material;
-use App\Models\Package;
 use App\Models\Price;
 use App\Models\Producer;
 use App\Models\Product;
@@ -72,8 +71,40 @@ class ProductController extends Controller
             }
         }
 
-        $products = $query->get();
+        $products = $query->paginate(25);
         return view('admin.products.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
+    }
+
+    public function show(Product $product)
+    {
+        if ($product->description) {
+            $description = str_replace('&', '<br>', $product->description);
+        } else {
+            $description = 'Не вказанно';
+        }
+
+        if ($product->advantages) {
+            $advantagesArray = explode('&', $product->advantages);
+            $advantagesArray = array_map('trim', $advantagesArray);
+        } else {
+            $advantagesArray[] = 'Не вказанно';
+        }
+
+        if ($product->outfit) {
+            $outfitsArray = explode('&', $product->outfit);
+            $outfitsArray = array_map('trim', $outfitsArray);
+        } else {
+            $outfitsArray[] = 'Не вказанно';
+        }
+
+        if ($product->measurements) {
+            $measurementsArray = explode('&', $product->measurements);
+            $measurementsArray = array_map('trim', $measurementsArray);
+        } else {
+            $measurementsArray[] = 'Не вказанно';
+        }
+
+        return view('admin.products.show', compact('product', 'description', 'advantagesArray', 'outfitsArray', 'measurementsArray'));
     }
 
     public function ratingProduct(Request $request)
@@ -114,7 +145,7 @@ class ProductController extends Controller
             }
         }
 
-        $products = $query->get();
+        $products = $query->paginate(25);
         return view('admin.products.rating.index', compact('products', 'codes', 'producers', 'prices', 'categories'));
     }
 
@@ -164,13 +195,12 @@ class ProductController extends Controller
         $colors = Color::all();
         $producers = Producer::all();
         $sizes = Size::all();
-        $packages = Package::all();
         $statuses = Status::all();
         $materials = Material::all();
         $characteristics = Characteristic::all();
         ($product == '') ? $productVariants = null : $productVariants = ProductVariant::where('product_id', $product->id)->get();;
 
-        return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'packages', 'product', 'statuses', 'materials', 'characteristics', 'productVariants'));
+        return view('admin.products.'.$view.'', compact('categories', 'colors', 'producers', 'sizes', 'product', 'statuses', 'materials', 'characteristics', 'productVariants'));
     }
 
     /**
@@ -254,89 +284,11 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
 
-        $product->price()->update([
-            'pair' => $request->validated('pair'),
-            'rec_pair' => $request->validated('rec_pair'),
-            'package' => $request->validated('package'),
-            'rec_package' => $request->validated('rec_package'),
-            'retail' => $request->validated('retail'),
-        ]);
-
-        foreach ($request->validated('productVariant') as $productVariantId => $productVariant) {
-            if (!ProductVariant::where('product_id', $product->id)->where('color_id', $productVariant['color'])->where('size_id', $productVariant['size'])) {
-                ProductVariant::updateOrCreate(
-                    [
-                        'id' => $productVariantId,
-                    ],
-                    [
-                        'product_id' => $product->id,
-                        'color_id' => $productVariant['color'],
-                        'size_id' => $productVariant['size'],
-                        'quantity' => $productVariant['quantity'],
-                    ]
-                );
-            }
-        }
-
-        if (!empty($request->validated('newProductVariant'))) {
-            foreach ($request->validated('newProductVariant') as $key => $newProductVariant) {
-                if (empty(ProductVariant::where('product_id', $product->id)->where('color_id', $newProductVariant['color'])->where('size_id', $newProductVariant['size'])->first())) {
-                    ProductVariant::create([
-                        'product_id' => $product->id,
-                        'color_id' => $newProductVariant['color'],
-                        'size_id' => $newProductVariant['size'],
-                        'quantity' => $newProductVariant['quantity'],
-                    ]);
-                }
-            }
-        }
-
-        if ($request->validated('main_media_id')) {
-            $media = Media::find($request->validated('main_media_id'));
-            $media->collection_name = $product->id;
-            $media->custom_properties = [
-                'alt' => $request->validated('alt_for_main_image'),
-                'main_image' => 1
-            ];
-            $media->save();
-        }
-
-        if ($request->validated('additional_image')) {
-            if (!empty($request->validated('additional_image'))) {
-                $media = $request->validated('additional_image');
-                foreach ($media as $key => $fields) {
-                    $media = Media::find($key);
-                    $media->collection_name = $product->id;
-                    $media->custom_properties = [
-                        'alt' => $fields['alt'],
-                        'main_image' => 0
-                    ];
-                    $media->save();
-                }
-            }
-        }
-
-        if ($request->validated('additional')) {
-            foreach ($request->validated('additional') as $imageData) {
-                if (isset($imageData['images'])) {
-                    $product->addMedia($imageData['images'])->withCustomProperties([
-                        'alt' => $imageData['alt'],
-                        'main_image' => 0
-                    ])->toMediaCollection($product->id);
-                }
-            }
-        }
-
-        if ($request->post('deleted_main_image')) {
-            $idDeletedPoster = $request->post('deleted_main_image');
-            Media::find($idDeletedPoster)->delete();
-        }
-
-        if ($request->validated('main_image')) {
-            $product->addMedia($request->validated('main_image'))->withCustomProperties([
-                'alt' => $request->validated('alt_for_main_image'),
-                'main_image' => 1
-            ])->toMediaCollection($product->id);
+        if ($request->validated('size_chart_img')) {
+            $product->addMedia($request->validated('size_chart_img'))->withCustomProperties([
+                'alt' => 'розмірна сітка',
+                'size_chart' => 1
+            ])->toMediaCollection('size_chart_'.$product->id);
         }
 
         return redirect()->route('product.index');

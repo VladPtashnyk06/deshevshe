@@ -9,29 +9,11 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required'],
-            'producer_id' => ['required'],
-            'status_id' => ['required'],
-            'productVariant.*' => ['required'],
-            'newProductVariant.*' => ['nullable'],
-            'package_id' => ['required'],
-            'material_id' => ['nullable'],
-            'characteristic_id' => ['nullable'],
-            'title' => ['required'],
-            'description' => ['required'],
-            'code' => ['required'],
-            'model' => ['nullable'],
-            'product_promotion' => ['nullable', 'boolean'],
-            'pair' => ['required', 'integer', 'min:1'],
-            'rec_pair' => ['required', 'integer', 'min:1'],
-            'package' => ['nullable', 'integer', 'min:1'],
-            'rec_package' => ['nullable', 'integer', 'min:1'],
-            'retail' => ['required', 'integer', 'min:1'],
-            'top_product' => ['nullable', 'boolean'],
-            'main_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
-            'alt_for_main_image' => ['nullable', 'string', 'max:255'],
-            'additional.*.images' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
-            'additional.*.alt' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'advantages' => ['nullable', 'string'],
+            'outfit' => ['nullable', 'string'],
+            'measurements' => ['nullable', 'string'],
+            'size_chart_img' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,webp,svg', 'max:5120'],
         ];
     }
 

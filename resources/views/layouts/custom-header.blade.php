@@ -1,5 +1,8 @@
 <header class="bg-white dark:bg-gray-800 shadow">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
+            {{ __('Продукт') }}
+        </x-nav-link>
         <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.index')">
             {{ __('Категорія') }}
         </x-nav-link>
