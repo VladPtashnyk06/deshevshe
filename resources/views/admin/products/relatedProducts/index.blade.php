@@ -11,9 +11,9 @@
                             <th class="p-2 text-lg">Код товару</th>
                             <th class="p-2 text-lg">Назва товару</th>
                             <th class="p-2 text-lg">Категорія</th>
-                            <th class="p-2 text-lg">Колір</th>
-                            <th class="p-2 text-lg">Розмір</th>
-                            <th class="p-2 text-lg">Кількість товару</th>
+                            <th class="p-2 text-lg">Бренд</th>
+                            <th class="p-2 text-lg">Стать</th>
+                            <th class="p-2 text-lg">Сезон</th>
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
@@ -32,21 +32,9 @@
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->code }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->title }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
-                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                @foreach($product->productVariants()->get() as $productVariant)
-                                    {{ $productVariant->color->title }}<br>
-                                @endforeach
-                            </td>
-                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                @foreach($product->productVariants()->get() as $productVariant)
-                                    {{ $productVariant->size->title }}<br>
-                                @endforeach
-                            </td>
-                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                @foreach($product->productVariants()->get() as $productVariant)
-                                    {{ $productVariant->quantity }}<br>
-                                @endforeach
-                            </td>
+                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->brand->title ?? 'Не вказанно' }}</td>
+                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->sex->title ?? 'Не вказанно' }}</td>
+                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->season->title ?? 'Не вказанно' }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
@@ -55,10 +43,10 @@
                         </tbody>
                     </table>
                     <div class="w-full flex grid grid-cols-2">
-                        <div class="text-center mb-4 w-3/6 mr-2">
+                        <div class="text-center mb-4 mr-2">
                             <a href="{{ route('product.index') }}" class="bg-gray-600 hover:bg-gray-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Назад</a>
                         </div>
-                        <div class="text-center mb-4 w-3/6">
+                        <div class="text-center mb-4">
                             <a href="{{ route('related-product.create', $product->id) }}" class="bg-green-600 hover:bg-green-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Додати супутній товар</a>
                         </div>
                     </div>
@@ -71,9 +59,9 @@
                             <th class="p-2 text-lg">Код товару</th>
                             <th class="p-2 text-lg">Назва товару</th>
                             <th class="p-2 text-lg">Категорія</th>
-                            <th class="p-2 text-lg">Колір</th>
-                            <th class="p-2 text-lg">Розмір</th>
-                            <th class="p-2 text-lg">Кількість товару</th>
+                            <th class="p-2 text-lg">Бренд</th>
+                            <th class="p-2 text-lg">Стать</th>
+                            <th class="p-2 text-lg">Сезон</th>
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
@@ -94,21 +82,9 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($relatedProduct->relatedProduct->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->color->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($relatedProduct->relatedProduct->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->size->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($relatedProduct->relatedProduct->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->quantity }}<br>
-                                    @endforeach
-                                </td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->brand->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->sex->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->season->title ?? 'Не вказанно' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->top_product == 0 ? 'Ні' : 'Так' }}</td>

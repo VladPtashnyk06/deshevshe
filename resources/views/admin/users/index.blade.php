@@ -114,7 +114,7 @@
                         <tbody>
                         @foreach ($users as $user)
                             <tr class="text-center odd:bg-gray-200">
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->name }} {{ $user->last_name }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;"><a href="{{ route('user.orders', $user->id) }}">{{ $user->name }} {{ $user->last_name }}</a></td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->phone ? $user->phone : 'Немає' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $user->email ? $user->email : 'Немає' }}</td>
                                 @if(!count($usersAddresses) == 0)

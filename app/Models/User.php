@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserPromocode::class, 'user_id');
     }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
 }

@@ -44,6 +44,13 @@ class UserController extends Controller
         return view('admin.users.index', compact('admins', 'operators', 'users', 'usersAddresses'));
     }
 
+    public function showOrders(User $user)
+    {
+        $orders = $user->orders()->get();
+        $ordersPhone = $user->phone;
+        return view('admin.orders.user-orders', compact('orders', 'user', 'ordersPhone'));
+    }
+
     public function createOperator() {
         return view('admin.users.create-operator');
     }

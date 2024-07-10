@@ -185,6 +185,7 @@ Route::middleware('auth')->group(function () {
                 Route::controller(\App\Http\Controllers\Admin\UserController::class)->group(function () {
                     Route::get('/', 'index')->name('user.index');
                     Route::get('/create', 'createOperator')->name('user.createOperator');
+                    Route::get('/orders', 'showOrders')->name('user.orders');
                     Route::post('/store', 'storeOperator')->name('user.storeOperator');
                     Route::get('/edit/{user}', 'edit')->name('user.edit');
                     Route::post('/update/{user}', 'update')->name('user.update');

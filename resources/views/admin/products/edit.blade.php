@@ -68,8 +68,13 @@
                         <textarea name="measurements" id="measurements" class="w-full border rounded px-3 py-2 h-32">{{ $product->measurements }}</textarea>
                     </div>
 
-                    <div class="text-center mb-4">
-                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Оновити продукт</button>
+                    <div class="w-full flex grid grid-cols-2">
+                        <div class="text-center mb-4 mr-2">
+                            <a href="{{ route('product.index') }}" class="bg-gray-600 hover:bg-gray-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Назад</a>
+                        </div>
+                        <div class="text-center mb-4">
+                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Оновити продукт</button>
+                        </div>
                     </div>
                 </form>
                 @if ($product->getMedia('size_chart_'.$product->id)->slice(1))

@@ -33,31 +33,45 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'last_name' => 'Admin',
+            'name' => 'Адміністратор',
+            'last_name' => 'Адміністратор',
             'phone' => '+380971037978',
             'email' => 'Admin@gmail.com',
             'role' => 'Admin',
             'password' => \Hash::make('admin'),
         ]);
         \App\Models\User::factory()->create([
-            'name' => 'User',
-            'last_name' => 'User',
+            'name' => 'Влад',
+            'last_name' => 'Пташник',
             'phone' => '+380686464949',
             'email' => 'User@gmail.com',
             'password' => \Hash::make('user'),
         ]);
         \App\Models\User::factory()->create([
-            'name' => 'Operator 1',
-            'last_name' => 'Operator 1',
+            'name' => 'Артем',
+            'last_name' => 'Гаврилюк',
+            'phone' => '+380971037979',
+            'email' => 'artem@gmail.com',
+            'password' => \Hash::make('user'),
+        ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Миколай',
+            'last_name' => 'Кайдаш',
+            'phone' => '+380971037980',
+            'email' => 'mukola@gmail.com',
+            'password' => \Hash::make('user'),
+        ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Оператор 1',
+            'last_name' => 'Оператор 1',
             'phone' => '+380686463838',
             'email' => 'operator@gmail.com',
             'role' => 'Operator',
             'password' => \Hash::make('operator'),
         ]);
         \App\Models\User::factory()->create([
-            'name' => 'Operator 2',
-            'last_name' => 'Operator 2',
+            'name' => 'Оператор 2',
+            'last_name' => 'Оператор 2',
             'phone' => '+380631198197',
             'email' => 'operator2@gmail.com',
             'role' => 'Operator',
@@ -133,6 +147,9 @@ class DatabaseSeeder extends Seeder
         ]);
         OrderStatus::create([
             'title' => 'В обробці'
+        ]);
+        OrderStatus::create([
+            'title' => 'Очікування на проплату'
         ]);
         OrderStatus::create([
             'title' => 'Пакують'

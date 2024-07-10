@@ -91,11 +91,7 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
-                                @foreach($prices as $price)
-                                    @if($price->product_id == $product->id)
-                                        <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->retail }}</td>
-                                    @endif
-                                @endforeach
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->retail }}</td>
                                 <td class="px-6 py-4 text-right flex" style="vertical-align: top;">
                                     <div class="mr-4">
                                         <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-2 block" style="display: block;text-align: center;font-weight: bold;padding: 0.5rem 1rem;border-radius: 0.375rem;transition: background-color 0.3s ease-in-out;">
