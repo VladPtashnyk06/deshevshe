@@ -17,8 +17,14 @@ class PromoCodeController extends Controller
 {
     public function index()
     {
-        $promoCodes = PromoCode::all();
+        $promoCodes = PromoCode::where('certificate', '=', 'No')->get();
         return view('admin.promoCodes.index', compact('promoCodes'));
+    }
+
+    public function indexCertificate()
+    {
+        $certificates = PromoCode::where('certificate', '=', 'Yes')->get();
+        return view('admin.certificates.index', compact('certificates'));
     }
 
     public function addPromoCode(Request $request, PromoCode $promoCode)
@@ -79,10 +85,21 @@ class PromoCodeController extends Controller
         return view('admin.promoCodes.create');
     }
 
+    public function createCertificate()
+    {
+        return view('admin.certificates.create');
+    }
+
     public function store(PromoCodeRequest $request)
     {
-        PromoCode::create($request->validated());
+        PromoCode::create(array_merge($request->validated(), ['certificate' => 'No']));
         return redirect()->route('promoCode.index');
+    }
+
+    public function storeCertificate(PromoCodeRequest $request)
+    {
+        PromoCode::create(array_merge($request->validated(), ['certificate' => 'Yes']));
+        return redirect()->route('certificate.index');
     }
 
     public function edit(PromoCode $promoCode)
@@ -90,11 +107,23 @@ class PromoCodeController extends Controller
         return view('admin.promoCodes.edit', compact('promoCode'));
     }
 
+    public function editCertificate(PromoCode $promoCode)
+    {
+        return view('admin.certificates.edit', compact('promoCode'));
+    }
+
     public function update(PromoCodeRequest $request, PromoCode $promoCode)
     {
-        $promoCode->update($request->validated());
+        $promoCode->update(array_merge($request->validated(), ['certificate' => 'No']));
 
         return redirect()->route('promoCode.index');
+    }
+
+    public function updateCertificate(PromoCodeRequest $request, PromoCode $promoCode)
+    {
+        $promoCode->update(array_merge($request->validated(), ['certificate' => 'Yes']));
+
+        return redirect()->route('certificate.index');
     }
 
     public function destroy(PromoCode $promoCode)

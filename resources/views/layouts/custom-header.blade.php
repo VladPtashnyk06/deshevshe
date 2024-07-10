@@ -6,9 +6,6 @@
         <x-nav-link :href="route('color.index')" :active="request()->routeIs('color.index')">
             {{ __('Колір') }}
         </x-nav-link>
-        <x-nav-link :href="route('package.index')" :active="request()->routeIs('package.index')">
-            {{ __('К-сть. у пакуванні') }}
-        </x-nav-link>
         <x-nav-link :href="route('material.index')" :active="request()->routeIs('material.index')">
             {{ __('Матеріал') }}
         </x-nav-link>

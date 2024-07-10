@@ -23,7 +23,7 @@
                             {{ __('Замовлення') }}
                         </x-nav-link>
                         <x-nav-link :href="route('promoCode.index')" :active="request()->routeIs('promoCode.index')">
-                            {{ __('Промокоди') }}
+                            {{ __('Бонуси') }}
                         </x-nav-link>
                         <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
                             {{ __('Блог') }}

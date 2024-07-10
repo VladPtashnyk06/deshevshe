@@ -22,6 +22,10 @@
                 @include('layouts.custom-header')
             @endif
 
+            @if(Auth::user() && Auth::user()->role == 'admin' && \Illuminate\Support\Facades\Route::is('promoCode.*') || \Illuminate\Support\Facades\Route::is('certificate.*'))
+                @include('layouts.header-bonuses')
+            @endif
+
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">

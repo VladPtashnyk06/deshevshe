@@ -30,5 +30,6 @@ class PromoCode extends Model
         'rate',
         'quantity_now',
         'quantity',
+        'certificate'
     ];
 }

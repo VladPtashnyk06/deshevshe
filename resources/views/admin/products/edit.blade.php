@@ -154,18 +154,6 @@
                     </div>
 
                     <div class="mb-4">
-                        @error('package_id')
-                        <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                        @enderror
-                        <label for="package_id" class="block mb-2 font-bold">К-сть. у пакуванні</label>
-                        <select name="package_id" id="package_id" class="w-full border rounded px-3 py-2">
-                            @foreach($packages as $package)
-                                <option value="{{ $package->id }}" @if($package->id == $product->package_id ) selected @endif>{{ $package->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
                         @error('producer_id')
                         <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
                         @enderror
@@ -220,38 +208,6 @@
                         </select>
                     </div>
                     @foreach($product->price()->get() as $price)
-                        <div class="mb-4">
-                            @error('pair')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                            @enderror
-                            <label for="pair" class="block mb-2 font-bold">Ціна за одну пару</label>
-                            <input type="text" name="pair" id="pair" class="w-full border rounded px-3 py-2" value="{{ $price->pair }}">
-                        </div>
-
-                        <div class="mb-4">
-                            @error('rec_pair')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                            @enderror
-                            <label for="rec_pair" class="block mb-2 font-bold">Рекомендована ціна за одну пару</label>
-                            <input type="text" name="rec_pair" id="rec_pair" class="w-full border rounded px-3 py-2" value="{{ $price->rec_pair }}">
-                        </div>
-
-                        <div class="mb-4">
-                            @error('package')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                            @enderror
-                            <label for="package" class="block mb-2 font-bold">Ціна за опт</label>
-                            <input type="text" name="package" id="package" class="w-full border rounded px-3 py-2" value="{{ $price->package }}">
-                        </div>
-
-                        <div class="mb-4">
-                            @error('rec_package')
-                            <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>
-                            @enderror
-                            <label for="rec_package" class="block mb-2 font-bold">Рекомендована ціна за опт</label>
-                            <input type="text" name="rec_package" id="rec_package" class="w-full border rounded px-3 py-2" value="{{ $price->rec_package }}">
-                        </div>
-
                         <div class="mb-4">
                             @error('retail')
                             <span class="text-red-500">{{ htmlspecialchars("Це поле є обов'язковим для заповнення") }}</span>

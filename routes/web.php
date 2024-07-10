@@ -360,6 +360,15 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/delete-promocode-user/{promoCode}', 'destroyUserPromoCode')->name('promoCode.delete-promocode-user');
                 });
             });
+            Route::controller(\App\Http\Controllers\Admin\PromoCodeController::class)->group(function () {
+                Route::prefix('certificates')->group(function () {
+                    Route::get('/', 'indexCertificate')->name('certificate.index');
+                    Route::get('/create', 'createCertificate')->name('certificate.create');
+                    Route::post('/store', 'storeCertificate')->name('certificate.store');
+                    Route::get('/edit/{promoCode}', 'editCertificate')->name('certificate.edit');
+                    Route::post('/update/{promoCode}', 'updateCertificate')->name('certificate.update');
+                });
+            });
         });
     });
 });

@@ -68,7 +68,6 @@
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
-                            <th class="p-2 text-lg">Ціна за пару</th>
                             <th class="p-2 text-lg">Роздрібна ціна</th>
                             <th class="p-2 text-lg">Дії</th>
                         </tr>
@@ -104,11 +103,6 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
-                                @foreach($prices as $price)
-                                    @if($price->product_id == $product->id)
-                                        <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->pair }}</td>
-                                    @endif
-                                @endforeach
                                 @foreach($prices as $price)
                                     @if($price->product_id == $product->id)
                                         <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $price->retail }}</td>

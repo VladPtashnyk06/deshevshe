@@ -14,11 +14,9 @@
                             <th class="p-2 text-lg">Колір</th>
                             <th class="p-2 text-lg">Розмір</th>
                             <th class="p-2 text-lg">Кількість товару</th>
-                            <th class="p-2 text-lg">К-сть. в упакуванні</th>
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
-                            <th class="p-2 text-lg">Ціна за пару</th>
                             <th class="p-2 text-lg">Роздрібна ціна</th>
                         </tr>
                         </thead>
@@ -49,11 +47,9 @@
                                     {{ $productVariant->quantity }}<br>
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($product->package->title) ? $product->package->title : 'Не вказано' }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->top_product == 0 ? 'Ні' : 'Так' }}</td>
-                            <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->pair }}</td>
                             <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->retail }}</td>
                         </tr>
                         </tbody>
@@ -73,11 +69,9 @@
                             <th class="p-2 text-lg">Колір</th>
                             <th class="p-2 text-lg">Розмір</th>
                             <th class="p-2 text-lg">Кількість товару</th>
-                            <th class="p-2 text-lg">К-сть. в упакуванні</th>
                             <th class="p-2 text-lg">Виробник</th>
                             <th class="p-2 text-lg">Акційний</th>
                             <th class="p-2 text-lg">Топ продукт</th>
-                            <th class="p-2 text-lg">Ціна за пару</th>
                             <th class="p-2 text-lg">Роздрібна ціна</th>
                             <th class="p-2 text-lg">Дії</th>
                         </tr>
@@ -110,11 +104,9 @@
                                         {{ $productVariant->quantity }}<br>
                                     @endforeach
                                 </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ isset($relatedProduct->relatedProduct->package->title) ? $relatedProduct->relatedProduct->package->title : 'Не вказано' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->top_product == 0 ? 'Ні' : 'Так' }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->price->pair }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $relatedProduct->relatedProduct->price->retail }}</td>
                                 <td class="px-6 py-4 text-right" style="vertical-align: top;">
                                     <div class="mr-4">
