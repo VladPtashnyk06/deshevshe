@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id');
-            $table->foreignId('color_id');
-            $table->foreignId('size_id');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('color_id')->nullable()->constrained('colors');
+            $table->foreignId('size_id')->nullable()->constrained('sizes');
             $table->string('quantity');
             $table->timestamps();
         });
