@@ -26,7 +26,9 @@ class ImportCategoriesCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title', 'parent_id', 'level']));
 
+        $importedCategoriesIds = [];
         foreach ($records as $category) {
+            $importedCategoriesIds[] = $category['id'];
             Category::updateOrCreate(
                 ['id' => $category['id']],
                 [
@@ -39,6 +41,8 @@ class ImportCategoriesCsvCommand extends Command
                 ]
             );
         }
+
+        Category::whereNotIn('id', $importedCategoriesIds)->delete();
 
         $this->info('Categories imported successfully.');
     }

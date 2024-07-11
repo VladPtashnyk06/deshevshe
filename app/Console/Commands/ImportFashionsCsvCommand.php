@@ -35,7 +35,9 @@ class ImportFashionsCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedFashionsIds = [];
         foreach ($records as $record) {
+            $importedFashionsIds[] = $record['id'];
             Fashion::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -46,6 +48,8 @@ class ImportFashionsCsvCommand extends Command
                 ]
             );
         }
+
+        Fashion::whereNotIn('id', $importedFashionsIds)->delete();
 
         $this->info('Fashions imported successfully.');
     }

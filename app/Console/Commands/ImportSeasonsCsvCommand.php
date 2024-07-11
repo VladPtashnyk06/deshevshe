@@ -35,7 +35,9 @@ class ImportSeasonsCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedSeasonsIds = [];
         foreach ($records as $record) {
+            $importedSeasonsIds[] = $record['id'];
             Season::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -46,6 +48,8 @@ class ImportSeasonsCsvCommand extends Command
                 ]
             );
         }
+
+        Season::whereNotIn('id', $importedSeasonsIds)->delete();
 
         $this->info('Seasons imported successfully.');
     }

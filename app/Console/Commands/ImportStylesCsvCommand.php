@@ -35,7 +35,9 @@ class ImportStylesCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedStylesIds = [];
         foreach ($records as $record) {
+            $importedStylesIds[] = $record['id'];
             Style::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -46,6 +48,8 @@ class ImportStylesCsvCommand extends Command
                 ]
             );
         }
+
+        Style::whereNotIn('id', $importedStylesIds)->delete();
 
         $this->info('Styles imported successfully.');
     }

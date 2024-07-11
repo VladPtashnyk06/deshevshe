@@ -35,7 +35,9 @@ class ImportFabricCompositionsCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedFabricCompositionsIds = [];
         foreach ($records as $record) {
+            $importedFabricCompositionsIds[] = $record['id'];
             FabricComposition::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -46,6 +48,8 @@ class ImportFabricCompositionsCsvCommand extends Command
                 ]
             );
         }
+
+        FabricComposition::whereNotIn('id', $importedFabricCompositionsIds)->delete();
 
         $this->info('Compositions imported successfully.');
     }

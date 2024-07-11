@@ -35,7 +35,9 @@ class ImportMaterialsCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedMaterialsIds = [];
         foreach ($records as $record) {
+            $importedMaterialsIds[] = $record['id'];
             Material::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -46,6 +48,8 @@ class ImportMaterialsCsvCommand extends Command
                 ]
             );
         }
+
+        Material::whereNotIn('id', $importedMaterialsIds)->delete();
 
         $this->info('Materials imported successfully.');
     }

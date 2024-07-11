@@ -35,11 +35,13 @@ class ImportBrandsCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedBrandIds = [];
+
         foreach ($records as $record) {
+            $importedBrandIds[] = $record['id'];
             Brand::updateOrCreate(
                 ['id' => $record['id']],
                 [
-                    'id' => $record['id'],
                     'title' => $record['title'],
                     'updated_at' => Carbon::now(),
                     'created_at' => Carbon::now(),
@@ -47,6 +49,8 @@ class ImportBrandsCsvCommand extends Command
             );
         }
 
-        $this->info('Brands imported successfully.');
+        Brand::whereNotIn('id', $importedBrandIds)->delete();
+
+        $this->info('Brands imported and cleaned up successfully.');
     }
 }

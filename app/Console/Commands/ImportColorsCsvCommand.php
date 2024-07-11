@@ -27,7 +27,9 @@ class ImportColorsCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedColorsIds = [];
         foreach ($records as $record) {
+            $importedColorsIds[] = $record['id'];
             Color::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -39,6 +41,8 @@ class ImportColorsCsvCommand extends Command
                 ]
             );
         }
+
+        Color::whereNotIn('id', $importedColorsIds)->delete();
 
         $this->info('Colors imported successfully.');
     }

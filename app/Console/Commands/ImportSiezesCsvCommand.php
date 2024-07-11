@@ -26,7 +26,9 @@ class ImportSiezesCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedSizesIds = [];
         foreach ($records as $record) {
+            $importedSizesIds[] = $record['id'];
             Size::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -37,6 +39,8 @@ class ImportSiezesCsvCommand extends Command
                 ]
             );
         }
+
+        Size::whereNotIn('id', $importedSizesIds)->delete();
 
         $this->info('Sizes imported successfully.');
     }

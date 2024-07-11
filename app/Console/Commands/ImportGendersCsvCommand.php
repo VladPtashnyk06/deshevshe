@@ -35,7 +35,9 @@ class ImportGendersCsvCommand extends Command
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
+        $importedGendersIds = [];
         foreach ($records as $record) {
+            $importedGendersIds[] = $record['id'];
             Gender::updateOrCreate(
                 ['id' => $record['id']],
                 [
@@ -46,6 +48,8 @@ class ImportGendersCsvCommand extends Command
                 ]
             );
         }
+
+        Gender::whereNotIn('id', $importedGendersIds)->delete();
 
         $this->info('Genders imported successfully.');
     }
