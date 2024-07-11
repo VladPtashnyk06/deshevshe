@@ -2,19 +2,28 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Size;
+use App\Models\Fashion;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
+use League\Csv\Exception;
+use League\Csv\InvalidArgument;
 use League\Csv\Reader;
+use League\Csv\UnavailableStream;
 
-class ImportSiezesCsvCommand extends Command
+class ImportFashionsCsvCommand extends Command
 {
-    protected $signature = 'import:sizes-csv';
-    protected $description = 'Import categories from CSV file';
+    protected $signature = 'import:fashions-csv';
+    protected $description = 'Import fashions from CSV file';
 
+    /**
+     * @return void
+     * @throws Exception
+     * @throws InvalidArgument
+     * @throws UnavailableStream
+     */
     public function handle()
     {
-        $filePath = storage_path('app/1с/sizes.csv');
+        $filePath = storage_path('app/1с/fashions.csv');
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');
@@ -27,7 +36,7 @@ class ImportSiezesCsvCommand extends Command
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
         foreach ($records as $record) {
-            Size::updateOrCreate(
+            Fashion::updateOrCreate(
                 ['id' => $record['id']],
                 [
                     'id' => $record['id'],
@@ -38,6 +47,6 @@ class ImportSiezesCsvCommand extends Command
             );
         }
 
-        $this->info('Sizes imported successfully.');
+        $this->info('Fashions imported successfully.');
     }
 }

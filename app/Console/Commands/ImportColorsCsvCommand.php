@@ -3,12 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\Color;
-use App\Models\Size;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use League\Csv\Reader;
-use App\Models\Category;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class ImportColorsCsvCommand extends Command
 {
@@ -26,7 +24,6 @@ class ImportColorsCsvCommand extends Command
 
         $csv = Reader::createFromPath($filePath, 'r');
         $csv->setDelimiter(';');
-        $csv->setHeaderOffset(0);
 
         $records = iterator_to_array($csv->getRecords(['id', 'title']));
 
@@ -36,6 +33,7 @@ class ImportColorsCsvCommand extends Command
                 [
                     'id' => $record['id'],
                     'title' => $record['title'],
+                    'title_en' => $this->translateColor($record['title']) ?? null,
                     'updated_at' => Carbon::now(),
                     'created_at' => Carbon::now(),
                 ]
@@ -43,5 +41,11 @@ class ImportColorsCsvCommand extends Command
         }
 
         $this->info('Colors imported successfully.');
+    }
+
+    function translateColor($colorInUkrainian) {
+        $tr = new GoogleTranslate('en');
+        $tr->setSource('uk');
+        return $tr->translate($colorInUkrainian);
     }
 }

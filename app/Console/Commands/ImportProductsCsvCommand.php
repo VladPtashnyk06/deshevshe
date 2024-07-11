@@ -7,7 +7,6 @@ use App\Models\Price;
 use App\Models\Producer;
 use App\Models\ProductVariant;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use League\Csv\Reader;
 use App\Models\Product;
 
@@ -32,9 +31,8 @@ class ImportProductsCsvCommand extends Command
 
         $csv = Reader::createFromPath($filePath, 'r');
         $csv->setDelimiter(';');
-        $csv->setHeaderOffset(0);
 
-        $records = $csv->getRecords(['product_code', 'model', 'title', 'category_id', 'quantity', 'img', 'length', 'width', 'price', 'producer', 'color_id', 'img_color', 'size_id']);
+        $records = iterator_to_array($csv->getRecords(['product_code', 'model', 'title', 'category_id', 'quantity', 'img', 'length', 'width', 'price', 'producer', 'color_id', 'img_color', 'size_id', 'material_id', 'style_id', 'season_id', 'fashion_id', 'fabric_composition_id', 'gender_id', 'brand_id']));
 
         foreach ($records as $record) {
             Producer::updateOrCreate(
@@ -49,7 +47,14 @@ class ImportProductsCsvCommand extends Command
                     'category_id' => $record['category_id'],
                     'producer_id' => '2',
                     'status_id' => 1,
-                    'material_id' => 1,
+                    'material_id' => $record['material_id'] !== '' ? $record['material_id'] : null,
+                    'brand_id' => $record['brand_id'] !== '' ? $record['brand_id'] : null,
+                    'style_id' => $record['style_id'] !== '' ? $record['style_id'] : null,
+                    'season_id' => $record['season_id'] !== '' ? $record['season_id'] : null,
+                    'fashion_id' => $record['fashion_id'] !== '' ? $record['fashion_id'] : null,
+                    'fabric_composition_id' => $record['fabric_composition_id'] !== '' ? $record['fabric_composition_id'] : null,
+                    'gender_id' => $record['gender_id'] !== '' ? $record['gender_id'] : null,
+                    'img_path' => $record['img'] !== '' ? $record['img'] : null,
                 ]
             );
             ProductVariant::updateOrCreate(

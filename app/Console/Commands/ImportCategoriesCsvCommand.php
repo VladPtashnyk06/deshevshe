@@ -23,7 +23,6 @@ class ImportCategoriesCsvCommand extends Command
 
         $csv = Reader::createFromPath($filePath, 'r');
         $csv->setDelimiter(';');
-        $csv->setHeaderOffset(0);
 
         $records = iterator_to_array($csv->getRecords(['id', 'title', 'parent_id', 'level']));
 
