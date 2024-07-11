@@ -190,4 +190,8 @@ class GeneralController extends Controller
         return response()->json($results);
     }
 
+    public function callback()
+    {
+        return view('site.callback-form');
+    }
 }

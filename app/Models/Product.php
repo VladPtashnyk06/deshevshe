@@ -38,11 +38,12 @@ class Product extends Model implements HasMedia
         'material_id',
         'characteristic_id',
         'brand_id',
-        'sex_id',
+        'gender_id',
         'fabric_composition_id',
         'style_id',
         'season_id',
         'fashion_id',
+        'img_path',
         'title',
         'description',
         'code',
@@ -79,9 +80,9 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Brand::class);
     }
 
-    public function sex(): BelongsTo
+    public function gender(): BelongsTo
     {
-        return $this->belongsTo(Sex::class);
+        return $this->belongsTo(Gender::class);
     }
 
     public function fabricComposition(): BelongsTo

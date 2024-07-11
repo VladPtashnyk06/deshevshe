@@ -4,24 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Blog;
-use App\Models\Category;
-use App\Models\Characteristic;
-use App\Models\Color;
-use App\Models\DeliveryMethod;
-use App\Models\DeliveryService;
-use App\Models\Material;
 use App\Models\OrderStatus;
-use App\Models\Package;
 use App\Models\PaymentMethod;
-use App\Models\Price;
 use App\Models\Producer;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Region;
-use App\Models\Size;
 use App\Models\Status;
 use Illuminate\Database\Seeder;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DatabaseSeeder extends Seeder
 {
@@ -106,17 +93,6 @@ class DatabaseSeeder extends Seeder
         ]);
         Producer::create([
             'title' => 'Польща'
-        ]);
-
-        //Materials
-        Material::create([
-            'title' => 'Тканина'
-        ]);
-        Material::create([
-            'title' => 'Пластик'
-        ]);
-        Material::create([
-            'title' => 'Двухнитка'
         ]);
 
         //Blogs

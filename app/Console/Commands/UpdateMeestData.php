@@ -5,13 +5,8 @@ namespace App\Console\Commands;
 use App\Models\MeestBranch;
 use App\Models\MeestCity;
 use App\Models\MeestRegion;
-use App\Models\NovaPoshtaWarehouse;
 use App\Services\MeestService;
 use Illuminate\Console\Command;
-use App\Models\NovaPoshtaRegion;
-use App\Models\NovaPoshtaDistrict;
-use App\Models\NovaPoshtaSettlement;
-use Illuminate\Support\Facades\Http;
 
 class UpdateMeestData extends Command
 {

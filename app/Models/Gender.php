@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Season extends Model
+class Gender extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'seasons';
+    protected $table = 'genders';
 
     /**
      * The primary key associated with the table.

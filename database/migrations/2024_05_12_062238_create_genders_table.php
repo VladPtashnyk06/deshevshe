@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('sexes', function (Blueprint $table) {
-            $table->id();
+        Schema::create('genders', function (Blueprint $table) {
+            $table->unsignedBigInteger('id')->primary();
             $table->string('title');
             $table->timestamps();
         });
@@ -16,6 +16,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('sexes');
+        Schema::dropIfExists('genders');
     }
 };

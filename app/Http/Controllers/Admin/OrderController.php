@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\GeneralController;
-use App\Http\Controllers\UkrPoshtaController;
 use App\Http\Requests\OrderEditFirstRequest;
 use App\Http\Requests\OrderEditFourthRequest;
 use App\Http\Requests\OrderEditSecondRequest;
 use App\Http\Requests\OrderEditThirdRequest;
-use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderSmallRequest;
 use App\Mail\OrderClientMail;
-use App\Mail\OrderMail;
 use App\Models\Delivery;
 use App\Models\MeestRegion;
 use App\Models\NovaPoshtaRegion;
@@ -25,18 +21,12 @@ use App\Models\ProductVariant;
 use App\Models\PromoCode;
 use App\Models\UkrPoshtaRegion;
 use App\Models\User;
-use App\Services\MeestService;
-use App\Services\NovaPoshtaService;
-use App\Services\UkrPoshtaService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use App\Notifications\OrderStatusUpdate;
 use Carbon\Carbon;
 
 class OrderController extends Controller

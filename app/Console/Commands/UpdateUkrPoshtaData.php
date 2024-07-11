@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\UkrPoshtaBranch;
 use App\Models\UkrPoshtaDistrict;
 use App\Models\UkrPoshtaRegion;
 use App\Models\UkrPoshtaSettlement;
