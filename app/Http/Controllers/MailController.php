@@ -16,7 +16,7 @@ class MailController extends Controller
             'message' => $request->message,
         ];
 
-        Mail::to('vlad1990pb@gmail.com')->send(new CallbackRequest($details));
+        Mail::to('deshevshe.ukraine@gmail.com')->send(new CallbackRequest($details));
 
         return back()->with('success', 'Ваш запит на зворотній дзвінок відправлено!');
     }
