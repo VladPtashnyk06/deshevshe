@@ -45,10 +45,6 @@ use App\Http\Controllers\MailController;
 
 Route::get('send-email', [MailController::class, 'sendEmail']);
 
-Route::get('/callback', function () {
-    return view('site.callback-form');
-});
-
 Route::post('/send-callback', [MailController::class, 'sendCallbackRequest']);
 /* =================================== */
 /*                 Site                */
@@ -58,7 +54,7 @@ Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(fu
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
     Route::get('/search', 'search')->name('search');
-
+    Route::get('/callback', 'callback')->name('callback');
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');

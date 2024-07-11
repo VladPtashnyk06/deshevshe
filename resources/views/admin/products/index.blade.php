@@ -75,18 +75,19 @@
                         <tbody>
                         @foreach ($products as $product)
                             <tr class="text-center odd:bg-gray-200">
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($product->getMedia($product->id) as $media)
-                                        @if($media->getCustomProperty('main_image') === 1)
-                                            <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-16 w-auto rounded-md object-cover">
-                                        @endif
-                                    @endforeach
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top; padding-left: 1rem; padding-top: 5px; padding-bottom: 5px;">
+{{--                                    @foreach($product->getMedia($product->id) as $media)--}}
+{{--                                        @if($media->getCustomProperty('main_image') === 1)--}}
+{{--                                            <img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-16 w-auto rounded-md object-cover">--}}
+{{--                                        @endif--}}
+{{--                                    @endforeach--}}
+                                    <img src="{{ asset('storage/'. $product->img_path) }}" alt="{{ $product->title }}" class="h-32 w-auto rounded-md object-cover">
                                 </td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->category->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->brand->title ?? 'Не вказанно' }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->sex->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->gender->title ?? 'Не вказанно' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->season->title ?? 'Не вказанно' }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->product_promotion == 0 ? 'Ні' : 'Так' }}</td>
