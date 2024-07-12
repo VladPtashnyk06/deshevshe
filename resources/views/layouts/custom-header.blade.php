@@ -3,6 +3,24 @@
         <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
             {{ __('Продукт') }}
         </x-nav-link>
+        <x-nav-link :href="route('brand.index')" :active="request()->routeIs('brand.index')">
+            {{ __('Бренд') }}
+        </x-nav-link>
+        <x-nav-link :href="route('fabric-composition.index')" :active="request()->routeIs('fabric-composition.index')">
+            {{ __('Склад') }}
+        </x-nav-link>
+        <x-nav-link :href="route('fashion.index')" :active="request()->routeIs('fashion.index')">
+            {{ __('Фасон') }}
+        </x-nav-link>
+        <x-nav-link :href="route('gender.index')" :active="request()->routeIs('gender.index')">
+            {{ __('Стать') }}
+        </x-nav-link>
+        <x-nav-link :href="route('season.index')" :active="request()->routeIs('season.index')">
+            {{ __('Сезон') }}
+        </x-nav-link>
+        <x-nav-link :href="route('style.index')" :active="request()->routeIs('style.index')">
+            {{ __('Стиль') }}
+        </x-nav-link>
         <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.index')">
             {{ __('Категорія') }}
         </x-nav-link>
@@ -17,9 +35,6 @@
         </x-nav-link>
         <x-nav-link :href="route('size.index')" :active="request()->routeIs('size.index')">
             {{ __('Розмір') }}
-        </x-nav-link>
-        <x-nav-link :href="route('status.index')" :active="request()->routeIs('status.index')">
-            {{ __('Статус') }}
         </x-nav-link>
         <x-nav-link :href="route('producer.index')" :active="request()->routeIs('producer.index')">
             {{ __('Виробник') }}
