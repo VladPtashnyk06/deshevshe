@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ClearOrdersJsonCommand extends Command
 {
+
     protected $signature = 'orders:clear-json';
     protected $description = 'Clear the contents of the orders.json file';
 
