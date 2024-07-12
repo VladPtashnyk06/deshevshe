@@ -29,11 +29,8 @@ class MeestBranch extends Model
     protected $fillable = [
         'city_id',
         'branch_id',
-        'branch_number',
         'branch_type',
-        'branch_type_id',
         'description',
-        'network_partner',
         'address',
     ];
 

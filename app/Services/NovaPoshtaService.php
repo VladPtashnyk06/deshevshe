@@ -110,10 +110,8 @@ class NovaPoshtaService
             'modelName' => 'InternetDocumentGeneral',
             'calledMethod' => 'getDocumentList',
             'methodProperties' => [
-//                'DateTimeFrom' => date('d.m.Y'),
-//                'DateTimeTo' => date('d.m.Y'),
-                'DateTimeFrom' => '01.07.2024',
-                'DateTimeTo' => '01.07.2024',
+                'DateTimeFrom' => date('d.m.Y'),
+                'DateTimeTo' => date('d.m.Y'),
                 'GetFullList' => '1',
             ],
         ]);

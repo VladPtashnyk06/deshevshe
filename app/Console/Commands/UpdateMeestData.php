@@ -78,11 +78,8 @@ class UpdateMeestData extends Command
                     ],
                     [
                         'city_id' => $city->id,
-                        'branch_number' => $branch['branchNumber'],
                         'branch_type' => $branch['branchType'],
-                        'branch_type_id' => $branch['branchTypeID'],
                         'description' => $branch['branchDescr']['descrUA'],
-                        'network_partner' => $branch['networkPartner'],
                         'address' => $branch['branchDescr']['descrSearchUA'],
                     ]
                 );

@@ -11,11 +11,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('city_id')->constrained('meest_cities')->cascadeOnDelete();
             $table->string('branch_id')->unique();
-            $table->string('branch_number');
             $table->string('branch_type');
-            $table->string('branch_type_id');
             $table->string('description');
-            $table->string('network_partner');
             $table->string('address');
             $table->timestamps();
         });

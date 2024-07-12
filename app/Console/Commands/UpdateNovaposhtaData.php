@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\NovaPoshtaService;
 use Illuminate\Console\Command;
 use App\Models\NovaPoshtaRegion;
 use App\Models\NovaPoshtaDistrict;
@@ -21,13 +22,8 @@ class UpdateNovaposhtaData extends Command
 
     private function updateRegions()
     {
-        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
-            'apiKey' => config('services.novaposhta.api_key'),
-            'modelName' => 'AddressGeneral',
-            'calledMethod' => 'getSettlementAreas',
-        ]);
-
-        $regions = $response->json()['data'];
+        $novaPoshtaService = new NovaPoshtaService;
+        $regions = $novaPoshtaService->getRegions();
 
         foreach ($regions as $region) {
             NovaPoshtaRegion::updateOrCreate(
@@ -44,18 +40,10 @@ class UpdateNovaposhtaData extends Command
     private function updateDistricts()
     {
         $regions = NovaPoshtaRegion::all();
+        $novaPoshtaService = new NovaPoshtaService;
 
         foreach ($regions as $region) {
-            $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
-                'apiKey' => config('services.novaposhta.api_key'),
-                'modelName' => 'AddressGeneral',
-                'calledMethod' => 'getSettlementCountryRegion',
-                'methodProperties' => [
-                    'AreaRef' => $region->ref,
-                ],
-            ]);
-
-            $districts = $response->json()['data'];
+            $districts = $novaPoshtaService->getDistricts($region->ref);
             foreach ($districts as $district) {
                 NovaPoshtaDistrict::updateOrCreate(
                     [

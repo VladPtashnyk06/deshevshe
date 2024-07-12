@@ -21,6 +21,7 @@ use App\Models\ProductVariant;
 use App\Models\PromoCode;
 use App\Models\UkrPoshtaRegion;
 use App\Models\User;
+use App\Notifications\OrderStatusUpdate;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -119,6 +120,7 @@ class OrderController extends Controller
 
         if ($order->orderStatus->title === 'Відравлено') {
             Mail::to('vlad1990pb@gmail.com')->send(new OrderClientMail($order));
+            Mail::to($order->user_email)->send(new OrderClientMail($order));
 
             $orders = Order::whereDate('created_at', Carbon::today())
                 ->where('order_status_id', $order->order_status_id)
@@ -129,7 +131,7 @@ class OrderController extends Controller
                     $userPhone = str_replace('+', '', $order->user_phone);
                     $message = "Ваше замовлення було відправлено. Ваша ТТН: {$order->int_doc_number}. Дякуємо Вам за замовлення.";
 
-//                    File::put(storage_path('logs/laravel.log'), '');
+//                    \File::put(storage_path('logs/laravel.log'), '');
 //                    if ($userPhone) {
 //                        \Log::info("Відправлене SMS до {$userPhone} з повідомленям: {$message}");
 //                        $order->notify(new OrderStatusUpdate($message));
