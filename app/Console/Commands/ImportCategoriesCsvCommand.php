@@ -14,7 +14,7 @@ class ImportCategoriesCsvCommand extends Command
 
     public function handle()
     {
-        $filePath = storage_path('app/1с/categories.csv');
+        $filePath = '1c_files/categories.csv';
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');

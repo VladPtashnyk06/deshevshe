@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('import:products-csv')->everyThirtyMinutes();
         $schedule->command('novaposhta:update-data')->monthly();
         $schedule->command('novaposhta:settlement-update-data')->monthly();
-        $schedule->command('novaposhta:warehouse-update-data')->daily();
+        $schedule->command('novaposhta:warehouse-update-data')->dailyAt('03:00');
         $schedule->command('meest:update-data')->weekly();
         $schedule->command('ukrposhta:update-data')->weekly();
         $schedule->command('novaposhta:update-status-ttn-data')->dailyAt('20:00');

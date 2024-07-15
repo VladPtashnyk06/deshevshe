@@ -23,7 +23,7 @@ class ImportStylesCsvCommand extends Command
      */
     public function handle()
     {
-        $filePath = storage_path('app/1с/styles.csv');
+        $filePath = '1c_files/styles.csv';
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');

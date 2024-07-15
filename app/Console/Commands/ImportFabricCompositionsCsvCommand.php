@@ -23,7 +23,7 @@ class ImportFabricCompositionsCsvCommand extends Command
      */
     public function handle()
     {
-        $filePath = storage_path('app/1с/compositions.csv');
+        $filePath = '1c_files/compositions.csv';
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');

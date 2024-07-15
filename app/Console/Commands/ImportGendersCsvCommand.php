@@ -23,7 +23,7 @@ class ImportGendersCsvCommand extends Command
      */
     public function handle()
     {
-        $filePath = storage_path('app/1с/genders.csv');
+        $filePath = '1c_files/genders.csv';
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');

@@ -13,7 +13,7 @@ class ClearOrdersJsonCommand extends Command
 
     public function handle()
     {
-        $filePath = storage_path('app/orders/orders.json');
+        $filePath = '1c_files/orders.json';
 
         if (file_exists($filePath)) {
             file_put_contents($filePath, json_encode([]));

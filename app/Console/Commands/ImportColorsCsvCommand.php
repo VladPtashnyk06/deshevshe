@@ -15,7 +15,7 @@ class ImportColorsCsvCommand extends Command
 
     public function handle()
     {
-        $filePath = storage_path('app/1с/colors.csv');
+        $filePath = '1c_files/colors.csv';
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');

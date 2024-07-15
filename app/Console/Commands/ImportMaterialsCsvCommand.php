@@ -23,7 +23,7 @@ class ImportMaterialsCsvCommand extends Command
      */
     public function handle()
     {
-        $filePath = storage_path('app/1с/materials.csv');
+        $filePath = '1c_files/materials.csv';
 
         if (!file_exists($filePath)) {
             $this->error('CSV file not found.');
