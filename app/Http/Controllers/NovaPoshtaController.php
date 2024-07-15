@@ -57,6 +57,7 @@ class NovaPoshtaController extends Controller
 
         if ($settlementType === 'місто') {
             $city = NovaPoshtaSettlement::where('ref', $cityRef)->first();
+            return response()->json($city);
         } else {
             $city = NovaPoshtaSettlement::where('ref', $cityRef)->first();
         }
