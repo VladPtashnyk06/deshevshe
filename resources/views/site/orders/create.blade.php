@@ -944,7 +944,7 @@
                         },
                         body: JSON.stringify({ city_ref: cityRef, search: searchText, settlementType: settlementType })
                     })
-                        .then(response => response.json())
+                        .then(response => console.log(response.json()))
                         .then(data => {
                             NovaPoshtaBranchesList.innerHTML = '';
                             console.log(data)
