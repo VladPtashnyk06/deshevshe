@@ -52,7 +52,7 @@ class NovaPoshtaController extends Controller
 
     public function getBranches(Request $request)
     {
-        $cityRef = $request->input('city');
+        $cityRef = $request->input('city_ref');
         $settlementType = $request->input('settlementType');
 
         if ($settlementType === 'місто') {
