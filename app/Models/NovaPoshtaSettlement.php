@@ -46,6 +46,6 @@ class NovaPoshtaSettlement extends Model
 
     public function warehouses(): HasMany
     {
-        return $this->hasMany(NovaPoshtaWarehouse::class, 'settlement_id', 'id');
+        return $this->hasMany(NovaPoshtaWarehouse::class, 'settlement_id');
     }
 }
