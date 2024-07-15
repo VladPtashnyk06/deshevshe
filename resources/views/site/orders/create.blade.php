@@ -856,11 +856,11 @@
                 });
 
                 DistrictInput.addEventListener('input', function() {
-                    const regionId = NovaPoshtaRegionSelect.value;
+                    const regionRef = NovaPoshtaRegionSelect.value;
                     const searchText = this.value.trim().toLowerCase();
 
-                    if (regionId && searchText.length >= 0) {
-                        NovaPoshtaFetchDiscticts(regionId, searchText);
+                    if (regionRef && searchText.length >= 0) {
+                        NovaPoshtaFetchDiscticts(regionRef, searchText);
                     } else {
                         DistrictList.innerHTML = '';
                         DistrictList.classList.add('hidden');
@@ -868,9 +868,9 @@
                 });
 
                 DistrictInput.addEventListener('focus', function() {
-                    const regionId = NovaPoshtaRegionSelect.value;
-                    if (regionId && DistrictInput.value.trim().length === 0) {
-                        NovaPoshtaFetchDiscticts(regionId, '');
+                    const regionRef = NovaPoshtaRegionSelect.value;
+                    if (regionRef && DistrictInput.value.trim().length === 0) {
+                        NovaPoshtaFetchDiscticts(regionRef, '');
                     } else if (DistrictList.children.length > 0) {
                         DistrictList.classList.remove('hidden');
                     }
@@ -1015,14 +1015,15 @@
                         .catch(error => console.error('Error:', error));
                 }
 
-                function NovaPoshtaFetchDiscticts(regionId, searchText) {
+                function NovaPoshtaFetchDiscticts(regionRef, searchText) {
+                    console.log(regionRef)
                     fetch('/get-nova-poshta-settlement-districts', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ region_id: regionId, search: searchText })
+                        body: JSON.stringify({ region_ref: regionRef, search: searchText })
                     })
                         .then(response => response.json())
                         .then(data => {
