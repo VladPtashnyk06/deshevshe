@@ -62,16 +62,9 @@ class NovaPoshtaController extends Controller
             $city = NovaPoshtaSettlement::where('ref', $cityRef)->first();
         }
 
-//        $branches = $city->warehouses()->get();
-//
-//        return response()->json($branches);
+        $branches = $city->warehouses()->get();
 
-        if ($city) {
-            $branches = $city->warehouses()->get();
-            return response()->json($branches);
-        } else {
-            return response()->json(['error' => 'City not found'], 404);
-        }
+        return response()->json($branches);
     }
 
     public function getDistricts(Request $request)

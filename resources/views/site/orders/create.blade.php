@@ -932,9 +932,6 @@
                 }
 
                 function NovaPoshtaFetchBranches(cityRef, searchText, settlementType) {
-                    console.log(cityRef)
-                    console.log(searchText)
-                    console.log(settlementType)
                     const categoryOfWarehouse = document.getElementById('categoryOfWarehouse').value;
                     fetch('/get-nova-poshta-branches', {
                         method: 'POST',
@@ -944,10 +941,9 @@
                         },
                         body: JSON.stringify({ city_ref: cityRef, search: searchText, settlementType: settlementType })
                     })
-                        .then(response => console.log(response.json()))
+                        .then(response => response.json())
                         .then(data => {
                             NovaPoshtaBranchesList.innerHTML = '';
-                            console.log(data)
                             data.forEach(branch => {
                                 if (categoryOfWarehouse === 'Postomat' && branch.type_of_warehouse.toLowerCase().includes('f9316480-5f2d-425d-bc2c-ac7cd29decf0')) {
                                     if (branch.description.toLowerCase().includes(searchText)) {
@@ -964,7 +960,6 @@
                                         NovaPoshtaBranchesList.appendChild(listItem);
                                     }
                                 } else if(categoryOfWarehouse === 'Branch' && !branch.type_of_warehouse.toLowerCase().includes('f9316480-5f2d-425d-bc2c-ac7cd29decf0')) {
-                                    console.log(categoryOfWarehouse)
                                     if (branch.description.toLowerCase().includes(searchText)) {
                                         const listItem = document.createElement('li');
                                         listItem.textContent = branch.description;
@@ -1021,7 +1016,6 @@
                 }
 
                 function NovaPoshtaFetchDiscticts(regionRef, searchText) {
-                    console.log(regionRef)
                     fetch('/get-nova-poshta-settlement-districts', {
                         method: 'POST',
                         headers: {
