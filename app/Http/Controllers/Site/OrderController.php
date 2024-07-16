@@ -17,13 +17,16 @@ use App\Models\Product;
 use App\Models\PromoCode;
 use App\Models\UkrPoshtaRegion;
 use App\Models\User;
+use App\Models\UserAddress;
 use App\Models\UserPromocode;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
 use App\Services\UkrPoshtaService;
+use Darryldecode\Cart\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use const http\Client\Curl\AUTH_ANY;
 
 class OrderController extends Controller
 {
@@ -85,7 +88,12 @@ class OrderController extends Controller
         $meestRegions = MeestRegion::all();
         $ukrPoshtaRegions = UkrPoshtaRegion::all();
 
-        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions'));
+        $delivery = null;
+        if (\Auth::user() && \Auth::user()->role == 'user') {
+            $delivery = \Auth::user()->userAddress()->first();
+        }
+
+        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'delivery'));
     }
 
     public function store(OrderRequest $request)
@@ -284,9 +292,43 @@ class OrderController extends Controller
             }
 //            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderMail($newOrder));
             Mail::to('vlad1990pb@gmail.com')->send(new OrderMail($newOrder));
+
+            if ($newOrder->user_id) {
+                UserAddress::updateOrCreate(
+                    [
+                        'user_id' => $newOrder->user_id,
+                    ],
+                    [
+                        'delivery_name' => $newOrder->delivery->delivery_name,
+                        'delivery_method' => $newOrder->delivery->delivery_method,
+                        'region' => $newOrder->delivery->region,
+                        'regionRef' => $newOrder->delivery->regionRef,
+                        'settlementType' => $newOrder->delivery->settlementType,
+                        'settlement' => $newOrder->delivery->settlement ?? null,
+                        'settlementRef' => $newOrder->delivery->settlementRef ?? null,
+                        'branch' => $newOrder->delivery->branch ?? null,
+                        'branchRef' => $newOrder->delivery->branchRef ?? null,
+                        'district' => $newOrder->delivery->district ?? null,
+                        'districtRef' => $newOrder->delivery->districtRef ?? null,
+                        'street' => $newOrder->delivery->street ?? null,
+                        'streetRef' => $newOrder->delivery->streetRef ?? null,
+                        'house' => $newOrder->delivery->house ?? null,
+                        'flat' => $newOrder->delivery->flat ?? null,
+                    ]
+                );
+            }
+
+//            Cart::clear();
         }
 
         return redirect()->route('site.order.thankYou');
+    }
+
+    public function jsonFile()
+    {
+        $json = UserAddress::all();
+
+        return response()->json($json);
     }
 
     public function updateCart(Request $request): RedirectResponse

@@ -25,6 +25,8 @@ Route::post('/get-nova-poshta-streets', [\App\Http\Controllers\NovaPoshtaControl
 Route::post('/get-nova-poshta-settlement-districts', [\App\Http\Controllers\NovaPoshtaController::class, 'getDistricts'])->name('nova-poshta.get-settlement-districts');
 Route::post('/get-nova-poshta-settlement-villages', [\App\Http\Controllers\NovaPoshtaController::class, 'getVillages'])->name('nova-poshta.get-settlement-villages');
 
+Route::get('/json', [\App\Http\Controllers\Site\OrderController::class, 'jsonFile'])->name('jsonfile');
+
 /* =================================== */
 /*                Meest                */
 /* =================================== */

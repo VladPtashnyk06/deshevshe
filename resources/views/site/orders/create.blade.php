@@ -150,6 +150,9 @@
                                         </div>
                                     @endif
                                 </div>
+{{--                                <div>--}}
+{{--                                    <input name="deliveryNamee" id="deliveryNamee" value="">--}}
+{{--                                </div>--}}
                                 <div class="second md:w-2/3">
                                     <h2 class="text-lg font-semibold">Спосіб доставки</h2>
                                     <div class="space-y-1 mb-4 text-gray-700">
@@ -393,6 +396,11 @@
         const RegistrationCheckbox = document.getElementById('registration');
         const PasswordFields = document.getElementById('password_fields');
         const PhoneInput = document.getElementById('user_phone');
+
+        {{--const deliveryNamee = document.getElementById('deliveryNamee');--}}
+        {{--const json = @json($delivery);--}}
+        {{--console.log(json)--}}
+        {{--deliveryNamee.value = json.region;--}}
 
         if (RegistrationCheckbox) {
             RegistrationCheckbox.addEventListener('change', function() {
