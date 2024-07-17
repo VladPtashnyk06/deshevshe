@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Запит на зворотній дзвінок</title>
+    <title>Запит на зворотній зв'язок</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -50,11 +50,11 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Запит на зворотній дзвінок</h1>
+        <h1>Запит на зворотній зв'язок</h1>
     </div>
     <div class="content">
-        <p><strong>Ім'я:</strong> {{ $details['name'] }}</p>
-        <p><strong>Телефон:</strong> {{ $details['phone'] }}</p>
+        <p><strong>Ім'я Прізвище:</strong> {{ $details['name'] }}</p>
+        <p><strong>Телефон:</strong> {{ $details['email'] }}</p>
         <p><strong>Повідомлення:</strong> {{ $details['message'] }}</p>
     </div>
     <div class="footer">

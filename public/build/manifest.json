@@ -1,13 +1,52 @@
 {
+  "public/img/closeEye.svg": {
+    "file": "assets/closeEye-FZdglbqj.svg",
+    "src": "public/img/closeEye.svg"
+  },
+  "public/img/flag.png": {
+    "file": "assets/flag-Dy9QnBsf.png",
+    "src": "public/img/flag.png"
+  },
+  "public/img/main-bg-mobile.png": {
+    "file": "assets/main-bg-mobile-DVlIP0hv.png",
+    "src": "public/img/main-bg-mobile.png"
+  },
+  "public/img/main-bg.png": {
+    "file": "assets/main-bg-xBQAZ1Ot.png",
+    "src": "public/img/main-bg.png"
+  },
+  "public/img/meestexpres.svg": {
+    "file": "assets/meestexpres-l2h1_82n.svg",
+    "src": "public/img/meestexpres.svg"
+  },
+  "public/img/новапошта.svg": {
+    "file": "assets/новапошта-DN_Z26t3.svg",
+    "src": "public/img/новапошта.svg"
+  },
+  "public/img/укрпошта.svg": {
+    "file": "assets/укрпошта-Bk5pvHFk.svg",
+    "src": "public/img/укрпошта.svg"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-CQID3bI3.css",
+    "file": "assets/app-CC1J-J82.css",
     "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/style.css": {
+    "file": "assets/style-BPvghwer.css",
+    "src": "resources/css/style.css",
     "isEntry": true
   },
   "resources/js/app.js": {
     "file": "assets/app-Bg1aHGgo.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/scripts.js": {
+    "file": "assets/scripts-BihTfSSO.js",
+    "name": "scripts",
+    "src": "resources/js/scripts.js",
     "isEntry": true
   }
 }

@@ -22,11 +22,45 @@ use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
-     */
+    public function recProducts()
+    {
+        $recommendProducts = RecProduct::paginate(8);
+        foreach ($recommendProducts as $recommendProduct) {
+            if ($recommendProduct->count_views > 0) {
+                $recProducts[] = $recommendProduct;
+            }
+        }
+        if (empty($recProducts)) {
+            $recProducts = [];
+        }
+
+        return $recProducts;
+    }
     public function index()
+    {
+        $recProducts = $this->recProducts();
+        return view('site.index', compact('recProducts'));
+    }
+
+    public function help()
+    {
+        $recProducts = $this->recProducts();
+        return view('site.help.help', compact('recProducts'));
+    }
+
+    public function spivpracia()
+    {
+        $recProducts = $this->recProducts();
+        return view('site.spivpracia.spivpracia', compact('recProducts'));
+    }
+
+    public function privacy()
+    {
+        return view('site.privacy');
+    }
+
+
+    public function second()
     {
         $recommendProducts = RecProduct::all();
         foreach ($recommendProducts as $recommendProduct) {
@@ -47,6 +81,8 @@ class GeneralController extends Controller
             $viewedProducts = [];
         }
 
+        $viewedProducts = [];
+
         $thirtyDaysAgo = Carbon::now()->subDays(30);
         $newProducts = Product::where('created_at', '>=', $thirtyDaysAgo)
             ->orderBy('created_at', 'desc')
@@ -61,7 +97,7 @@ class GeneralController extends Controller
 
         $promotionalProducts = Product::where('product_promotion', 1)->get();
 
-        return view('site.index', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts', 'comments', 'promotionalProducts'));
+        return view('site.second', compact('recProducts', 'viewedProducts', 'blogs', 'newProducts', 'likedProducts', 'comments', 'promotionalProducts'));
     }
 
     /**
@@ -192,6 +228,6 @@ class GeneralController extends Controller
 
     public function callback()
     {
-        return view('site.callback-form');
+        return view('site.contact');
     }
 }

@@ -29,5 +29,6 @@ class Comment extends Model
         'comment',
         'name',
         'last_name',
+        'email'
     ];
 }

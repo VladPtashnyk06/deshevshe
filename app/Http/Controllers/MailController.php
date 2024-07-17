@@ -11,9 +11,9 @@ class MailController extends Controller
     public function sendCallbackRequest(Request $request)
     {
         $details = [
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'message' => $request->message,
+            'name' => $request->nameContact,
+            'email' => $request->mailContact,
+            'message' => $request->textarea,
         ];
 
         Mail::to('deshevshe.ukraine@gmail.com')->send(new CallbackRequest($details));

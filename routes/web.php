@@ -42,21 +42,20 @@ Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaControll
 Route::get('/get-ukr-poshta-streets', [\App\Http\Controllers\UkrPoshtaController::class, 'getStreetByCityId'])->name('ukr-poshta.get-street-by-city-id');
 Route::get('/get-shipments', [\App\Http\Controllers\UkrPoshtaController::class, 'getShipments'])->name('ukr-poshta.get-shipments');
 
-
-use App\Http\Controllers\MailController;
-
-Route::get('send-email', [MailController::class, 'sendEmail']);
-
-Route::post('/send-callback', [MailController::class, 'sendCallbackRequest']);
+Route::post('/send-callback', [\App\Http\Controllers\MailController::class, 'sendCallbackRequest']);
 /* =================================== */
 /*                 Site                */
 /* =================================== */
 Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(function () {
     Route::get('/', 'index')->name('site.index');
+    Route::get('/second', 'second')->name('site.second');
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
     Route::get('/search', 'search')->name('search');
     Route::get('/callback', 'callback')->name('callback');
+    Route::get('/help', 'help')->name('help');
+    Route::get('/spivpracia', 'spivpracia')->name('spivpracia');
+    Route::get('/privacy', 'privacy')->name('privacy');
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
@@ -107,6 +106,7 @@ Route::controller(\App\Http\Controllers\Site\CartController::class)->group(funct
 });
 Route::controller(\App\Http\Controllers\Site\CommentController::class)->group(function () {
    Route::get('/all-comments', 'index')->name('site.comment.index');
+   Route::post('/store', 'store')->name('site.comment.store');
 });
 
 ///* =================================== */
