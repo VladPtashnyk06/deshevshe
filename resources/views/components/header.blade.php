@@ -488,7 +488,7 @@
                                     d="M11.5 10.6012C9.50415 12.7018 4.41318 7.65653 6.41662 5.54795C7.63985 4.26052 6.25803 2.78923 5.49317 1.70778C4.0577 -0.321854 0.906427 2.48034 1.00213 4.26287C1.30394 9.88404 7.38462 16.5455 13.2729 15.9645C15.115 15.7827 17.2315 12.456 15.1186 11.2402C14.0621 10.6322 12.6118 9.43099 11.5 10.6012Z"
                                     stroke="#1E4284" stroke-linecap="round" stroke-linejoin="round"></path>
                             </svg>
-                            <a href="tel:+380000000000">+38 (000) 000 00 00</a>
+                            <a href="tel:+380681188181">+38 (068) 118 81 81</a>
                         </p>
                         <p class="d-flex">
                             <svg fill="none" height="10" viewbox="0 0 15 10" width="15"
@@ -502,7 +502,7 @@
                         <p class="head-mobile-menu">ми у соцмережах</p>
                         <div class="d-flex social-icon">
                             <p>
-                                <a href="https://t.me/">
+                                <a href="https://t.me/" target="_blank">
                                     <svg fill="none" height="20" viewbox="0 0 20 20" width="20"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_213_16744)">
@@ -533,7 +533,7 @@
                                 </a>
                             </p>
                             <p>
-                                <a href="whatsapp://send?phone=+380681188181">
+                                <a href="whatsapp://send?phone=+380681188181" target="_blank">
                                     <svg fill="none" height="20" viewbox="0 0 20 20" width="20"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_213_16752)">
@@ -558,7 +558,7 @@
                                 </a>
                             </p>
                             <p>
-                                <a href="">
+                                <a href="https://www.tiktok.com/@deshevshe?_t=8lnDGrrJq6f&_r=1" target="_blank">
                                     <svg fill="none" height="20" viewbox="0 0 20 20" width="20"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_213_16759)">
@@ -596,7 +596,7 @@
                                 </a>
                             </p>
                             <p>
-                                <a href="">
+                                <a href="https://www.facebook.com/people/%D0%94%D0%B5%D1%88%D0%B5%D0%B2%D1%88%D0%B5/61558651598744/" target="_blank">
                                     <svg fill="none" height="20" viewbox="0 0 20 20" width="20"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_213_16771)">
@@ -613,7 +613,7 @@
                                 </a>
                             </p>
                             <p>
-                                <a href="">
+                                <a href="https://www.instagram.com/deshevshe_ua/" target="_blank">
                                     <svg fill="none" height="20" viewbox="0 0 20 20" width="20"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_213_16773)">
