@@ -23,14 +23,14 @@ class CommentController extends Controller
             'email' => ['email', 'required'],
 
         ]);
-        $nameAndLastName = explode(' ', $request->post('name'));
+        $nameAndLastName = explode(' ', $request->name);
         $name = $nameAndLastName[0];
         $lastName = $nameAndLastName[1];
         Comment::create([
             'name' => $name,
             'last_name' => $lastName,
-            'comment' => $request->post('comment'),
-            'email' => $request->post('email'),
+            'comment' => $request->comment,
+            'email' => $request->email,
         ]);
 
         return redirect()->route('site.comment.index');
