@@ -27,7 +27,7 @@
                     </a>
                 </p>
                 <p class="cabinet-cta">
-                    <a href="#">
+                    <a href="{{ Auth::user() ? route('cabinet') : '#' }}">
                         <svg fill="none" height="10" viewbox="0 0 11 10" width="11" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="5.5" cy="2.5" r="2" stroke="#214498"></circle>
                             <path d="M10 9C10 6.79086 7.98528 5 5.5 5C3.01472 5 1 6.79086 1 9" stroke="#214498"
@@ -37,6 +37,7 @@
                             <span class="name-autorization">{{ Auth::user()->name .' '. Auth::user()->last_name}}</span>
                         @endif
                     </a>
+                    <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
                 </p>
                 <p class="cart-cta">
                     <a href="basket.html">
