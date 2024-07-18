@@ -322,14 +322,14 @@
                         <form action="{{ route('auth.authenticate') }}" method="post">
                             @csrf
 
-                            <input type="hidden" name="login_method_radio" value="email">
+                            <input type="hidden" name="login_method" value="email">
                             <p>
                                 <label for="emailEntry">E-mail</label>
-                                <input autocomplete="username" id="emailEntry" name="emailEntry" placeholder="Ваш e-mail" required="" type="email">
+                                <input autocomplete="username" id="emailEntry" name="email" placeholder="Ваш e-mail" required="" type="email">
                             </p>
                             <p>
                                 <label for="passwordEntry">Пароль</label>
-                                <input autocomplete="current-password" class="password" id="passwordEntry" maxlength="25" minlength="6" name="passwordEntry" placeholder="Ваш пароль" required="" type="password">
+                                <input autocomplete="current-password" class="password" id="passwordEntry" maxlength="25" minlength="6" name="password" placeholder="Ваш пароль" required="" type="password">
                                 <a class="eye closeEye" data-target="passwordEntry" href="#">
                                     <svg class="openEye" fill="none" height="12" viewbox="0 0 17 12" width="17"
                                          xmlns="http://www.w3.org/2000/svg">

@@ -47,6 +47,17 @@
                         <a data-href="myLikeProduct" href="javascript:void(0)"><span>Вподобані товари</span><svg fill="none" height="12" viewbox="0 0 7 12" width="7" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 1L6 6L1 11" stroke="#214498" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
                     </li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('logout')"
+                                             onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Вийти') }}
+                            </x-dropdown-link>
+                        </form>
+                    </li>
                 </ul>
             </div>
             <section class="about-us-block active-help help-content cabinet-section" id="profile">
