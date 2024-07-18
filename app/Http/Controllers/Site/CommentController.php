@@ -20,7 +20,7 @@ class CommentController extends Controller
         $request->validate([
             'name' => ['string', 'required'],
             'comment' => ['string', 'required'],
-            'mail' => ['email', 'required'],
+            'email' => ['email', 'required'],
         ]);
         $nameAndLastName = explode(' ', $request->post('name'));
         $name = $nameAndLastName[0];
@@ -29,7 +29,7 @@ class CommentController extends Controller
             'name' => $name,
             'last_name' => $lastName,
             'comment' => $request->post('comment'),
-            'email' => $request->post('mail'),
+            'email' => $request->post('email'),
         ]);
 
         return redirect()->route('site.comment.index');
