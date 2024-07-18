@@ -438,7 +438,7 @@
                                             </a>
                                             <div class="default-menu second-subMenu">
                                                 @foreach($category->children()->get() as $subCategory)
-                                                @if($subCategory->level == 2)
+                                                    @if($subCategory->level == 2)
                                                         <div>
                                                             <p class="head-subMenu">{{ $subCategory->title }}</p>
                                                             @foreach($subCategory->children()->get() as $subCategory)

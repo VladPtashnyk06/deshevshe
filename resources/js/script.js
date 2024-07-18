@@ -285,10 +285,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         }
         let defaultMenu = document.querySelector(".default-menu")
-        if (window.innerWidth < 1024) {
-            defaultMenu.classList.remove("default-menu")
-        } else {
-            defaultMenu.classList.add("default-menu")
+        if (defaultMenu) {
+            if (window.innerWidth < 1024) {
+                defaultMenu.classList.remove("default-menu")
+            } else {
+                defaultMenu.classList.add("default-menu")
+            }
         }
 
         if (window.innerWidth < 1024) {
