@@ -76,7 +76,7 @@
                                 </a>
                             </p>
                             <p>
-                                <a href="whatsapp://send?phone=+12345678910" target="_blank">
+                                <a href="whatsapp://send?phone=+380681188181" target="_blank">
                                     <svg fill="none" height="20" viewbox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_213_16752)">
                                             <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="url(#paint0_linear_213_16752)"></path>
