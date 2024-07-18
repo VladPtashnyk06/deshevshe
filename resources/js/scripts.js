@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", (function() {
                 Y = (document.querySelector("#body"), document.querySelectorAll(".navigation-menu-catalog > li")),
                 H = document.querySelectorAll(".sub-menu > li"),
                 O = (e, t) => e.classList.add(t),
-                T = (e, t) => e.classList.remove(t);
+                R = (e, t) => e.classList.remove(t);
             Y.forEach((e => {
                 e.addEventListener("mousemove", (function() {
                     const e = this.querySelector("a"),
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", (function() {
                 })), e.addEventListener("mouseleave", (function() {
                     const e = this.querySelector("a"),
                         t = this.querySelector(".sub-menu-main") || this.querySelector(".help-sub-menu");
-                    e && T(e, "yellow-header-hover"), t && T(t, t.classList.contains("sub-menu-main") ? "hover-sub-menu" : "hover-help-menu")
+                    e && R(e, "yellow-header-hover"), t && R(t, t.classList.contains("sub-menu-main") ? "hover-sub-menu" : "hover-help-menu")
                 }))
             })), H.forEach((e => {
                 e.addEventListener("mousemove", (function() {
@@ -141,9 +141,9 @@ document.addEventListener("DOMContentLoaded", (function() {
                     const e = this.querySelector(".second-subMenu");
                     e && O(e, "subSecond-hover")
                 })), e.addEventListener("mouseleave", (function() {
-                    T(this, "hover-sub-sub-a");
+                    R(this, "hover-sub-sub-a");
                     const e = this.querySelector(".second-subMenu");
-                    e && T(e, "subSecond-hover")
+                    e && R(e, "subSecond-hover")
                 }))
             })), V.forEach((e => {
                 const t = e.nextElementSibling,
@@ -169,10 +169,10 @@ document.addEventListener("DOMContentLoaded", (function() {
         }
         let X = document.querySelector(".default-menu");
         if (window.innerWidth < 1024 ? X.classList.remove("default-menu") : X.classList.add("default-menu"), window.innerWidth < 1024) {
-            const F = document.querySelectorAll(".second-subMenu");
+            const T = document.querySelectorAll(".second-subMenu");
             document.querySelectorAll(".mobile-item").forEach((e => {
                 e.classList.contains("default-item") && e.classList.remove("default-item")
-            })), F.forEach((e => {
+            })), T.forEach((e => {
                 e.classList.contains("default-menu") && e.classList.remove("default-menu")
             }));
             document.querySelectorAll(".mobile-item > a").forEach((e => {
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", (function() {
                 t && (window.matchMedia("(min-width: 1024px)").matches ? t.style.display = "flex" : t.style.display = "block")
             }))
         })), document.querySelector("#burger")) {
-            const R = document.querySelector(".burger"),
+            const F = document.querySelector(".burger"),
                 j = document.querySelector(".navigation-menu-catalog"),
                 G = document.querySelectorAll(".scrollBurger"),
                 J = document.querySelector(".cancel-menu"),
@@ -199,19 +199,19 @@ document.addEventListener("DOMContentLoaded", (function() {
             let N = !1;
 
             function c() {
-                R.classList.remove("active"), R.classList.add("noactive"), j.style.left = "-100%", j.style.top = "-62px", j.style.overflowY = "", R.style.left = "0", t.classList.remove("black-fon-mobile"), t.style.left = "0"
+                F.classList.remove("active"), F.classList.add("noactive"), j.style.left = "-100%", j.style.top = "-62px", j.style.overflowY = "", F.style.left = "0", t.classList.remove("black-fon-mobile"), t.style.left = "0"
             }
             K.forEach((e => {
                 e.addEventListener("click", (function() {
                     let t = e.nextElementSibling;
                     console.log(e.nextElementSibling), t.classList.toggle("d-block")
                 }))
-            })), R.addEventListener("click", (function() {
-                R.classList.add("active"), j.style.overflowY = "scroll", j.style.left = "0", j.style.top = "-62px", t.classList.add("black-fon-mobile"), t.style.left = "80%", N = !0
+            })), F.addEventListener("click", (function() {
+                F.classList.add("active"), j.style.overflowY = "scroll", j.style.left = "0", j.style.top = "-62px", t.classList.add("black-fon-mobile"), t.style.left = "80%", N = !0
             })), window.addEventListener("scroll", (function() {
                 G.forEach((e => {
                     const t = e.getBoundingClientRect();
-                    t.top <= 0 && t.bottom >= 0 && (R.classList.remove("active"), c(), N = !1)
+                    t.top <= 0 && t.bottom >= 0 && (F.classList.remove("active"), c(), N = !1)
                 }))
             })), J.addEventListener("click", (function() {
                 c()
@@ -478,7 +478,7 @@ document.addEventListener("DOMContentLoaded", (function() {
             }))
         }
     }
-    if (document.querySelector("#ukrPoshta")) {
+    if (document.querySelector("#ukrPostRadio")) {
         const Me = document.querySelector("#ukrPoshta"),
             De = document.querySelector("#novaPoshta"),
             Be = document.querySelector("#meest"),
@@ -492,10 +492,10 @@ document.addEventListener("DOMContentLoaded", (function() {
             Ye = document.querySelectorAll('input[name="adress"]'),
             He = document.querySelectorAll('input[name="cityVilage"]'),
             Oe = document.querySelector("#ukrPostRadio"),
-            Te = document.querySelector("#novaPostMeest");
+            Re = document.querySelector("#novaPostMeest");
 
         function A() {
-            Me.checked || De.checked || Be.checked ? (Ie.style.display = "flex", Be.checked ? (Xe.style.display = "none", document.querySelector("#poshtomat").checked && (document.querySelector("#poshtomat").checked = !1)) : Xe.style.display = "flex") : (Ie.style.display = "none", _e.style.display = "none", Pe.style.display = "none", $e.style.display = "none", Ue.style.display = "none", Ve.style.display = "none"), Me.checked ? (Oe.style.display = "flex", Te.style.display = "none") : Oe.style.display = "none"
+            Me.checked || De.checked || Be.checked ? (Ie.style.display = "flex", Be.checked ? (Xe.style.display = "none", document.querySelector("#poshtomat").checked && (document.querySelector("#poshtomat").checked = !1)) : Xe.style.display = "flex") : (Ie.style.display = "none", _e.style.display = "none", Pe.style.display = "none", $e.style.display = "none", Ue.style.display = "none", Ve.style.display = "none"), Me.checked ? (Oe.style.display = "flex", Re.style.display = "none") : Oe.style.display = "none"
         }
 
         function x() {
@@ -505,7 +505,7 @@ document.addEventListener("DOMContentLoaded", (function() {
         function C() {
             Pe.style.display = "none", $e.style.display = "none", Ue.style.display = "none", Ve.style.display = "none", document.querySelector("#viddilenia").checked || document.querySelector("#viddileniaExpres").checked || document.querySelector("#viddileniaExpres").checked || document.querySelector("#viddileniaUkr").checked || document.querySelector("#curierExpres").checked || document.querySelector("#curierUkr").checked ? document.querySelector("#city").checked ? $e.style.display = "block" : document.querySelector("#vilage").checked && (Ue.style.display = "block") : document.querySelector("#adress").checked ? document.querySelector("#city").checked ? Pe.style.display = "block" : document.querySelector("#vilage").checked && (Ue.style.display = "block") : document.querySelector("#poshtomat").checked && (Ve.style.display = "block")
         }
-        Ie.style.display = "none", _e.style.display = "none", Pe.style.display = "none", $e.style.display = "none", Ue.style.display = "none", Ve.style.display = "none", Xe.style.display = "none", Te.style.display = "none", Oe.style.display = "none", Me.addEventListener("change", (() => {
+        Ie.style.display = "none", _e.style.display = "none", Pe.style.display = "none", $e.style.display = "none", Ue.style.display = "none", Ve.style.display = "none", Xe.style.display = "none", Re.style.display = "none", Oe.style.display = "none", Me.addEventListener("change", (() => {
             A(), x(), C()
         })), De.addEventListener("change", (() => {
             A(), x(), C()
@@ -520,13 +520,13 @@ document.addEventListener("DOMContentLoaded", (function() {
         })), A(), x(), C()
     }
     if (document.querySelector(".cabinet-top-prodaz")) {
-        const Fe = document.querySelector(".top-prodaz-main.cabinet-top-prodaz"),
-            Re = document.querySelector(".cabinet-cart-product"),
-            je = Fe.parentElement;
-        Fe.nextElementSibling;
+        const Te = document.querySelector(".top-prodaz-main.cabinet-top-prodaz"),
+            Fe = document.querySelector(".cabinet-cart-product"),
+            je = Te.parentElement;
+        Te.nextElementSibling;
 
         function z() {
-            window.innerWidth <= 1024 ? Fe && Fe.parentElement !== Re && Re.appendChild(Fe) : je.appendChild(Fe)
+            window.innerWidth <= 1024 ? Te && Te.parentElement !== Fe && Fe.appendChild(Te) : je.appendChild(Te)
         }
         z(), window.addEventListener("resize", z)
     }

@@ -2963,6 +2963,12 @@ p.descript-text {
     justify-content: center;
     margin-bottom: 16rem
 }
+.page-contact svg {
+    width: 15px
+}
+.page-contact a {
+    font-size: 16rem
+}
 .contact-social-page div {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -2970,6 +2976,10 @@ p.descript-text {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center
+}
+.contact-social-page .social-icon svg {
+    width: 30rem;
+    height: 30rem
 }
 .form-contactPage {
     padding: 54rem 0 0 0
@@ -3229,6 +3239,11 @@ p.flag-cabinet, p.sale-flag {
 .cabinet-like-description .size p {
     padding: 0
 }
+.cta-cabinet-cart {
+    padding-top: 20px;
+    max-width: 365px;
+    margin: 0 auto
+}
 .footer {
     padding: 37rem 0 170rem
 }
@@ -3355,8 +3370,8 @@ p.flag-cabinet, p.sale-flag {
         height: 74rem
     }
     .logo {
-        padding-left: 70px;
-        width: 350rem;
+        padding-left: 60px;
+        width: 300rem;
         height: 50rem
     }
     .main-bg {
@@ -3497,6 +3512,9 @@ p.flag-cabinet, p.sale-flag {
         display: block;
         min-width: 200rem;
         max-width: 250rem
+    }
+    .cart-cta svg {
+        width: 25px
     }
     div.decstop-cart {
         display: -webkit-box;
@@ -3944,6 +3962,9 @@ p.flag-cabinet, p.sale-flag {
         -ms-flex-pack: start;
         justify-content: flex-start
     }
+    .page-contact svg {
+        width: 20px
+    }
     .delete-cta {
         padding: 20rem
     }
@@ -3975,6 +3996,12 @@ p.flag-cabinet, p.sale-flag {
         -webkit-column-gap: 80px;
         -moz-column-gap: 80px;
         column-gap: 80px
+    }
+}
+@media screen and (min-width:1200px) {
+    .logo {
+        padding-left: 70px;
+        width: 350rem
     }
 }
 @media screen and (min-width:1220px) {
