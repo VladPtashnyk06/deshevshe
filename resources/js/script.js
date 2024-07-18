@@ -766,6 +766,7 @@ document.addEventListener("DOMContentLoaded", function () {
         blackFonReg = document.querySelector(".black-fon-popup"),
         popupCabinet = document.querySelector(".popup-cabinet"),
         cancelCabinetPopup = document.querySelector(".cancel-popup-cabinet"),
+        eyeReg = document.querySelectorAll(".eye"),
         navigationMenuPopup = document.querySelector(".navigation-menu-catalog");
 
     let isAuthenticated = document.getElementById('auth-status').dataset.authenticated === 'true';
@@ -773,12 +774,10 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log('Authenticated:', isAuthenticated);
 
     cabinetCta.forEach(itemCta => {
-        console.log('Item:', itemCta);
         if (!isAuthenticated) {
             console.log('Not authenticated, adding event listener');
             itemCta.addEventListener("click", function (e) {
                 e.preventDefault();
-                console.log("Popup triggered");
                 popupCabinet.style.display = "block";
                 blackFonReg.style.display = "block";
                 navigationMenuPopup.style.zIndex = "20";
