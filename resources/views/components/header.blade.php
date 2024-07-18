@@ -254,7 +254,6 @@
                     </a>
                 </p>
                 <p class="cabinet-cta">
-                    <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
                     <a class="d-flex item-center" href="{{ Auth::user() ? route('cabinet') : '#' }}">
                         <svg fill="none" height="16" viewbox="0 0 17 16" width="17" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8.50016" cy="4.16667" r="3.41667" stroke="none" stroke-width="1.5"></circle>
@@ -267,6 +266,7 @@
                         @endif
                     </a>
                 </p>
+                <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
                 <p class="cart-cta">
                     <a href="basket.html">
                         <svg fill="none" height="17" viewbox="0 0 15 15" width="17" xmlns="http://www.w3.org/2000/svg">

@@ -766,30 +766,34 @@ document.addEventListener("DOMContentLoaded", function () {
         blackFonReg = document.querySelector(".black-fon-popup"),
         popupCabinet = document.querySelector(".popup-cabinet"),
         cancelCabinetPopup = document.querySelector(".cancel-popup-cabinet"),
-        eyeReg = document.querySelectorAll(".eye"),
         navigationMenuPopup = document.querySelector(".navigation-menu-catalog");
 
     let isAuthenticated = document.getElementById('auth-status').dataset.authenticated === 'true';
 
+    console.log('Authenticated:', isAuthenticated);
+
     cabinetCta.forEach(itemCta => {
-        console.log(isAuthenticated)
+        console.log('Item:', itemCta);
         if (!isAuthenticated) {
-            console.log('Зайшло')
+            console.log('Not authenticated, adding event listener');
             itemCta.addEventListener("click", function (e) {
-                e.preventDefault()
-                console.log("+")
-                popupCabinet.style.display = "block"
-                blackFonReg.style.display = "block"
-                navigationMenuPopup.style.zIndex = "20"
-            })
-            cancelCabinetPopup.addEventListener("click", function (e) {
-                e.preventDefault()
-                popupCabinet.style.display = "none"
-                blackFonReg.style.display = "none"
-                navigationMenuPopup.style.zIndex = "30"
-            })
+                e.preventDefault();
+                console.log("Popup triggered");
+                popupCabinet.style.display = "block";
+                blackFonReg.style.display = "block";
+                navigationMenuPopup.style.zIndex = "20";
+            });
         }
-    })
+    });
+
+    if (cancelCabinetPopup) {
+        cancelCabinetPopup.addEventListener("click", function (e) {
+            e.preventDefault();
+            popupCabinet.style.display = "none";
+            blackFonReg.style.display = "none";
+            navigationMenuPopup.style.zIndex = "30";
+        });
+    }
 
     // visible password
     eyeReg.forEach(eye => {
