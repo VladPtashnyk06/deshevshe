@@ -772,7 +772,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let isAuthenticated = document.getElementById('auth-status').dataset.authenticated === 'true';
 
     cabinetCta.forEach(itemCta => {
+        console.log(isAuthenticated)
         if (!isAuthenticated) {
+            console.log('Зайшло')
             itemCta.addEventListener("click", function (e) {
                 e.preventDefault()
                 console.log("+")
