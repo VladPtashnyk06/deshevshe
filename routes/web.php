@@ -56,6 +56,7 @@ Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(fu
     Route::get('/help', 'help')->name('help');
     Route::get('/spivpracia', 'spivpracia')->name('spivpracia');
     Route::get('/privacy', 'privacy')->name('privacy');
+    Route::get('/cabinet', 'cabinet')->name('cabinet');
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');

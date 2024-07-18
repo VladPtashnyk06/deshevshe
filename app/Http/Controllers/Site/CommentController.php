@@ -21,6 +21,7 @@ class CommentController extends Controller
             'name' => ['string', 'required'],
             'comment' => ['string', 'required'],
             'email' => ['email', 'required'],
+
         ]);
         $nameAndLastName = explode(' ', $request->post('name'));
         $name = $nameAndLastName[0];

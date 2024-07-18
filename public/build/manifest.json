@@ -43,10 +43,10 @@
     "src": "resources/js/app.js",
     "isEntry": true
   },
-  "resources/js/scripts.js": {
-    "file": "assets/scripts-BCq9EA-3.js",
-    "name": "scripts",
-    "src": "resources/js/scripts.js",
+  "resources/js/script.js": {
+    "file": "assets/script-DMN83BqZ.js",
+    "name": "script",
+    "src": "resources/js/script.js",
     "isEntry": true
   }
 }

@@ -59,6 +59,11 @@ class GeneralController extends Controller
         return view('site.privacy');
     }
 
+    public function cabinet()
+    {
+        return view('site.cabinet');
+    }
+
 
     public function second()
     {

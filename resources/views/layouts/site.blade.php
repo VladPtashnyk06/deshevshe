@@ -16,7 +16,7 @@
         @vite(
             [
                 'resources/css/style.css',
-                'resources/js/scripts.js'
+                'resources/js/script.js'
                 ]
         )
     </head>

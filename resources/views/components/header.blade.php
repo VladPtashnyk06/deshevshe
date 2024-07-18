@@ -33,6 +33,9 @@
                             <path d="M10 9C10 6.79086 7.98528 5 5.5 5C3.01472 5 1 6.79086 1 9" stroke="#214498"
                                   stroke-linecap="round"></path>
                         </svg>
+                        @if(Auth::user())
+                            <span class="name-autorization">{{ Auth::user()->name .' '. Auth::user()->last_name}}</span>
+                        @endif
                     </a>
                 </p>
                 <p class="cart-cta">
@@ -251,7 +254,8 @@
                     </a>
                 </p>
                 <p class="cabinet-cta">
-                    <a class="d-flex item-center" href="#">
+                    <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
+                    <a class="d-flex item-center" href="{{ Auth::user() ? route('cabinet') : '#' }}">
                         <svg fill="none" height="16" viewbox="0 0 17 16" width="17" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8.50016" cy="4.16667" r="3.41667" stroke="none" stroke-width="1.5"></circle>
                             <path
@@ -314,7 +318,10 @@
                     </div>
                     <hr class="reg-hr">
                     <div class="entry-form active-form">
-                        <form action="#">
+                        <form action="{{ route('auth.authenticate') }}" method="post">
+                            @csrf
+
+                            <input type="hidden" name="login_method_radio" value="email">
                             <p>
                                 <label for="emailEntry">E-mail</label>
                                 <input autocomplete="username" id="emailEntry" name="emailEntry" placeholder="Ваш e-mail" required="" type="email">
@@ -336,23 +343,25 @@
                                     </svg>
                                 </a>
                             </p>
-                            <a href="#">Забули пароль?</a>
+                            <a href="{{ route('password.request') }}">Забули пароль?</a>
                             <button class="yellow-cta btn-card contact-cta" type="submit">увійти</button>
                         </form>
                     </div>
                     <div class="registration-form">
-                        <form action="#">
+                        <form action="{{ route('register.store') }}" method="post">
+                            @csrf
+
                             <p>
-                                <label for="nameReg">Імʼя та прізвище</label>
-                                <input maxlength="50" name="nameReg" placeholder="Ваше імʼя та прізвище" required="" type="text">
+                                <label for="name">Імʼя та прізвище</label>
+                                <input maxlength="50" name="name" placeholder="Ваше імʼя та прізвище" required="" type="text">
                             </p>
                             <p>
-                                <label for="emailReg">E-mail</label>
-                                <input autocomplete="username" maxlength="50" name="emailReg" placeholder="Ваш e-mail" required="" type="email">
+                                <label for="email">E-mail</label>
+                                <input autocomplete="username" maxlength="50" name="email" placeholder="Ваш e-mail" required="" type="email">
                             </p>
                             <p>
-                                <label for="passwordReg">Пароль<span>(Пароль повинен бути не менше 6 символів)</span></label>
-                                <input autocomplete="new-password" class="password" id="passwordReg" maxlength="25" minlength="6" name="passwordReg" placeholder="Ваш пароль" required="" type="password">
+                                <label for="password">Пароль<span>(Пароль повинен бути не менше 6 символів)</span></label>
+                                <input autocomplete="new-password" class="password" id="passwordReg" maxlength="25" minlength="6" name="password" placeholder="Ваш пароль" required="" type="password">
                                 <a class="eye closeEye" data-target="passwordReg" href="#">
                                     <svg class="openEye" fill="none" height="12" viewbox="0 0 17 12" width="17"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -368,8 +377,8 @@
                                 </a>
                             </p>
                             <p>
-                                <label for="passwordReg2">Повторіть пароль</label>
-                                <input autocomplete="new-password" class="password" id="passwordReg2" maxlength="25" minlength="6" name="passwordReg2" placeholder="Ваш пароль" required="" type="password">
+                                <label for="password">Повторіть пароль</label>
+                                <input autocomplete="new-password" class="password" id="passwordReg2" maxlength="25" minlength="6" name="password" placeholder="Ваш пароль" required="" type="password">
                                 <a class="eye closeEye" data-target="passwordReg2" href="#">
                                     <svg class="openEye" fill="none" height="12" viewbox="0 0 17 12" width="17"
                                          xmlns="http://www.w3.org/2000/svg">

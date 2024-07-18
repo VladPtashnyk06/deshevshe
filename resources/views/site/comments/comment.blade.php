@@ -97,7 +97,7 @@
                             <label for="mail">E-mail*</label>
                         </p>
                         <p>
-                            <input id="mail" name="mail" placeholder="E-mail" required="" type="email">
+                            <input id="mail" name="email" placeholder="E-mail" required="" type="email">
                         </p>
                         <p>
                             <label for="comment">Відгук</label>
