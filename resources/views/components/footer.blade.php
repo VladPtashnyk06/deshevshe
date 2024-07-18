@@ -422,7 +422,7 @@
             </svg>
             <span>головна</span>
         </a>
-        <a class="viber-footer footer-fixed-icon" href="viber://chat?number=+380681188181" target="_blank">
+        <a class="viber-footer footer-fixed-icon" href="viber://chat?number=%2B380681188181">
             <img alt="" src="{{ asset('img/viber.svg') }}">
             <span>написати нам</span>
         </a>
