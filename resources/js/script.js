@@ -285,10 +285,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         }
         let defaultMenu = document.querySelector(".default-menu")
-        if (window.innerWidth < 1024) {
-            defaultMenu.classList.remove("default-menu")
-        } else {
-            defaultMenu.classList.add("default-menu")
+        if (defaultMenu) {
+            if (window.innerWidth < 1024) {
+                defaultMenu.classList.remove("default-menu")
+            } else {
+                defaultMenu.classList.add("default-menu")
+            }
         }
 
         if (window.innerWidth < 1024) {
@@ -761,7 +763,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    //popup registration-enter 
+    //popup registration-enter
     const cabinetCta = document.querySelectorAll(".cabinet-cta"),
         blackFonReg = document.querySelector(".black-fon-popup"),
         popupCabinet = document.querySelector(".popup-cabinet"),
