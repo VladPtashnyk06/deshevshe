@@ -16,7 +16,7 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Дешевше - інтернет магазин необхідних товарів для всієї родини">
     <meta property="og:description" content="Дешевше - ваш надійний інтернет-магазин, що пропонує широкий асортимент товарів для всієї родини за доступними цінами. Відкрийте для себе якісні товари з швидкою доставкою.">
-    <meta property="og:image" content="{{ asset('images/your-image.jpg') }}">
+    <meta property="og:image" content="{{ asset('../public/img/logo.svg') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
 
@@ -24,7 +24,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Дешевше - інтернет магазин необхідних товарів для всієї родини">
     <meta name="twitter:description" content="Дешевше - ваш надійний інтернет-магазин, що пропонує широкий асортимент товарів для всієї родини за доступними цінами. Відкрийте для себе якісні товари з швидкою доставкою.">
-    <meta name="twitter:image" content="{{ asset('images/your-image.jpg') }}">
+    <meta name="twitter:image" content="{{ asset('../public/img/logo.svg') }}">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">

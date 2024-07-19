@@ -28,8 +28,8 @@
                                                 <div class="size d-flex item-center">
                                                     @foreach($recProduct->product->productVariants()->get() as $productVariant)
                                                         <p>
-                                                            <input id="xs" name="size" required="required" type="radio">
-                                                            <label for="xs">{{ $productVariant->size->title }}</label>
+                                                            <input id="{{ $productVariant->size->title }}" name="size" required="required" type="radio">
+                                                            <label for="{{ $productVariant->size->title }}">{{ $productVariant->size->title }}</label>
                                                         </p>
                                                     @endforeach
                                                 </div>
