@@ -62,7 +62,13 @@ class GeneralController extends Controller
 
     public function cabinet()
     {
-        return view('site.cabinet');
+        $likedProducts = session()->get('likedProducts', []);
+        $products = [];
+        foreach ($likedProducts as $productId) {
+            $product = Product::find($productId);
+            $products[] = $product;
+        }
+        return view('site.cabinet', compact('products'));
     }
 
 
