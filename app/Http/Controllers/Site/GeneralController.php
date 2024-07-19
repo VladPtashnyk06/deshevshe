@@ -40,7 +40,8 @@ class GeneralController extends Controller
     public function index()
     {
         $recProducts = $this->recProducts();
-        return view('site.index', compact('recProducts'));
+        $categories = Category::where('parent_id', '=', null)->where('level', '=', 1)->take(7)->get();
+        return view('site.index', compact('recProducts', 'categories'));
     }
 
     public function help()

@@ -51,31 +51,18 @@
         <section class="popular">
             <h2>популярні категорії</h2>
             <div class="wrapper flex-between popular-elements">
-                <a href="#">
-                    <picture><img alt="" src="{{ asset('img/img1.png') }}"></picture>
-                    <span>Сумки</span></a> <a href="#">
-                    <picture><img alt="" src="{{ asset('img/img2.png') }}"></picture>
-                    <span>Футболки</span></a> <a href="#">
-                    <picture><img alt="" src="{{ asset('img/img3.png') }}"></picture>
-                    <span>Велосипедки</span></a> <a href="#">
-                    <picture><img alt="" src="{{ asset('img/img4.png') }}"></picture>
-                    <span>Взуття</span></a>
-                <a href="#">
-                    <picture><img alt="" src="{{ asset('img/img5.png') }}"></picture>
-                    <span>Штани</span>
-                </a>
-                <a href="#">
-                    <picture>
-                        <img alt="" src="{{ asset('img/img6.png') }}">
-                    </picture>
-                    <span>Піжами</span>
-                </a>
-                <a href="#">
-                    <picture>
-                        <img alt="" src="{{ asset('img/img7.png') }}">
-                    </picture>
-                    <span>Аксесуари</span>
-                </a>
+                @foreach($categories as $category)
+                    <a href="#">
+                        <picture>
+                            @if($category->getMedia('category'.$category->id)->count() > 0)
+                                @foreach($category->getMedia('category'.$category->id) as $media)
+                                    <img src="{{ secure_url($media->getFullUrl()) }}" alt="{{ $media->getCustomProperty('alt') }}">
+                                @endforeach
+                            @endif
+                        </picture>
+                        <span>{{ $category->title }}</span>
+                    </a>
+                @endforeach
             </div>
         </section>
         <div class="wrapper top-prodaz-main">
