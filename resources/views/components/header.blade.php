@@ -40,7 +40,7 @@
                     <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
                 </p>
                 <p class="cart-cta">
-                    <a href="basket.html">
+                    <a href="{{ route('cart') }}">
                         <svg fill="none" height="10" viewbox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_474_28)">
                                 <path clip-rule="evenodd"
@@ -269,7 +269,7 @@
                 </p>
                 <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
                 <p class="cart-cta">
-                    <a href="basket.html">
+                    <a href="{{ route('cart') }}">
                         <svg fill="none" height="17" viewbox="0 0 15 15" width="17" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_2001_1242)">
                                 <path clip-rule="evenodd"

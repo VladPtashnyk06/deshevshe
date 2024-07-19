@@ -68,7 +68,79 @@ class GeneralController extends Controller
             $product = Product::find($productId);
             $products[] = $product;
         }
-        return view('site.cabinet', compact('products'));
+
+        $cart = new CartController();
+        $cart->addGiftsToCartIfNeeded();
+        $cartItems = \Cart::getContent()->sortBy('id');
+
+        // Counting Cart's additional parameters
+        $cartItems->totalPrice = $cartItems->totalDiscountPrice = 0;
+        $cartItems->map(function ($item) use($cartItems) {
+            $cartItems->totalPrice += $item->quantity * $item->price;
+            $cartItems->totalDiscountPrice += $item->quantity * $item->price;
+        });
+        $cartItems->totalDiscount = $cartItems->totalPrice - $cartItems->totalDiscountPrice;
+
+        // Check if total price exceeds 2500 and apply discount
+        $discount = 0;
+        if(session()->get('currency') == 'USD') {
+            $currencyRateUsd = session()->get('currency_rate_usd');
+
+            if ($cartItems->totalPrice > ( 2500 / $currencyRateUsd ) && $cartItems->totalPrice <= ( 5000 / $currencyRateUsd )) {
+                // Assuming a 10% discount for this example
+                $discount = $cartItems->totalPrice * 0.10;
+                $cartItems->totalDiscountPrice -= $discount;
+                $cartItems->totalDiscount += $discount;
+            }
+
+            // Check if total price exceeds 1000 and apply free shipping
+            $freeShipping = false;
+            if ($cartItems->totalPrice > ( 1000 / $currencyRateUsd ) && $cartItems->totalPrice < ( 2500 / $currencyRateUsd )) {
+                $freeShipping = true;
+            }
+
+            // Check if total price is below minimum threshold
+            $minimumAmount = ( 500 / $currencyRateUsd );
+            $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+        } elseif(session()->get('currency') == 'EUR') {
+            $currencyRateEUR = session()->get('currency_rate_eur');
+
+            if ($cartItems->totalPrice > ( 2500 / $currencyRateEUR ) && $cartItems->totalPrice <= ( 5000 / $currencyRateEUR )) {
+                // Assuming a 10% discount for this example
+                $discount = $cartItems->totalPrice * 0.10;
+                $cartItems->totalDiscountPrice -= $discount;
+                $cartItems->totalDiscount += $discount;
+            }
+
+            // Check if total price exceeds 1000 and apply free shipping
+            $freeShipping = false;
+            if ($cartItems->totalPrice > ( 1000 / $currencyRateEUR ) && $cartItems->totalPrice < ( 2500 / $currencyRateEUR )) {
+                $freeShipping = true;
+            }
+
+            // Check if total price is below minimum threshold
+            $minimumAmount = ( 500 / $currencyRateEUR );
+            $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+        } else {
+            if ($cartItems->totalPrice > 2500 && $cartItems->totalPrice <= 5000) {
+                // Assuming a 10% discount for this example
+                $discount = $cartItems->totalPrice * 0.10;
+                $cartItems->totalDiscountPrice -= $discount;
+                $cartItems->totalDiscount += $discount;
+            }
+
+            // Check if total price exceeds 1000 and apply free shipping
+            $freeShipping = false;
+            if ($cartItems->totalPrice > 1000 && $cartItems->totalPrice < 2500) {
+                $freeShipping = true;
+            }
+
+            // Check if total price is below minimum threshold
+            $minimumAmount = 500;
+            $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
+        }
+
+        return view('site.cabinet', compact('products', 'cartItems', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount'));
     }
 
     public function likedProducts()

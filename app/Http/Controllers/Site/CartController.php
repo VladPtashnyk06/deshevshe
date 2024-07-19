@@ -90,7 +90,7 @@ class CartController extends Controller
             $belowMinimumAmount = $cartItems->totalPrice < $minimumAmount;
         }
 
-        return view('site.cart.cart', compact('cartItems', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount'));
+        return view('site.cart.basket', compact('cartItems', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount'));
     }
 
     public function addGiftsToCartIfNeeded()
