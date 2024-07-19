@@ -71,6 +71,16 @@ class GeneralController extends Controller
         return view('site.cabinet', compact('products'));
     }
 
+    public function likedProducts()
+    {
+        $likedProducts = session()->get('likedProducts', []);
+        $products = [];
+        foreach ($likedProducts as $productId) {
+            $product = Product::find($productId);
+            $products[] = $product;
+        }
+        return view('site.like-product', compact('products'));
+    }
 
     public function second()
     {
