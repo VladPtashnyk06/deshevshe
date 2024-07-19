@@ -28,12 +28,12 @@
     "src": "public/img/укрпошта.svg"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CC1J-J82.css",
+    "file": "assets/app-CriwFAwJ.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/style.css": {
-    "file": "assets/style-DOvNVfJm.css",
+    "file": "assets/style-DYCRwAJz.css",
     "src": "resources/css/style.css",
     "isEntry": true
   },
@@ -44,7 +44,7 @@
     "isEntry": true
   },
   "resources/js/script.js": {
-    "file": "assets/script-D471wEbb.js",
+    "file": "assets/script-DW78X0pS.js",
     "name": "script",
     "src": "resources/js/script.js",
     "isEntry": true

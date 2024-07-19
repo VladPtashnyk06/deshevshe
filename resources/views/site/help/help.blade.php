@@ -14,7 +14,7 @@
         <p class="page-look d-flex">
             <a href="{{ route('site.index') }}">головна</a>
             <span>/</span>
-            <a href="{{ route('help', '#aboutUs') }}">допомога</a>
+            <a href="{{ route('help', '#') }}">допомога</a>
             <span>/</span>
             <span class="selected-page">питання та відповіді</span>
         </p>
@@ -56,7 +56,7 @@
                     </li>
                 </ul>
             </div>
-            <section class="about-us-block active-help help-content" id="aboutUs">
+            <section class="about-us-block help-content" id="aboutUs">
                 @include('components.about-us')
             </section>
             <section class="help-content question" id="question">

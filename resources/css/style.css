@@ -317,6 +317,9 @@ li.contact-mobile-menu .head-mobile-menu {
 .hover-help-menu a:hover {
     font-weight: 600
 }
+.help-svg {
+    display: none
+}
 .hover-sub-menu {
     position: absolute;
     top: 100%;
@@ -1919,6 +1922,9 @@ button.oneClick:hover svg path {
 }
 .filter-select .visible {
     padding: 20rem
+}
+.clothes-select .readmore, .filter-select .readmore {
+    padding: 17rem 20rem
 }
 .description-more {
     color: #1e1e1e;
@@ -3563,6 +3569,9 @@ p.flag-cabinet, p.sale-flag {
     }
     li.contact-mobile-menu {
         display: none
+    }
+    .help-svg {
+        display: block
     }
     .down-menu svg path {
         stroke: #fff

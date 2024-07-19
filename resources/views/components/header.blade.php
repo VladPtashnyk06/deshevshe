@@ -33,9 +33,6 @@
                             <path d="M10 9C10 6.79086 7.98528 5 5.5 5C3.01472 5 1 6.79086 1 9" stroke="#214498"
                                   stroke-linecap="round"></path>
                         </svg>
-                        @if(Auth::user())
-                            <span class="name-autorization">{{ Auth::user()->name .' '. Auth::user()->last_name}}</span>
-                        @endif
                     </a>
                     <input type="hidden" name="auth-status" id="auth-status" data-authenticated="@json(Auth::check())">
                 </p>
@@ -459,13 +456,12 @@
                         </div>
                     </li>
                     <li>
-                        <a class="down-menu" href="{{ route('help', '#aboutUs') }}">допомога
-                            <svg class="position-center" fill="none" height="8" viewbox="0 0 12 8" width="12"
-                                 xmlns="http://www.w3.org/2000/svg">
+                        <a class="down-menu d-block" href="{{ route('help') }}">допомога
+                            <svg class="position-center help-svg" fill="none" height="8" viewbox="0 0 12 8" width="12" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 1L6 6L11 1" stroke-linecap="round" stroke-width="1.5"></path>
                             </svg>
                         </a>
-                        <ul class="help-sub-menu mobile-menu">
+                        <ul class="help-sub-menu">
                             <li>
                                 <a data-href="aboutUs" href="{{ route('help', '#aboutUs') }}">Про нас</a>
                             </li>

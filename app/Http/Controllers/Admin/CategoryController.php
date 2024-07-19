@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class CategoryController extends Controller
 {
@@ -103,6 +104,24 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
+        if ($request->validated('main_media_id')) {
+            $media = Media::find($request->validated('main_media_id'));
+            $media->collection_name = 'category'.$category->id;
+            $media->custom_properties = [
+                'alt' => $category->title,
+            ];
+            $media->save();
+        }
+        if ($request->validated('deleted_main_image')) {
+            $idDeletedPoster = $request->validated('deleted_main_image');
+            Media::find($idDeletedPoster)->delete();
+        }
+
+        if ($request->validated('main_image')) {
+            $category->addMedia($request->validated('main_image'))->withCustomProperties([
+                'alt' => $category->title,
+            ])->toMediaCollection('category'.$category->id);
+        }
 
         return redirect()->route('category.index');
     }

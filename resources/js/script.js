@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     buttonSelector: '.menu-help-item a',
                     targetAttr: 'data-href',
                     sectionSelector: '.help-content',
-                    initialButtonSelector: '.menu-help-item a[data-href="aboutUs"]',
+                    initialButtonSelectorNoActive: '', //якщо треба зробити щось активним тоді додати туди селектор
                     initialSectionId: 'aboutUs',
                     readmoreClass: 'readmore',
                     moreClass: 'description-more',
@@ -156,6 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (hash) {
                 document.querySelectorAll('.help-content').forEach(section => {
                     section.classList.remove('visible')
+                    console.log(section)
                 })
 
                 document.querySelectorAll('.menu-help-item a').forEach(button => {
@@ -248,7 +249,9 @@ document.addEventListener("DOMContentLoaded", function () {
             menuItems.forEach(item => {
                 const subMenu = item.nextElementSibling,
                     blackFon = document.querySelector(".black-fon")
+                console.log(blackFon)
                 // listItemMenu = document.querySelector(".navigation-menu-catalog > li")
+                console.log(subMenu)
                 const showMenu = () => {
                     blackFon.classList.add("black-fon-style")
                     blackFon.style.display = 'block'
@@ -271,6 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             mobileMenuItems.forEach(mobileItem => {
                 mobileItem.addEventListener("click", function () {
+                    console.log(mobileItem)
                     // mobileItem.querySelector("a").classList.toggle("header-hover-mobile")
                     let itemSubMenu = mobileItem.querySelector(".mobile-menu")
                     if (itemSubMenu) {
@@ -281,12 +285,10 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         }
         let defaultMenu = document.querySelector(".default-menu")
-        if (defaultMenu) {
-            if (window.innerWidth < 1024) {
-                defaultMenu.classList.remove("default-menu")
-            } else {
-                defaultMenu.classList.add("default-menu")
-            }
+        if (window.innerWidth < 1024) {
+            defaultMenu.classList.remove("default-menu")
+        } else {
+            defaultMenu.classList.add("default-menu")
         }
 
         if (window.innerWidth < 1024) {
@@ -343,6 +345,7 @@ document.addEventListener("DOMContentLoaded", function () {
             headList.forEach(item => {
                 item.addEventListener("click", function () {
                     let subSubmenu = item.nextElementSibling
+                    console.log(item.nextElementSibling)
                     subSubmenu.classList.toggle("d-block")
                 })
             })
@@ -758,36 +761,30 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    //popup registration-enter
+    //popup registration-enter 
     const cabinetCta = document.querySelectorAll(".cabinet-cta"),
         blackFonReg = document.querySelector(".black-fon-popup"),
         popupCabinet = document.querySelector(".popup-cabinet"),
         cancelCabinetPopup = document.querySelector(".cancel-popup-cabinet"),
         eyeReg = document.querySelectorAll(".eye"),
-        navigationMenuPopup = document.querySelector(".navigation-menu-catalog");
-
-    let isAuthenticated = document.getElementById('auth-status').dataset.authenticated === 'true';
-
+        navigationMenuPopup = document.querySelector(".navigation-menu-catalog")
 
     cabinetCta.forEach(itemCta => {
-        if (!isAuthenticated) {
-            itemCta.addEventListener("click", function (e) {
-                e.preventDefault();
-                popupCabinet.style.display = "block";
-                blackFonReg.style.display = "block";
-                navigationMenuPopup.style.zIndex = "20";
-            });
-        }
-    });
-
-    if (cancelCabinetPopup) {
+        itemCta.addEventListener("click", function (e) {
+            e.preventDefault()
+            console.log("+")
+            popupCabinet.style.display = "block"
+            blackFonReg.style.display = "block"
+            navigationMenuPopup.style.zIndex = "20"
+        })
         cancelCabinetPopup.addEventListener("click", function (e) {
-            e.preventDefault();
-            popupCabinet.style.display = "none";
-            blackFonReg.style.display = "none";
-            navigationMenuPopup.style.zIndex = "30";
-        });
-    }
+            e.preventDefault()
+            popupCabinet.style.display = "none"
+            blackFonReg.style.display = "none"
+            navigationMenuPopup.style.zIndex = "30"
+
+        })
+    })
 
     // visible password
     eyeReg.forEach(eye => {
@@ -795,6 +792,8 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault()
             const target = document.getElementById(this.getAttribute('data-target')),
                 targerEye = this.querySelector("svg")
+                console.log(targerEye);
+            console.log(targerEye);
             if (target.type === 'password') {
                 target.type = 'text'
                 targerEye.style.display = "block"

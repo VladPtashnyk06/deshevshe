@@ -3,7 +3,7 @@
         <section class="max-w-4xl mx-auto py-12">
             <div class="bg-white shadow sm:rounded-lg p-6">
                 <h1 class="text-3xl font-semibold mb-6 text-center" itemprop="name">Вхід</h1>
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('auth.authenticate') }}">
                     @csrf
 
                     <!-- Hidden input for login method -->
