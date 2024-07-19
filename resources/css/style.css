@@ -1453,6 +1453,9 @@ button.oneClick:hover svg path {
     font-weight: 600;
     text-transform: uppercase
 }
+.comment-card-block {
+    display: grid
+}
 .comment-items {
     padding-bottom: 50rem
 }
@@ -3708,6 +3711,9 @@ p.flag-cabinet, p.sale-flag {
     }
     .oneClickBtn {
         min-width: 60rem
+    }
+    .comment-card-block {
+        grid-template-columns: 9fr 3fr
     }
     .form-comment .head-comment-form, .order-form .head-comment-form {
         padding: 0 0 23px 0
