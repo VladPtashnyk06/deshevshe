@@ -156,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (hash) {
                 document.querySelectorAll('.help-content').forEach(section => {
                     section.classList.remove('visible')
-                    console.log(section)
                 })
 
                 document.querySelectorAll('.menu-help-item a').forEach(button => {
@@ -249,9 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
             menuItems.forEach(item => {
                 const subMenu = item.nextElementSibling,
                     blackFon = document.querySelector(".black-fon")
-                console.log(blackFon)
                 // listItemMenu = document.querySelector(".navigation-menu-catalog > li")
-                console.log(subMenu)
                 const showMenu = () => {
                     blackFon.classList.add("black-fon-style")
                     blackFon.style.display = 'block'
@@ -274,7 +271,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             mobileMenuItems.forEach(mobileItem => {
                 mobileItem.addEventListener("click", function () {
-                    console.log(mobileItem)
                     // mobileItem.querySelector("a").classList.toggle("header-hover-mobile")
                     let itemSubMenu = mobileItem.querySelector(".mobile-menu")
                     if (itemSubMenu) {
@@ -347,7 +343,6 @@ document.addEventListener("DOMContentLoaded", function () {
             headList.forEach(item => {
                 item.addEventListener("click", function () {
                     let subSubmenu = item.nextElementSibling
-                    console.log(item.nextElementSibling)
                     subSubmenu.classList.toggle("d-block")
                 })
             })
@@ -773,11 +768,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isAuthenticated = document.getElementById('auth-status').dataset.authenticated === 'true';
 
-    console.log('Authenticated:', isAuthenticated);
 
     cabinetCta.forEach(itemCta => {
         if (!isAuthenticated) {
-            console.log('Not authenticated, adding event listener');
             itemCta.addEventListener("click", function (e) {
                 e.preventDefault();
                 popupCabinet.style.display = "block";
@@ -802,8 +795,6 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault()
             const target = document.getElementById(this.getAttribute('data-target')),
                 targerEye = this.querySelector("svg")
-                console.log(targerEye);
-            console.log(targerEye);
             if (target.type === 'password') {
                 target.type = 'text'
                 targerEye.style.display = "block"
