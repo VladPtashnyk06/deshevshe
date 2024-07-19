@@ -52,23 +52,29 @@
                     </div>
                 </div>
                 <div class="form-comment">
-                    <form action="#">
+                    <form action="{{ route('site.comment.store') }}" method="post">
+                        @csrf
+
                         <p class="head-comment-form">Залишити відгук</p>
-                        <p class="form-to-add_comment"></p>
-                        <p></p>
-                        <p><label for="name">Імʼя та прізвище*</label></p>
-                        <p><input id="name" name="name" placeholder="Імʼя та прізвище" required="" type="text"></p>
-                        <p></p>
-                        <p></p>
-                        <p><label for="mail">E-mail*</label></p>
-                        <p><input id="mail" name="mail" placeholder="E-mail" required="" type="email"></p>
-                        <p></p>
-                        <p></p>
-                        <p><label for="comment">Відгук</label></p>
                         <p>
-                            <textarea id="comment" name="comment" placeholder="Написати відгук"></textarea></p>
-                        <p></p><button class="btn-card yellow-cta" type="submit">надіслати</button>
-                        <p></p>
+                            <label for="name">Імʼя та прізвище*</label>
+                        </p>
+                        <p>
+                            <input id="name" name="name" placeholder="Імʼя та прізвище" required="" type="text">
+                        </p>
+                        <p>
+                            <label for="mail">E-mail*</label>
+                        </p>
+                        <p>
+                            <input id="mail" name="email" placeholder="E-mail" required="" type="email">
+                        </p>
+                        <p>
+                            <label for="comment">Відгук</label>
+                        </p>
+                        <p>
+                            <textarea id="comment" name="comment" placeholder="Написати відгук"></textarea>
+                        </p>
+                        <button class="btn-card yellow-cta" type="submit">надіслати</button>
                     </form>
                 </div>
             </div>
