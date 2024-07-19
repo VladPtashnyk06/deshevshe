@@ -461,6 +461,7 @@
                                 <path d="M1 1L6 6L11 1" stroke-linecap="round" stroke-width="1.5"></path>
                             </svg>
                         </a>
+
                         <ul class="help-sub-menu">
                             <li>
                                 <a data-href="aboutUs" href="{{ route('help', '#aboutUs') }}">Про нас</a>
