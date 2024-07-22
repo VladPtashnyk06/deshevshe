@@ -325,4 +325,9 @@ class GeneralController extends Controller
     {
         return view('site.contact');
     }
+
+    public function orderFront()
+    {
+        return view('site.orders.order_front');
+    }
 }

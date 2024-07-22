@@ -96,16 +96,16 @@
                 </div>
             @endif
 
-{{--            @if(!Auth::user() || Auth::user()->role == 'user')--}}
-{{--                <div class="relative flex items-center ml-6 w-full" style="max-width: 350px;">--}}
-{{--                    <div class="flex-grow">--}}
-{{--                        <input type="text" class="border rounded w-full px-4 py-2 shadow-sm focus:ring focus:ring-indigo-300 focus:border-indigo-300" name="search" id="search" placeholder="Пошук товарів...">--}}
-{{--                        <ul id="search-results" class="absolute bg-white border rounded mt-1 w-full z-10 hidden shadow-lg max-h-60 overflow-y-auto">--}}
-{{--                            <!-- Результати пошуку будуть тут -->--}}
-{{--                        </ul>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            @endif--}}
+            @if(!Auth::user() || Auth::user()->role == 'user')
+                <div class="relative flex items-center ml-6 w-full" style="max-width: 350px;">
+                    <div class="flex-grow">
+                        <input type="text" class="border rounded w-full px-4 py-2 shadow-sm focus:ring focus:ring-indigo-300 focus:border-indigo-300" name="search" id="search" placeholder="Пошук товарів...">
+                        <ul id="search-results" class="absolute bg-white border rounded mt-1 w-full z-10 hidden shadow-lg max-h-60 overflow-y-auto">
+                            <!-- Результати пошуку будуть тут -->
+                        </ul>
+                    </div>
+                </div>
+            @endif
 
             <!-- Currency Selector and Cart -->
 {{--            @if(!Auth::user() || Auth::user()->role == 'user')--}}

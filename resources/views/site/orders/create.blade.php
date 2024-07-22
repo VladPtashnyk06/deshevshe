@@ -9,8 +9,8 @@
                         @foreach($cartItems as $item)
                             <div class="flex items-center mb-4 border-b p-6" style="padding-left: 0">
                                 <div class="flex-shrink-0 w-24 h-24">
-                                    <img src="{{ $item->attributes->imageUrl ?: asset('/img/_no_image.png') }}"
-                                         alt="Купити {{ $item->name }}" class="w-full h-full object-cover rounded h-48">
+{{--                                    <img src="{{ $item->attributes->imageUrl ?: asset('storage/') }}"--}}
+{{--                                         alt="Купити {{ $item->name }}" class="w-full h-full object-cover rounded h-48">--}}
                                 </div>
                                 <div class="ml-4 flex-1">
                                     <h2 class="text-lg font-semibold">{{ $item->name }}</h2>
@@ -912,8 +912,10 @@
                     })
                         .then(response => response.json() )
                         .then(data => {
+                            console.log(data)
                             NovaPoshtaCityList.innerHTML = '';
                             data.forEach(city => {
+                                console.log(city)
                                 if (type === 'City') {
                                     if (city.description.toLowerCase().includes(searchText) && city.settlement_type_description.toLowerCase().includes('місто')) {
                                         const listItem = document.createElement('li');
