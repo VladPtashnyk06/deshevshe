@@ -131,6 +131,8 @@ Route::middleware('auth.operator')->group(function () {
                 Route::post('/edit-fourth/update/{order}', 'updateFourth')->name('operator.order.updateFourth');
                 Route::post('/edit-fourth/promoCodeUpdate/{order}', 'updateOrderPromoCode')->name('operator.order.updateOrderPromoCode');
                 Route::post('/edit-fourth/updateOrderPoints/{order}', 'updateOrderPoints')->name('operator.order.updateOrderPoints');
+                Route::get('/operator-comment/{order}', 'createOperatorComment')->name('operator.order.operator-comment');
+                Route::post('/operator-comment/update/{order}', 'storeOperatorComment')->name('operator.order.updateOperatorComment');
                 Route::post('/update/{order}', 'update')->name('operator.order.update');
                 Route::get('/small-edit/{order}', 'smallEdit')->name('operator.order.small-edit');
                 Route::post('/small-edit/update/{order}', 'smallUpdate')->name('operator.order.smallUpdate');

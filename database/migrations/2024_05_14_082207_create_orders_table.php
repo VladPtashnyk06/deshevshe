@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->string('int_doc_number')->nullable();
             $table->string('ref')->nullable();
             $table->text('comment')->nullable();
+            $table->text('operator_comment')->nullable();
+            $table->integer('return_payment')->nullable();
             $table->timestamps();
         });
     }

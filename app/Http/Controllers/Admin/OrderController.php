@@ -143,6 +143,21 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order status and operator updated successfully'], 200);
     }
 
+    public function createOperatorComment(Order $order)
+    {
+        return view('admin.orders.operator-comment', compact('order'));
+    }
+
+    public function storeOperatorComment(Request $request, Order $order)
+    {
+        $order->update([
+            'operator_comment' => $request->post('operator_comment') ?? null,
+            'return_comment' => $request->post('return_comment') ?? null,
+        ]);
+
+        return to_route('operator.order.index');
+    }
+
     public function addTTNtoOrder(Order $order)
     {
         return view('admin.orders.add-ttn', compact('order'));

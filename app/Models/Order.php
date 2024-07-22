@@ -49,6 +49,8 @@ class Order extends Model
         'comment',
         'int_doc_number',
         'ref',
+        'operator_comment',
+        'return_payment'
     ];
 
     public function setOrderStatusIdAttribute($value)
