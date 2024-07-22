@@ -769,24 +769,29 @@ document.addEventListener("DOMContentLoaded", function () {
         popupCabinet = document.querySelector(".popup-cabinet"),
         cancelCabinetPopup = document.querySelector(".cancel-popup-cabinet"),
         eyeReg = document.querySelectorAll(".eye"),
-        navigationMenuPopup = document.querySelector(".navigation-menu-catalog")
+        navigationMenuPopup = document.querySelector(".navigation-menu-catalog");
+
+    let isAuthenticated = document.getElementById('auth-status').dataset.authenticated === 'true';
 
     cabinetCta.forEach(itemCta => {
-        itemCta.addEventListener("click", function (e) {
-            e.preventDefault()
-            console.log("+")
-            popupCabinet.style.display = "block"
-            blackFonReg.style.display = "block"
-            navigationMenuPopup.style.zIndex = "20"
-        })
-        cancelCabinetPopup.addEventListener("click", function (e) {
-            e.preventDefault()
-            popupCabinet.style.display = "none"
-            blackFonReg.style.display = "none"
-            navigationMenuPopup.style.zIndex = "30"
+        if (!isAuthenticated) {
+            itemCta.addEventListener("click", function (e) {
+                e.preventDefault();
+                popupCabinet.style.display = "block";
+                blackFonReg.style.display = "block";
+                navigationMenuPopup.style.zIndex = "20";
+            });
+        }
+    });
 
-        })
-    })
+    if (cancelCabinetPopup) {
+        cancelCabinetPopup.addEventListener("click", function (e) {
+            e.preventDefault();
+            popupCabinet.style.display = "none";
+            blackFonReg.style.display = "none";
+            navigationMenuPopup.style.zIndex = "30";
+        });
+    }
 
     // visible password
     eyeReg.forEach(eye => {
@@ -794,8 +799,6 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault()
             const target = document.getElementById(this.getAttribute('data-target')),
                 targerEye = this.querySelector("svg")
-                console.log(targerEye);
-            console.log(targerEye);
             if (target.type === 'password') {
                 target.type = 'text'
                 targerEye.style.display = "block"
