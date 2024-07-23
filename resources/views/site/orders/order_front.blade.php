@@ -107,7 +107,7 @@
                             </div>
                             <div id="nova_poshta_container" class="text-gray-700">
                                 <div class="space-y-1 mb-4" id="nova_poshta_region_div">
-                                    <div class="grid form-post-grid">
+                                    <div class="grid form-post-grid" id="nova_postha_city_and_branch">
                                         <div class="select-order">
                                             <p>Регіон/Область *</p>
                                             <label for="nova_poshta_region_ref"
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
 
-                                <div id="nova_postha_city_and_branch">
+                                <div>
                             </div>
 
                             <div id="meest_container" class="hidden text-gray-700">

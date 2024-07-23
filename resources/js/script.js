@@ -1108,9 +1108,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (RegistrationCheckbox) {
         RegistrationCheckbox.addEventListener('change', function() {
             if (this.checked) {
-                PasswordFields.classList.remove('hidden');
+                PasswordFields.classList.remove('d-none');
             } else {
-                PasswordFields.classList.add('hidden');
+                PasswordFields.classList.add('d-none');
             }
         });
     }
@@ -1216,15 +1216,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const isClickInsideStreetList = StreetList.contains(event.target) || event.target === StreetInput;
 
         if (!isClickInsideDistrictList) {
-            DistrictList.classList.add('hidden');
+            DistrictList.classList.add('d-none');
         }
 
         if (!isClickInsideVillageList) {
-            VillageList.classList.add('hidden');
+            VillageList.classList.add('d-none');
         }
 
         if (!isClickInsideStreetList) {
-            StreetList.classList.add('hidden');
+            StreetList.classList.add('d-none');
         }
     });
 
@@ -1333,7 +1333,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 NovaPoshtaFetchStreets(CityName.value, searchText);
                             } else {
                                 StreetList.innerHTML = '';
-                                StreetList.classList.add('hidden');
+                                StreetList.classList.add('d-none');
                             }
                         } else if (poshta === 'UkrPoshta') {
                             let cityId;
@@ -1347,7 +1347,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 fetchStreets(cityId, searchText);
                             } else {
                                 VillageList.innerHTML = '';
-                                VillageList.classList.add('hidden');
+                                VillageList.classList.add('d-none');
                             }
                         }
                     };
@@ -1357,7 +1357,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (StreetInput.value.trim().length === 0) {
                                 NovaPoshtaFetchStreets(CityName.value, '');
                             } else if (StreetList.children.length > 0) {
-                                StreetList.classList.remove('hidden');
+                                StreetList.classList.remove('d-none');
                             }
                         } else if (poshta === 'UkrPoshta') {
                             let cityId;
@@ -1369,7 +1369,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (VillageInput.value.trim().length === 0) {
                                 fetchStreets(cityId, '');
                             } else if (VillageList.children.length > 0) {
-                                VillageList.classList.remove('hidden');
+                                VillageList.classList.remove('d-none');
                             }
                         }
                     };
@@ -1398,7 +1398,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 NovaPoshtaFetchVillages(districtRef, searchText);
                             } else {
                                 VillageList.innerHTML = '';
-                                VillageList.classList.add('hidden');
+                                VillageList.classList.add('d-none');
                             }
                         } else if (poshta === 'UkrPoshta') {
                             const districtId = DistrictRef.value;
@@ -1407,7 +1407,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 fetchCities(districtId, '', searchText);
                             } else {
                                 VillageList.innerHTML = '';
-                                VillageList.classList.add('hidden');
+                                VillageList.classList.add('d-none');
                             }
                         }
                     };
@@ -1418,14 +1418,14 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (VillageInput.value.trim().length === 0) {
                                 NovaPoshtaFetchVillages(districtRef, '');
                             } else if (VillageList.children.length > 0) {
-                                VillageList.classList.remove('hidden');
+                                VillageList.classList.remove('d-none');
                             }
                         } else if (poshta === 'UkrPoshta') {
                             const districtId = DistrictRef.value;
                             if (VillageInput.value.trim().length === 0) {
                                 fetchCities(districtId, '', '');
                             } else if (VillageList.children.length > 0) {
-                                VillageList.classList.remove('hidden');
+                                VillageList.classList.remove('d-none');
                             }
                         }
                     };
@@ -1441,13 +1441,13 @@ document.addEventListener("DOMContentLoaded", function () {
         //
         if (poshta === 'NovaPoshta') {
             NovaPoshtaCityBranchContainer.style.display = 'block';
-            MeestContainer.classList.add('hidden');
-            NovaPoshtaContainer.classList.remove('hidden');
-            UkrPoshtaContainer.classList.add('hidden');
+            MeestContainer.classList.add('d-none');
+            NovaPoshtaContainer.classList.remove('d-none');
+            UkrPoshtaContainer.classList.add('d-none');
             NovaPoshtaBranchDiv.style.display = 'block';
             AddressContainer.style.display = 'none';
             NovaPoshtaCityDiv.style.display = 'block';
-            DeliveryLocationVillage.classList.add('hidden');
+            DeliveryLocationVillage.classList.add('d-none');
             NovaPoshtaBranchesInput.placeholder = 'Введіть назву відділення';
             inputCategoryOfWarehouse.value = 'Branch';
 
@@ -1455,11 +1455,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (type === 'City') {
                     NovaPoshtaBranchDiv.style.display = 'block';
                     NovaPoshtaCityDiv.style.display = 'block';
-                    DeliveryLocationVillage.classList.add('hidden');
+                    DeliveryLocationVillage.classList.add('d-none');
                 } else if (type === 'Village') {
                     NovaPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, NovaPoshtaBranchDiv);
                     NovaPoshtaCityDiv.style.display = 'none';
-                    DeliveryLocationVillage.classList.remove('hidden');
+                    DeliveryLocationVillage.classList.remove('d-none');
                 }
                 document.querySelector('#nova_poshta_branch_div label').textContent = 'Відділення Нової Пошти *';
             } else if (delivery === 'postomat') {
@@ -1473,12 +1473,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (type === 'City') {
                     NovaPoshtaCityDiv.style.display = 'block';
                     NovaPoshtaBranchDiv.style.display = 'block';
-                    DeliveryLocationVillage.classList.add('hidden');
+                    DeliveryLocationVillage.classList.add('d-none');
                 } else if (type === 'Village') {
                     NovaPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, NovaPoshtaBranchDiv);
                     NovaPoshtaCityDiv.style.display = 'none';
                     NovaPoshtaBranchDiv.style.display = 'block';
-                    DeliveryLocationVillage.classList.remove('hidden');
+                    DeliveryLocationVillage.classList.remove('d-none');
                 }
             } else if (delivery === 'courier') {
                 NovaPoshtaBranchDiv.style.display = 'none';
@@ -1488,11 +1488,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (type === 'City') {
                     NovaPoshtaBranchDiv.style.display = 'none';
                     NovaPoshtaCityDiv.style.display = 'block';
-                    DeliveryLocationVillage.classList.add('hidden');
+                    DeliveryLocationVillage.classList.add('d-none');
                 } else if (type === 'Village') {
                     NovaPoshtaBranchDiv.style.display = 'none';
                     NovaPoshtaCityDiv.style.display = 'none';
-                    DeliveryLocationVillage.classList.remove('hidden');
+                    DeliveryLocationVillage.classList.remove('d-none');
                 }
             }
 
@@ -1510,7 +1510,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     NovaPoshtaFetchCities(regionRef, searchText);
                 } else {
                     NovaPoshtaCityList.innerHTML = '';
-                    NovaPoshtaCityList.classList.add('hidden');
+                    NovaPoshtaCityList.classList.add('d-none');
                 }
             });
 
@@ -1520,7 +1520,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (regionId && NovaPoshtaCityInput.value.trim().length === 0) {
                     NovaPoshtaFetchCities(regionId, '');
                 } else if (NovaPoshtaCityList.children.length > 0) {
-                    NovaPoshtaCityList.classList.remove('hidden');
+                    NovaPoshtaCityList.classList.remove('d-none');
                 }
             });
 
@@ -1539,7 +1539,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     NovaPoshtaFetchBranches(cityRef, searchText, settlementType);
                 } else {
                     NovaPoshtaBranchesList.innerHTML = '';
-                    NovaPoshtaBranchesList.classList.add('hidden');
+                    NovaPoshtaBranchesList.classList.add('d-none');
                 }
             });
 
@@ -1556,7 +1556,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (NovaPoshtaBranchesInput.value.trim().length === 0) {
                     NovaPoshtaFetchBranches(cityRef, '', settlementType);
                 } else if (NovaPoshtaBranchesList.children.length > 0) {
-                    NovaPoshtaBranchesList.classList.remove('hidden');
+                    NovaPoshtaBranchesList.classList.remove('d-none');
                 }
             });
 
@@ -1568,7 +1568,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     NovaPoshtaFetchDiscticts(regionRef, searchText);
                 } else {
                     DistrictList.innerHTML = '';
-                    DistrictList.classList.add('hidden');
+                    DistrictList.classList.add('d-none');
                 }
             });
 
@@ -1577,7 +1577,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (regionRef && DistrictInput.value.trim().length === 0) {
                     NovaPoshtaFetchDiscticts(regionRef, '');
                 } else if (DistrictList.children.length > 0) {
-                    DistrictList.classList.remove('hidden');
+                    DistrictList.classList.remove('d-none');
                 }
             });
 
@@ -1586,15 +1586,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isClickInsideBranchesList = NovaPoshtaBranchesList.contains(event.target) || event.target === NovaPoshtaBranchesInput;
 
                 if (!isClickInsideCityList) {
-                    NovaPoshtaCityList.classList.add('hidden');
+                    NovaPoshtaCityList.classList.add('d-none');
                 }
 
                 if (!isClickInsideCityList) {
-                    NovaPoshtaCityList.classList.add('hidden');
+                    NovaPoshtaCityList.classList.add('d-none');
                 }
 
                 if (!isClickInsideBranchesList) {
-                    NovaPoshtaBranchesList.classList.add('hidden');
+                    NovaPoshtaBranchesList.classList.add('d-none');
                 }
             });
 
@@ -1623,7 +1623,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         NovaPoshtaCityInput.value = city.description;
                                         CityName.value = city.description
                                         CityRefHidden.value = city.ref;
-                                        NovaPoshtaCityList.classList.add('hidden');
+                                        NovaPoshtaCityList.classList.add('d-none');
                                         MeestBranchesInput.value = '';
                                         NovaPoshtaBranchesList.innerHTML = '';
                                     });
@@ -1632,7 +1632,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                         if (NovaPoshtaCityList.children.length > 0) {
-                            NovaPoshtaCityList.classList.remove('hidden');
+                            NovaPoshtaCityList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -1663,7 +1663,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         NovaPoshtaBranchesInput.value = this.textContent;
                                         BranchRefHidden.value = branch.ref;
                                         BranchNumber.value = branch.number;
-                                        NovaPoshtaBranchesList.classList.add('hidden');
+                                        NovaPoshtaBranchesList.classList.add('d-none');
                                     });
                                     NovaPoshtaBranchesList.appendChild(listItem);
                                 }
@@ -1677,14 +1677,14 @@ document.addEventListener("DOMContentLoaded", function () {
                                         NovaPoshtaBranchesInput.value = this.textContent;
                                         BranchRefHidden.value = branch.ref;
                                         BranchNumber.value = branch.number;
-                                        NovaPoshtaBranchesList.classList.add('hidden');
+                                        NovaPoshtaBranchesList.classList.add('d-none');
                                     });
                                     NovaPoshtaBranchesList.appendChild(listItem);
                                 }
                             }
                         });
                         if (NovaPoshtaBranchesList.children.length > 0) {
-                            NovaPoshtaBranchesList.classList.remove('hidden');
+                            NovaPoshtaBranchesList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -1711,13 +1711,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function() {
                                     StreetInput.value = this.textContent;
                                     StreetRef.value = street.Ref;
-                                    StreetList.classList.add('hidden');
+                                    StreetList.classList.add('d-none');
                                 });
                                 StreetList.appendChild(listItem);
                             }
                         });
                         if (StreetList.children.length > 0) {
-                            StreetList.classList.remove('hidden');
+                            StreetList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -1744,13 +1744,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function() {
                                     DistrictInput.value = this.textContent;
                                     DistrictRef.value = district.ref;
-                                    DistrictList.classList.add('hidden');
+                                    DistrictList.classList.add('d-none');
                                 });
                                 DistrictList.appendChild(listItem);
                             }
                         });
                         if (DistrictList.children.length > 0) {
-                            DistrictList.classList.remove('hidden');
+                            DistrictList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -1778,40 +1778,40 @@ document.addEventListener("DOMContentLoaded", function () {
                                     CityName.value = village.description
                                     VillageInput.value = this.textContent;
                                     VillageRef.value = village.ref;
-                                    VillageList.classList.add('hidden');
+                                    VillageList.classList.add('d-none');
                                 });
                                 VillageList.appendChild(listItem);
                             }
                         });
                         if (VillageList.children.length > 0) {
-                            VillageList.classList.remove('hidden');
+                            VillageList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
             }
         } else if (poshta === 'Meest') {
             MeestCityBranchContainer.style.display = 'block';
-            DeliveryLocationTypeContainer.classList.add('hidden');
-            NovaPoshtaContainer.classList.add('hidden');
-            MeestContainer.classList.remove('hidden');
-            UkrPoshtaContainer.classList.add('hidden');
+            DeliveryLocationTypeContainer.classList.add('d-none');
+            NovaPoshtaContainer.classList.add('d-none');
+            MeestContainer.classList.remove('d-none');
+            UkrPoshtaContainer.classList.add('d-none');
 
             if (delivery === 'branch') {
-                DeliveryLocationTypeContainer.classList.add('hidden');
+                DeliveryLocationTypeContainer.classList.add('d-none');
                 MeestBranchesContainer.style.display = 'block';
                 AddressContainer.style.display = 'none';
                 document.querySelector('#meest_branch_div label').textContent = 'Відділення Meest';
                 MeestBranchesInput.placeholder = 'Введіть назву відділення';
                 inputCategoryOfWarehouse.value = '';
             } else if (delivery === 'postomat') {
-                DeliveryLocationTypeContainer.classList.add('hidden');
+                DeliveryLocationTypeContainer.classList.add('d-none');
                 MeestBranchesContainer.style.display = 'block';
                 AddressContainer.style.display = 'none';
                 document.querySelector('#meest_branch_div label').textContent = 'Поштомат Meest';
                 MeestBranchesInput.placeholder = 'Введіть назву поштомата';
                 inputCategoryOfWarehouse.value = 'Postomat';
             } else if (delivery === 'courier') {
-                DeliveryLocationTypeContainer.classList.add('hidden');
+                DeliveryLocationTypeContainer.classList.add('d-none');
                 MeestBranchesContainer.style.display = 'none';
                 AddressContainer.style.display = 'block';
                 inputCategoryOfWarehouse.value = '';
@@ -1825,7 +1825,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     MeestFetchCities(regionId, searchText);
                 } else {
                     MeestCityList.innerHTML = '';
-                    MeestCityList.classList.add('hidden');
+                    MeestCityList.classList.add('d-none');
                 }
             });
 
@@ -1834,7 +1834,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (regionId && MeestCityInput.value.trim().length === 0) {
                     MeestFetchCities(regionId, '');
                 } else if (MeestCityList.children.length > 0) {
-                    MeestCityList.classList.remove('hidden');
+                    MeestCityList.classList.remove('d-none');
                 }
             });
 
@@ -1845,7 +1845,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     MeestFetchBranches(cityId, searchText);
                 } else {
                     MeestBranchesList.innerHTML = '';
-                    MeestBranchesList.classList.add('hidden');
+                    MeestBranchesList.classList.add('d-none');
                 }
             });
 
@@ -1854,7 +1854,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (cityId && MeestBranchesInput.value.trim().length === 0) {
                     MeestFetchBranches(cityId, '');
                 } else if (MeestBranchesList.children.length > 0) {
-                    MeestBranchesList.classList.remove('hidden');
+                    MeestBranchesList.classList.remove('d-none');
                 }
             });
 
@@ -1863,11 +1863,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isClickInsideBranchesList = MeestBranchesList.contains(event.target) || event.target === MeestBranchesInput;
 
                 if (!isClickInsideCityList) {
-                    MeestCityList.classList.add('hidden');
+                    MeestCityList.classList.add('d-none');
                 }
 
                 if (!isClickInsideBranchesList) {
-                    MeestBranchesList.classList.add('hidden');
+                    MeestBranchesList.classList.add('d-none');
                 }
             });
 
@@ -1898,7 +1898,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function() {
                                     MeestCityInput.value = city.description;
                                     CityRefHidden.value = city.city_id;
-                                    MeestCityList.classList.add('hidden');
+                                    MeestCityList.classList.add('d-none');
                                     MeestBranchesInput.value = '';
                                     MeestBranchesList.innerHTML = '';
                                 });
@@ -1906,7 +1906,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                         if (MeestCityList.children.length > 0) {
-                            MeestCityList.classList.remove('hidden');
+                            MeestCityList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -1933,37 +1933,37 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function () {
                                     MeestBranchesInput.value = branch.branch_type + ' ' + branch.address;
                                     BranchRefHidden.value = branch.branch_id;
-                                    MeestBranchesList.classList.add('hidden');
+                                    MeestBranchesList.classList.add('d-none');
                                 });
                                 MeestBranchesList.appendChild(listItem);
                             }
                         });
                         if (MeestBranchesList.children.length > 0) {
-                            MeestBranchesList.classList.remove('hidden');
+                            MeestBranchesList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
             }
         } else if (poshta === 'UkrPoshta') {
             UkrPoshtaCityBranchContainer.style.display = 'block';
-            NovaPoshtaContainer.classList.add('hidden');
-            MeestContainer.classList.add('hidden');
-            UkrPoshtaContainer.classList.remove('hidden');
-            DeliveryLocationVillage.classList.add('hidden');
+            NovaPoshtaContainer.classList.add('d-none');
+            MeestContainer.classList.add('d-none');
+            UkrPoshtaContainer.classList.remove('d-none');
+            DeliveryLocationVillage.classList.add('d-none');
             AddressContainer.style.display = 'none';
-            DeliveryLocationTypeContainer.classList.remove('hidden')
-            UkrPoshtaCityDiv.classList.remove('hidden');
+            DeliveryLocationTypeContainer.classList.remove('d-none')
+            UkrPoshtaCityDiv.classList.remove('d-none');
 
             if (delivery === 'exspresBranch' || delivery === 'branch') {
                 if (type === 'City') {
-                    DeliveryLocationVillage.classList.add('hidden');
-                    UkrPoshtaCityDiv.classList.remove('hidden');
+                    DeliveryLocationVillage.classList.add('d-none');
+                    UkrPoshtaCityDiv.classList.remove('d-none');
                 } else if (type === 'Village') {
-                    DeliveryLocationVillage.classList.remove('hidden');
-                    UkrPoshtaCityDiv.classList.add('hidden');
+                    DeliveryLocationVillage.classList.remove('d-none');
+                    UkrPoshtaCityDiv.classList.add('d-none');
                     UkrPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, UkrPoshtaBranchDiv);
                     NovaPoshtaCityDiv.style.display = 'none';
-                    DeliveryLocationVillage.classList.remove('hidden');
+                    DeliveryLocationVillage.classList.remove('d-none');
                 }
                 UkrPoshtaBranchDiv.style.display = 'block';
                 AddressContainer.style.display = 'none';
@@ -1974,12 +1974,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 AddressContainer.style.display = 'block';
                 if (type === 'City') {
                     UkrPoshtaBranchDiv.style.display = 'none';
-                    UkrPoshtaCityDiv.classList.remove('hidden');
-                    DeliveryLocationVillage.classList.add('hidden');
+                    UkrPoshtaCityDiv.classList.remove('d-none');
+                    DeliveryLocationVillage.classList.add('d-none');
                 } else if (type === 'Village') {
                     UkrPoshtaBranchDiv.style.display = 'none';
-                    UkrPoshtaCityDiv.classList.add('hidden');
-                    DeliveryLocationVillage.classList.remove('hidden');
+                    UkrPoshtaCityDiv.classList.add('d-none');
+                    DeliveryLocationVillage.classList.remove('d-none');
                 }
             }
 
@@ -1990,7 +1990,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     fetchCities('', regionId, searchText);
                 } else {
                     UkrPoshtaCityList.innerHTML = '';
-                    UkrPoshtaCityList.classList.add('hidden');
+                    UkrPoshtaCityList.classList.add('d-none');
                 }
             });
 
@@ -1999,7 +1999,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (regionId && UkrPoshtaCityInput.value.trim().length === 0) {
                     fetchCities('', regionId, '');
                 } else if (UkrPoshtaCityInput.children.length >= 0) {
-                    UkrPoshtaCityList.classList.remove('hidden');
+                    UkrPoshtaCityList.classList.remove('d-none');
                 }
             });
 
@@ -2015,7 +2015,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     fetchBranches(cityId, searchText);
                 } else {
                     UkrPoshtaBranchesList.innerHTML = '';
-                    UkrPoshtaBranchesList.classList.add('hidden');
+                    UkrPoshtaBranchesList.classList.add('d-none');
                 }
             });
 
@@ -2029,7 +2029,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (UkrPoshtaBranchesInput.value.trim().length === 0) {
                     fetchBranches(cityId, '');
                 } else if (UkrPoshtaBranchesList.children.length >= 0) {
-                    UkrPoshtaBranchesList.classList.remove('hidden');
+                    UkrPoshtaBranchesList.classList.remove('d-none');
                 }
             });
 
@@ -2041,7 +2041,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     fetchDistricts(regionRef, searchText);
                 } else {
                     DistrictList.innerHTML = '';
-                    DistrictList.classList.add('hidden');
+                    DistrictList.classList.add('d-none');
                 }
             });
 
@@ -2050,7 +2050,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (regionRef && DistrictInput.value.trim().length === 0) {
                     fetchDistricts(regionRef, '');
                 } else if (DistrictList.children.length > 0) {
-                    DistrictList.classList.remove('hidden');
+                    DistrictList.classList.remove('d-none');
                 }
             });
 
@@ -2059,11 +2059,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isClickInsideBranchesList = UkrPoshtaBranchesList.contains(event.target) || event.target === UkrPoshtaBranchesInput;
 
                 if (!isClickInsideCityList) {
-                    UkrPoshtaCityList.classList.add('hidden');
+                    UkrPoshtaCityList.classList.add('d-none');
                 }
 
                 if (!isClickInsideBranchesList) {
-                    UkrPoshtaBranchesList.classList.add('hidden');
+                    UkrPoshtaBranchesList.classList.add('d-none');
                 }
             });
 
@@ -2096,7 +2096,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         UkrPoshtaCityInput.value = city.description;
                                         CityName.value = city.description;
                                         CityRefHidden.value = city.settlement_id;
-                                        UkrPoshtaCityList.classList.add('hidden');
+                                        UkrPoshtaCityList.classList.add('d-none');
                                         UkrPoshtaBranchesInput.value = '';
                                         UkrPoshtaBranchesList.innerHTML = '';
                                     });
@@ -2111,7 +2111,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     listItem.addEventListener('click', function() {
                                         VillageInput.value = city.description;
                                         VillageRef.value = city.settlement_id;
-                                        VillageList.classList.add('hidden');
+                                        VillageList.classList.add('d-none');
                                         UkrPoshtaBranchesInput.value = '';
                                         UkrPoshtaBranchesList.innerHTML = '';
                                     });
@@ -2120,9 +2120,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                         if (UkrPoshtaCityList.children.length > 0) {
-                            UkrPoshtaCityList.classList.remove('hidden');
+                            UkrPoshtaCityList.classList.remove('d-none');
                         } else {
-                            VillageList.classList.remove('hidden');
+                            VillageList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -2148,13 +2148,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function() {
                                     UkrPoshtaBranchesInput.value = branch.POSTOFFICE_UA + (branch.STREET_UA_VPZ ? ' ' + branch.STREET_UA_VPZ : '');
                                     BranchRefHidden.value = branch.POSTOFFICE_ID;
-                                    UkrPoshtaBranchesList.classList.add('hidden');
+                                    UkrPoshtaBranchesList.classList.add('d-none');
                                 });
                                 UkrPoshtaBranchesList.appendChild(listItem);
                             }
                         });
                         if (UkrPoshtaBranchesList.children.length > 0) {
-                            UkrPoshtaBranchesList.classList.remove('hidden');
+                            UkrPoshtaBranchesList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -2180,7 +2180,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function() {
                                     DistrictInput.value = this.textContent;
                                     DistrictRef.value = district.district_id;
-                                    DistrictList.classList.add('hidden');
+                                    DistrictList.classList.add('d-none');
                                     VillageInput.value = '';
                                     VillageList.innerHTML = '';
                                 });
@@ -2188,7 +2188,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                         if (DistrictList.children.length > 0) {
-                            DistrictList.classList.remove('hidden');
+                            DistrictList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -2214,7 +2214,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 listItem.addEventListener('click', function() {
                                     StreetInput.value = this.textContent;
                                     StreetRef.value = street.STREET_ID;
-                                    StreetList.classList.add('hidden');
+                                    StreetList.classList.add('d-none');
                                     House.value = '';
                                     Flat.value = '';
                                 });
@@ -2222,7 +2222,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                         if (StreetList.children.length > 0) {
-                            StreetList.classList.remove('hidden');
+                            StreetList.classList.remove('d-none');
                         }
                     })
                     .catch(error => console.error('Error:', error));
