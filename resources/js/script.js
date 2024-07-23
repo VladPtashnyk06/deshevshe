@@ -1011,17 +1011,9 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 })
 
-
-
-// document.addEventListener('DOMContentLoaded', function() {
     const RegistrationCheckbox = document.getElementById('registration');
     const PasswordFields = document.getElementById('password_fields');
     const PhoneInput = document.getElementById('user_phone');
-
-    // {{--const deliveryNamee = document.getElementById('deliveryNamee');--}}
-    // {{--const json = @json($delivery);--}}
-    // {{--console.log(json)--}}
-    // {{--deliveryNamee.value = json.region;--}}
 
     if (RegistrationCheckbox) {
         RegistrationCheckbox.addEventListener('change', function() {
@@ -1075,7 +1067,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const DeliveryLocationVillage = document.getElementById('delivery_location_village');
     const DeliveryLocationVillageDistrict = document.getElementById('delivery_location_village-district');
     const DeliveryLocationVillageRef = document.getElementById('delivery_location_village-ref');
-    // const DeliveryLocationTypeContainer = document.getElementById('delivery_location_type_container');
     const StreetInput = document.getElementById('street_input');
     const StreetList = document.getElementById('street_list');
     const StreetRef = document.getElementById('street_ref');
@@ -1233,15 +1224,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     
     function handleDeliveryTypeChange(event) {
-        let selectedDeliveryType = event.target.value;
-        let poshtaAndDelivery = selectedDeliveryType.split("_");
-        let poshta = poshtaAndDelivery[0];
-        let delivery = poshtaAndDelivery[1];
-        let selectedRadio = Array.from(document.querySelectorAll('input[name="delivery_location_type"]')).find(radio => radio.checked);
+        let selectedDeliveryType = event.target.value,
+            poshtaAndDelivery = selectedDeliveryType.split("_"),
+            poshta = poshtaAndDelivery[0],
+            delivery = poshtaAndDelivery[1],
+            selectedRadio = Array.from(document.querySelectorAll('input[name="delivery_location_type"]')).find(radio => radio.checked)
         if (selectedRadio) {
             type = selectedRadio.value;
         }
-        console.log(poshtaAndDelivery, type);
+        // console.log(poshtaAndDelivery, type);
         updateFormVisibility(poshta, delivery, type);
     }
     
@@ -1251,13 +1242,13 @@ document.addEventListener("DOMContentLoaded", function () {
             type = selectedRadio.value;
         }
         let selectedDeliveryType = Array.from(document.querySelectorAll('input[name="delivery_type"]')).find(radio => radio.checked);
-        if (selectedDeliveryType) {
+        // if (selectedDeliveryType) {
             let poshtaAndDelivery = selectedDeliveryType.value.split("_");
             let poshta = poshtaAndDelivery[0];
             let delivery = poshtaAndDelivery[1];
-            console.log(poshtaAndDelivery, type);
+            // console.log(poshtaAndDelivery, type);
             updateFormVisibility(poshta, delivery, type);
-        }
+        // }
     }
     function updateFormVisibility(poshta, delivery, type) {
         
@@ -1408,15 +1399,17 @@ document.addEventListener("DOMContentLoaded", function () {
             inputCategoryOfWarehouse.value = 'Branch';
 
             if (delivery === 'branch') {
-                console.log(delivery);
+                console.log("---");
                 if (type === 'City') {
                     console.log(type);
+                    NovaPoshtaContainer.style.display = 'grid';
                     NovaPoshtaBranchDiv.style.display = 'grid';
                     NovaPoshtaCityDiv.style.display = 'grid';
                     DeliveryLocationVillageDistrict.style.display = "none"
                     DeliveryLocationVillageRef.style.display = "none"
                 } else if (type === 'Village') {
                     console.log(type);
+                    NovaPoshtaContainer.style.display = 'grid';
                     NovaPoshtaCityDiv.style.display = 'none';
                     DeliveryLocationVillageDistrict.style.display = "block"
                     DeliveryLocationVillageRef.style.display = "block"
@@ -1432,13 +1425,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 inputCategoryOfWarehouse.value = 'Postomat';
 
                 if (type === 'City') {
+                    NovaPoshtaContainer.style.display = 'grid';
                     NovaPoshtaCityDiv.style.display = 'grid';
                     NovaPoshtaBranchDiv.style.display = 'grid';
                     // DeliveryLocationVillage.classList.add('d-none');
                     DeliveryLocationVillageDistrict.style.display = "none"
                     DeliveryLocationVillageRef.style.display = "none"
                 } else if (type === 'Village') {
-                    // NovaPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, NovaPoshtaBranchDiv);
+                    NovaPoshtaContainer.style.display = 'grid';
                     NovaPoshtaCityDiv.style.display = 'none';
                     NovaPoshtaBranchDiv.style.display = 'grid';
                     // DeliveryLocationVillage.classList.remove('d-none');
@@ -1772,18 +1766,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector('#meest_branch_div label').textContent = 'Відділення Meest';
                 MeestBranchesInput.placeholder = 'Введіть назву відділення';
                 inputCategoryOfWarehouse.value = '';
-            } else if (delivery === 'postomat') {
-                // DeliveryLocationTypeContainer.style.display = "none"
-                MeestBranchesContainer.style.display = 'grid';
-                AddressContainer.style.display = 'none';
-                document.querySelector('#meest_branch_div label').textContent = 'Поштомат Meest';
-                MeestBranchesInput.placeholder = 'Введіть назву поштомата';
-                inputCategoryOfWarehouse.value = 'Postomat';
             } else if (delivery === 'courier') {
                 // DeliveryLocationTypeContainer.style.display = "none"
                 MeestBranchesContainer.style.display = 'none';
                 AddressContainer.style.display = 'grid';
                 inputCategoryOfWarehouse.value = '';
+            }
+            if (type === 'City') {
+                DeliveryLocationVillageDistrict.style.display = "none"
+                DeliveryLocationVillageRef.style.display = "none"
+            } else if (type === 'Village') {
+                console.log(type);
+                MeestCityhDiv.style.display = 'none';
+                DeliveryLocationVillageDistrict.style.display = "block"
+                DeliveryLocationVillageRef.style.display = "block"
+
             }
 
             MeestCityInput.addEventListener('input', function() {
