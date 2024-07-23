@@ -10,6 +10,9 @@ header {
     width: 100%;
     background-color: #fff
 }
+#address_container {
+    padding-top: 10px;
+}
 .header {
     position: relative;
     background-color: #fff;
@@ -879,7 +882,7 @@ body, button {
     margin: 0 auto
 }
 .d-none {
-    display: none
+    display: none !important
 }
 .d-block {
     display: block
@@ -3941,8 +3944,13 @@ p.flag-cabinet, p.sale-flag {
         flex-wrap: nowrap
     }
     .form-post-grid {
+        gap: 10px;
         grid-template-columns: repeat(2, 1fr)
     }
+    .form-post-grid .select-order label {
+        display: block;
+        margin-bottom: 0;
+     }
     .order-succes-form {
         padding-right: 20px;
         max-height: 350rem;
