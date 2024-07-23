@@ -14,7 +14,7 @@ use App\Models\Producer;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Rating;
-use App\Models\RecProduct;
+use App\Models\TopProduct;
 use App\Models\Size;
 use App\Models\Status;
 use Illuminate\Contracts\Foundation\Application;
@@ -220,7 +220,7 @@ class ProductController extends Controller
     {
         $newProduct = Product::create($request->validated());
 
-        RecProduct::create([
+        TopProduct::create([
             'product_id' => $newProduct->id,
         ]);
 

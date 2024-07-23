@@ -28,7 +28,6 @@ return new class extends Migration {
             $table->text('measurements')->nullable();
             $table->integer('code')->unique();
             $table->boolean('product_promotion')->default(false);
-            $table->boolean('top_product')->default(false);
             $table->integer('rating')->default(5);
             $table->timestamps();
         });

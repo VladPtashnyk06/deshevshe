@@ -51,7 +51,6 @@ class Product extends Model implements HasMedia
         'outfit',
         'measurements',
         'product_promotion',
-        'top_product',
         'rating',
     ];
 

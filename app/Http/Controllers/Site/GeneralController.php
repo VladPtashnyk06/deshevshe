@@ -10,7 +10,7 @@ use App\Models\Color;
 use App\Models\Comment;
 use App\Models\Producer;
 use App\Models\Product;
-use App\Models\RecProduct;
+use App\Models\TopProduct;
 use App\Models\Size;
 use App\Models\Status;
 use Carbon\Carbon;
@@ -23,25 +23,20 @@ use Illuminate\Support\Facades\Auth;
 
 class GeneralController extends Controller
 {
-    public function recProducts()
+    public function topProducts()
     {
-        $recommendProducts = RecProduct::paginate(8);
-        foreach ($recommendProducts as $recommendProduct) {
-            if ($recommendProduct->count_views > 0) {
-                $recProducts[] = $recommendProduct;
-            }
-        }
-        if (empty($recProducts)) {
-            $recProducts = [];
+        $topProducts = TopProduct::orderBy('count_purchased', 'desc')->paginate(8);
+        if (empty($topProducts)) {
+            $topProducts = [];
         }
 
-        return $recProducts;
+        return $topProducts;
     }
     public function index()
     {
-        $recProducts = $this->recProducts();
+        $topProducts = $this->topProducts();
         $categories = Category::where('parent_id', '=', null)->where('level', '=', 1)->take(7)->get();
-        return view('site.index', compact('recProducts', 'categories'));
+        return view('site.index', compact('topProducts', 'categories'));
     }
 
     public function help()
@@ -157,7 +152,7 @@ class GeneralController extends Controller
 
     public function second()
     {
-        $recommendProducts = RecProduct::all();
+        $recommendProducts = TopProduct::all();
         foreach ($recommendProducts as $recommendProduct) {
             if ($recommendProduct->count_views > 0) {
                 $recProducts[] = $recommendProduct;

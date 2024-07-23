@@ -2,8 +2,8 @@
     <h2>топ продажів</h2>
     <div class="wrapper-card">
         <div class="top-prodaz-card">
-            @if(!empty($recProducts))
-                @foreach($recProducts as $recProduct)
+            @if(!empty($topProducts))
+                @foreach($topProducts as $topProduct)
                     <figure class="card">
                         <a href="card.html"></a>
                         <figcaption>
@@ -11,22 +11,22 @@
                                 <div class="main-info-card item-center">
                                     <div class="image-block-card">
                                         <span class="flag"><span>new</span></span>
-                                        <picture><img alt="{{ $recProduct->product->title }}" src="{{ asset('storage/'. $recProduct->product->img_path) }}"></picture>
+                                        <picture><img alt="{{ $topProduct->product->title }}" src="{{ asset('storage/'. $topProduct->product->img_path) }}"></picture>
                                     </div>
                                     <form action="#">
                                         <div class="haracteristic-block-card">
                                             <div class="hover-card">
-                                                <h3>{{ $recProduct->product->title }}</h3>
+                                                <h3>{{ $topProduct->product->title }}</h3>
                                                 <div class="color d-flex item-center">
-                                                    @foreach($recProduct->product->productVariants()->get()->unique('color_id') as $productVariant)
+                                                    @foreach($topProduct->product->productVariants()->get()->unique('color_id') as $productVariant)
                                                         <label>
                                                             <input name="color" required="required" type="radio" value="{{ $productVariant->color->title_en }}">
                                                         </label>
                                                     @endforeach
                                                 </div>
-                                                <p class="article">Артикул: {{ $recProduct->product->code }}</p>
+                                                <p class="article">Артикул: {{ $topProduct->product->code }}</p>
                                                 <div class="size d-flex item-center">
-                                                    @foreach($recProduct->product->productVariants()->get() as $productVariant)
+                                                    @foreach($topProduct->product->productVariants()->get() as $productVariant)
                                                         <p>
                                                             <input id="{{ $productVariant->size->title }}" name="size" required="required" type="radio">
                                                             <label for="{{ $productVariant->size->title }}">{{ $productVariant->size->title }}</label>
@@ -34,7 +34,7 @@
                                                     @endforeach
                                                 </div>
                                                 <p class="d-flex price-block item-center">
-                                                    <span class="price">{{ $recProduct->product->price->retail }}₴</span>
+                                                    <span class="price">{{ $topProduct->product->price->retail }}₴</span>
                                                     <span class="old-price">1200₴</span>
                                                 </p>
                                             </div>

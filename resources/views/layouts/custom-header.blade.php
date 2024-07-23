@@ -42,8 +42,11 @@
         <x-nav-link :href="route('promotional.index')" :active="request()->routeIs('promotional.index')">
             {{ __('Акційній товари') }}
         </x-nav-link>
-        <x-nav-link :href="route('product.ratingProduct')" :active="request()->routeIs('product.ratingProduct')">
-            {{ __('Рейтинги товарів') }}
+{{--        <x-nav-link :href="route('product.ratingProduct')" :active="request()->routeIs('product.ratingProduct')">--}}
+{{--            {{ __('Рейтинги товарів') }}--}}
+{{--        </x-nav-link>--}}
+        <x-nav-link :href="route('top-product.index')" :active="request()->routeIs('top-product.index')">
+            {{ __('Топ товари') }}
         </x-nav-link>
     </div>
 </header>

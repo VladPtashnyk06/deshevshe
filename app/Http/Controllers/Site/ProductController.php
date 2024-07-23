@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Rating;
-use App\Models\RecProduct;
+use App\Models\TopProduct;
 use App\Models\RelatedProduct;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
@@ -29,13 +29,6 @@ class ProductController extends Controller
      */
     public function showOneProduct(Product $product)
     {
-        $recProduct = RecProduct::where('product_id', $product->id)->first();
-        if ($recProduct) {
-            $recProduct->update(['count_views' => $recProduct->count_views + 1]);
-        } else {
-            RecProduct::create(['product_id' => $product->id]);
-        }
-
         if (!empty(session()->get('recentlyViewedProducts'))) {
             $recentlyViewedProducts = session()->get('recentlyViewedProducts', []);
 
@@ -88,27 +81,27 @@ class ProductController extends Controller
     public function recProducts(Request $request)
     {
         $sort = $request->get('sort', 'newest');
-        $query = RecProduct::query();
+        $query = TopProduct::query();
 
         switch ($sort) {
             case 'price_asc':
-                $query->join('prices', 'rec_products.product_id', '=', 'prices.product_id')
-                    ->select('rec_products.*', 'prices.pair as price')
+                $query->join('prices', 'top_products.product_id', '=', 'prices.product_id')
+                    ->select('top_products.*', 'prices.pair as price')
                     ->orderBy('price', 'asc');
                 break;
             case 'price_desc':
-                $query->join('prices', 'rec_products.product_id', '=', 'prices.product_id')
-                    ->select('rec_products.*', 'prices.pair as price')
+                $query->join('prices', 'top_products.product_id', '=', 'prices.product_id')
+                    ->select('top_products.*', 'prices.pair as price')
                     ->orderBy('price', 'desc');
                 break;
             case 'name_asc':
-                $query->join('products', 'rec_products.product_id', '=', 'products.id')
-                    ->select('rec_products.*', 'products.title as title')
+                $query->join('products', 'top_products.product_id', '=', 'products.id')
+                    ->select('top_products.*', 'products.title as title')
                     ->orderBy('title', 'asc');
                 break;
             case 'name_desc':
-                $query->join('products', 'rec_products.product_id', '=', 'products.id')
-                    ->select('rec_products.*', 'products.title as title')
+                $query->join('products', 'top_products.product_id', '=', 'products.id')
+                    ->select('top_products.*', 'products.title as title')
                     ->orderBy('title', 'desc');
                 break;
             case 'newest':
@@ -117,18 +110,11 @@ class ProductController extends Controller
                 break;
         }
 
-        $recommendProducts = $query->get();
-        $recProducts = [];
-
-        foreach ($recommendProducts as $recommendProduct) {
-            if ($recommendProduct->count_views > 0) {
-                $recProducts[] = $recommendProduct;
-            }
-        }
+        $topProducts = $query->get();
 
         $likedProducts = session()->get('likedProducts', []);
 
-        return view('site.product.rec-products', compact('recProducts', 'likedProducts'));
+        return view('site.product.rec-products', compact('topProducts', 'likedProducts'));
     }
 
     /**

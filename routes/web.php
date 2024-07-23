@@ -363,6 +363,16 @@ Route::middleware('auth')->group(function () {
                     Route::post('/promotional/update/{product}', 'update')->name('promotional.update');
                     Route::delete('/promotional/delete/{product}', 'destroy')->name('promotional.delete');
                 });
+                Route::group(['prefix' => 'top-product'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\TopProductController::class)->group(function () {
+                        Route::get('/', 'index')->name('top-product.index');
+                        Route::get('/create', 'create')->name('top-product.create');
+                        Route::post('/store/{product}', 'store')->name('top-product.store');
+                        Route::get('/edit/{topProduct}', 'edit')->name('top-product.edit');
+                        Route::post('/update/{topProduct}', 'update')->name('top-product.update');
+                        Route::delete('/delete/{topProduct}', 'destroy')->name('top-product.delete');
+                    });
+                });
                 Route::controller(\App\Http\Controllers\Admin\ProductCommentController::class)->group(function () {
                     Route::get('/comments/{product}', 'index')->name('product.comments');
                     Route::get('/comments/create/{product_comment}', 'create')->name('product.comments.create');

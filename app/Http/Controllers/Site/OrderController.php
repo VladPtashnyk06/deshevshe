@@ -15,6 +15,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\PromoCode;
+use App\Models\TopProduct;
 use App\Models\UkrPoshtaRegion;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -26,7 +27,6 @@ use Darryldecode\Cart\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use const http\Client\Curl\AUTH_ANY;
 
 class OrderController extends Controller
 {
@@ -212,6 +212,12 @@ class OrderController extends Controller
                     'product_total_price' => $product->price->retail * $item->quantity,
                     'quantity_product' => $item->quantity
                 ]);
+                $topProduct = TopProduct::where('product_id', $product->id)->first();
+                if ($topProduct) {
+                    $topProduct->update(['count_purchased' => $topProduct->count_purchased + 1]);
+                } else {
+                    TopProduct::create(['product_id' => $product->id]);
+                }
             }
             $deliveryNameAndType = $request->validated('delivery_type');
             list($deliveryName, $deliveryType) = explode('_', $deliveryNameAndType, 2);

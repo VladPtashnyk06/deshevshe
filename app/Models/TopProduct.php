@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RecProduct extends Model
+class TopProduct extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'rec_products';
+    protected $table = 'top_products';
 
     /**
      * The primary key associated with the table.
@@ -28,7 +28,7 @@ class RecProduct extends Model
      */
     protected $fillable = [
         'product_id',
-        'count_views',
+        'count_purchased',
     ];
 
     public function product(): BelongsTo
