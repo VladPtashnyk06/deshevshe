@@ -4,6 +4,10 @@
             <div class="bg-transparent overflow-hidden shadow-sm sm:rounded-lg p-6 bg-white">
                 <h2 class="text-2xl font-semibold mb-4 text-center">Коментарі до продукту</h2>
 
+                <div class="text-center mb-4">
+                    <a href="{{ route('product.index') }}" class="bg-gray-600 hover:bg-gray-700 block text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full border">Назад</a>
+                </div>
+
                 <table class="w-full mb-5">
                     <thead>
                         <tr class="text-center border-b-2 border-gray-700">

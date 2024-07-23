@@ -7,19 +7,26 @@ use App\Http\Requests\OrderRequest;
 use App\Http\Requests\UpdateOneOrderRequest;
 use App\Mail\OrderMail;
 use App\Models\Delivery;
+use App\Models\MeestRegion;
+use App\Models\NovaPoshtaRegion;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\PromoCode;
+use App\Models\UkrPoshtaRegion;
 use App\Models\User;
+use App\Models\UserAddress;
+use App\Models\UserPromocode;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
 use App\Services\UkrPoshtaService;
+use Darryldecode\Cart\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use const http\Client\Curl\AUTH_ANY;
 
 class OrderController extends Controller
 {
@@ -77,17 +84,16 @@ class OrderController extends Controller
         }
 
         $paymentMethods = PaymentMethod::all();
+        $novaPoshtaRegions = NovaPoshtaRegion::all();
+        $meestRegions = MeestRegion::all();
+        $ukrPoshtaRegions = UkrPoshtaRegion::all();
 
-        $novaPoshtaService = new NovaPoshtaService();
-        $novaPoshtaRegions = $novaPoshtaService->getRegions();
+        $delivery = null;
+        if (\Auth::user() && \Auth::user()->role == 'user') {
+            $delivery = \Auth::user()->userAddress()->first();
+        }
 
-        $meestService = new MeestService();
-        $meestRegions = $meestService->getRegions();
-
-        $ukrPoshtaService = new UkrPoshtaService();
-        $ukrPoshtaRegions = $ukrPoshtaService->getRegions();
-
-        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions'));
+        return view('site.orders.create', compact('cartItems', 'totalPrice', 'totalDiscountPrice', 'discount', 'freeShipping', 'belowMinimumAmount', 'minimumAmount', 'paymentMethods', 'novaPoshtaRegions', 'meestRegions', 'ukrPoshtaRegions', 'delivery'));
     }
 
     public function store(OrderRequest $request)
@@ -108,25 +114,37 @@ class OrderController extends Controller
         if ($request->validated('promo_code')) {
             $promoCode = PromoCode::where('title', $request->validated('promo_code'))->first();
             if ($promoCode) {
-                if ($promoCode->quantity_now < $promoCode->quantity) {
-                    $promoCodeId = $promoCode->id;
-                    $phoneOrders = Order::where('user_phone', $request->validated('user_phone'))->get();
-                    $promoCodeUsed = false;
-                    foreach ($phoneOrders as $phoneOrder) {
-                        if ($phoneOrder->promo_code_id == $promoCodeId) {
-                            $promoCodeUsed = true;
-                            return back()->withErrors(['promo_code' => 'Ви вже використали цей промокод']);
+                if ($userPromoCode = UserPromocode::where('user_id', $request->validated('user_id'))->where('promo_code_id', $promoCode->id)->first()) {
+                    if ($userPromoCode->status == 'Не використанний') {
+                        if ($promoCode->quantity_now < $promoCode->quantity) {
+                            $promoCodeId = $promoCode->id;
+                            $phoneOrders = Order::where('user_phone', $request->validated('user_phone'))->get();
+                            $promoCodeUsed = false;
+                            foreach ($phoneOrders as $phoneOrder) {
+                                if ($phoneOrder->promo_code_id == $promoCodeId) {
+                                    $promoCodeUsed = true;
+                                    return back()->withErrors(['promo_code' => 'Ви вже використали цей промокод']);
+                                }
+                            }
+                            if ($promoCodeUsed == false) {
+                                $totalPrice = $request->validated('total_price') - ($request->validated('total_price') * ($promoCode->rate / 100));
+                                $promoCode->update([
+                                    'quantity_now' => $promoCode->quantity_now + 1
+                                ]);
+                                $userPromoCode->update([
+                                    'status' => 'Використанний'
+                                ]);
+                                $promoCodeId = $promoCode->id;
+                            }
+                        } else {
+                            return back()->withErrors(['promo_code' => 'Цей промокод не доступний']);
                         }
+                    } else {
+                        return back()->withErrors(['promo_code' => 'Ви вже використали цей промокод']);
                     }
-                    if ($promoCodeUsed == false) {
-                        $totalPrice = $request->validated('total_price') - ($request->validated('total_price') * ($promoCode->rate / 100));
-                        $promoCode->update([
-                            'quantity_now' => $promoCode->quantity_now + 1
-                        ]);
-                        $promoCodeId = $promoCode->id;
-                    }
-                } else {
-                    return back()->withErrors(['promo_code' => 'Цей промокод не доступний']);
+                }
+                else {
+                    return back()->withErrors(['promo_code' => 'Такого промокоду немає']);
                 }
             } else {
                 return back()->withErrors(['promo_code' => 'Такого промокоду немає']);
@@ -274,9 +292,43 @@ class OrderController extends Controller
             }
 //            Mail::to('zembitskijdenis813@gmail.com')->send(new OrderMail($newOrder));
             Mail::to('vlad1990pb@gmail.com')->send(new OrderMail($newOrder));
+
+            if ($newOrder->user_id) {
+                UserAddress::updateOrCreate(
+                    [
+                        'user_id' => $newOrder->user_id,
+                    ],
+                    [
+                        'delivery_name' => $newOrder->delivery->delivery_name,
+                        'delivery_method' => $newOrder->delivery->delivery_method,
+                        'region' => $newOrder->delivery->region,
+                        'regionRef' => $newOrder->delivery->regionRef,
+                        'settlementType' => $newOrder->delivery->settlementType,
+                        'settlement' => $newOrder->delivery->settlement ?? null,
+                        'settlementRef' => $newOrder->delivery->settlementRef ?? null,
+                        'branch' => $newOrder->delivery->branch ?? null,
+                        'branchRef' => $newOrder->delivery->branchRef ?? null,
+                        'district' => $newOrder->delivery->district ?? null,
+                        'districtRef' => $newOrder->delivery->districtRef ?? null,
+                        'street' => $newOrder->delivery->street ?? null,
+                        'streetRef' => $newOrder->delivery->streetRef ?? null,
+                        'house' => $newOrder->delivery->house ?? null,
+                        'flat' => $newOrder->delivery->flat ?? null,
+                    ]
+                );
+            }
+
+//            Cart::clear();
         }
 
         return redirect()->route('site.order.thankYou');
+    }
+
+    public function jsonFile()
+    {
+        $json = UserAddress::all();
+
+        return response()->json($json);
     }
 
     public function updateCart(Request $request): RedirectResponse

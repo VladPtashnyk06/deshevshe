@@ -41,7 +41,7 @@ class RelatedProductController extends Controller
         }
 
         $mainProduct = $product;
-        $products = $query->get();
+        $products = $query->paginate(25);
         return view('admin.products.relatedProducts.create', compact('mainProduct', 'products', 'codes', 'categories', 'producers'));
     }
 

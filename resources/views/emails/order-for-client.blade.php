@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Нове замовлення №{{ $order->id }}</title>
+    <title>Нове замовлення</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -80,7 +80,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Нове замовлення №{{ $order->id }}</h1>
+        <h1>Нове замовлення</h1>
     </div>
     <div class="content">
         <div class="two-table">

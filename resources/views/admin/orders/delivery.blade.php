@@ -99,9 +99,9 @@
         <div class="space-y-1 mb-4" id="nova_poshta_region_div">
             <label for="nova_poshta_region_ref" class="block font-semibold">Регіон / Область *</label>
             <select name="nova_poshta_region_ref" id="nova_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
-                <option value="" selected>--- Виберіть ---</option>
+                <option value="">--- Виберіть ---</option>
                 @foreach($novaPoshtaRegions as $region)
-                    <option value="{{ $region['Ref'] }}" {{ $order->delivery->regionRef == $region['Ref'] ? 'selected' : '' }}>{{ $region['Description'] }}</option>
+                    <option value="{{ $region->ref }}" {{ $order->delivery->regionRef == $region->ref ? 'selected' : '' }}>{{ $region->description }}</option>
                 @endforeach
             </select>
         </div>
@@ -131,7 +131,7 @@
             <select name="meest_region_ref" id="meest_region_ref" class="w-full border rounded-md py-2 px-3">
                 <option value="">--- Виберіть ---</option>
                 @foreach($meestRegions as $region)
-                    <option value="{{ $region['regionID'] }}" {{ $order->delivery->regionRef == $region['regionID'] ? 'selected' : '' }}>{{ ucfirst(strtolower($region['regionDescr']['descrUA'])) }}</option>
+                    <option value="{{ $region->region_id }}" {{ $order->delivery->regionRef == $region->region_id ? 'selected' : '' }}>{{ ucfirst(strtolower($region->description)) }}</option>
                 @endforeach
             </select>
         </div>
@@ -161,7 +161,7 @@
             <select name="ukr_poshta_region_ref" id="ukr_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
                 <option value="">--- Виберіть ---</option>
                 @foreach($ukrPoshtaRegions as $region)
-                    <option value="{{ $region['REGION_ID'] }}" {{ $region['REGION_ID'] == $order->delivery->regionRef ? 'selected' : ''}}>{{ ucfirst(strtolower($region['REGION_UA'])) }}</option>
+                    <option value="{{ $region->region_id }}" {{ $region->region_id == $order->delivery->regionRef ? 'selected' : ''}}>{{ ucfirst(strtolower($region->description)) }}</option>
                 @endforeach
             </select>
         </div>

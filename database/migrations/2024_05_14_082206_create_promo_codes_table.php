@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->integer('rate');
             $table->integer('quantity_now')->default('0');
             $table->integer('quantity');
+            $table->enum('certificate', ['Yes', 'No']);
             $table->timestamps();
         });
     }

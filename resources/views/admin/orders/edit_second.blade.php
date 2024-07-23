@@ -53,7 +53,7 @@
                                     @endforeach
                                 </td>
                                 <td class="break-words max-w-xs">
-                                    {{ $orderDetail->product->price->pair }}
+                                    {{ $orderDetail->product->price->retail }}
                                     {{ $order->currency }}
                                 </td>
                                 <td class="break-words max-w-60">

@@ -40,20 +40,6 @@ class NovaPoshtaService
         return $response->json()['data'];
     }
 
-    public function getBranchesVillages()
-    {
-        $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [
-            'apiKey' => $this->apiKey,
-            'modelName' => 'AddressGeneral',
-            'calledMethod' => 'getWarehouses',
-            'methodProperties' => [
-                'SettlementRef' => '',
-            ],
-        ]);
-
-        return $response->json()['data'];
-    }
-
     public function getVillages($districtRef)
     {
         $response = Http::post('https://api.novaposhta.ua/v2.0/json/', [

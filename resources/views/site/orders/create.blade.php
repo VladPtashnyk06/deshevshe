@@ -150,6 +150,9 @@
                                         </div>
                                     @endif
                                 </div>
+{{--                                <div>--}}
+{{--                                    <input name="deliveryNamee" id="deliveryNamee" value="">--}}
+{{--                                </div>--}}
                                 <div class="second md:w-2/3">
                                     <h2 class="text-lg font-semibold">Спосіб доставки</h2>
                                     <div class="space-y-1 mb-4 text-gray-700">
@@ -246,8 +249,8 @@
                                             <label for="nova_poshta_region_ref" class="block font-semibold">Регіон / Область *</label>
                                             <select name="nova_poshta_region_ref" id="nova_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
                                                 <option value="" selected>--- Виберіть ---</option>
-                                            @foreach($novaPoshtaRegions as $region)
-                                                    <option value="{{ $region['Ref'] }}">{{ $region['Description'] }}</option>
+                                                @foreach($novaPoshtaRegions as $region)
+                                                    <option value="{{ $region->ref }}">{{ $region->description }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -277,7 +280,7 @@
                                             <select name="meest_region_ref" id="meest_region_ref" class="w-full border rounded-md py-2 px-3">
                                                 <option value="">--- Виберіть ---</option>
                                                     @foreach($meestRegions as $region)
-                                                        <option value="{{ $region['regionID'] }}">{{ ucfirst(strtolower($region['regionDescr']['descrUA'])) }}</option>
+                                                        <option value="{{ $region->region_id }}">{{ strtolower($region->description) }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -307,7 +310,7 @@
                                             <select name="ukr_poshta_region_ref" id="ukr_poshta_region_ref" class="w-full border rounded-md py-2 px-3">
                                                 <option value="">--- Виберіть ---</option>
                                                 @foreach($ukrPoshtaRegions as $region)
-                                                    <option value="{{ $region['REGION_ID'] }}">{{ ucfirst(strtolower($region['REGION_UA'])) }}</option>
+                                                    <option value="{{ $region->region_id }}">{{ ucfirst(strtolower($region->description)) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -393,6 +396,11 @@
         const RegistrationCheckbox = document.getElementById('registration');
         const PasswordFields = document.getElementById('password_fields');
         const PhoneInput = document.getElementById('user_phone');
+
+        {{--const deliveryNamee = document.getElementById('deliveryNamee');--}}
+        {{--const json = @json($delivery);--}}
+        {{--console.log(json)--}}
+        {{--deliveryNamee.value = json.region;--}}
 
         if (RegistrationCheckbox) {
             RegistrationCheckbox.addEventListener('change', function() {
@@ -675,6 +683,62 @@
                 }
             });
 
+            if (currentInputHandler) {
+                VillageInput.removeEventListener('input', currentInputHandler);
+            }
+            if (currentFocusHandler) {
+                VillageInput.removeEventListener('focus', currentFocusHandler);
+            }
+
+            DeliveryLocationTypeRadios.forEach(radio => {
+                if (radio.checked) {
+                    if (radio.value === 'Village') {
+                        currentInputHandler = function() {
+                            if (poshta === 'NovaPoshta') {
+                                const districtRef = DistrictRef.value;
+                                const searchText = this.value.trim().toLowerCase();
+                                if (districtRef && searchText.length >= 0) {
+                                    NovaPoshtaFetchVillages(districtRef, searchText);
+                                } else {
+                                    VillageList.innerHTML = '';
+                                    VillageList.classList.add('hidden');
+                                }
+                            } else if (poshta === 'UkrPoshta') {
+                                const districtId = DistrictRef.value;
+                                const searchText = this.value.trim().toLowerCase();
+                                if (districtId && searchText.length >= 0) {
+                                    fetchCities(districtId, '', searchText);
+                                } else {
+                                    VillageList.innerHTML = '';
+                                    VillageList.classList.add('hidden');
+                                }
+                            }
+                        };
+
+                        currentFocusHandler = function() {
+                            if (poshta === 'NovaPoshta') {
+                                const districtRef = DistrictRef.value;
+                                if (VillageInput.value.trim().length === 0) {
+                                    NovaPoshtaFetchVillages(districtRef, '');
+                                } else if (VillageList.children.length > 0) {
+                                    VillageList.classList.remove('hidden');
+                                }
+                            } else if (poshta === 'UkrPoshta') {
+                                const districtId = DistrictRef.value;
+                                if (VillageInput.value.trim().length === 0) {
+                                    fetchCities(districtId, '', '');
+                                } else if (VillageList.children.length > 0) {
+                                    VillageList.classList.remove('hidden');
+                                }
+                            }
+                        };
+
+                        VillageInput.addEventListener('input', currentInputHandler);
+                        VillageInput.addEventListener('focus', currentFocusHandler);
+                    }
+                }
+            });
+
             //
             //Nova Poshta
             //
@@ -754,10 +818,10 @@
                 });
 
                 NovaPoshtaCityInput.addEventListener('focus', function() {
-                    const regionRef = NovaPoshtaRegionSelect.value;
+                    const regionId = NovaPoshtaRegionSelect.value;
 
-                    if (regionRef && NovaPoshtaCityInput.value.trim().length === 0) {
-                        NovaPoshtaFetchCities(regionRef, '');
+                    if (regionId && NovaPoshtaCityInput.value.trim().length === 0) {
+                        NovaPoshtaFetchCities(regionId, '');
                     } else if (NovaPoshtaCityList.children.length > 0) {
                         NovaPoshtaCityList.classList.remove('hidden');
                     }
@@ -765,14 +829,17 @@
 
                 NovaPoshtaBranchesInput.addEventListener('input', function() {
                     let cityRef;
+                    let settlementType;
                     if (type === 'City') {
                         cityRef = CityRefHidden.value;
+                        settlementType = 'місто';
                     } else {
                         cityRef = VillageRef.value;
+                        settlementType = 'село';
                     }
                     const searchText = this.value.trim().toLowerCase();
                     if (cityRef  && searchText.length >= 0) {
-                        NovaPoshtaFetchBranches(cityRef, searchText);
+                        NovaPoshtaFetchBranches(cityRef, searchText, settlementType);
                     } else {
                         NovaPoshtaBranchesList.innerHTML = '';
                         NovaPoshtaBranchesList.classList.add('hidden');
@@ -781,13 +848,16 @@
 
                 NovaPoshtaBranchesInput.addEventListener('focus', function() {
                     let cityRef;
+                    let settlementType;
                     if (type === 'City') {
                         cityRef = CityRefHidden.value;
+                        settlementType = 'місто';
                     } else {
                         cityRef = VillageRef.value;
+                        settlementType = 'село';
                     }
                     if (NovaPoshtaBranchesInput.value.trim().length === 0) {
-                        NovaPoshtaFetchBranches(cityRef, '');
+                        NovaPoshtaFetchBranches(cityRef, '', settlementType);
                     } else if (NovaPoshtaBranchesList.children.length > 0) {
                         NovaPoshtaBranchesList.classList.remove('hidden');
                     }
@@ -811,26 +881,6 @@
                         NovaPoshtaFetchDiscticts(regionRef, '');
                     } else if (DistrictList.children.length > 0) {
                         DistrictList.classList.remove('hidden');
-                    }
-                });
-
-                VillageInput.addEventListener('input', function() {
-                    const districtRef = DistrictRef.value;
-                    const searchText = this.value.trim().toLowerCase();
-                    if (districtRef && searchText.length >= 0) {
-                        NovaPoshtaFetchVillages(districtRef, searchText);
-                    } else {
-                        VillageList.innerHTML = '';
-                        VillageList.classList.add('hidden');
-                    }
-                });
-
-                VillageInput.addEventListener('focus', function() {
-                    const districtRef = DistrictRef.value;
-                    if (VillageInput.value.trim().length === 0) {
-                        NovaPoshtaFetchVillages(districtRef, '');
-                    } else if (VillageList.children.length > 0) {
-                        VillageList.classList.remove('hidden');
                     }
                 });
 
@@ -860,20 +910,20 @@
                         },
                         body: JSON.stringify({ region_ref: regionRef, findByString: searchText })
                     })
-                        .then(response => response.json())
+                        .then(response => response.json() )
                         .then(data => {
                             NovaPoshtaCityList.innerHTML = '';
                             data.forEach(city => {
                                 if (type === 'City') {
-                                    if (city.Description.toLowerCase().includes(searchText) && city.SettlementTypeDescription.toLowerCase().includes('місто')) {
+                                    if (city.description.toLowerCase().includes(searchText) && city.settlement_type_description.toLowerCase().includes('місто')) {
                                         const listItem = document.createElement('li');
-                                        listItem.textContent = city.SettlementTypeDescription + ' ' + city.Description;
-                                        listItem.setAttribute('data-value', city.Ref);
+                                        listItem.textContent = city.settlement_type_description + ' ' + city.description;
+                                        listItem.setAttribute('data-value', city.ref);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
-                                            NovaPoshtaCityInput.value = city.Description;
-                                            CityName.value = city.Description
-                                            CityRefHidden.value = city.Ref;
+                                            NovaPoshtaCityInput.value = city.description;
+                                            CityName.value = city.description
+                                            CityRefHidden.value = city.ref;
                                             NovaPoshtaCityList.classList.add('hidden');
                                             MeestBranchesInput.value = '';
                                             NovaPoshtaBranchesList.innerHTML = '';
@@ -889,7 +939,7 @@
                         .catch(error => console.error('Error:', error));
                 }
 
-                function NovaPoshtaFetchBranches(cityRef, searchText) {
+                function NovaPoshtaFetchBranches(cityRef, searchText, settlementType) {
                     const categoryOfWarehouse = document.getElementById('categoryOfWarehouse').value;
                     fetch('/get-nova-poshta-branches', {
                         method: 'POST',
@@ -897,36 +947,36 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ city: cityRef, search: searchText })
+                        body: JSON.stringify({ city_ref: cityRef, search: searchText, settlementType: settlementType })
                     })
                         .then(response => response.json())
                         .then(data => {
                             NovaPoshtaBranchesList.innerHTML = '';
                             data.forEach(branch => {
-                                if (categoryOfWarehouse === 'Postomat' && branch.CategoryOfWarehouse.toLowerCase().includes('postomat')) {
-                                    if (branch.Description.toLowerCase().includes(searchText)) {
+                                if (categoryOfWarehouse === 'Postomat' && branch.type_of_warehouse.toLowerCase().includes('f9316480-5f2d-425d-bc2c-ac7cd29decf0')) {
+                                    if (branch.description.toLowerCase().includes(searchText)) {
                                         const listItem = document.createElement('li');
-                                        listItem.textContent = branch.Description;
-                                        listItem.setAttribute('data-value', branch.Ref);
+                                        listItem.textContent = branch.description;
+                                        listItem.setAttribute('data-value', branch.ref);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
                                             NovaPoshtaBranchesInput.value = this.textContent;
-                                            BranchRefHidden.value = branch.Ref;
-                                            BranchNumber.value = branch.Number;
+                                            BranchRefHidden.value = branch.ref;
+                                            BranchNumber.value = branch.number;
                                             NovaPoshtaBranchesList.classList.add('hidden');
                                         });
                                         NovaPoshtaBranchesList.appendChild(listItem);
                                     }
-                                } else if(categoryOfWarehouse === 'Branch' && !branch.CategoryOfWarehouse.toLowerCase().includes('postomat')) {
-                                    if (branch.Description.toLowerCase().includes(searchText)) {
+                                } else if(categoryOfWarehouse === 'Branch' && !branch.type_of_warehouse.toLowerCase().includes('f9316480-5f2d-425d-bc2c-ac7cd29decf0')) {
+                                    if (branch.description.toLowerCase().includes(searchText)) {
                                         const listItem = document.createElement('li');
-                                        listItem.textContent = branch.Description;
-                                        listItem.setAttribute('data-value', branch.Ref);
+                                        listItem.textContent = branch.description;
+                                        listItem.setAttribute('data-value', branch.ref);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function () {
                                             NovaPoshtaBranchesInput.value = this.textContent;
-                                            BranchRefHidden.value = branch.Ref;
-                                            BranchNumber.value = branch.Number;
+                                            BranchRefHidden.value = branch.ref;
+                                            BranchNumber.value = branch.number;
                                             NovaPoshtaBranchesList.classList.add('hidden');
                                         });
                                         NovaPoshtaBranchesList.appendChild(listItem);
@@ -980,20 +1030,20 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ region: regionRef, search: searchText })
+                        body: JSON.stringify({ region_ref: regionRef, search: searchText })
                     })
                         .then(response => response.json())
                         .then(data => {
                             DistrictList.innerHTML = '';
                             data.forEach(district => {
-                                if (district.Description.toLowerCase().includes(searchText) || district.RegionType.toLowerCase().includes(searchText) || (district.Description+' '+district.RegionType).toLowerCase().includes(searchText)) {
+                                if (district.description.toLowerCase().includes(searchText)) {
                                     const listItem = document.createElement('li');
-                                    listItem.textContent = district.Description + ' ' + district.RegionType;
-                                    listItem.setAttribute('data-value', district.Ref);
+                                    listItem.textContent = district.description + ' район';
+                                    listItem.setAttribute('data-value', district.ref);
                                     listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                     listItem.addEventListener('click', function() {
                                         DistrictInput.value = this.textContent;
-                                        DistrictRef.value = district.Ref;
+                                        DistrictRef.value = district.ref;
                                         DistrictList.classList.add('hidden');
                                     });
                                     DistrictList.appendChild(listItem);
@@ -1019,15 +1069,15 @@
                         .then(data => {
                             VillageList.innerHTML = '';
                             data.forEach(village => {
-                                if ((village.Description.toLowerCase().includes(searchText) || village.SettlementTypeDescription.toLowerCase().includes(searchText) || (village.SettlementTypeDescription+' '+village.Description).toLowerCase().includes(searchText)) && !village.SettlementTypeDescription.toLowerCase().includes('місто')) {
+                                if ((village.description.toLowerCase().includes(searchText) || village.settlement_type_description.toLowerCase().includes(searchText) || (village.settlement_type_description+' '+village.description).toLowerCase().includes(searchText)) && !village.settlement_type_description.toLowerCase().includes('місто')) {
                                     const listItem = document.createElement('li');
-                                    listItem.textContent = village.SettlementTypeDescription + ' ' + village.Description;
-                                    listItem.setAttribute('data-value', village.Ref);
+                                    listItem.textContent = village.settlement_type_description + ' ' + village.description;
+                                    listItem.setAttribute('data-value', village.ref);
                                     listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                     listItem.addEventListener('click', function() {
-                                        CityName.value = village.Description
+                                        CityName.value = village.description
                                         VillageInput.value = this.textContent;
-                                        VillageRef.value = village.Ref;
+                                        VillageRef.value = village.ref;
                                         VillageList.classList.add('hidden');
                                     });
                                     VillageList.appendChild(listItem);
@@ -1092,7 +1142,7 @@
                     const cityId = document.querySelector('#meest_city_list li[data-value]')?.getAttribute('data-value');
                     const searchText = this.value.trim().toLowerCase();
                     if (cityId && searchText.length > 1) {
-                        MeestFetchBranches(cityId, MeestCityInput.value, searchText);
+                        MeestFetchBranches(cityId, searchText);
                     } else {
                         MeestBranchesList.innerHTML = '';
                         MeestBranchesList.classList.add('hidden');
@@ -1102,7 +1152,7 @@
                 MeestBranchesInput.addEventListener('focus', function() {
                     const cityId = document.querySelector('#meest_city_list li[data-value]')?.getAttribute('data-value');
                     if (cityId && MeestBranchesInput.value.trim().length === 0) {
-                        MeestFetchBranches(cityId, MeestCityInput.value, '');
+                        MeestFetchBranches(cityId, '');
                     } else if (MeestBranchesList.children.length > 0) {
                         MeestBranchesList.classList.remove('hidden');
                     }
@@ -1134,20 +1184,20 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ regionId: regionId, regionDescr: searchText })
+                        body: JSON.stringify({ regionId: regionId })
                     })
                         .then(response => response.json())
                         .then(data => {
                             MeestCityList.innerHTML = '';
                             data.forEach(city => {
-                                if (city.cityDescr.descrUA.toLowerCase().includes(searchText)) {
+                                if (city.description.toLowerCase().includes(searchText)) {
                                     const listItem = document.createElement('li');
-                                    listItem.textContent = city.cityDescr.descrUA;
-                                    listItem.setAttribute('data-value', city.cityID);
+                                    listItem.textContent = city.description + ' ' + city.city_type.toLowerCase();
+                                    listItem.setAttribute('data-value', city.city_id);
                                     listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                     listItem.addEventListener('click', function() {
-                                        MeestCityInput.value = city.cityDescr.descrUA;
-                                        CityRefHidden.value = city.cityID;
+                                        MeestCityInput.value = city.description;
+                                        CityRefHidden.value = city.city_id;
                                         MeestCityList.classList.add('hidden');
                                         MeestBranchesInput.value = '';
                                         MeestBranchesList.innerHTML = '';
@@ -1162,46 +1212,30 @@
                         .catch(error => console.error('Error:', error));
                 }
 
-                function MeestFetchBranches(cityId, cityDescr, searchText) {
+                function MeestFetchBranches(cityId, searchText) {
                     fetch('/meest/branches', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ cityDescr: cityDescr, cityId: cityId, branchDescr: searchText, addressMoreInformation: searchText, address: searchText })
+                        body: JSON.stringify({ cityId: cityId })
                     })
                         .then(response => response.json())
                         .then(data => {
                             MeestBranchesList.innerHTML = '';
                             data.forEach(branch => {
                                 const listItem = document.createElement('li');
-                                if (document.getElementById('categoryOfWarehouse').value !== 'Postomat') {
-                                    if (branch.branchType.toLowerCase().includes(searchText) || branch.addressMoreInformation.toLowerCase().includes(searchText) || branch.address.toLowerCase().includes(searchText)) {
-                                        listItem.textContent = branch.branchType + '(' + branch.addressMoreInformation + ')' + ' ' + branch.address;
-                                        listItem.setAttribute('data-value', branch.branchID);
-                                        listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
-                                        listItem.addEventListener('click', function () {
-                                            MeestBranchesInput.value = branch.branchType + '(' + branch.addressMoreInformation + ')' + ' ' + branch.address;
-                                            BranchRefHidden.value = branch.branchID;
-                                            MeestBranchesList.classList.add('hidden');
-                                        });
-                                        MeestBranchesList.appendChild(listItem);
-                                    }
-                                } else {
-                                    if (branch.networkPartner === "Поштомат") {
-                                        if (branch.branchType.toLowerCase().includes(searchText) || branch.addressMoreInformation.toLowerCase().includes(searchText) || branch.address.toLowerCase().includes(searchText)) {
-                                            listItem.textContent = branch.branchType + '(' + branch.addressMoreInformation + ')' + ' ' + branch.address;
-                                            listItem.setAttribute('data-value', branch.branchID);
-                                            listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
-                                            listItem.addEventListener('click', function() {
-                                                MeestBranchesInput.value = branch.branchType + '(' + branch.addressMoreInformation + ')' + ' ' + branch.address;
-                                                BranchRefHidden.value = branch.branchID;
-                                                MeestBranchesList.classList.add('hidden');
-                                            });
-                                            MeestBranchesList.appendChild(listItem);
-                                        }
-                                    }
+                                if (branch.branch_type.toLowerCase().includes(searchText) || branch.address.toLowerCase().includes(searchText)) {
+                                    listItem.textContent = branch.branch_type + ' ' + branch.address;
+                                    listItem.setAttribute('data-value', branch.branch_id);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function () {
+                                        MeestBranchesInput.value = branch.branch_type + ' ' + branch.address;
+                                        BranchRefHidden.value = branch.branch_id;
+                                        MeestBranchesList.classList.add('hidden');
+                                    });
+                                    MeestBranchesList.appendChild(listItem);
                                 }
                             });
                             if (MeestBranchesList.children.length > 0) {
@@ -1320,26 +1354,6 @@
                     }
                 });
 
-                VillageInput.addEventListener('input', function() {
-                    const districtId = DistrictRef.value;
-                    const searchText = this.value.trim().toLowerCase();
-                    if (districtId && searchText.length >= 0) {
-                        fetchCities(districtId, '', searchText);
-                    } else {
-                        VillageList.innerHTML = '';
-                        VillageList.classList.add('hidden');
-                    }
-                });
-
-                VillageInput.addEventListener('focus', function() {
-                    const districtId = DistrictRef.value;
-                    if (VillageInput.value.trim().length === 0) {
-                        fetchCities(districtId, '', '');
-                    } else if (VillageList.children.length > 0) {
-                        VillageList.classList.remove('hidden');
-                    }
-                });
-
                 document.addEventListener('click', function(event) {
                     const isClickInsideCityList = UkrPoshtaCityList.contains(event.target) || event.target === UkrPoshtaCityInput;
                     const isClickInsideBranchesList = UkrPoshtaBranchesList.contains(event.target) || event.target === UkrPoshtaBranchesInput;
@@ -1370,18 +1384,18 @@
                         .then(response => response.json())
                         .then(data => {
                             UkrPoshtaCityList.innerHTML = '';
+                            VillageList.innerHTML = '';
                             data.forEach(city => {
                                 if (type === 'City') {
-                                    if (city.CITY_UA.toLowerCase().startsWith(searchText) && city.CITYTYPE_UA.toLowerCase().includes('місто')) {
+                                    if (city.description.toLowerCase().startsWith(searchText) && city.settlement_type.toLowerCase().includes('місто')) {
                                         const listItem = document.createElement('li');
-                                        console.log(city)
-                                        listItem.textContent = city.CITYTYPE_UA + ' ' + city.CITY_UA;
-                                        listItem.setAttribute('data-value', city.CITY_ID);
+                                        listItem.textContent = city.settlement_type + ' ' + city.description;
+                                        listItem.setAttribute('data-value', city.settlement_id);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
-                                            UkrPoshtaCityInput.value = city.CITY_UA;
-                                            CityName.value = city.CITY_UA;
-                                            CityRefHidden.value = city.CITY_ID;
+                                            UkrPoshtaCityInput.value = city.description;
+                                            CityName.value = city.description;
+                                            CityRefHidden.value = city.settlement_id;
                                             UkrPoshtaCityList.classList.add('hidden');
                                             UkrPoshtaBranchesInput.value = '';
                                             UkrPoshtaBranchesList.innerHTML = '';
@@ -1389,16 +1403,14 @@
                                         UkrPoshtaCityList.appendChild(listItem);
                                     }
                                 } else {
-                                    if (city.CITY_UA.toLowerCase().startsWith(searchText) && !city.CITYTYPE_UA.toLowerCase().includes('місто')) {
+                                    if (city.description.toLowerCase().startsWith(searchText) && !city.settlement_type.toLowerCase().includes('місто')) {
                                         const listItem = document.createElement('li');
-                                        console.log(city)
-                                        listItem.textContent = city.CITYTYPE_UA + ' ' + city.CITY_UA;
-                                        listItem.setAttribute('data-value', city.CITY_ID);
+                                        listItem.textContent = city.settlement_type + ' ' + city.description;
+                                        listItem.setAttribute('data-value', city.settlement_id);
                                         listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                         listItem.addEventListener('click', function() {
-                                            VillageInput.value = city.CITYTYPE_UA + ' ' + city.CITY_UA;
-                                            CityName.value = null;
-                                            VillageRef.value = city.CITY_ID;
+                                            VillageInput.value = city.description;
+                                            VillageRef.value = city.settlement_id;
                                             VillageList.classList.add('hidden');
                                             UkrPoshtaBranchesInput.value = '';
                                             UkrPoshtaBranchesList.innerHTML = '';
@@ -1461,13 +1473,13 @@
                             DistrictList.innerHTML = '';
                             data.forEach(district => {
                                 const listItem = document.createElement('li');
-                                if (district.DISTRICT_UA.toLowerCase().includes(searchText.toLowerCase())) {
-                                    listItem.textContent = district.DISTRICT_UA;
-                                    listItem.setAttribute('data-value', district.DISTRICT_ID);
+                                if (district.description.toLowerCase().includes(searchText.toLowerCase())) {
+                                    listItem.textContent = district.description;
+                                    listItem.setAttribute('data-value', district.district_id);
                                     listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
                                     listItem.addEventListener('click', function() {
                                         DistrictInput.value = this.textContent;
-                                        DistrictRef.value = district.DISTRICT_ID;
+                                        DistrictRef.value = district.district_id;
                                         DistrictList.classList.add('hidden');
                                         VillageInput.value = '';
                                         VillageList.innerHTML = '';

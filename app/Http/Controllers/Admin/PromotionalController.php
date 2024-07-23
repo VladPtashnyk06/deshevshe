@@ -16,7 +16,7 @@ class PromotionalController extends Controller
 {
     public function index()
     {
-        $promotionalProducts = Product::where('product_promotion', 1)->get();
+        $promotionalProducts = Product::where('product_promotion', 1)->paginate(25);
 
         return view('admin.promotional.index', compact('promotionalProducts'));
     }
@@ -47,7 +47,7 @@ class PromotionalController extends Controller
             $query->where('category_id', $filteredParams['category_id']);
         }
 
-        $products = $query->get();
+        $products = $query->paginate(25);
         return view('admin.promotional.create', compact('codes', 'categories', 'producers', 'products'));
     }
 

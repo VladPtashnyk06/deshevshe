@@ -35,16 +35,23 @@ class Product extends Model implements HasMedia
         'category_id',
         'producer_id',
         'status_id',
-        'package_id',
         'material_id',
         'characteristic_id',
+        'brand_id',
+        'gender_id',
+        'fabric_composition_id',
+        'style_id',
+        'season_id',
+        'fashion_id',
+        'img_path',
         'title',
         'description',
         'code',
-        'model',
+        'advantages',
+        'outfit',
+        'measurements',
         'product_promotion',
         'top_product',
-        'rec_product',
         'rating',
     ];
 
@@ -63,14 +70,39 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Status::class);
     }
 
-    public function package(): BelongsTo
-    {
-        return $this->belongsTo(Package::class);
-    }
-
     public function material(): BelongsTo
     {
         return $this->belongsTo(Material::class);
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function gender(): BelongsTo
+    {
+        return $this->belongsTo(Gender::class);
+    }
+
+    public function fabricComposition(): BelongsTo
+    {
+        return $this->belongsTo(FabricComposition::class);
+    }
+
+    public function style(): BelongsTo
+    {
+        return $this->belongsTo(Style::class);
+    }
+
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
+    }
+
+    public function fashion(): BelongsTo
+    {
+        return $this->belongsTo(Fashion::class);
     }
 
     public function characteristic(): BelongsTo

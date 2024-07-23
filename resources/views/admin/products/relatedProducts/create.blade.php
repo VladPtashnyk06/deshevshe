@@ -11,9 +11,11 @@
                             <th class="p-2 text-lg">Код товару</th>
                             <th class="p-2 text-lg">Назва товару</th>
                             <th class="p-2 text-lg">Категорія</th>
-                            <th class="p-2 text-lg">Колір</th>
-                            <th class="p-2 text-lg">Розмір</th>
-                            <th class="p-2 text-lg">Ціна за пару</th>
+                            <th class="p-2 text-lg">Бренд</th>
+                            <th class="p-2 text-lg">Стать</th>
+                            <th class="p-2 text-lg">Сезон</th>
+                            <th class="p-2 text-lg">Виробник</th>
+                            <th class="p-2 text-lg">Роздрібна ціна</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -28,17 +30,11 @@
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->code }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->title }}</td>
                                 <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->category->title }}</td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($mainProduct->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->color->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">
-                                    @foreach($mainProduct->productVariants()->get() as $productVariant)
-                                        {{ $productVariant->size->title }}<br>
-                                    @endforeach
-                                </td>
-                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->price->pair }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->brand->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->sex->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->season->title ?? 'Не вказанно' }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->producer->title }}</td>
+                                <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $mainProduct->price->retail ?? 'Не вказанно' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -93,7 +89,7 @@
                             <th class="p-2 text-lg">Розмір</th>
                             <th class="p-2 text-lg">Кількість товару</th>
                             <th class="p-2 text-lg">Виробник</th>
-                            <th class="p-2 text-lg">Ціна за пару</th>
+                            <th class="p-2 text-lg">Роздрібна ціна</th>
                             <th class="p-2 text-lg">Дії</th>
                         </tr>
                         </thead>
@@ -127,7 +123,7 @@
                                         @endforeach
                                     </td>
                                     <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->producer->title }}</td>
-                                    <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->pair }}</td>
+                                    <td class="px-6 py-4" style="word-wrap:break-word; max-width: 15rem; vertical-align: top;">{{ $product->price->retail }}</td>
                                     <td class="px-6 py-4 text-right flex" style="vertical-align: top;">
                                         <a href="javascript:void(0);" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out w-full mb-2" style="display: block; text-align: center; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.375rem; transition: background-color 0.3s ease-in-out;" onclick="addRelatedProduct({{ $mainProduct->id }}, {{ $product->id }})">
                                             Додати
@@ -138,6 +134,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $products->links() }}
+                    </div>
                 </div>
             </div>
         </div>

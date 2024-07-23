@@ -4,16 +4,17 @@
         @if(!empty($newProducts))
             @foreach($newProducts as $newProduct)
                 <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center relative">
-                    @foreach($newProduct->getMedia($newProduct->id) as $media)
-                        @if($media->getCustomProperty('main_image') === 1)
-                            <div class="relative">
-                                @if(now()->diffInDays($newProduct->created_at) <= 30)
-                                    <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-bl">Новинка</span>
-                                @endif
-                                <a href="{{ route('site.product.showOneProduct', $newProduct->id) }}"><img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy"></a>
-                            </div>
-                        @endif
-                    @endforeach
+{{--                    @foreach($newProduct->getMedia($newProduct->id) as $media)--}}
+{{--                        @if($media->getCustomProperty('main_image') === 1)--}}
+{{--                            <div class="relative">--}}
+{{--                                @if(now()->diffInDays($newProduct->created_at) <= 30)--}}
+{{--                                    <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-bl">Новинка</span>--}}
+{{--                                @endif--}}
+{{--                                <a href="{{ route('site.product.showOneProduct', $newProduct->id) }}"><img src="{{ $media->getUrl() }}" alt="{{ $media->getCustomProperty('alt') }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy"></a>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
+{{--                    @endforeach--}}
+                    <img src="{{ asset('storage/'. $newProduct->img_path) }}" alt="{{ $newProduct->title }}" class="h-40 w-auto rounded-md object-cover mb-4" loading="lazy">
                     <div class="absolute top-8 ml-2 text-red-500" style="right: 16px">
                         <a href="#" class="heartLink" data-product-id="{{ $newProduct->id }}">
                             @if(in_array($newProduct->id, $likedProducts))

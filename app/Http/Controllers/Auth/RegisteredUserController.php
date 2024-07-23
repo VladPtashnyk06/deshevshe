@@ -28,32 +28,18 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $phone = $request->input('phone');
-
-        if (!str_starts_with($phone, '+380')) {
-            if (str_starts_with($phone, '0')) {
-                $phone = '+38' . $phone;
-            } else {
-                $phone = '+380' . $phone;
-            }
-        }
-
-        $request->merge(['phone' => $phone]);
-
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['nullable', 'string', 'max:255'],
-            'phone' => ['required', 'regex:/^\+380(39|67|68|96|97|98|50|66|95|99|63|73|93)\d{7}$/', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
         ]);
+//        dd($request->all());
+
+        $nameAndLastName = explode(' ', $request->post('name'));
 
         $user = User::create([
-            'name' => $request->name,
-            'last_name' => $request->last_name,
-            'middle_name' => $request->middle_name ? $request->middle_name : null,
-            'phone' => $request->phone,
+            'name' => $nameAndLastName[0],
+            'last_name' => $nameAndLastName[1],
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);

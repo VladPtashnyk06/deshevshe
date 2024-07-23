@@ -28,9 +28,21 @@ class UserAddress extends Model
      */
     protected $fillable = [
         'user_id',
+        'delivery_name',
+        'delivery_method',
         'region',
-        'city',
-        'address',
+        'regionRef',
+        'settlementType',
+        'settlement',
+        'settlementRef',
+        'branch',
+        'branchRef',
+        'district',
+        'districtRef',
+        'street',
+        'streetRef',
+        'house',
+        'flat',
     ];
 
     public function user(): BelongsTo

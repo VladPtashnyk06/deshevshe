@@ -63,8 +63,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function userAddresses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function userAddress(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(UserAddress::class, 'user_id');
+    }
+
+    public function promocodes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserPromocode::class, 'user_id');
+    }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
     }
 }

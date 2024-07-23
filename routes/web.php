@@ -24,7 +24,8 @@ Route::post('/get-nova-poshta-branches', [\App\Http\Controllers\NovaPoshtaContro
 Route::post('/get-nova-poshta-streets', [\App\Http\Controllers\NovaPoshtaController::class, 'getStreets'])->name('nova-poshta.get-streets');
 Route::post('/get-nova-poshta-settlement-districts', [\App\Http\Controllers\NovaPoshtaController::class, 'getDistricts'])->name('nova-poshta.get-settlement-districts');
 Route::post('/get-nova-poshta-settlement-villages', [\App\Http\Controllers\NovaPoshtaController::class, 'getVillages'])->name('nova-poshta.get-settlement-villages');
-Route::get('/getBrucnhesVillages', [\App\Http\Controllers\NovaPoshtaController::class, 'getBrucnhesVillages'])->name('nova-poshta.getBrucnhesVillages');
+
+Route::get('/json', [\App\Http\Controllers\Site\OrderController::class, 'jsonFile'])->name('jsonfile');
 
 /* =================================== */
 /*                Meest                */
@@ -41,25 +42,21 @@ Route::get('/get-ukr-poshta-districts', [\App\Http\Controllers\UkrPoshtaControll
 Route::get('/get-ukr-poshta-streets', [\App\Http\Controllers\UkrPoshtaController::class, 'getStreetByCityId'])->name('ukr-poshta.get-street-by-city-id');
 Route::get('/get-shipments', [\App\Http\Controllers\UkrPoshtaController::class, 'getShipments'])->name('ukr-poshta.get-shipments');
 
-
-use App\Http\Controllers\MailController;
-
-Route::get('send-email', [MailController::class, 'sendEmail']);
-
-Route::get('/callback', function () {
-    return view('site.callback-form');
-});
-
-Route::post('/send-callback', [MailController::class, 'sendCallbackRequest']);
+Route::post('/send-callback', [\App\Http\Controllers\MailController::class, 'sendCallbackRequest']);
 /* =================================== */
 /*                 Site                */
 /* =================================== */
 Route::controller(\App\Http\Controllers\Site\GeneralController::class)->group(function () {
     Route::get('/', 'index')->name('site.index');
+    Route::get('/second', 'second')->name('site.second');
     Route::get('/catalog', 'catalog')->name('site.catalog.index');
     Route::get('/catalog/show/{category}', 'show')->name('site.catalog.show');
     Route::get('/search', 'search')->name('search');
-
+    Route::get('/callback', 'callback')->name('callback');
+    Route::get('/help', 'help')->name('help');
+    Route::get('/spivpracia', 'spivpracia')->name('spivpracia');
+    Route::get('/privacy', 'privacy')->name('privacy');
+    Route::get('/cabinet', 'cabinet')->name('cabinet');
 });
 Route::controller(\App\Http\Controllers\CurrencyController::class)->group(function () {
     Route::post('/change-currency', 'changeCurrency')->name('change-currency');
@@ -110,6 +107,7 @@ Route::controller(\App\Http\Controllers\Site\CartController::class)->group(funct
 });
 Route::controller(\App\Http\Controllers\Site\CommentController::class)->group(function () {
    Route::get('/all-comments', 'index')->name('site.comment.index');
+   Route::post('/store', 'store')->name('site.comment.store');
 });
 
 ///* =================================== */
@@ -186,6 +184,7 @@ Route::middleware('auth')->group(function () {
                 Route::controller(\App\Http\Controllers\Admin\UserController::class)->group(function () {
                     Route::get('/', 'index')->name('user.index');
                     Route::get('/create', 'createOperator')->name('user.createOperator');
+                    Route::get('/orders', 'showOrders')->name('user.orders');
                     Route::post('/store', 'storeOperator')->name('user.storeOperator');
                     Route::get('/edit/{user}', 'edit')->name('user.edit');
                     Route::post('/update/{user}', 'update')->name('user.update');
@@ -203,6 +202,7 @@ Route::middleware('auth')->group(function () {
             Route::group(['prefix' => 'product'], function () {
                 Route::controller(\App\Http\Controllers\Admin\ProductController::class)->group(function () {
                     Route::get('/', 'index')->name('product.index');
+                    Route::get('/show/{product}', 'show')->name('product.show');
                     Route::get('/create', 'create')->name('product.create');
                     Route::post('/store', 'store')->name('product.store');
                     Route::get('/edit/{product}', 'edit')->name('product.edit');
@@ -228,16 +228,6 @@ Route::middleware('auth')->group(function () {
                         Route::delete('/delete/{color}', 'destroy')->name('color.destroy');
                     });
                 });
-                Route::group(['prefix' => 'package'], function () {
-                    Route::controller(\App\Http\Controllers\Admin\PackageController::class)->group(function () {
-                        Route::get('/', 'index')->name('package.index');
-                        Route::get('/create', 'create')->name('package.create');
-                        Route::post('/store', 'store')->name('package.store');
-                        Route::get('/edit/{package}', 'edit')->name('package.edit');
-                        Route::post('/update/{package}', 'update')->name('package.update');
-                        Route::delete('/delete/{package}', 'destroy')->name('package.destroy');
-                    });
-                });
                 Route::group(['prefix' => 'material'], function () {
                     Route::controller(\App\Http\Controllers\Admin\MaterialController::class)->group(function () {
                         Route::get('/', 'index')->name('material.index');
@@ -246,6 +236,52 @@ Route::middleware('auth')->group(function () {
                         Route::get('/edit/{material}', 'edit')->name('material.edit');
                         Route::post('/update/{material}', 'update')->name('material.update');
                         Route::delete('/delete/{material}', 'destroy')->name('material.destroy');
+                    });
+                });
+                Route::group(['prefix' => 'brand'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\BrandController::class)->group(function () {
+                        Route::get('/', 'index')->name('brand.index');
+                        Route::get('/edit/{brand}', 'edit')->name('brand.edit');
+                        Route::post('/update/{brand}', 'update')->name('brand.update');
+                        Route::delete('/delete/{brand}', 'destroy')->name('brand.destroy');
+                    });
+                });
+                Route::group(['prefix' => 'fabric-composition'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\FabricCompositionController::class)->group(function () {
+                        Route::get('/', 'index')->name('fabric-composition.index');
+                        Route::get('/edit/{fabricComposition}', 'edit')->name('fabric-composition.edit');
+                        Route::post('/update/{fabricComposition}', 'update')->name('fabric-composition.update');
+                        Route::delete('/delete/{fabricComposition}', 'destroy')->name('fabric-composition.destroy');
+                    });
+                });Route::group(['prefix' => 'fashion'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\FashionController::class)->group(function () {
+                        Route::get('/', 'index')->name('fashion.index');
+                        Route::get('/edit/{fashion}', 'edit')->name('fashion.edit');
+                        Route::post('/update/{fashion}', 'update')->name('fashion.update');
+                        Route::delete('/delete/{fashion}', 'destroy')->name('fashion.destroy');
+                    });
+                });
+                Route::group(['prefix' => 'gender'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\GenderController::class)->group(function () {
+                        Route::get('/', 'index')->name('gender.index');
+                        Route::get('/edit/{gender}', 'edit')->name('gender.edit');
+                        Route::post('/update/{gender}', 'update')->name('gender.update');
+                        Route::delete('/delete/{gender}', 'destroy')->name('gender.destroy');
+                    });
+                });
+                Route::group(['prefix' => 'season'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\SeasonController::class)->group(function () {
+                        Route::get('/', 'index')->name('season.index');
+                        Route::get('/edit/{season}', 'edit')->name('season.edit');
+                        Route::post('/update/{season}', 'update')->name('season.update');
+                        Route::delete('/delete/{season}', 'destroy')->name('season.destroy');
+                    });
+                });Route::group(['prefix' => 'style'], function () {
+                    Route::controller(\App\Http\Controllers\Admin\StyleController::class)->group(function () {
+                        Route::get('/', 'index')->name('style.index');
+                        Route::get('/edit/{style}', 'edit')->name('style.edit');
+                        Route::post('/update/{style}', 'update')->name('style.update');
+                        Route::delete('/delete/{style}', 'destroy')->name('style.destroy');
                     });
                 });
                 Route::group(['prefix' => 'characteristic'], function () {
@@ -352,10 +388,22 @@ Route::middleware('auth')->group(function () {
                 Route::prefix('promocodes')->group(function () {
                     Route::get('/', 'index')->name('promoCode.index');
                     Route::get('/create', 'create')->name('promoCode.create');
+                    Route::get('/add-promocode/{promoCode}', 'addPromoCode')->name('promoCode.add-promocode');
+                    Route::post('/store-promocde-user/{promoCode}', 'storePromoCodeForUser')->name('promoCode.store-promocde-user');
                     Route::post('/store', 'store')->name('promoCode.store');
                     Route::get('/edit/{promoCode}', 'edit')->name('promoCode.edit');
                     Route::post('/update/{promoCode}', 'update')->name('promoCode.update');
                     Route::delete('/delete/{promoCode}', 'destroy')->name('promoCode.destroy');
+                    Route::delete('/delete-promocode-user/{promoCode}', 'destroyUserPromoCode')->name('promoCode.delete-promocode-user');
+                });
+            });
+            Route::controller(\App\Http\Controllers\Admin\PromoCodeController::class)->group(function () {
+                Route::prefix('certificates')->group(function () {
+                    Route::get('/', 'indexCertificate')->name('certificate.index');
+                    Route::get('/create', 'createCertificate')->name('certificate.create');
+                    Route::post('/store', 'storeCertificate')->name('certificate.store');
+                    Route::get('/edit/{promoCode}', 'editCertificate')->name('certificate.edit');
+                    Route::post('/update/{promoCode}', 'updateCertificate')->name('certificate.update');
                 });
             });
         });

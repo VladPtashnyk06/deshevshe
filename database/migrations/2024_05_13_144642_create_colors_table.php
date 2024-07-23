@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('colors', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
             $table->string('title');
+            $table->string('title_en')->nullable();
             $table->timestamps();
         });
     }

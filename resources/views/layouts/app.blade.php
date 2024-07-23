@@ -18,8 +18,12 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
-            @if(Auth::user() && Auth::user()->role == 'admin' && \Illuminate\Support\Facades\Route::is('product.*') || \Illuminate\Support\Facades\Route::is('category.*') || \Illuminate\Support\Facades\Route::is('color.*') || \Illuminate\Support\Facades\Route::is('package.*') || \Illuminate\Support\Facades\Route::is('material.*') || \Illuminate\Support\Facades\Route::is('characteristic.*') || \Illuminate\Support\Facades\Route::is('size.*') || \Illuminate\Support\Facades\Route::is('status.*') || \Illuminate\Support\Facades\Route::is('promotional.*') || \Illuminate\Support\Facades\Route::is('producer.*'))
+            @if(Auth::user() && Auth::user()->role == 'admin' && \Illuminate\Support\Facades\Route::is('product.*') || \Illuminate\Support\Facades\Route::is('category.*') || \Illuminate\Support\Facades\Route::is('color.*') || \Illuminate\Support\Facades\Route::is('package.*') || \Illuminate\Support\Facades\Route::is('material.*') || \Illuminate\Support\Facades\Route::is('characteristic.*') || \Illuminate\Support\Facades\Route::is('size.*') || \Illuminate\Support\Facades\Route::is('status.*') || \Illuminate\Support\Facades\Route::is('promotional.*') || \Illuminate\Support\Facades\Route::is('producer.*') || \Illuminate\Support\Facades\Route::is('brand.*') || \Illuminate\Support\Facades\Route::is('fabric-composition.*') || \Illuminate\Support\Facades\Route::is('fashion.*') || \Illuminate\Support\Facades\Route::is('gender.*') || \Illuminate\Support\Facades\Route::is('season.*') || \Illuminate\Support\Facades\Route::is('style.*'))
                 @include('layouts.custom-header')
+            @endif
+
+            @if(Auth::user() && Auth::user()->role == 'admin' && \Illuminate\Support\Facades\Route::is('promoCode.*') || \Illuminate\Support\Facades\Route::is('certificate.*'))
+                @include('layouts.header-bonuses')
             @endif
 
             <!-- Page Heading -->

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MeestCity;
+use App\Models\MeestRegion;
 use App\Services\MeestService;
 use App\Services\NovaPoshtaService;
 use Illuminate\Http\Request;
@@ -17,20 +19,21 @@ class MeestController extends Controller
 
     public function getCities(Request $request)
     {
-        $regionDescr = $request->input('regionName');
         $regionId = $request->input('regionId');
 
-        $cities = $this->meestService->getCities($regionDescr, $regionId);
+        $region = MeestRegion::where('region_id', $regionId)->first();
+        $cities = $region->cities()->get();
 
         return response()->json($cities);
     }
 
     public function getBranches(Request $request)
     {
-        $cityDescr = $request->input('cityDescr');
         $cityId = $request->input('cityId');
 
-        $branches = $this->meestService->getBranches($cityDescr, $cityId);
+        $city = MeestCity::where('city_id', $cityId)->first();
+
+        $branches = $city->branches()->get();
 
         return response()->json($branches);
     }

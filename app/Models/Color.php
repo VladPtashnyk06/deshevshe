@@ -28,5 +28,6 @@ class Color extends Model
     protected $fillable = [
         'id',
         'title',
+        'title_en',
     ];
 }
