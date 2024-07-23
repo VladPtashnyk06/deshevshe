@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->foreignId('color_id')->nullable()->constrained('colors');
             $table->foreignId('size_id')->nullable()->constrained('sizes');
             $table->string('quantity');
+            $table->string('img_path')->nullable();
             $table->timestamps();
         });
     }

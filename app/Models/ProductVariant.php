@@ -32,6 +32,7 @@ class ProductVariant extends Model
         'color_id',
         'size_id',
         'quantity',
+        'img_path',
     ];
 
     public function product(): BelongsTo

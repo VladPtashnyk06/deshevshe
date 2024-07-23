@@ -128,6 +128,9 @@ class DatabaseSeeder extends Seeder
             'title' => 'Очікування на проплату'
         ]);
         OrderStatus::create([
+            'title' => 'Оплачено'
+        ]);
+        OrderStatus::create([
             'title' => 'Пакують'
         ]);
         OrderStatus::create([
@@ -138,6 +141,9 @@ class DatabaseSeeder extends Seeder
         ]);
         OrderStatus::create([
             'title' => 'Має дозамовити товар'
+        ]);
+        OrderStatus::create([
+            'title' => 'Не оплачено'
         ]);
         OrderStatus::create([
             'title' => 'Не відповідає'
