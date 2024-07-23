@@ -8,11 +8,14 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Comment;
+use App\Models\MeestRegion;
+use App\Models\NovaPoshtaRegion;
 use App\Models\Producer;
 use App\Models\Product;
 use App\Models\TopProduct;
 use App\Models\Size;
 use App\Models\Status;
+use App\Models\UkrPoshtaRegion;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -323,6 +326,9 @@ class GeneralController extends Controller
 
     public function orderFront()
     {
-        return view('site.orders.order_front');
+        $novaPoshtaRegions = NovaPoshtaRegion::all();
+        $ukrPoshtaRegions = UkrPoshtaRegion::all();
+        $meestRegions = MeestRegion::all();
+        return view('site.orders.order_front', compact('meestRegions', 'novaPoshtaRegions', 'ukrPoshtaRegions'));
     }
 }

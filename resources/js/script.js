@@ -896,126 +896,126 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    if (document.querySelector("#ukrPostRadio")) {
-        const ukrPoshta = document.querySelector('#ukrPoshta'),
-            novaPoshta = document.querySelector('#novaPoshta'),
-            meest = document.querySelector('#meest'),
-            deliveryOptions = document.querySelector('.post-radio'),
-            cityVilageOptions = document.querySelector('#cityVilageOptions'),
-            forCity = document.querySelector('#forCityAdress'),
-            forCityViddilenia = document.querySelector('#forCityViddilenia'),
-            forVilage = document.querySelector('#forVilage'),
-            poshtomatOption = document.querySelector('#postomatOption'),
-            forPostomat = document.querySelector('#forPostomat'),
-            deliveryRadios = document.querySelectorAll('input[name="adress"]'),
-            cityVilageRadios = document.querySelectorAll('input[name="cityVilage"]'),
-            ukrPostRadio = document.querySelector("#ukrPostRadio"),
-            noveMeestRadio = document.querySelector("#novaPostMeest")
+    // if (document.querySelector("#ukrPostRadio")) {
+    //     const ukrPoshta = document.querySelector('#ukrPoshta'),
+    //         novaPoshta = document.querySelector('#novaPoshta'),
+    //         meest = document.querySelector('#meest'),
+    //         deliveryOptions = document.querySelector('.post-radio'),
+    //         cityVilageOptions = document.querySelector('#cityVilageOptions'),
+    //         forCity = document.querySelector('#forCityAdress'),
+    //         forCityViddilenia = document.querySelector('#forCityViddilenia'),
+    //         forVilage = document.querySelector('#forVilage'),
+    //         poshtomatOption = document.querySelector('#postomatOption'),
+    //         forPostomat = document.querySelector('#forPostomat'),
+    //         deliveryRadios = document.querySelectorAll('input[name="adress"]'),
+    //         cityVilageRadios = document.querySelectorAll('input[name="cityVilage"]'),
+    //         ukrPostRadio = document.querySelector("#ukrPostRadio"),
+    //         noveMeestRadio = document.querySelector("#novaPostMeest")
 
-        deliveryOptions.style.display = 'none'
-        cityVilageOptions.style.display = 'none'
-        forCity.style.display = 'none'
-        forCityViddilenia.style.display = 'none'
-        forVilage.style.display = 'none'
-        forPostomat.style.display = 'none'
-        poshtomatOption.style.display = 'none'
-        noveMeestRadio.style.display = "none"
-        ukrPostRadio.style.display = "none"
+    //     deliveryOptions.style.display = 'none'
+    //     cityVilageOptions.style.display = 'none'
+    //     forCity.style.display = 'none'
+    //     forCityViddilenia.style.display = 'none'
+    //     forVilage.style.display = 'none'
+    //     forPostomat.style.display = 'none'
+    //     poshtomatOption.style.display = 'none'
+    //     noveMeestRadio.style.display = "none"
+    //     ukrPostRadio.style.display = "none"
 
-        function showDeliveryOptions() {
-            if (ukrPoshta.checked || novaPoshta.checked || meest.checked) {
-                deliveryOptions.style.display = 'flex'
-                if (meest.checked) {
-                    poshtomatOption.style.display = 'none'
-                    if (document.querySelector('#poshtomat').checked) {
-                        document.querySelector('#poshtomat').checked = false
-                    }
-                } else {
-                    poshtomatOption.style.display = 'flex'
-                }
-            } else {
-                deliveryOptions.style.display = 'none'
-                cityVilageOptions.style.display = 'none'
-                forCity.style.display = 'none'
-                forCityViddilenia.style.display = 'none'
-                forVilage.style.display = 'none'
-                forPostomat.style.display = 'none'
-            }
-            if (ukrPoshta.checked) {
-                ukrPostRadio.style.display = "flex"
-                noveMeestRadio.style.display = "none"
-            } else {
-                ukrPostRadio.style.display = "none"
-                // noveMeestRadio.style.display = "flex"
-            }
-        }
+    //     function showDeliveryOptions() {
+    //         if (ukrPoshta.checked || novaPoshta.checked || meest.checked) {
+    //             deliveryOptions.style.display = 'flex'
+    //             if (meest.checked) {
+    //                 poshtomatOption.style.display = 'none'
+    //                 if (document.querySelector('#poshtomat').checked) {
+    //                     document.querySelector('#poshtomat').checked = false
+    //                 }
+    //             } else {
+    //                 poshtomatOption.style.display = 'flex'
+    //             }
+    //         } else {
+    //             deliveryOptions.style.display = 'none'
+    //             cityVilageOptions.style.display = 'none'
+    //             forCity.style.display = 'none'
+    //             forCityViddilenia.style.display = 'none'
+    //             forVilage.style.display = 'none'
+    //             forPostomat.style.display = 'none'
+    //         }
+    //         if (ukrPoshta.checked) {
+    //             ukrPostRadio.style.display = "flex"
+    //             noveMeestRadio.style.display = "none"
+    //         } else {
+    //             ukrPostRadio.style.display = "none"
+    //             // noveMeestRadio.style.display = "flex"
+    //         }
+    //     }
 
-        function showCityVilageOptions() {
-            if (document.querySelector('#viddilenia').checked || document.querySelector('#adress').checked || document.querySelector('#poshtomat').checked || document.querySelector('#viddileniaExpres').checked || document.querySelector('#viddileniaUkr').checked || document.querySelector('#curierExpres').checked || document.querySelector('#curierUkr').checked) {
-                cityVilageOptions.style.display = 'flex'
-            } else {
-                cityVilageOptions.style.display = 'none'
-                forCity.style.display = 'none'
-                forCityViddilenia.style.display = 'none'
-                forVilage.style.display = 'none'
-                forPostomat.style.display = 'none'
-            }
-        }
+    //     function showCityVilageOptions() {
+    //         if (document.querySelector('#viddilenia').checked || document.querySelector('#adress').checked || document.querySelector('#poshtomat').checked || document.querySelector('#viddileniaExpres').checked || document.querySelector('#viddileniaUkr').checked || document.querySelector('#curierExpres').checked || document.querySelector('#curierUkr').checked) {
+    //             cityVilageOptions.style.display = 'flex'
+    //         } else {
+    //             cityVilageOptions.style.display = 'none'
+    //             forCity.style.display = 'none'
+    //             forCityViddilenia.style.display = 'none'
+    //             forVilage.style.display = 'none'
+    //             forPostomat.style.display = 'none'
+    //         }
+    //     }
 
-        function showCityOrVilageForm() {
-            forCity.style.display = 'none'
-            forCityViddilenia.style.display = 'none'
-            forVilage.style.display = 'none'
-            forPostomat.style.display = 'none'
+    //     function showCityOrVilageForm() {
+    //         forCity.style.display = 'none'
+    //         forCityViddilenia.style.display = 'none'
+    //         forVilage.style.display = 'none'
+    //         forPostomat.style.display = 'none'
 
-            if (document.querySelector('#viddilenia').checked || document.querySelector('#viddileniaExpres').checked || document.querySelector('#viddileniaExpres').checked || document.querySelector('#viddileniaUkr').checked || document.querySelector('#curierExpres').checked || document.querySelector('#curierUkr').checked) {
-                if (document.querySelector('#city').checked) {
-                    forCityViddilenia.style.display = 'block'
-                } else if (document.querySelector('#vilage').checked) {
-                    forVilage.style.display = 'block'
-                }
-            } else if (document.querySelector('#adress').checked) {
-                if (document.querySelector('#city').checked) {
-                    forCity.style.display = 'block'
-                } else if (document.querySelector('#vilage').checked) {
-                    forVilage.style.display = 'block'
-                }
-            } else if (document.querySelector('#poshtomat').checked) {
-                forPostomat.style.display = 'block'
-            }
-        }
+    //         if (document.querySelector('#viddilenia').checked || document.querySelector('#viddileniaExpres').checked || document.querySelector('#viddileniaExpres').checked || document.querySelector('#viddileniaUkr').checked || document.querySelector('#curierExpres').checked || document.querySelector('#curierUkr').checked) {
+    //             if (document.querySelector('#city').checked) {
+    //                 forCityViddilenia.style.display = 'block'
+    //             } else if (document.querySelector('#vilage').checked) {
+    //                 forVilage.style.display = 'block'
+    //             }
+    //         } else if (document.querySelector('#adress').checked) {
+    //             if (document.querySelector('#city').checked) {
+    //                 forCity.style.display = 'block'
+    //             } else if (document.querySelector('#vilage').checked) {
+    //                 forVilage.style.display = 'block'
+    //             }
+    //         } else if (document.querySelector('#poshtomat').checked) {
+    //             forPostomat.style.display = 'block'
+    //         }
+    //     }
 
-        ukrPoshta.addEventListener('change', () => {
-            showDeliveryOptions()
-            showCityVilageOptions()
-            showCityOrVilageForm()
-        })
-        novaPoshta.addEventListener('change', () => {
-            showDeliveryOptions()
-            showCityVilageOptions()
-            showCityOrVilageForm()
-        })
-        meest.addEventListener('change', () => {
-            showDeliveryOptions()
-            showCityVilageOptions()
-            showCityOrVilageForm()
-        })
+    //     ukrPoshta.addEventListener('change', () => {
+    //         showDeliveryOptions()
+    //         showCityVilageOptions()
+    //         showCityOrVilageForm()
+    //     })
+    //     novaPoshta.addEventListener('change', () => {
+    //         showDeliveryOptions()
+    //         showCityVilageOptions()
+    //         showCityOrVilageForm()
+    //     })
+    //     meest.addEventListener('change', () => {
+    //         showDeliveryOptions()
+    //         showCityVilageOptions()
+    //         showCityOrVilageForm()
+    //     })
 
-        deliveryRadios.forEach(radio => {
-            radio.addEventListener('change', () => {
-                showCityVilageOptions()
-                showCityOrVilageForm()
-            })
-        })
+    //     deliveryRadios.forEach(radio => {
+    //         radio.addEventListener('change', () => {
+    //             showCityVilageOptions()
+    //             showCityOrVilageForm()
+    //         })
+    //     })
 
-        cityVilageRadios.forEach(radio => {
-            radio.addEventListener('change', showCityOrVilageForm)
-        })
+    //     cityVilageRadios.forEach(radio => {
+    //         radio.addEventListener('change', showCityOrVilageForm)
+    //     })
 
-        showDeliveryOptions()
-        showCityVilageOptions()
-        showCityOrVilageForm()
-    }
+    //     showDeliveryOptions()
+    //     showCityVilageOptions()
+    //     showCityOrVilageForm()
+    // }
     if (document.querySelector('.cabinet-top-prodaz')) {
         const topProdazMain = document.querySelector('.top-prodaz-main.cabinet-top-prodaz'),
             descriptionAboutUs = document.querySelector('.cabinet-cart-product'),
@@ -1092,3 +1092,1141 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     })
 })
+
+
+
+// document.addEventListener('DOMContentLoaded', function() {
+    const RegistrationCheckbox = document.getElementById('registration');
+    const PasswordFields = document.getElementById('password_fields');
+    const PhoneInput = document.getElementById('user_phone');
+
+    // {{--const deliveryNamee = document.getElementById('deliveryNamee');--}}
+    // {{--const json = @json($delivery);--}}
+    // {{--console.log(json)--}}
+    // {{--deliveryNamee.value = json.region;--}}
+
+    if (RegistrationCheckbox) {
+        RegistrationCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                PasswordFields.classList.remove('d-none');
+            } else {
+                PasswordFields.classList.add('d-none');
+            }
+        });
+    }
+
+
+    const Region = document.getElementById('region');
+    const CityName = document.getElementById('city_name');
+    const BranchNumber = document.getElementById('branch_number');
+    const CityRefHidden = document.getElementById('city_ref');
+    const BranchRefHidden = document.getElementById('branch_ref');
+    const MeestContainer = document.getElementById('meest_container');
+    const MeestBranchesContainer = document.getElementById('meest_branch_div');
+    const MeestRegionSelect = document.getElementById('meest_region_ref');
+    const MeestCityInput = document.getElementById('meest_city_input');
+    const MeestBranchesInput = document.getElementById('meest_branches_input');
+    const MeestCityList = document.getElementById('meest_city_list');
+    const MeestBranchesList = document.getElementById('meest_branches_list');
+    const MeestCityBranchContainer = document.getElementById('meest_city_and_branch');
+    const NovaPoshtaContainer = document.getElementById('nova_poshta_container');
+    const NovaPoshtaRegionSelect = document.getElementById('nova_poshta_region_ref');
+    const NovaPoshtaBranchDiv = document.getElementById('nova_poshta_branch_div');
+    const NovaPoshtaCityDiv = document.getElementById('nova_poshta_city_div');
+    const NovaPoshtaCityInput = document.getElementById('nova_poshta_city_input');
+    const NovaPoshtaBranchesInput = document.getElementById('nova_poshta_branches_input');
+    const NovaPoshtaCityList = document.getElementById('nova_poshta_city_list');
+    const NovaPoshtaBranchesList = document.getElementById('nova_poshta_branches_list');
+    const NovaPoshtaCityBranchContainer = document.getElementById('nova_postha_city_and_branch');
+    const UkrPoshtaContainer = document.getElementById('ukr_poshta_container');
+    const UkrPoshtaBranchDiv = document.getElementById('ukr_poshta_branch_div');
+    const UkrPoshtaCityDiv = document.getElementById('ukr_poshta_city_div');
+    const UkrPoshtaRegionSelect = document.getElementById('ukr_poshta_region_ref');
+    const UkrPoshtaCityInput = document.getElementById('ukr_poshta_city_input');
+    const UkrPoshtaBranchesInput = document.getElementById('ukr_poshta_branches_input');
+    const UkrPoshtaCityList = document.getElementById('ukr_poshta_city_list');
+    const UkrPoshtaBranchesList = document.getElementById('ukr_poshta_branches_list');
+    const UkrPoshtaCityBranchContainer = document.getElementById('ukr_postha_city_and_branch');
+    const AddressContainer = document.getElementById('address_container');
+    const DeliveryTypeInputs = document.querySelectorAll('input[name="delivery_type"]');
+    const DeliveryLocationTypeRadios = document.querySelectorAll('input[name="delivery_location_type"]');
+    const DeliveryLocationVillage = document.getElementById('delivery_location_village');
+    const DeliveryLocationTypeContainer = document.getElementById('delivery_location_type_container');
+    const StreetInput = document.getElementById('street_input');
+    const StreetList = document.getElementById('street_list');
+    const StreetRef = document.getElementById('street_ref');
+    const DistrictInput = document.getElementById('district_input');
+    const DistrictList = document.getElementById('district_list');
+    const DistrictRef = document.getElementById('district_ref');
+    const VillageInput = document.getElementById('village_input');
+    const VillageList = document.getElementById('village_list');
+    const VillageRef = document.getElementById('village_ref');
+    const House = document.getElementById('house');
+    const Flat = document.getElementById('flat');
+    let type = 'City';
+
+    NovaPoshtaRegionSelect.addEventListener('change', function() {
+        NovaPoshtaCityInput.value = '';
+        CityRefHidden.value = '';
+        BranchRefHidden.value = '';
+        NovaPoshtaBranchesInput.value = '';
+        NovaPoshtaCityList.innerHTML = '';
+        NovaPoshtaBranchesList.innerHTML = '';
+        StreetInput.value = '';
+        StreetList.value = '';
+        StreetRef.value = '';
+        DistrictInput.value = '';
+        DistrictList.value = '';
+        DistrictRef.value = '';
+        VillageInput.value = '';
+        VillageList.value = '';
+        VillageRef.value = '';
+        CityName.value = '';
+        House.value = '';
+        Flat.value = '';
+    });
+    MeestRegionSelect.addEventListener('change', function() {
+        MeestCityInput.value = '';
+        MeestBranchesInput.value = '';
+        MeestCityList.innerHTML = '';
+        MeestBranchesList.innerHTML = '';
+    });
+    UkrPoshtaRegionSelect.addEventListener('change', function () {
+        UkrPoshtaCityInput.value = '';
+        UkrPoshtaBranchesInput.value = '';
+        UkrPoshtaCityList.innerHTML = '';
+        UkrPoshtaBranchesList.innerHTML = '';
+        StreetInput.value = '';
+        StreetList.value = '';
+        StreetRef.value = '';
+        DistrictInput.value = '';
+        DistrictList.value = '';
+        DistrictRef.value = '';
+        VillageInput.value = '';
+        VillageList.value = '';
+        VillageRef.value = '';
+        CityName.value = '';
+        House.value = '';
+        Flat.value = '';
+    })
+
+    document.addEventListener('click', function(event) {
+        const isClickInsideDistrictList = DistrictList.contains(event.target) || event.target === DistrictInput;
+        const isClickInsideVillageList = VillageList.contains(event.target) || event.target === VillageInput;
+        const isClickInsideStreetList = StreetList.contains(event.target) || event.target === StreetInput;
+
+        if (!isClickInsideDistrictList) {
+            DistrictList.classList.add('d-none');
+        }
+
+        if (!isClickInsideVillageList) {
+            VillageList.classList.add('d-none');
+        }
+
+        if (!isClickInsideStreetList) {
+            StreetList.classList.add('d-none');
+        }
+    });
+
+    function setType() {
+        DeliveryLocationTypeRadios.forEach(radio => {
+            if (radio.checked) {
+                if (radio.value === 'City') {
+                    type = 'City';
+                    CityRefHidden.value = '';
+                    CityName.value = '';
+                    BranchRefHidden.value = '';
+                    BranchNumber.value = '';
+                    NovaPoshtaBranchesInput.value = '';
+                    NovaPoshtaBranchesList.innerHTML = '';
+                    UkrPoshtaCityInput.value = '';
+                    UkrPoshtaCityList.innerHTML = '';
+                    UkrPoshtaBranchesInput.value = '';
+                    UkrPoshtaBranchesList.innerHTML = '';
+                    DistrictInput.value = '';
+                    DistrictList.value = '';
+                    DistrictRef.value = '';
+                    VillageInput.value = '';
+                    VillageList.value = '';
+                    VillageRef.value = '';
+                    StreetInput.value = '';
+                    StreetList.value = '';
+                    StreetRef.value = '';
+                    House.value = '';
+                    Flat.value = '';
+                } else if (radio.value === 'Village') {
+                    type = 'Village';
+                    CityRefHidden.value = '';
+                    CityName.value = '';
+                    NovaPoshtaCityInput.value = '';
+                    NovaPoshtaCityList.innerHTML = '';
+                    BranchRefHidden.value = '';
+                    BranchNumber.value = '';
+                    NovaPoshtaBranchesInput.value = '';
+                    NovaPoshtaBranchesList.innerHTML = '';
+                    UkrPoshtaCityInput.value = '';
+                    UkrPoshtaCityList.innerHTML = '';
+                    UkrPoshtaBranchesInput.value = '';
+                    UkrPoshtaBranchesList.innerHTML = '';
+                    DistrictInput.value = '';
+                    DistrictList.value = '';
+                    DistrictRef.value = '';
+                    StreetInput.value = '';
+                    StreetList.value = '';
+                    StreetRef.value = '';
+                    House.value = '';
+                    Flat.value = '';
+                }
+            }
+        });
+    }
+
+    let currentInputHandler = null;
+    let currentFocusHandler = null;
+
+    updateFormVisibility();
+
+    DeliveryTypeInputs.forEach(input => {
+        input.addEventListener('change', updateFormVisibility);
+    });
+
+    setType();
+
+    DeliveryLocationTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            setType();
+            updateFormVisibility();
+        });
+    });
+
+    function updateFormVisibility() {
+        let selectedDeliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
+        const inputCategoryOfWarehouse = document.getElementById('categoryOfWarehouse');
+
+        let poshtaAndDelivery = selectedDeliveryType.split("_");
+        let poshta = poshtaAndDelivery[0];
+        let delivery = poshtaAndDelivery[1];
+
+        NovaPoshtaBranchesInput.value = '';
+        NovaPoshtaCityInput.value = '';
+        MeestBranchesInput.value = '';
+        MeestCityInput.value = '';
+        NovaPoshtaBranchesList.innerHTML = '';
+        MeestBranchesList.innerHTML = '';
+        MeestCityList.innerHTML = '';
+        BranchRefHidden.value = '';
+
+        if (currentInputHandler) {
+            StreetInput.removeEventListener('input', currentInputHandler);
+        }
+        if (currentFocusHandler) {
+            StreetInput.removeEventListener('focus', currentFocusHandler);
+        }
+
+        DeliveryLocationTypeRadios.forEach(radio => {
+            if (radio.checked) {
+                if (radio.value === 'City') {
+                    currentInputHandler = function() {
+                        if (poshta === 'NovaPoshta') {
+                            const searchText = this.value.trim().toLowerCase();
+                            if (CityName.value && searchText.length >= 0) {
+                                NovaPoshtaFetchStreets(CityName.value, searchText);
+                            } else {
+                                StreetList.innerHTML = '';
+                                StreetList.classList.add('d-none');
+                            }
+                        } else if (poshta === 'UkrPoshta') {
+                            let cityId;
+                            if (type === 'City') {
+                                cityId = CityRefHidden.value;
+                            } else if (type === 'Village') {
+                                cityId = VillageRef.value;
+                            }
+                            const searchText = this.value.trim().toLowerCase();
+                            if (cityId && searchText.length >= 0) {
+                                fetchStreets(cityId, searchText);
+                            } else {
+                                VillageList.innerHTML = '';
+                                VillageList.classList.add('d-none');
+                            }
+                        }
+                    };
+
+                    currentFocusHandler = function() {
+                        if (poshta === 'NovaPoshta') {
+                            if (StreetInput.value.trim().length === 0) {
+                                NovaPoshtaFetchStreets(CityName.value, '');
+                            } else if (StreetList.children.length > 0) {
+                                StreetList.classList.remove('d-none');
+                            }
+                        } else if (poshta === 'UkrPoshta') {
+                            let cityId;
+                            if (type === 'City') {
+                                cityId = CityRefHidden.value;
+                            } else if (type === 'Village') {
+                                cityId = VillageRef.value;
+                            }
+                            if (VillageInput.value.trim().length === 0) {
+                                fetchStreets(cityId, '');
+                            } else if (VillageList.children.length > 0) {
+                                VillageList.classList.remove('d-none');
+                            }
+                        }
+                    };
+
+                    StreetInput.addEventListener('input', currentInputHandler);
+                    StreetInput.addEventListener('focus', currentFocusHandler);
+                }
+            }
+        });
+
+        if (currentInputHandler) {
+            VillageInput.removeEventListener('input', currentInputHandler);
+        }
+        if (currentFocusHandler) {
+            VillageInput.removeEventListener('focus', currentFocusHandler);
+        }
+
+        DeliveryLocationTypeRadios.forEach(radio => {
+            if (radio.checked) {
+                if (radio.value === 'Village') {
+                    currentInputHandler = function() {
+                        if (poshta === 'NovaPoshta') {
+                            const districtRef = DistrictRef.value;
+                            const searchText = this.value.trim().toLowerCase();
+                            if (districtRef && searchText.length >= 0) {
+                                NovaPoshtaFetchVillages(districtRef, searchText);
+                            } else {
+                                VillageList.innerHTML = '';
+                                VillageList.classList.add('d-none');
+                            }
+                        } else if (poshta === 'UkrPoshta') {
+                            const districtId = DistrictRef.value;
+                            const searchText = this.value.trim().toLowerCase();
+                            if (districtId && searchText.length >= 0) {
+                                fetchCities(districtId, '', searchText);
+                            } else {
+                                VillageList.innerHTML = '';
+                                VillageList.classList.add('d-none');
+                            }
+                        }
+                    };
+
+                    currentFocusHandler = function() {
+                        if (poshta === 'NovaPoshta') {
+                            const districtRef = DistrictRef.value;
+                            if (VillageInput.value.trim().length === 0) {
+                                NovaPoshtaFetchVillages(districtRef, '');
+                            } else if (VillageList.children.length > 0) {
+                                VillageList.classList.remove('d-none');
+                            }
+                        } else if (poshta === 'UkrPoshta') {
+                            const districtId = DistrictRef.value;
+                            if (VillageInput.value.trim().length === 0) {
+                                fetchCities(districtId, '', '');
+                            } else if (VillageList.children.length > 0) {
+                                VillageList.classList.remove('d-none');
+                            }
+                        }
+                    };
+
+                    VillageInput.addEventListener('input', currentInputHandler);
+                    VillageInput.addEventListener('focus', currentFocusHandler);
+                }
+            }
+        });
+
+        //
+        //Nova Poshta
+        //
+        if (poshta === 'NovaPoshta') {
+            NovaPoshtaCityBranchContainer.style.display = 'block';
+            MeestContainer.classList.add('d-none');
+            NovaPoshtaContainer.classList.remove('d-none');
+            UkrPoshtaContainer.classList.add('d-none');
+            NovaPoshtaBranchDiv.style.display = 'block';
+            AddressContainer.style.display = 'none';
+            NovaPoshtaCityDiv.style.display = 'block';
+            DeliveryLocationVillage.classList.add('d-none');
+            NovaPoshtaBranchesInput.placeholder = 'Введіть назву відділення';
+            inputCategoryOfWarehouse.value = 'Branch';
+
+            if (delivery === 'branch') {
+                if (type === 'City') {
+                    NovaPoshtaBranchDiv.style.display = 'block';
+                    NovaPoshtaCityDiv.style.display = 'block';
+                    DeliveryLocationVillage.classList.add('d-none');
+                } else if (type === 'Village') {
+                    NovaPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, NovaPoshtaBranchDiv);
+                    NovaPoshtaCityDiv.style.display = 'none';
+                    DeliveryLocationVillage.classList.remove('d-none');
+                }
+                document.querySelector('#nova_poshta_branch_div label').textContent = 'Відділення Нової Пошти *';
+            } else if (delivery === 'postomat') {
+                AddressContainer.style.display = 'none';
+                NovaPoshtaBranchDiv.style.display = 'block';
+                NovaPoshtaCityDiv.style.display = 'block';
+                document.querySelector('#nova_poshta_branch_div label').textContent = 'Поштомат Нової Пошти *';
+                NovaPoshtaBranchesInput.placeholder = 'Введіть назву поштомата';
+                inputCategoryOfWarehouse.value = 'Postomat';
+
+                if (type === 'City') {
+                    NovaPoshtaCityDiv.style.display = 'block';
+                    NovaPoshtaBranchDiv.style.display = 'block';
+                    DeliveryLocationVillage.classList.add('d-none');
+                } else if (type === 'Village') {
+                    NovaPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, NovaPoshtaBranchDiv);
+                    NovaPoshtaCityDiv.style.display = 'none';
+                    NovaPoshtaBranchDiv.style.display = 'block';
+                    DeliveryLocationVillage.classList.remove('d-none');
+                }
+            } else if (delivery === 'courier') {
+                NovaPoshtaBranchDiv.style.display = 'none';
+                AddressContainer.style.display = 'block';
+                inputCategoryOfWarehouse.value = '';
+
+                if (type === 'City') {
+                    NovaPoshtaBranchDiv.style.display = 'none';
+                    NovaPoshtaCityDiv.style.display = 'block';
+                    DeliveryLocationVillage.classList.add('d-none');
+                } else if (type === 'Village') {
+                    NovaPoshtaBranchDiv.style.display = 'none';
+                    NovaPoshtaCityDiv.style.display = 'none';
+                    DeliveryLocationVillage.classList.remove('d-none');
+                }
+            }
+
+            if (NovaPoshtaRegionSelect && Region) {
+                NovaPoshtaRegionSelect.addEventListener('change', function() {
+                    Region.value = this.selectedOptions[0].text;
+                });
+            }
+
+            NovaPoshtaCityInput.addEventListener('input', function() {
+                const regionRef = NovaPoshtaRegionSelect.value;
+                const searchText = this.value.trim().toLowerCase();
+
+                if (regionRef && searchText.length >= 0) {
+                    NovaPoshtaFetchCities(regionRef, searchText);
+                } else {
+                    NovaPoshtaCityList.innerHTML = '';
+                    NovaPoshtaCityList.classList.add('d-none');
+                }
+            });
+
+            NovaPoshtaCityInput.addEventListener('focus', function() {
+                const regionId = NovaPoshtaRegionSelect.value;
+
+                if (regionId && NovaPoshtaCityInput.value.trim().length === 0) {
+                    NovaPoshtaFetchCities(regionId, '');
+                } else if (NovaPoshtaCityList.children.length > 0) {
+                    NovaPoshtaCityList.classList.remove('d-none');
+                }
+            });
+
+            NovaPoshtaBranchesInput.addEventListener('input', function() {
+                let cityRef;
+                let settlementType;
+                if (type === 'City') {
+                    cityRef = CityRefHidden.value;
+                    settlementType = 'місто';
+                } else {
+                    cityRef = VillageRef.value;
+                    settlementType = 'село';
+                }
+                const searchText = this.value.trim().toLowerCase();
+                if (cityRef  && searchText.length >= 0) {
+                    NovaPoshtaFetchBranches(cityRef, searchText, settlementType);
+                } else {
+                    NovaPoshtaBranchesList.innerHTML = '';
+                    NovaPoshtaBranchesList.classList.add('d-none');
+                }
+            });
+
+            NovaPoshtaBranchesInput.addEventListener('focus', function() {
+                let cityRef;
+                let settlementType;
+                if (type === 'City') {
+                    cityRef = CityRefHidden.value;
+                    settlementType = 'місто';
+                } else {
+                    cityRef = VillageRef.value;
+                    settlementType = 'село';
+                }
+                if (NovaPoshtaBranchesInput.value.trim().length === 0) {
+                    NovaPoshtaFetchBranches(cityRef, '', settlementType);
+                } else if (NovaPoshtaBranchesList.children.length > 0) {
+                    NovaPoshtaBranchesList.classList.remove('d-none');
+                }
+            });
+
+            DistrictInput.addEventListener('input', function() {
+                const regionRef = NovaPoshtaRegionSelect.value;
+                const searchText = this.value.trim().toLowerCase();
+
+                if (regionRef && searchText.length >= 0) {
+                    NovaPoshtaFetchDiscticts(regionRef, searchText);
+                } else {
+                    DistrictList.innerHTML = '';
+                    DistrictList.classList.add('d-none');
+                }
+            });
+
+            DistrictInput.addEventListener('focus', function() {
+                const regionRef = NovaPoshtaRegionSelect.value;
+                if (regionRef && DistrictInput.value.trim().length === 0) {
+                    NovaPoshtaFetchDiscticts(regionRef, '');
+                } else if (DistrictList.children.length > 0) {
+                    DistrictList.classList.remove('d-none');
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                const isClickInsideCityList = NovaPoshtaCityList.contains(event.target) || event.target === NovaPoshtaCityInput;
+                const isClickInsideBranchesList = NovaPoshtaBranchesList.contains(event.target) || event.target === NovaPoshtaBranchesInput;
+
+                if (!isClickInsideCityList) {
+                    NovaPoshtaCityList.classList.add('d-none');
+                }
+
+                if (!isClickInsideCityList) {
+                    NovaPoshtaCityList.classList.add('d-none');
+                }
+
+                if (!isClickInsideBranchesList) {
+                    NovaPoshtaBranchesList.classList.add('d-none');
+                }
+            });
+
+            function NovaPoshtaFetchCities(regionRef, searchText) {
+                console.log(regionRef);
+                fetch('/get-nova-poshta-cities', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ region_ref: regionRef, findByString: searchText })
+                })
+                .then(response => response.json() )
+                    .then(data => {
+                        NovaPoshtaCityList.innerHTML = '';
+                        data.forEach(city => {
+                            console.log(city)
+                            if (type === 'City') {
+                                if (city.description.toLowerCase().includes(searchText) && city.settlement_type_description.toLowerCase().includes('місто')) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = city.settlement_type_description + ' ' + city.description;
+                                    listItem.setAttribute('data-value', city.ref);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        NovaPoshtaCityInput.value = city.description;
+                                        CityName.value = city.description
+                                        CityRefHidden.value = city.ref;
+                                        NovaPoshtaCityList.classList.add('d-none');
+                                        MeestBranchesInput.value = '';
+                                        NovaPoshtaBranchesList.innerHTML = '';
+                                    });
+                                    NovaPoshtaCityList.appendChild(listItem);
+                                }
+                            }
+                        });
+                        if (NovaPoshtaCityList.children.length > 0) {
+                            NovaPoshtaCityList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function NovaPoshtaFetchBranches(cityRef, searchText, settlementType) {
+                console.log(regionRef);
+                const categoryOfWarehouse = document.getElementById('categoryOfWarehouse').value;
+                fetch('/get-nova-poshta-branches', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ city_ref: cityRef, search: searchText, settlementType: settlementType })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        NovaPoshtaBranchesList.innerHTML = '';
+                        data.forEach(branch => {
+                            if (categoryOfWarehouse === 'Postomat' && branch.type_of_warehouse.toLowerCase().includes('f9316480-5f2d-425d-bc2c-ac7cd29decf0')) {
+                                if (branch.description.toLowerCase().includes(searchText)) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = branch.description;
+                                    listItem.setAttribute('data-value', branch.ref);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        NovaPoshtaBranchesInput.value = this.textContent;
+                                        BranchRefHidden.value = branch.ref;
+                                        BranchNumber.value = branch.number;
+                                        NovaPoshtaBranchesList.classList.add('d-none');
+                                    });
+                                    NovaPoshtaBranchesList.appendChild(listItem);
+                                }
+                            } else if(categoryOfWarehouse === 'Branch' && !branch.type_of_warehouse.toLowerCase().includes('f9316480-5f2d-425d-bc2c-ac7cd29decf0')) {
+                                if (branch.description.toLowerCase().includes(searchText)) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = branch.description;
+                                    listItem.setAttribute('data-value', branch.ref);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function () {
+                                        NovaPoshtaBranchesInput.value = this.textContent;
+                                        BranchRefHidden.value = branch.ref;
+                                        BranchNumber.value = branch.number;
+                                        NovaPoshtaBranchesList.classList.add('d-none');
+                                    });
+                                    NovaPoshtaBranchesList.appendChild(listItem);
+                                }
+                            }
+                        });
+                        if (NovaPoshtaBranchesList.children.length > 0) {
+                            NovaPoshtaBranchesList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function NovaPoshtaFetchStreets(CityName, searchText) {
+                fetch('/get-nova-poshta-streets', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ city_name: CityName, search: searchText })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        StreetList.innerHTML = '';
+                        data.forEach(street => {
+                            if (street.Description.toLowerCase().includes(searchText) || street.StreetsType.toLowerCase().includes(searchText) || (street.StreetsType+' '+street.Description).toLowerCase().includes(searchText)) {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = street.StreetsType + ' ' + street.Description;
+                                listItem.setAttribute('data-value', street.Ref);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    StreetInput.value = this.textContent;
+                                    StreetRef.value = street.Ref;
+                                    StreetList.classList.add('d-none');
+                                });
+                                StreetList.appendChild(listItem);
+                            }
+                        });
+                        if (StreetList.children.length > 0) {
+                            StreetList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function NovaPoshtaFetchDiscticts(regionRef, searchText) {
+                fetch('/get-nova-poshta-settlement-districts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ region_ref: regionRef, search: searchText })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        DistrictList.innerHTML = '';
+                        data.forEach(district => {
+                            if (district.description.toLowerCase().includes(searchText)) {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = district.description + ' район';
+                                listItem.setAttribute('data-value', district.ref);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    DistrictInput.value = this.textContent;
+                                    DistrictRef.value = district.ref;
+                                    DistrictList.classList.add('d-none');
+                                });
+                                DistrictList.appendChild(listItem);
+                            }
+                        });
+                        if (DistrictList.children.length > 0) {
+                            DistrictList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function NovaPoshtaFetchVillages(districtRef, searchText) {
+                fetch('/get-nova-poshta-settlement-villages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ district_ref: districtRef, search: searchText })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        VillageList.innerHTML = '';
+                        data.forEach(village => {
+                            if ((village.description.toLowerCase().includes(searchText) || village.settlement_type_description.toLowerCase().includes(searchText) || (village.settlement_type_description+' '+village.description).toLowerCase().includes(searchText)) && !village.settlement_type_description.toLowerCase().includes('місто')) {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = village.settlement_type_description + ' ' + village.description;
+                                listItem.setAttribute('data-value', village.ref);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    CityName.value = village.description
+                                    VillageInput.value = this.textContent;
+                                    VillageRef.value = village.ref;
+                                    VillageList.classList.add('d-none');
+                                });
+                                VillageList.appendChild(listItem);
+                            }
+                        });
+                        if (VillageList.children.length > 0) {
+                            VillageList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        } else if (poshta === 'Meest') {
+            MeestCityBranchContainer.style.display = 'block';
+            DeliveryLocationTypeContainer.classList.add('d-none');
+            NovaPoshtaContainer.classList.add('d-none');
+            MeestContainer.classList.remove('d-none');
+            UkrPoshtaContainer.classList.add('d-none');
+
+            if (delivery === 'branch') {
+                DeliveryLocationTypeContainer.classList.add('d-none');
+                MeestBranchesContainer.style.display = 'block';
+                AddressContainer.style.display = 'none';
+                document.querySelector('#meest_branch_div label').textContent = 'Відділення Meest';
+                MeestBranchesInput.placeholder = 'Введіть назву відділення';
+                inputCategoryOfWarehouse.value = '';
+            } else if (delivery === 'postomat') {
+                DeliveryLocationTypeContainer.classList.add('d-none');
+                MeestBranchesContainer.style.display = 'block';
+                AddressContainer.style.display = 'none';
+                document.querySelector('#meest_branch_div label').textContent = 'Поштомат Meest';
+                MeestBranchesInput.placeholder = 'Введіть назву поштомата';
+                inputCategoryOfWarehouse.value = 'Postomat';
+            } else if (delivery === 'courier') {
+                DeliveryLocationTypeContainer.classList.add('d-none');
+                MeestBranchesContainer.style.display = 'none';
+                AddressContainer.style.display = 'block';
+                inputCategoryOfWarehouse.value = '';
+            }
+
+            MeestCityInput.addEventListener('input', function() {
+                const regionId = MeestRegionSelect.value;
+                const searchText = this.value.trim().toLowerCase();
+
+                if (regionId && searchText.length >= 1) {
+                    MeestFetchCities(regionId, searchText);
+                } else {
+                    MeestCityList.innerHTML = '';
+                    MeestCityList.classList.add('d-none');
+                }
+            });
+
+            MeestCityInput.addEventListener('focus', function() {
+                const regionId = MeestRegionSelect.value;
+                if (regionId && MeestCityInput.value.trim().length === 0) {
+                    MeestFetchCities(regionId, '');
+                } else if (MeestCityList.children.length > 0) {
+                    MeestCityList.classList.remove('d-none');
+                }
+            });
+
+            MeestBranchesInput.addEventListener('input', function() {
+                const cityId = document.querySelector('#meest_city_list li[data-value]')?.getAttribute('data-value');
+                const searchText = this.value.trim().toLowerCase();
+                if (cityId && searchText.length > 1) {
+                    MeestFetchBranches(cityId, searchText);
+                } else {
+                    MeestBranchesList.innerHTML = '';
+                    MeestBranchesList.classList.add('d-none');
+                }
+            });
+
+            MeestBranchesInput.addEventListener('focus', function() {
+                const cityId = document.querySelector('#meest_city_list li[data-value]')?.getAttribute('data-value');
+                if (cityId && MeestBranchesInput.value.trim().length === 0) {
+                    MeestFetchBranches(cityId, '');
+                } else if (MeestBranchesList.children.length > 0) {
+                    MeestBranchesList.classList.remove('d-none');
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                const isClickInsideCityList = MeestCityList.contains(event.target) || event.target === MeestCityInput;
+                const isClickInsideBranchesList = MeestBranchesList.contains(event.target) || event.target === MeestBranchesInput;
+
+                if (!isClickInsideCityList) {
+                    MeestCityList.classList.add('d-none');
+                }
+
+                if (!isClickInsideBranchesList) {
+                    MeestBranchesList.classList.add('d-none');
+                }
+            });
+
+            if (MeestRegionSelect && Region) {
+                MeestRegionSelect.addEventListener('change', function() {
+                    Region.value = this.selectedOptions[0].text;
+                });
+            }
+
+            function MeestFetchCities(regionId, searchText) {
+                fetch('/meest/cities', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ regionId: regionId })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        MeestCityList.innerHTML = '';
+                        data.forEach(city => {
+                            if (city.description.toLowerCase().includes(searchText)) {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = city.description + ' ' + city.city_type.toLowerCase();
+                                listItem.setAttribute('data-value', city.city_id);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    MeestCityInput.value = city.description;
+                                    CityRefHidden.value = city.city_id;
+                                    MeestCityList.classList.add('d-none');
+                                    MeestBranchesInput.value = '';
+                                    MeestBranchesList.innerHTML = '';
+                                });
+                                MeestCityList.appendChild(listItem);
+                            }
+                        });
+                        if (MeestCityList.children.length > 0) {
+                            MeestCityList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function MeestFetchBranches(cityId, searchText) {
+                fetch('/meest/branches', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ cityId: cityId })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        MeestBranchesList.innerHTML = '';
+                        data.forEach(branch => {
+                            const listItem = document.createElement('li');
+                            if (branch.branch_type.toLowerCase().includes(searchText) || branch.address.toLowerCase().includes(searchText)) {
+                                listItem.textContent = branch.branch_type + ' ' + branch.address;
+                                listItem.setAttribute('data-value', branch.branch_id);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function () {
+                                    MeestBranchesInput.value = branch.branch_type + ' ' + branch.address;
+                                    BranchRefHidden.value = branch.branch_id;
+                                    MeestBranchesList.classList.add('d-none');
+                                });
+                                MeestBranchesList.appendChild(listItem);
+                            }
+                        });
+                        if (MeestBranchesList.children.length > 0) {
+                            MeestBranchesList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        } else if (poshta === 'UkrPoshta') {
+            UkrPoshtaCityBranchContainer.style.display = 'block';
+            NovaPoshtaContainer.classList.add('d-none');
+            MeestContainer.classList.add('d-none');
+            UkrPoshtaContainer.classList.remove('d-none');
+            DeliveryLocationVillage.classList.add('d-none');
+            AddressContainer.style.display = 'none';
+            DeliveryLocationTypeContainer.classList.remove('d-none')
+            UkrPoshtaCityDiv.classList.remove('d-none');
+
+            if (delivery === 'exspresBranch' || delivery === 'branch') {
+                if (type === 'City') {
+                    DeliveryLocationVillage.classList.add('d-none');
+                    UkrPoshtaCityDiv.classList.remove('d-none');
+                } else if (type === 'Village') {
+                    DeliveryLocationVillage.classList.remove('d-none');
+                    UkrPoshtaCityDiv.classList.add('d-none');
+                    UkrPoshtaCityBranchContainer.insertBefore(DeliveryLocationVillage, UkrPoshtaBranchDiv);
+                    NovaPoshtaCityDiv.style.display = 'none';
+                    DeliveryLocationVillage.classList.remove('d-none');
+                }
+                UkrPoshtaBranchDiv.style.display = 'block';
+                AddressContainer.style.display = 'none';
+                document.querySelector('#ukr_poshta_branch_div label').textContent = 'Відділення УкрПошта';
+                UkrPoshtaCityInput.placeholder = 'Введіть назву відділення';
+            } else if (delivery === 'exspresCourier' || delivery === 'courier') {
+                UkrPoshtaBranchDiv.style.display = 'none';
+                AddressContainer.style.display = 'block';
+                if (type === 'City') {
+                    UkrPoshtaBranchDiv.style.display = 'none';
+                    UkrPoshtaCityDiv.classList.remove('d-none');
+                    DeliveryLocationVillage.classList.add('d-none');
+                } else if (type === 'Village') {
+                    UkrPoshtaBranchDiv.style.display = 'none';
+                    UkrPoshtaCityDiv.classList.add('d-none');
+                    DeliveryLocationVillage.classList.remove('d-none');
+                }
+            }
+
+            UkrPoshtaCityInput.addEventListener('input', function() {
+                const regionId = UkrPoshtaRegionSelect.value;
+                const searchText = this.value.trim().toLowerCase();
+                if (regionId && searchText.length > 0) {
+                    fetchCities('', regionId, searchText);
+                } else {
+                    UkrPoshtaCityList.innerHTML = '';
+                    UkrPoshtaCityList.classList.add('d-none');
+                }
+            });
+
+            UkrPoshtaCityInput.addEventListener('focus', function() {
+                const regionId = UkrPoshtaRegionSelect.value;
+                if (regionId && UkrPoshtaCityInput.value.trim().length === 0) {
+                    fetchCities('', regionId, '');
+                } else if (UkrPoshtaCityInput.children.length >= 0) {
+                    UkrPoshtaCityList.classList.remove('d-none');
+                }
+            });
+
+            UkrPoshtaBranchesInput.addEventListener('input', function() {
+                const searchText = this.value.trim().toLowerCase();
+                let cityId;
+                if (type === 'City') {
+                    cityId = CityRefHidden.value;
+                } else if (type === 'Village') {
+                    cityId = VillageRef.value;
+                }
+                if (cityId && searchText.length > 0) {
+                    fetchBranches(cityId, searchText);
+                } else {
+                    UkrPoshtaBranchesList.innerHTML = '';
+                    UkrPoshtaBranchesList.classList.add('d-none');
+                }
+            });
+
+            UkrPoshtaBranchesInput.addEventListener('focus', function() {
+                let cityId;
+                if (type === 'City') {
+                    cityId = CityRefHidden.value;
+                } else if (type === 'Village') {
+                    cityId = VillageRef.value;
+                }
+                if (UkrPoshtaBranchesInput.value.trim().length === 0) {
+                    fetchBranches(cityId, '');
+                } else if (UkrPoshtaBranchesList.children.length >= 0) {
+                    UkrPoshtaBranchesList.classList.remove('d-none');
+                }
+            });
+
+            DistrictInput.addEventListener('input', function() {
+                const regionRef = UkrPoshtaRegionSelect.value;
+                const searchText = this.value.trim().toLowerCase();
+
+                if (regionRef && searchText.length >= 0) {
+                    fetchDistricts(regionRef, searchText);
+                } else {
+                    DistrictList.innerHTML = '';
+                    DistrictList.classList.add('d-none');
+                }
+            });
+
+            DistrictInput.addEventListener('focus', function() {
+                const regionRef = UkrPoshtaRegionSelect.value;
+                if (regionRef && DistrictInput.value.trim().length === 0) {
+                    fetchDistricts(regionRef, '');
+                } else if (DistrictList.children.length > 0) {
+                    DistrictList.classList.remove('d-none');
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                const isClickInsideCityList = UkrPoshtaCityList.contains(event.target) || event.target === UkrPoshtaCityInput;
+                const isClickInsideBranchesList = UkrPoshtaBranchesList.contains(event.target) || event.target === UkrPoshtaBranchesInput;
+
+                if (!isClickInsideCityList) {
+                    UkrPoshtaCityList.classList.add('d-none');
+                }
+
+                if (!isClickInsideBranchesList) {
+                    UkrPoshtaBranchesList.classList.add('d-none');
+                }
+            });
+
+            if (UkrPoshtaRegionSelect && Region) {
+                UkrPoshtaRegionSelect.addEventListener('change', function() {
+                    Region.value = this.selectedOptions[0].text;
+                });
+            }
+
+            function fetchCities(districtId, regionId, searchText) {
+                fetch(`/get-ukr-poshta-cities?region_id=${regionId}&district_id=${districtId}`, {
+                    method: 'GET',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        UkrPoshtaCityList.innerHTML = '';
+                        VillageList.innerHTML = '';
+                        data.forEach(city => {
+                            if (type === 'City') {
+                                if (city.description.toLowerCase().startsWith(searchText) && city.settlement_type.toLowerCase().includes('місто')) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = city.settlement_type + ' ' + city.description;
+                                    listItem.setAttribute('data-value', city.settlement_id);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        UkrPoshtaCityInput.value = city.description;
+                                        CityName.value = city.description;
+                                        CityRefHidden.value = city.settlement_id;
+                                        UkrPoshtaCityList.classList.add('d-none');
+                                        UkrPoshtaBranchesInput.value = '';
+                                        UkrPoshtaBranchesList.innerHTML = '';
+                                    });
+                                    UkrPoshtaCityList.appendChild(listItem);
+                                }
+                            } else {
+                                if (city.description.toLowerCase().startsWith(searchText) && !city.settlement_type.toLowerCase().includes('місто')) {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = city.settlement_type + ' ' + city.description;
+                                    listItem.setAttribute('data-value', city.settlement_id);
+                                    listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                    listItem.addEventListener('click', function() {
+                                        VillageInput.value = city.description;
+                                        VillageRef.value = city.settlement_id;
+                                        VillageList.classList.add('d-none');
+                                        UkrPoshtaBranchesInput.value = '';
+                                        UkrPoshtaBranchesList.innerHTML = '';
+                                    });
+                                    VillageList.appendChild(listItem);
+                                }
+                            }
+                        });
+                        if (UkrPoshtaCityList.children.length > 0) {
+                            UkrPoshtaCityList.classList.remove('d-none');
+                        } else {
+                            VillageList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function fetchBranches(cityId, searchText) {
+                fetch(`/get-ukr-poshta-branches?cityId=${cityId}`, {
+                    method: 'GET',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        UkrPoshtaBranchesList.innerHTML = '';
+                        data.forEach(branch => {
+                            const listItem = document.createElement('li');
+                            if (branch.POSTOFFICE_UA.toLowerCase().includes(searchText.toLowerCase()) || branch.STREET_UA_VPZ.toLowerCase().includes(searchText.toLowerCase())) {
+                                listItem.textContent = branch.POSTOFFICE_UA + (branch.STREET_UA_VPZ ? ' ' + branch.STREET_UA_VPZ : '');
+                                listItem.setAttribute('data-value', branch.POSTOFFICE_UA);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    UkrPoshtaBranchesInput.value = branch.POSTOFFICE_UA + (branch.STREET_UA_VPZ ? ' ' + branch.STREET_UA_VPZ : '');
+                                    BranchRefHidden.value = branch.POSTOFFICE_ID;
+                                    UkrPoshtaBranchesList.classList.add('d-none');
+                                });
+                                UkrPoshtaBranchesList.appendChild(listItem);
+                            }
+                        });
+                        if (UkrPoshtaBranchesList.children.length > 0) {
+                            UkrPoshtaBranchesList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function fetchDistricts(regionId, searchText) {
+                fetch(`/get-ukr-poshta-districts?regionId=${regionId}`, {
+                    method: 'GET',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        DistrictList.innerHTML = '';
+                        data.forEach(district => {
+                            const listItem = document.createElement('li');
+                            if (district.description.toLowerCase().includes(searchText.toLowerCase())) {
+                                listItem.textContent = district.description;
+                                listItem.setAttribute('data-value', district.district_id);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    DistrictInput.value = this.textContent;
+                                    DistrictRef.value = district.district_id;
+                                    DistrictList.classList.add('d-none');
+                                    VillageInput.value = '';
+                                    VillageList.innerHTML = '';
+                                });
+                                DistrictList.appendChild(listItem);
+                            }
+                        });
+                        if (DistrictList.children.length > 0) {
+                            DistrictList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function fetchStreets(cityId, searchText) {
+                fetch(`/get-ukr-poshta-streets?cityId=${cityId}`, {
+                    method: 'GET',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        StreetList.innerHTML = '';
+                        data.forEach(street => {
+                            const listItem = document.createElement('li');
+                            if (street.STREET_UA.toLowerCase().includes(searchText.toLowerCase())) {
+                                listItem.textContent = street.SHORTSTREETTYPE_UA + ' ' + street.STREET_UA;
+                                listItem.setAttribute('data-value', street.DISTRICT_ID);
+                                listItem.classList.add('py-2', 'px-3', 'hover:bg-gray-100', 'cursor-pointer');
+                                listItem.addEventListener('click', function() {
+                                    StreetInput.value = this.textContent;
+                                    StreetRef.value = street.STREET_ID;
+                                    StreetList.classList.add('d-none');
+                                    House.value = '';
+                                    Flat.value = '';
+                                });
+                                StreetList.appendChild(listItem);
+                            }
+                        });
+                        if (StreetList.children.length > 0) {
+                            StreetList.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    }
+// });
