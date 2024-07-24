@@ -104,10 +104,10 @@
                                 <input type="hidden" id="city_ref" name="city_ref" value="">
                                 <input type="hidden" id="branch_ref" name="branch_ref" value="">
                             </div>
-                            <div class="form-order-container">
+                            <div class="form-order-container form-post-grid">
                                 <div id="nova_poshta_container" class="text-gray-700">
                                     <div class="space-y-1 mb-4" id="nova_poshta_region_div">
-                                        <div class="grid form-post-grid" id="nova_postha_city_and_branch">
+                                        <div id="nova_postha_city_and_branch" class="form-post-grid">
                                             <div class="select-order">
                                                 <p>Регіон/Область *</p>
                                                 <label for="nova_poshta_region_ref"
@@ -149,16 +149,19 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        </div>
                                     </div>
-                                    <div>
                                 </div>
-                                <div id="meest_container" class="hidden text-gray-700">
+                                <div id="meest_container" class="hidden text-gray-700 grid form-post-grid">
                                     <!-- <div class="grid form-post-grid"> -->
                                         <div class="select-order">
                                             <p>Регіон/Область*</p>
                                             <div class="space-y-1 mb-4">
                                                 <label for="meest_region_ref" class="block font-semibold arrow-select">
+                                                    <svg fill="none" height="7" viewbox="0 0 12 7" width="12"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M11 1L6 6L1 1" stroke="#121212" stroke-linecap="round"
+                                                            stroke-linejoin="round"></path>
+                                                    </svg>
                                                     <select name="meest_region_ref" id="meest_region_ref"
                                                         class="w-full border rounded-md py-2 px-3">
                                                         <option value="">Обрати</option>
@@ -195,20 +198,28 @@
                                     <!-- </div> -->
                                     <!-- </div> -->
                                 </div>
-                                <div id="ukr_poshta_container" class="hidden text-gray-700 grid form-post-grid">
-                                    <div class="space-y-1 mb-4">
-                                        <label for="ukr_poshta_region_ref" class="block font-semibold">Регіон /
-                                            Область</label>
-                                        <select name="ukr_poshta_region_ref" id="ukr_poshta_region_ref"
-                                            class="w-full border rounded-md py-2 px-3">
-                                            <option value="">--- Виберіть ---</option>
-                                            @foreach($ukrPoshtaRegions as $region)
-                                                <option value="{{ $region->region_id }}">
-                                                    {{ ucfirst(strtolower($region->description)) }}</option>
-                                            @endforeach
-                                        </select>
+                                <!-- <div id="ukr_poshta_container" class="hidden text-gray-700 grid form-post-grid"> -->
+                                    <div class="space-y-1 mb-4" id="ukr_poshta_region_ref">
+                                        <div class="select-order">
+                                            <p>Регіон/Область *</p>
+                                            <label for="ukr_poshta_region_ref" class="block font-semibold arrow-select">
+                                                <svg fill="none" height="7" viewbox="0 0 12 7" width="12"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M11 1L6 6L1 1" stroke="#121212" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
+                                                <select name="ukr_poshta_region_ref" 
+                                                    class="w-full border rounded-md py-2 px-3">
+                                                    <option value="">Оберіть</option>
+                                                    @foreach($ukrPoshtaRegions as $region)
+                                                        <option value="{{ $region->region_id }}">
+                                                            {{ ucfirst(strtolower($region->description)) }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div id="ukr_postha_city_and_branch">
+                                    <!-- <div id="ukr_postha_city_and_branch"> -->
                                         <div class="space-y-1 relative mb-4 inputCity" id="ukr_poshta_city_div">
                                             <label for="ukr_poshta_city_input" class="block font-semibold">Місто</label>
                                             <input id="ukr_poshta_city_input" name="ukr_poshta_city_input"
@@ -230,8 +241,8 @@
                                                 <!-- Відділення будуть відображені тут -->
                                             </ul>
                                         </div>
-                                    </div>
-                                </div>
+                                    <!-- </div> -->
+                                <!-- </div> -->
                                 <!-- <div id="delivery_location_village" class="hidden"> -->
                                     <div class="space-y-1 relative mb-4" id="delivery_location_village-district">
                                         <input type="hidden" name="district_ref" id="district_ref" value="">
@@ -254,7 +265,7 @@
                                         </ul>
                                     </div>
                                 <!-- </div> -->
-                                <div class="space-y-1 mb-4 text-gray-700" id="address_container">
+                                <!-- <div class="space-y-1 mb-4 text-gray-700 grid form-post-grid" id="address_container"> -->
                                     <!-- <div class="grid form-post-grid"> -->
                                         <div class="space-y-1 relative mb-4" id="address_container-street">
                                             <input type="hidden" name="street_ref" id="street_ref" value="">
@@ -278,7 +289,7 @@
                                                 class="w-full border rounded-md py-2 px-3">
                                         </div>
                                     <!-- </div> -->
-                                </div>
+                                <!-- </div> -->
                             </div>
                                 <div class="filter-header-block order-checkbox">
                                     <h2>Оберіть спосіб Оплати:</h2>
