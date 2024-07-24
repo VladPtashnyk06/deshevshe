@@ -922,7 +922,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     deliveryContainerCityVilage.style.display = "flex"
                     deliveryContainerCityVilage.querySelectorAll("input").forEach(itemDelivery => {
                         itemDelivery.addEventListener("input", function() {
-                            formContainer.style.display = "grid"
+                            if(radioElement == radioNovaPoshta) {
+                                formContainer.style.display = "block"
+                            } else {
+                                formContainer.style.display = "grid"
+                            }
                         })
                     })
                 })
@@ -959,7 +963,7 @@ document.addEventListener("DOMContentLoaded", function () {
             radioMeest.querySelectorAll("input[name='delivery_type']").forEach(radioItem => {
                 radioItem.addEventListener("change", function() {
                     deliveryContainerCityVilage.style.display = "none"
-                    formContainer.style.display = "grid"
+                    formContainer.style.display = "block"
                 })
             })
         })
@@ -1077,10 +1081,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const NovaPoshtaCityDiv = document.getElementById('nova_poshta_city_div');
     const NovaPoshtaCityInput = document.getElementById('nova_poshta_city_input');
     const NovaPoshtaBranchesInput = document.getElementById('nova_poshta_branches_input');
+    const NovaPoshtaCityBranchContainer = document.getElementById('nova_postha_city_and_branch');
     const NovaPoshtaCityList = document.getElementById('nova_poshta_city_list');
     const NovaPoshtaBranchesList = document.getElementById('nova_poshta_branches_list');
-    const NovaPoshtaCityBranchContainer = document.getElementById('nova_postha_city_and_branch');
-    const UkrPoshtaContainer = document.getElementById('ukr_poshta_container');
     const UkrPoshtaBranchDiv = document.getElementById('ukr_poshta_branch_div');
     const UkrPoshtaCityDiv = document.getElementById('ukr_poshta_city_div');
     const UkrPoshtaRegionSelect = document.getElementById('ukr_poshta_region_ref');
@@ -1088,8 +1091,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const UkrPoshtaBranchesInput = document.getElementById('ukr_poshta_branches_input');
     const UkrPoshtaCityList = document.getElementById('ukr_poshta_city_list');
     const UkrPoshtaBranchesList = document.getElementById('ukr_poshta_branches_list');
-    const UkrPoshtaCityBranchContainer = document.getElementById('ukr_postha_city_and_branch');
-    const AddressContainer = document.getElementById('address_container');
     const AddressContainerStreet = document.getElementById('address_container-street');
     const AddressContainerBuild = document.getElementById('address_container-build');
     const AddressContainerKv = document.getElementById('address_container-kv');
@@ -1423,16 +1424,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 DeliveryLocationVillageDistrict.style.display = 'block'
                 DeliveryLocationVillageRef.style.display = 'block'
                 const parentElement = NovaPoshtaBranchDiv.parentNode
-        parentElement.insertBefore(DeliveryLocationVillageDistrict, NovaPoshtaBranchDiv)
+                parentElement.insertBefore(DeliveryLocationVillageDistrict, NovaPoshtaBranchDiv)
+                parentElement.insertBefore(DeliveryLocationVillageRef, NovaPoshtaBranchDiv);
             }
         
             NovaPoshtaContainer.classList.remove('d-none')
             NovaPoshtaContainer.style.display = 'grid'
             NovaPoshtaCityBranchContainer.style.display = 'grid'
             MeestContainer.classList.add('d-none')
-            UkrPoshtaContainer.classList.add('d-none')
+            UkrPoshtaCityDiv.classList.add('d-none')
+            UkrPoshtaBranchDiv.classList.add('d-none')
+            UkrPoshtaRegionSelect.classList.add('d-none')
             NovaPoshtaBranchDiv.style.display = 'grid'
-            AddressContainer.style.display = 'none'
+            AddressContainerStreet.style.display = 'none'
+            AddressContainerBuild.style.display = 'none'
+            AddressContainerKv.style.display = 'none'
             NovaPoshtaCityDiv.style.display = 'grid'
             DeliveryLocationVillageDistrict.style.display = 'none'
             DeliveryLocationVillageRef.style.display = 'none'
@@ -1443,7 +1449,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector('#nova_poshta_branch_div label').textContent = 'Відділення Нової Пошти *'
                 type === 'City' ? showCityElements() : showVillageElements()
             } else if (delivery === 'postomat') {
-                AddressContainer.style.display = 'none'
+                AddressContainerStreet.style.display = 'none'
+                AddressContainerBuild.style.display = 'none'
+                AddressContainerKv.style.display = 'none'
                 document.querySelector('#nova_poshta_branch_div label').textContent = 'Поштомат Нової Пошти *'
                 NovaPoshtaBranchesInput.placeholder = 'Введіть назву поштомата'
                 inputCategoryOfWarehouse.value = 'Postomat'
@@ -1451,7 +1459,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 type === 'City' ? showCityElements() : showVillageElements()
             } else if (delivery === 'courier') {
                 NovaPoshtaBranchDiv.style.display = 'none'
-                AddressContainer.style.display = 'grid'
+                AddressContainerStreet.style.display = 'block'
+                AddressContainerBuild.style.display = 'block'
+                AddressContainerKv.style.display = 'block'
+                NovaPoshtaCityBranchContainer.appendChild(AddressContainerStreet)
+                NovaPoshtaCityBranchContainer.appendChild(AddressContainerBuild)
+                NovaPoshtaCityBranchContainer.appendChild(AddressContainerKv)
                 inputCategoryOfWarehouse.value = ''
                 if (type === 'City') {
                     NovaPoshtaCityDiv.style.display = 'grid'
@@ -1463,8 +1476,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     DeliveryLocationVillageRef.style.display = 'block'
                 }
             }
-        
-        
         
             if (NovaPoshtaRegionSelect && Region) {
                 NovaPoshtaRegionSelect.addEventListener('change', function() {
@@ -1764,22 +1775,31 @@ document.addEventListener("DOMContentLoaded", function () {
             // DeliveryLocationTypeContainer.style.display = "none"
             NovaPoshtaContainer.classList.add('d-none');
             MeestContainer.classList.remove('d-none');
-            UkrPoshtaContainer.classList.add('d-none');
+            UkrPoshtaCityDiv.classList.add('d-none')
+            UkrPoshtaRegionSelect.classList.add('d-none')
             DeliveryLocationVillageDistrict.style.display = "none"
             DeliveryLocationVillageRef.style.display = "none"
+            UkrPoshtaBranchDiv.classList.add('d-none')
             
             if (delivery === 'branch') {
                 // DeliveryLocationTypeContainer.style.display = "none"
                 MeestBranchesContainer.style.display = 'grid';
-                AddressContainer.style.display = 'none';
+                AddressContainerStreet.style.display = 'none'
+                AddressContainerBuild.style.display = 'none'
+                AddressContainerKv.style.display = 'none'
                 document.querySelector('#meest_branch_div label').textContent = 'Відділення Meest';
                 MeestBranchesInput.placeholder = 'Введіть назву відділення';
                 inputCategoryOfWarehouse.value = '';
             } else if (delivery === 'courier') {
                 // DeliveryLocationTypeContainer.style.display = "none"
                 MeestBranchesContainer.style.display = 'none';
-                AddressContainer.style.display = 'grid';
+                AddressContainerStreet.style.display = 'block'
+                AddressContainerBuild.style.display = 'block'
+                AddressContainerKv.style.display = 'block'
                 inputCategoryOfWarehouse.value = '';
+                MeestContainer.appendChild(AddressContainerStreet)
+                MeestContainer.appendChild(AddressContainerBuild)
+                MeestContainer.appendChild(AddressContainerKv)
             }
 
             MeestCityInput.addEventListener('input', function() {
@@ -1922,25 +1942,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 UkrPoshtaCityDiv.classList.add('d-none');
                 const parentElement = UkrPoshtaBranchDiv.parentNode;
                 parentElement.insertBefore(DeliveryLocationVillageDistrict, UkrPoshtaBranchDiv);
+                parentElement.insertBefore(DeliveryLocationVillageRef, UkrPoshtaBranchDiv);
+                
             };
         
-            UkrPoshtaCityBranchContainer.style.display = 'grid';
+            UkrPoshtaCityDiv.style.display = 'grid';
+            UkrPoshtaBranchDiv.style.display = 'grid';
             NovaPoshtaContainer.style.display = 'none';
             MeestContainer.classList.add('d-none');
-            UkrPoshtaContainer.classList.remove('d-none');
+            UkrPoshtaBranchDiv.classList.remove('d-none')
+            UkrPoshtaCityDiv.classList.remove('d-none')
+            UkrPoshtaRegionSelect.classList.remove('d-none')
             DeliveryLocationVillageDistrict.style.display = 'none';
             DeliveryLocationVillageRef.style.display = 'none';
-            AddressContainer.style.display = 'none';
+            AddressContainerStreet.style.display = 'none'
+            AddressContainerBuild.style.display = 'none'
+            AddressContainerKv.style.display = 'none'
         
             if (delivery === 'exspresBranch' || delivery === 'branch') {
                 type === 'City' ? showCityElements() : showVillageElements();
                 UkrPoshtaBranchDiv.style.display = 'grid';
-                AddressContainer.style.display = 'none';
+                AddressContainerStreet.style.display = 'none'
+                AddressContainerBuild.style.display = 'none'
+                AddressContainerKv.style.display = 'none'
                 document.querySelector('#ukr_poshta_branch_div label').textContent = 'Відділення УкрПошта';
                 UkrPoshtaCityInput.placeholder = 'Введіть назву відділення';
             } else if (delivery === 'exspresCourier' || delivery === 'courier') {
                 UkrPoshtaBranchDiv.style.display = 'none';
-                AddressContainer.style.display = 'grid';
+                AddressContainerStreet.style.display = 'block'
+                AddressContainerBuild.style.display = 'block'
+                AddressContainerKv.style.display = 'block'
                 type === 'City' ? showCityElements() : showVillageElements();
             }
 
