@@ -895,45 +895,76 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     }
-
     if (document.querySelector("#ukrPostRadio")) {
-            const ukrPoshta = document.querySelector('#ukrPoshta'),
-                novaPoshta = document.querySelector('#novaPoshta'),
-                meest = document.querySelector('#meest'),
-                radioNovaPoshta = document.querySelector("#novaPost"),
-                radioUkrPoshta = document.querySelector("#ukrPostRadio"),
-                radioMeest = document.querySelector("#meestPostRadioBtn"),
-                deliveryContainerCityVilage = document.querySelector("#delivery_location_type_container"),
-                formContainer = document.querySelector(".form-order-container");
-        
-            const hideAllForms = () => {
-                [radioMeest, radioUkrPoshta, radioNovaPoshta, deliveryContainerCityVilage, formContainer].forEach(el => el.style.display = "none");
-            };
-            const resetRadioButtons = () => {
-                document.querySelectorAll('input[name="delivery_location_type"]').forEach(radio => radio.checked = false);
-            };
-            const showForm = (radioElement) => {
-                hideAllForms();
-                resetRadioButtons()                 
-                radioElement.style.display = "flex";
-                radioElement.querySelectorAll("input[name='delivery_type']").forEach(radioItem => {
-                    radioItem.addEventListener("change", function() {      
-                        deliveryContainerCityVilage.style.display = "flex";
-                        deliveryContainerCityVilage.querySelectorAll("input").forEach(itemDelivery => {
-                            itemDelivery.addEventListener("input", function() {
-                                formContainer.style.display = "grid";
-                            })
-                        })
-                    });
-                });
-            };
-        
+        const ukrPoshta = document.querySelector('#ukrPoshta'),
+            novaPoshta = document.querySelector('#novaPoshta'),
+            meest = document.querySelector('#meest'),
+            radioNovaPoshta = document.querySelector("#novaPost"),
+            radioUkrPoshta = document.querySelector("#ukrPostRadio"),
+            radioMeest = document.querySelector("#meestPostRadioBtn"),
+            deliveryContainerCityVilage = document.querySelector("#delivery_location_type_container"),
+            formContainer = document.querySelector(".form-order-container")
+    
+        const hideAllForms = () => {
+            [radioMeest, radioUkrPoshta, radioNovaPoshta, deliveryContainerCityVilage, formContainer].forEach(el => el.style.display = "none")
+        }
+    
+        const resetRadioButtons = () => {
+            document.querySelectorAll('input[name="delivery_location_type"]').forEach(radio => radio.checked = false)
+        }
+    
+        const showForm = (radioElement) => {
             hideAllForms()
-        
-            ukrPoshta.addEventListener("change", function() { showForm(radioUkrPoshta); });
-            novaPoshta.addEventListener("change", function() { showForm(radioNovaPoshta); });
-            meest.addEventListener("change", function() { showForm(radioMeest); });
+            resetRadioButtons()
+            radioElement.style.display = "flex"
+            radioElement.querySelectorAll("input[name='delivery_type']").forEach(radioItem => {
+                radioItem.addEventListener("change", function() {
+                    deliveryContainerCityVilage.style.display = "flex"
+                    deliveryContainerCityVilage.querySelectorAll("input").forEach(itemDelivery => {
+                        itemDelivery.addEventListener("input", function() {
+                            formContainer.style.display = "grid"
+                        })
+                    })
+                })
+            })
+        }
+    
+        hideAllForms()
+    
+        ukrPoshta.addEventListener("change", function() {
+            showForm(radioUkrPoshta)
+        })
+    
+        novaPoshta.addEventListener("change", function() {
+            showForm(radioNovaPoshta)
+    
+            const poshtomat = document.querySelector("#poshtomat")
+            poshtomat.addEventListener("click", function() {
+                deliveryContainerCityVilage.querySelector(".village-block").style.display = "none"
+            })
+    
+            radioNovaPoshta.querySelectorAll("input[name='delivery_type']").forEach(radioItem => {
+                radioItem.addEventListener("change", function() {
+                    if (radioItem.id !== "poshtomat") {
+                        deliveryContainerCityVilage.querySelector(".village-block").style.display = "flex"
+                    }
+                })
+            })
+        })
+    
+        meest.addEventListener("change", function() {
+            hideAllForms()
+            resetRadioButtons()
+            radioMeest.style.display = "flex"
+            radioMeest.querySelectorAll("input[name='delivery_type']").forEach(radioItem => {
+                radioItem.addEventListener("change", function() {
+                    deliveryContainerCityVilage.style.display = "none"
+                    formContainer.style.display = "grid"
+                })
+            })
+        })
     }
+    
     if (document.querySelector('.cabinet-top-prodaz')) {
         const topProdazMain = document.querySelector('.top-prodaz-main.cabinet-top-prodaz'),
             descriptionAboutUs = document.querySelector('.cabinet-cart-product'),
@@ -990,12 +1021,12 @@ document.addEventListener("DOMContentLoaded", function () {
     inputMasks.forEach(function (inputMask) {
         inputMask.addEventListener("click", function () {
             if (!inputMask.value) {
-                inputMask.value = "+380";
+                inputMask.value = "+380"
             }
         })
 
         inputMask.addEventListener("input", function () {
-            let inputValue = inputMask.value;
+            let inputValue = inputMask.value
             let cleanedValue = inputValue.replace(/[^\d+]/g, "")
 
             inputMask.value = cleanedValue
@@ -1198,30 +1229,30 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentInputHandler = null;
     let currentFocusHandler = null;
 
-    updateFormVisibility();
+    updateFormVisibility() 
 
     DeliveryTypeInputs.forEach(input => {
-        input.addEventListener('change', updateFormVisibility);
-    });
+        input.addEventListener('change', updateFormVisibility)
+    })
 
-    setType();
+    setType()
     DeliveryLocationTypeRadios.forEach(radio => {
         radio.addEventListener('change', function() {
-            setType();
-            updateFormVisibility(type);
-        });
-    });
+            setType()
+            updateFormVisibility(type)
+        })
+    })
     document.querySelectorAll('input[name="delivery_type"]').forEach((radio) => {
         radio.addEventListener('change', (event) => {
-            handleDeliveryTypeChange(event);
-        });
-    });
+            handleDeliveryTypeChange(event)
+        })
+    })
     
     document.querySelectorAll('input[name="delivery_location_type"]').forEach((radio) => {
         radio.addEventListener('change', (event) => {
-            handleLocationTypeChange(event);
-        });
-    });
+            handleLocationTypeChange(event)
+        })
+    })
     
     function handleDeliveryTypeChange(event) {
         let selectedDeliveryType = event.target.value,
@@ -1230,25 +1261,21 @@ document.addEventListener("DOMContentLoaded", function () {
             delivery = poshtaAndDelivery[1],
             selectedRadio = Array.from(document.querySelectorAll('input[name="delivery_location_type"]')).find(radio => radio.checked)
         if (selectedRadio) {
-            type = selectedRadio.value;
+            type = selectedRadio.value
         }
-        // console.log(poshtaAndDelivery, type);
-        updateFormVisibility(poshta, delivery, type);
+        updateFormVisibility(poshta, delivery, type)
     }
     
     function handleLocationTypeChange(event) {
-        let selectedRadio = event.target;
+        let selectedRadio = event.target
         if (selectedRadio) {
-            type = selectedRadio.value;
+            type = selectedRadio.value
         }
-        let selectedDeliveryType = Array.from(document.querySelectorAll('input[name="delivery_type"]')).find(radio => radio.checked);
-        // if (selectedDeliveryType) {
-            let poshtaAndDelivery = selectedDeliveryType.value.split("_");
-            let poshta = poshtaAndDelivery[0];
-            let delivery = poshtaAndDelivery[1];
-            // console.log(poshtaAndDelivery, type);
-            updateFormVisibility(poshta, delivery, type);
-        // }
+        let selectedDeliveryType = Array.from(document.querySelectorAll('input[name="delivery_type"]')).find(radio => radio.checked)
+            let poshtaAndDelivery = selectedDeliveryType.value.split("_"),
+                poshta = poshtaAndDelivery[0],
+                delivery = poshtaAndDelivery[1]
+            updateFormVisibility(poshta, delivery, type)
     }
     function updateFormVisibility(poshta, delivery, type) {
         
@@ -1382,100 +1409,80 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        //
-        //Nova Poshta
-        //
         if (poshta === 'NovaPoshta') {
-            NovaPoshtaCityBranchContainer.style.display = 'grid';
-            MeestContainer.classList.add('d-none');
-            NovaPoshtaContainer.classList.remove('d-none');
-            UkrPoshtaContainer.classList.add('d-none');
-            NovaPoshtaBranchDiv.style.display = 'grid';
-            AddressContainer.style.display = 'none';
-            NovaPoshtaCityDiv.style.display = 'grid';
-            DeliveryLocationVillageDistrict.style.display = "none"
-            DeliveryLocationVillageRef.style.display = "none"
-            NovaPoshtaBranchesInput.placeholder = 'Введіть назву відділення';
-            inputCategoryOfWarehouse.value = 'Branch';
-
+            const showCityElements = () => {
+                NovaPoshtaBranchDiv.style.display = 'grid'
+                NovaPoshtaCityDiv.style.display = 'grid'
+                DeliveryLocationVillageDistrict.style.display = 'none'
+                DeliveryLocationVillageRef.style.display = 'none'
+            }
+        
+            const showVillageElements = () => {
+                NovaPoshtaBranchDiv.style.display = 'grid'
+                NovaPoshtaCityDiv.style.display = 'none'
+                DeliveryLocationVillageDistrict.style.display = 'block'
+                DeliveryLocationVillageRef.style.display = 'block'
+                const parentElement = NovaPoshtaBranchDiv.parentNode
+        parentElement.insertBefore(DeliveryLocationVillageDistrict, NovaPoshtaBranchDiv)
+            }
+        
+            NovaPoshtaContainer.classList.remove('d-none')
+            NovaPoshtaContainer.style.display = 'grid'
+            NovaPoshtaCityBranchContainer.style.display = 'grid'
+            MeestContainer.classList.add('d-none')
+            UkrPoshtaContainer.classList.add('d-none')
+            NovaPoshtaBranchDiv.style.display = 'grid'
+            AddressContainer.style.display = 'none'
+            NovaPoshtaCityDiv.style.display = 'grid'
+            DeliveryLocationVillageDistrict.style.display = 'none'
+            DeliveryLocationVillageRef.style.display = 'none'
+            NovaPoshtaBranchesInput.placeholder = 'Введіть назву відділення'
+            inputCategoryOfWarehouse.value = 'Branch'
+        
             if (delivery === 'branch') {
-                console.log("---");
-                if (type === 'City') {
-                    console.log(type);
-                    NovaPoshtaContainer.style.display = 'grid';
-                    NovaPoshtaBranchDiv.style.display = 'grid';
-                    NovaPoshtaCityDiv.style.display = 'grid';
-                    DeliveryLocationVillageDistrict.style.display = "none"
-                    DeliveryLocationVillageRef.style.display = "none"
-                } else if (type === 'Village') {
-                    console.log(type);
-                    NovaPoshtaContainer.style.display = 'grid';
-                    NovaPoshtaCityDiv.style.display = 'none';
-                    DeliveryLocationVillageDistrict.style.display = "block"
-                    DeliveryLocationVillageRef.style.display = "block"
-
-                }
-                document.querySelector('#nova_poshta_branch_div label').textContent = 'Відділення Нової Пошти *';
+                document.querySelector('#nova_poshta_branch_div label').textContent = 'Відділення Нової Пошти *'
+                type === 'City' ? showCityElements() : showVillageElements()
             } else if (delivery === 'postomat') {
-                AddressContainer.style.display = 'none';
-                NovaPoshtaBranchDiv.style.display = 'grid';
-                NovaPoshtaCityDiv.style.display = 'grid';
-                document.querySelector('#nova_poshta_branch_div label').textContent = 'Поштомат Нової Пошти *';
-                NovaPoshtaBranchesInput.placeholder = 'Введіть назву поштомата';
-                inputCategoryOfWarehouse.value = 'Postomat';
-
-                if (type === 'City') {
-                    NovaPoshtaContainer.style.display = 'grid';
-                    NovaPoshtaCityDiv.style.display = 'grid';
-                    NovaPoshtaBranchDiv.style.display = 'grid';
-                    // DeliveryLocationVillage.classList.add('d-none');
-                    DeliveryLocationVillageDistrict.style.display = "none"
-                    DeliveryLocationVillageRef.style.display = "none"
-                } else if (type === 'Village') {
-                    NovaPoshtaContainer.style.display = 'grid';
-                    NovaPoshtaCityDiv.style.display = 'none';
-                    NovaPoshtaBranchDiv.style.display = 'grid';
-                    // DeliveryLocationVillage.classList.remove('d-none');
-                    DeliveryLocationVillageDistrict.style.display = "block"
-                    DeliveryLocationVillageRef.style.display = "block"
-                }
+                AddressContainer.style.display = 'none'
+                document.querySelector('#nova_poshta_branch_div label').textContent = 'Поштомат Нової Пошти *'
+                NovaPoshtaBranchesInput.placeholder = 'Введіть назву поштомата'
+                inputCategoryOfWarehouse.value = 'Postomat'
+                NovaPoshtaContainer.style.display = 'grid'
+                type === 'City' ? showCityElements() : showVillageElements()
             } else if (delivery === 'courier') {
-                NovaPoshtaBranchDiv.style.display = 'none';
-                AddressContainer.style.display = 'grid';
-                inputCategoryOfWarehouse.value = '';
-
+                NovaPoshtaBranchDiv.style.display = 'none'
+                AddressContainer.style.display = 'grid'
+                inputCategoryOfWarehouse.value = ''
                 if (type === 'City') {
-                    NovaPoshtaBranchDiv.style.display = 'none';
-                    NovaPoshtaCityDiv.style.display = 'grid';
-                    // DeliveryLocationVillage.classList.add('d-none');
-                    DeliveryLocationVillageDistrict.style.display = "none"
-                    DeliveryLocationVillageRef.style.display = "none"
+                    NovaPoshtaCityDiv.style.display = 'grid'
+                    DeliveryLocationVillageDistrict.style.display = 'none'
+                    DeliveryLocationVillageRef.style.display = 'none'
                 } else if (type === 'Village') {
-                    NovaPoshtaBranchDiv.style.display = 'none';
-                    NovaPoshtaCityDiv.style.display = 'none';
-                    // DeliveryLocationVillage.classList.remove('d-none');
-                    DeliveryLocationVillageDistrict.style.display = "block"
-                    DeliveryLocationVillageRef.style.display = "block"
+                    NovaPoshtaCityDiv.style.display = 'none'
+                    DeliveryLocationVillageDistrict.style.display = 'block'
+                    DeliveryLocationVillageRef.style.display = 'block'
                 }
             }
-
+        
+        
+        
             if (NovaPoshtaRegionSelect && Region) {
                 NovaPoshtaRegionSelect.addEventListener('change', function() {
-                    Region.value = this.selectedOptions[0].text;
-                });
+                    Region.value = this.selectedOptions[0].text
+                })
             }
 
             NovaPoshtaCityInput.addEventListener('input', function() {
-                const regionRef = NovaPoshtaRegionSelect.value;
-                const searchText = this.value.trim().toLowerCase();
+                const regionRef = NovaPoshtaRegionSelect.value,
+                    searchText = this.value.trim().toLowerCase()
 
                 if (regionRef && searchText.length >= 0) {
-                    NovaPoshtaFetchCities(regionRef, searchText);
+                    NovaPoshtaFetchCities(regionRef, searchText)
                 } else {
-                    NovaPoshtaCityList.innerHTML = '';
-                    NovaPoshtaCityList.classList.add('d-none');
+                    NovaPoshtaCityList.innerHTML = ''
+                    NovaPoshtaCityList.classList.add('d-none')
                 }
-            });
+            })
 
             NovaPoshtaCityInput.addEventListener('focus', function() {
                 const regionId = NovaPoshtaRegionSelect.value;
@@ -1488,8 +1495,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             NovaPoshtaBranchesInput.addEventListener('input', function() {
-                let cityRef;
-                let settlementType;
+                let cityRef,
+                    settlementType
                 if (type === 'City') {
                     cityRef = CityRefHidden.value;
                     settlementType = 'місто';
@@ -1507,8 +1514,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             NovaPoshtaBranchesInput.addEventListener('focus', function() {
-                let cityRef;
-                let settlementType;
+                let cityRef,
+                    settlementType
                 if (type === 'City') {
                     cityRef = CityRefHidden.value;
                     settlementType = 'місто';
@@ -1524,8 +1531,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             DistrictInput.addEventListener('input', function() {
-                const regionRef = NovaPoshtaRegionSelect.value;
-                const searchText = this.value.trim().toLowerCase();
+                const regionRef = NovaPoshtaRegionSelect.value,
+                    searchText = this.value.trim().toLowerCase()
 
                 if (regionRef && searchText.length >= 0) {
                     NovaPoshtaFetchDiscticts(regionRef, searchText);
@@ -1758,6 +1765,8 @@ document.addEventListener("DOMContentLoaded", function () {
             NovaPoshtaContainer.classList.add('d-none');
             MeestContainer.classList.remove('d-none');
             UkrPoshtaContainer.classList.add('d-none');
+            DeliveryLocationVillageDistrict.style.display = "none"
+            DeliveryLocationVillageRef.style.display = "none"
             
             if (delivery === 'branch') {
                 // DeliveryLocationTypeContainer.style.display = "none"
@@ -1771,16 +1780,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 MeestBranchesContainer.style.display = 'none';
                 AddressContainer.style.display = 'grid';
                 inputCategoryOfWarehouse.value = '';
-            }
-            if (type === 'City') {
-                DeliveryLocationVillageDistrict.style.display = "none"
-                DeliveryLocationVillageRef.style.display = "none"
-            } else if (type === 'Village') {
-                console.log(type);
-                MeestCityhDiv.style.display = 'none';
-                DeliveryLocationVillageDistrict.style.display = "block"
-                DeliveryLocationVillageRef.style.display = "block"
-
             }
 
             MeestCityInput.addEventListener('input', function() {
@@ -1911,26 +1910,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     .catch(error => console.error('Error:', error));
             }
         } else if (poshta === 'UkrPoshta') {
+            const showCityElements = () => {
+                DeliveryLocationVillageDistrict.style.display = 'none';
+                DeliveryLocationVillageRef.style.display = 'none';
+                UkrPoshtaCityDiv.classList.remove('d-none');
+            };
+        
+            const showVillageElements = () => {
+                DeliveryLocationVillageDistrict.style.display = 'block';
+                DeliveryLocationVillageRef.style.display = 'block';
+                UkrPoshtaCityDiv.classList.add('d-none');
+                const parentElement = UkrPoshtaBranchDiv.parentNode;
+                parentElement.insertBefore(DeliveryLocationVillageDistrict, UkrPoshtaBranchDiv);
+            };
+        
             UkrPoshtaCityBranchContainer.style.display = 'grid';
-            NovaPoshtaContainer.style.display = "none"
+            NovaPoshtaContainer.style.display = 'none';
             MeestContainer.classList.add('d-none');
             UkrPoshtaContainer.classList.remove('d-none');
-            DeliveryLocationVillageDistrict.style.display ="none"
-            DeliveryLocationVillageRef.style.display ="none"
+            DeliveryLocationVillageDistrict.style.display = 'none';
+            DeliveryLocationVillageRef.style.display = 'none';
             AddressContainer.style.display = 'none';
-
+        
             if (delivery === 'exspresBranch' || delivery === 'branch') {
-                if (type === 'City') {
-                    DeliveryLocationVillageDistrict.style.display = "none"
-                    DeliveryLocationVillageRef.style.display = "none"
-                    UkrPoshtaCityDiv.classList.remove('d-none');
-                    console.log("+");
-                } else if (type === 'Village') {
-                    DeliveryLocationVillageDistrict.style.display = "block"
-                    DeliveryLocationVillageRef.style.display = "block"
-                    UkrPoshtaCityDiv.classList.add('d-none');
-                    NovaPoshtaCityDiv.style.display = 'none';
-                }
+                type === 'City' ? showCityElements() : showVillageElements();
                 UkrPoshtaBranchDiv.style.display = 'grid';
                 AddressContainer.style.display = 'none';
                 document.querySelector('#ukr_poshta_branch_div label').textContent = 'Відділення УкрПошта';
@@ -1938,17 +1941,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if (delivery === 'exspresCourier' || delivery === 'courier') {
                 UkrPoshtaBranchDiv.style.display = 'none';
                 AddressContainer.style.display = 'grid';
-                if (type === 'City') {
-                    UkrPoshtaBranchDiv.style.display = 'none';
-                    UkrPoshtaCityDiv.classList.remove('d-none');
-                    DeliveryLocationVillageDistrict.style.display = "none"
-                    DeliveryLocationVillageRef.style.display = "none"
-                } else if (type === 'Village') {
-                    UkrPoshtaBranchDiv.style.display = 'none';
-                    UkrPoshtaCityDiv.classList.add('d-none');
-                    DeliveryLocationVillageDistrict.style.display = "block"
-                    DeliveryLocationVillageRef.style.display = "block"
-                }
+                type === 'City' ? showCityElements() : showVillageElements();
             }
 
             UkrPoshtaCityInput.addEventListener('input', function() {
@@ -2197,4 +2190,3 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-// });

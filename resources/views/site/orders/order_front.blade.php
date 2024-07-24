@@ -70,11 +70,11 @@
                                             type="radio" value="UkrPoshta_exspresBranch"><label for="viddileniaExpres"></label><span>Експрес доставка у
                                             відділення</span></p>
                                     <p class="d-flex item-center"><input id="viddileniaUkr" name="delivery_type"
-                                            type="radio" value="UkrPoshta_exspresCourier"><label for="viddileniaUkr"
-                                            value="UkrPoshta_exspresCourier"></label><span>Доставка у відділення</span>
+                                            type="radio" value="UkrPoshta_branch"><label for="viddileniaUkr"
+                                            ></label><span>Доставка у відділення</span>
                                     </p>
                                     <p class="d-flex item-center" id="postomatOption"><input id="curierExpres"
-                                            name="delivery_type" type="radio" value="UkrPoshta_branch"><label
+                                            name="delivery_type" type="radio" value="UkrPoshta_exspresCourier"><label
                                             for="curierExpres"></label><span>Експрес доставка кур'єром</span></p>
                                     <p class="d-flex item-center" id="postomatOption"><input id="curierUkr"
                                             name="delivery_type" type="radio" value="UkrPoshta_courier"><label
@@ -94,7 +94,7 @@
                                     <p class="d-flex item-center"><input id="city" value="City"
                                             name="delivery_location_type" type="radio"><label
                                             for="city"></label><span>Місто</span></p>
-                                    <p class="d-flex item-center"><input id="vilage" value="Village"
+                                    <p class="d-flex item-center village-block"><input id="vilage" value="Village"
                                             name="delivery_location_type" type="radio"><label
                                             for="vilage"></label><span>Село</span></p>
                                 </div>
